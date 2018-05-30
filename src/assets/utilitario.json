@@ -1,0 +1,9 @@
+{
+ 	"msj" : {
+	    "succes": "Successfully assured",
+	    "alerta": "Missing data!...",
+	    "warning": "Are you sure?....",
+	    "load": "Loading....",
+	    "err": "An error occurred!..."
+	}
+}
