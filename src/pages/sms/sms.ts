@@ -244,6 +244,7 @@ export class SmsPage {
   doRefresh(refresher) {
     setTimeout(() => {
       this.getCampaniaSMSUsuario();
+      refresher.complete();
     });
   }
 }

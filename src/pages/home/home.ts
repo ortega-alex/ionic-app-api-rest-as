@@ -47,7 +47,7 @@ export class HomePage {
   private timer: any;
   private time: { hora: number, minuto: number, segundo: number };
   private tiempo_restante: any;
-  private edid_name : Array<{ edit: boolean, border: string, border_stado: Array<any> }> = [];
+  private edid_name: Array<{ edit: boolean, border: string, border_stado: Array<any>, posicion_campania: number, stado: Array<any> }> = [];
   private sms_activo: boolean = false;
   private campania_sms: Array<{ id_campania: number, nombre: string, estados: Array<{ color: number, id: number, valor: number, texto: string }>, togglel: boolean }> = [];
   private background: string;
@@ -85,7 +85,7 @@ export class HomePage {
       });
     }
     this.isLogin();
-    this.tiempoActual();    
+    this.tiempoActual();
   }
 
   ionViewWillUnload() {
@@ -122,18 +122,18 @@ export class HomePage {
       autoShow: true,
       isTesting: false,
     }
-    this.admobFree.rewardVideo.config(VideoConfig);    
+    this.admobFree.rewardVideo.config(VideoConfig);
   }
 
   showVideo() {
     this.timer = setInterval(() => {
-       this.tick();
-     }, 1000);
-     this.admobFree.rewardVideo.prepare().then((res) => {
-       this.prepareVideo();
-     }).catch((err) => {
-       throw new Error(err);
-     });
+      this.tick();
+    }, 1000);
+    this.admobFree.rewardVideo.prepare().then((res) => {
+      this.prepareVideo();
+    }).catch((err) => {
+      throw new Error(err);
+    });
   }
 
   setBloqueoPublicidadUsuario(tipo: string, fecha: string = null, hora: string = null, creditos: any = null) {
@@ -155,13 +155,13 @@ export class HomePage {
 
   banner() {
     const bannerConfig: AdMobFreeBannerConfig = {
-       id: 'ca-app-pub-9573570332340263/7605313113',
-       isTesting: false,
-       autoShow: true
-     };
-     this.admobFree.banner.config(bannerConfig);
-     this.admobFree.banner.prepare().then(() => {
-     }).catch(err => console.log('err: ' + JSON.stringify(err)));     
+      id: 'ca-app-pub-9573570332340263/7605313113',
+      isTesting: false,
+      autoShow: true
+    };
+    this.admobFree.banner.config(bannerConfig);
+    this.admobFree.banner.prepare().then(() => {
+    }).catch(err => console.log('err: ' + JSON.stringify(err)));
   }
 
   isLogin() {
@@ -206,7 +206,7 @@ export class HomePage {
       this.res = res;
       if (this.res.error == 'false') {
         for (let index = 0; index < this.res.campania.length; index++) {
-          this.edid_name.push({ edit: true, border: 'none', border_stado: ['none', 'none', 'none', 'none', 'none'] });
+          this.edid_name.push({ edit: true, border: 'none', border_stado: ['none', 'none', 'none', 'none', 'none'], posicion_campania: index, stado: [false, false, false, false, false] });
         }
         this.campanias = this.res.campania;
         this.globalProvider.usuario.compartir_fb = this.res.compartir_fb;
@@ -246,40 +246,8 @@ export class HomePage {
         }
       });
     } else {
-      var si: boolean = false;
-      this.edid_name[posicion_campania].border_stado[posicion] = "solid gray 4px";
-      if (this.campania_sms && this.campania_sms.length > 0) {
-        for (let i = 0; i < this.campania_sms.length; i++) {
-          if (this.campania_sms[i].id_campania == campania.id_campania) {
-            this.campania_sms[i].estados.push(
-              {
-                color: campania.estados_llamadas[posicion].color,
-                id: campania.estados_llamadas[posicion].key_estado,
-                valor: campania.estados_llamadas[posicion].valor,
-                texto: campania.estados_llamadas[posicion].texto,
-              }
-            );
-            si = true;
-          }
-        }
-      }
-      if (si == false) {
-        var estados = [];
-        estados.push({
-          color: campania.estados_llamadas[posicion].color,
-          id: campania.estados_llamadas[posicion].key_estado,
-          valor: campania.estados_llamadas[posicion].valor,
-          texto: campania.estados_llamadas[posicion].texto,
-        });
-        this.campania_sms.push(
-          {
-            id_campania: campania.id_campania,
-            nombre: campania.nombre,
-            estados: estados,
-            togglel: false
-          }
-        );
-      }
+      this.edid_name[posicion_campania].stado[posicion] = !this.edid_name[posicion_campania].stado[posicion];
+      (this.edid_name[posicion_campania].stado[posicion] == true) ? this.edid_name[posicion_campania].border_stado[posicion] = "solid gray 4px" : this.edid_name[posicion_campania].border_stado[posicion] = "none";
     }
   }
 
@@ -538,12 +506,56 @@ export class HomePage {
           if (this.edid_name[i].border_stado[j] != 'none') {
             this.edid_name[i].border_stado[j] = 'none';
           }
+          if (this.edid_name[i].stado[j] != false) {
+            this.edid_name[i].stado[j] = false;
+          }
         }
       }
     }
   }
 
   smsModal(historial: boolean = false) {
+    var si: boolean = false;
+    for (let i = 0; i < this.edid_name.length; i++) {
+      for (let j = 0; j < this.edid_name[i].stado.length; j++) {
+        if (this.edid_name[i].stado[j] == true) {
+          if (this.campania_sms && this.campania_sms.length > 0) {
+            for (let k = 0; k < this.campania_sms.length; k++) {
+              if (this.campania_sms[k].id_campania == this.campanias[this.edid_name[i].posicion_campania].id_campania) {
+                this.campania_sms[k].estados.push(
+                  {
+                    color: this.campanias[this.edid_name[i].posicion_campania].estados_llamadas[j].color,
+                    id: this.campanias[this.edid_name[i].posicion_campania].estados_llamadas[j].key_estado,
+                    valor: this.campanias[this.edid_name[i].posicion_campania].estados_llamadas[j].valor,
+                    texto: this.campanias[this.edid_name[i].posicion_campania].estados_llamadas[j].texto,
+                  }
+                );
+                si = true;
+              } else {
+                si = false;
+              }
+            }
+          }
+          if (si == false) {
+            var estados = [];
+            estados.push({
+              color: this.campanias[this.edid_name[i].posicion_campania].estados_llamadas[j].color,
+              id: this.campanias[this.edid_name[i].posicion_campania].estados_llamadas[j].key_estado,
+              valor: this.campanias[this.edid_name[i].posicion_campania].estados_llamadas[j].valor,
+              texto: this.campanias[this.edid_name[i].posicion_campania].estados_llamadas[j].texto,
+            });
+            this.campania_sms.push(
+              {
+                id_campania: this.campanias[this.edid_name[i].posicion_campania].id_campania,
+                nombre: this.campanias[this.edid_name[i].posicion_campania].nombre,
+                estados: estados,
+                togglel: false
+              }
+            );
+          }
+        }
+      }
+    }
     if (historial == false && this.campania_sms.length == 0) {
       let alert = this.alertController.create({
         title: '',
@@ -577,5 +589,5 @@ export class HomePage {
         });
       }
     });
-  }  
+  }
 }

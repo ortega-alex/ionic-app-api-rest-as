@@ -306,8 +306,8 @@ export class CampaniaPage {
         if (nuevo == true) {
           this.setContacto(telefono);
         }
-      }).catch(err => console.log('err; ' + JSON.stringify(err)));
-    }).catch(err => console.log('err: ' + JSON.stringify(err)));
+      }).catch(err => alert('err call; ' + JSON.stringify(err)));
+    }).catch(err => alert('err per: ' + JSON.stringify(err)));
   }
 
   setSms(telefono: string) {
