@@ -158,7 +158,7 @@ page-modal {
 				//float: left;
 				background: #f8f8f8;
 				//color: #fff;
-				font-size: 1.2em;
+				font-size: 1.0em;
 			}			
 			p span {
 				position:absolute;
@@ -193,10 +193,10 @@ page-modal {
                 //color: white;
             }                  
             #imagen-demo{      
-                //display: block;
-                //margin: auto;
+                display: block;
+                margin: auto;
                 height: 100% !important;
-                width: 100% !important;
+                width: 90% !important;
             }
         }
         .llamada{

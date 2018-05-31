@@ -19,7 +19,7 @@
       </ion-col>
     </ion-row>
   </div>
-  <ion-scroll scrollY="true" class="content-div"  no-Lines no-border *ngIf="conexion == false" [style.background]="background">
+  <ion-scroll scrollY="true" class="content-div" no-Lines no-border *ngIf="conexion == false" [style.background]="background">
     <ion-refresher (ionRefresh)="doRefresh($event)">
       <ion-refresher-content></ion-refresher-content>
     </ion-refresher>
@@ -57,11 +57,11 @@
         </ion-col>
       </ion-row>
     </div>
-  </ion-scroll >
+  </ion-scroll>
   <div class="conten-conexion" *ngIf="conexion == true">
     <ion-row class="conten-row">
       <ion-col id="conten-row" col-2>
-        <ion-icon id="icon"  name="arrow-round-back" (click)="monitoreo()"></ion-icon>
+        <ion-icon id="icon" name="arrow-round-back" (click)="monitoreo()"></ion-icon>
       </ion-col>
       <ion-col id="conten-row" col-8>
         <p id="title">{{title}}</p>
@@ -121,8 +121,17 @@
       </ion-col>
     </ion-row>
   </div>
+  <div no-Lines no-border ion-fixed class="content-footer" *ngIf="conexion == false">
+    <div class="btn-conexion" *ngIf="sms_activo == false" (click)="monitoreo()">
+      <img id="btn-conexion-tex" src="assets/imgs/text.png">
+    </div>
+    <div class="btn-conexion" *ngIf="sms_activo == true" (click)="smsModal()">
+      <p id="btn-conexion-p">sms</p>
+    </div>
+    <img id="btn-conexion" src="assets/imgs/conexion.gif">
+  </div>
 </ion-content>
-<ion-footer no-Lines no-border class="content-footer" *ngIf="conexion == false">
+<!--ion-footer no-Lines no-border class="content-footer" *ngIf="conexion == false">
   <div class="btn-conexion" *ngIf="sms_activo == false" (click)="monitoreo()">
     <img id="btn-conexion-tex" src="assets/imgs/text.png">
   </div>
@@ -130,4 +139,4 @@
     <p id="btn-conexion-p">sms</p>
   </div>
   <img id="btn-conexion" src="assets/imgs/conexion.gif">
-</ion-footer>
+</ion-footer-->

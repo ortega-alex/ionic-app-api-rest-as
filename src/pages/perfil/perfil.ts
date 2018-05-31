@@ -77,6 +77,7 @@ export class PerfilPage {
     if (this.globalProvider.usuario) {
       this.globalProvider.deleteUsuario();
       this.globalProvider.getUsuario();
+      //this.globalProvider.deleteNum();
       this.menu();
     }
   }

@@ -5,6 +5,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { HomePage } from '../pages/home/home';
 import { LoginPage } from '../pages/login/login';
+import { ModalPage } from '../pages/modal/modal';
 
 import { GlobalProvider } from '../providers/global/global';
 import { setMilisegundos, Fechas, Numerico } from '../pipes/filtros/filtros';
@@ -61,7 +62,7 @@ export class MyApp {
       // Here you can do any higher level native things you might need.
       statusBar.styleDefault();
       splashScreen.hide();
-      this.initPushNotification();
+      //this.initPushNotification();
     });
   }
 
@@ -93,7 +94,7 @@ export class MyApp {
   }
 
   historialTelefonico() {
-    let data = { view: 1, num: null }
+    let d = { view: 1, num: null }
     this.storage.get('fecha').then(fecha => {
       this.options = [
         {
@@ -127,7 +128,7 @@ export class MyApp {
           this.respuesta = res;
           if (this.respuesta.error == 'false') {
             if (this.respuesta.llamadas && this.respuesta.llamadas.length > 0) {
-              let modal = this.modalControlle.create('ModalPage', { llamadas: this.respuesta.llamadas, data: data });
+              let modal = this.modalControlle.create('ModalPage', { llamadas: this.respuesta.llamadas , data: d });
               modal.present();
             }
           }
