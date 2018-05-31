@@ -1,3 +1,48 @@
 page-login {
-
+	.login-content{
+		background: #666666;		
+		.conten-img{
+			margin: 30% 0% 2% 0% !important;
+			text-align: center;
+			#title{
+				display: block;
+				margin: auto !important;
+				height: 13vh !important;
+			}			
+		}
+		.content-row{
+			margin: 0% !important;
+			#content-row{
+				padding: 0% !important;
+				margin: 0% 10% !important;
+				#content-row-btn{
+					font-size: 1.2em;
+					border-radius: 3%;
+				}
+			}
+		}
+		.conten-from{
+			.conten-item{
+				padding: 0% !important;
+				margin: 3% 10% !important;
+				width: 80% !important;
+				border-radius: 3%;
+				#conten-input{
+					padding: 0% !important;			
+					margin: 0% !important;
+					font-size: 1.0em;	
+				}
+			}
+			#err{
+				font-size: 0.9em;
+				margin: 0% 10% !important;
+				width: 80% !important; 
+			}  
+		}
+		#rigistrar{
+			text-align: center;
+			font-family: 1.5em;
+			margin: 7%;
+		}
+	}
 }

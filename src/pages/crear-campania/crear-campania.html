@@ -1,18 +1,170 @@
-<!--
-  Generated template for the CrearCampaniaPage page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
-<ion-header>
-
-  <ion-navbar>
-    <ion-title>crear-campania</ion-title>
-  </ion-navbar>
-
-</ion-header>
-
-
-<ion-content padding>
-
+<ion-content class="contenido">
+  <div class="content-header">
+    <ion-row class="conten-row">
+      <ion-col id="conten-row" col-2>
+        <ion-icon id="icon"  name="arrow-round-back" (click)="cancelar()"></ion-icon>
+      </ion-col>
+      <ion-col id="conten-row">
+        <p id="title"></p>
+      </ion-col>
+      <ion-col id="conten-row" col-2> </ion-col>
+    </ion-row>
+  </div>
+  <div class="content-botones" *ngIf="mostrar == false">
+    <p id="instrucciones">Upload your file, make sure to have your headers in the first line as in this example:</p>
+    <img id="imagen" src="assets/imgs/ej.jpg">
+    <ion-row class="content-row">
+      <ion-col id="content-row">
+        <button id="content-row-btn" ion-button small icon-right block color="dark" (click)="setExcelUsuario()">
+          Upload xsl/csv file
+          <ion-icon name="attach"></ion-icon>
+        </button>
+      </ion-col>
+    </ion-row>
+    <ion-row class="content-row">
+      <ion-col id="content-row">
+        <button id="content-row-btn" small ion-button block color="danger" (click)="cancelar()">
+          <ion-icon name="close"></ion-icon>
+          &nbsp;Cancel
+        </button>
+      </ion-col>
+    </ion-row>
+  </div>
+  <form [formGroup]="ordenarCampania" *ngIf="mostrar == true" class="from-content">
+    <ion-item class="from-item">
+      <ion-label id="from-label" floating>File name:</ion-label>
+      <ion-input id="from-input" autofocus text-center type="text" formControlName="nombreArchivo" [(ngModel)]="nombre_archivo"
+        readonly text-lg:992px></ion-input>
+    </ion-item>
+    <ion-item class="from-item">
+      <ion-label id="from-label" floating>Campaing name:</ion-label>
+      <ion-input id="from-input" text-center type="text" formControlName="nombreCampania" placeholder="Mandatory" text-lg:992px></ion-input>
+    </ion-item>
+    <p ion-text [hidden]="ordenarCampania.controls.nombreCampania.valid || submitted === false" color="danger" padding-left>
+      Enter campaing name...
+    </p>
+    <ion-item class="from-item">
+      <ion-label id="from-label" floating>Phone:</ion-label>
+      <ion-select id="from-select" text-center formControlName="telefono" interface="action-sheet" placeholder="Mandatory">
+        <ion-option *ngFor="let dato of datos;let i = index" value="{{i}}">{{dato.nombre}}</ion-option>
+      </ion-select>
+    </ion-item>
+    <p ion-text [hidden]="ordenarCampania.controls.telefono.valid || submitted === false" color="danger" padding-left>
+      Select phone number...
+    </p>
+    <ion-item class="from-item">
+      <ion-label id="from-label" floating>Name:</ion-label>
+      <ion-select id="from-select" text-center formControlName="nombre" interface="action-sheet" placeholder="Mandatory">
+        <ion-option *ngFor="let dato of datos;let i = index" value="{{i}}">{{dato.nombre}}</ion-option>
+      </ion-select>
+    </ion-item>
+    <p ion-text [hidden]="ordenarCampania.controls.telefono.valid || submitted === false" color="danger" padding-left>
+      select lead name...
+    </p>
+    <ion-row class="row-from">
+      <ion-col id="row-from">
+        <ion-item no-lines class="from-item">
+          <ion-label id="from-label" floating>Name:</ion-label>
+          <ion-input id="from-input" text-center type="text" formControlName="c1Nombre" [(ngModel)]="columna[0].c" [readonly]="columna[0].r"
+            text-lg:992px></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col id="row-from">
+        <ion-item no-lines class="from-item">
+          <ion-label id="from-label" floating>:</ion-label>
+          <ion-select id="from-select" formControlName="c1" interface="action-sheet" placeholder="Optional" (ionChange)="getNombre(1)">
+            <ion-option *ngFor="let dato of datos;let i = index" value="{{i}}">{{dato.nombre}}</ion-option>
+          </ion-select>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row class="row-from">
+      <ion-col id="row-from">
+        <ion-item no-lines class="from-item">
+          <ion-label id="from-label" floating>Name:</ion-label>
+          <ion-input id="from-input" text-center type="text" formControlName="c2Nombre" [(ngModel)]="columna[1].c" [readonly]="columna[1].r"
+            text-lg:992px></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col id="row-from">
+        <ion-item no-lines class="from-item">
+          <ion-label id="from-label" floating></ion-label>
+          <ion-select id="from-select" formControlName="c2" placeholder="Name:" interface="action-sheet" placeholder="Optional" (ionChange)="getNombre(2)">
+            <ion-option *ngFor="let dato of datos;let i = index" value="{{i}}">{{dato.nombre}}</ion-option>
+          </ion-select>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row class="row-from">
+      <ion-col id="row-from">
+        <ion-item no-lines class="from-item">
+          <ion-label id="from-label" floating>Name:</ion-label>
+          <ion-input id="from-input" text-center type="text" formControlName="c3Nombre" [(ngModel)]="columna[2].c" [readonly]="columna[2].r"
+            text-lg:992px></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col id="row-from">
+        <ion-item no-lines class="from-item">
+          <ion-label id="from-label" floating></ion-label>
+          <ion-select id="from-select" formControlName="c3" interface="action-sheet" placeholder="Optional" (ionChange)="getNombre(3)">
+            <ion-option *ngFor="let dato of datos;let i = index" value="{{i}}">{{dato.nombre}}</ion-option>
+          </ion-select>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row class="row-from">
+      <ion-col id="row-from">
+        <ion-item no-lines class="from-item">
+          <ion-label id="from-label" floating>Name:</ion-label>
+          <ion-input id="from-input" text-center type="text" formControlName="c4Nombre" [(ngModel)]="columna[3].c" [readonly]="columna[3].r"
+            text-lg:992px></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col id="row-from">
+        <ion-item no-lines class="from-item">
+          <ion-label id="from-label" floating></ion-label>
+          <ion-select id="from-select" formControlName="c4" interface="action-sheet" placeholder="Optional" (ionChange)="getNombre(4)">
+            <ion-option *ngFor="let dato of datos;let i = index" value="{{i}}">{{dato.nombre}}</ion-option>
+          </ion-select>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row class="row-cont">
+      <ion-col col-3 id="row-cont">
+      </ion-col>
+      <ion-col col-6 id="row-cont">
+        <ion-item class="from-item">
+          <ion-label id="from-label-sms">SMS:</ion-label>
+          <ion-toggle id="from-toggle" color="danger" checked="{{msnS}}" (ionChange)="chekedSms($event)"></ion-toggle>
+        </ion-item>
+      </ion-col>
+      <ion-col col-3 id="row-cont">
+      </ion-col>
+    </ion-row>
+    <ion-row class="row-from">
+      <ion-col id="row-from">
+        <ion-item class="from-item">
+          <ion-textarea id="textarea-notes" placeholder='Edit this text message and it will be sent to each lead "No Answer" or "Call Later" after you called. Write *name* where you want each of the customers name on the text'
+            formControlName="sms_predeterminado" [(ngModel)]="sms_tex" text-center text-lg:992px></ion-textarea>
+        </ion-item>
+        <p ion-text [hidden]="ordenarCampania.controls.sms_predeterminado.valid || submitted === false" color="danger" padding-left>
+          Enter SMS...
+        </p>
+      </ion-col>
+    </ion-row>
+  </form>
+  <ion-row *ngIf="mostrar == true" class="content-row">
+    <ion-col id="content-row">
+      <button id="content-row-btn" small ion-button block color="danger" (click)="cancelar()">
+        <ion-icon name="close"></ion-icon>
+        &nbsp;cancel
+      </button>
+    </ion-col>
+    <ion-col id="content-row">
+      <button id="content-row-btn" icon-right small ion-button block color="secondary" type="submit" (click)="guardarRegistro()">
+        save
+        <ion-icon name="checkmark-circle-outline"></ion-icon>
+      </button>
+    </ion-col>
+  </ion-row>
 </ion-content>

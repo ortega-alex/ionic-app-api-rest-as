@@ -1,3 +1,229 @@
 page-campania {
-
+	.contenido{ 
+		font-size:1.0em;
+		text-align: center;
+		.content-div{
+			//height: 100% !important;
+			width: 100% !important;
+			margin: 2% 0%;
+			.conten-card{
+				//border: solid black 1px;
+				//padding-top: 3%;
+				.row-cont-b{
+					padding: 1% 0%;								
+					#row-cont-b{
+						//border:solid gray 3px;
+						border-radius: 10%;
+						width: 98% !important;
+						margin: 0% 1% 1%;
+						padding: 3% 0%;
+						color:white;
+						text-align: center;
+						font-weight: bold;
+						font-size:0.6em;
+						b{
+							font-size:2.0em;
+						}
+					}
+				}
+				.row-cont{ 
+					//border: solid black;
+					#row-cont{
+						font-size:0.9em;
+						text-align: center;
+						margin: 0% !important;
+						padding: 0% !important;
+						#title{
+							margin-top: 0% !important;
+							font-size: 1.5em;
+							font-weight: bold;;
+						}	
+					}
+					#row-cont-btn{
+						font-size:0.9em;
+						text-align: center;
+					}
+					#row-cont-btn-f{
+						font-size:2.5em;
+						//width: 100%;						 
+						//text-align: left;
+						//padding: 10% 0% 0% 10%; 
+					}				
+				}				
+			}
+		}
+		.content-list{
+			//border: solid black 1px;
+			height: 68% !important;
+			.conten-card{
+				border: solid #f0f0f0 1px;
+				margin: 1% 0%;
+			}
+		}
+		.row-cont{
+			//border-bottom:solid gray 1px;
+			margin: 0% !important;
+			#row-cont{	
+				//padding: 0% 1% !important;
+				font-size:0.7em;
+				text-align: center;
+				#p-nota{
+					//border: solid black 1px;
+					background-color:  #f8f8f8 ;
+					font-size: 1.2em;
+					margin: 0% 5%;
+					padding: 0%;
+				}
+				#row-icon{
+					font-size: 3em;
+				}
+				#input-title{
+					height: 100% !important; 
+					width: 100% !important;
+					border-top: none;
+					border-left: none;
+					border-right: none;
+					font-size: 2em;		
+					background: transparent;			
+				}
+			}
+			#row-cont-btn{
+				font-size:1.2em;
+			}				
+			#row-cont-c{
+				//border: solid red 1px;				
+				text-align: center;
+				margin: 0% !important;
+				padding: 0% 1% !important;
+				font-size:0.7em;
+			}
+			#row-cont-p{
+				//border: solid red 1px;				
+				text-align: center;
+				margin: 0% !important;
+				padding: 0% 1% !important;
+				font-size:0.7em;
+				#row-cont-btn-p{
+					//border: solid black 1px;
+					font-size:1.2em;
+					margin: 0.2% 0% !important;
+					padding: 0%  !important;
+				}
+			}
+			#row-cont-btn-c{
+				//border: solid black 1px;
+				font-size:1.2em;
+				margin: 0% !important;
+				padding: 0% !important;
+				text-align: center;
+			}	
+			#row-cont-b{
+				margin: 0%;
+				padding: 0.5%; 
+				#row-cont-btn-status{
+					//border: solid black 1px;
+					font-size:1.0em;
+					margin: 0% !important;
+					padding: 0% !important;
+				}
+				#row-cont-btn-t{
+					font-size:1.0em;
+					margin: 0.3% !important;
+					padding: 0% !important;
+				}
+				#input-title{
+					height: 100% !important; 
+					width: 100% !important;
+					border-top: none;
+					border-left: none;
+					border-right: none;
+					font-size: 1.2em;		
+					background: transparent;			
+				}
+			}
+		}
+		.toggle-div{
+			/*width: 100% !important;
+			padding-left: 30%;
+			#label-div{
+				position: absolute;
+				left: 30%;
+				padding-top: 0.2%; 
+				font-size: 0.7em;
+				opacity: 0.5;
+			}
+			#from-toggle{
+				margin: 0% !important;
+				padding: 1% !important;
+			}*/
+		}
+		.from-item{			
+			margin: 0% 0% 0% 1% !important;
+			padding: 0% !important;
+			#from-label{
+				//border: solid black 1px;
+				margin: 0% !important;
+				//padding: 0% !important;
+				width: 100% !important;
+				font-size: 0.8em;
+			}
+			#from-label-sms{
+				//border: solid black 1px;
+				margin: 0% !important;
+				//padding: 0% !important;
+				width: 100% !important;
+				font-size: 0.8em;
+				opacity: 0.5;
+			}
+			#from-input{
+				margin: 0% !important;
+				padding: 0% !important;
+				width: 100% !important;
+				font-size: 0.7em;				
+				 border-bottom:solid #f0f0f0 1px;				
+			}
+			#textarea-notes{
+				margin: 0% !important;
+				width: 100% !important;
+ 				font-size: 0.7em;
+ 				border:solid #f0f0f0 1px;
+			}
+			#from-date{
+				margin: 0% !important;
+				width: 100% !important;
+ 				font-size: 0.7em;
+				//border-bottom:solid #f0f0f0 1px;
+				border: none;
+				text-align: center;
+			}
+			#from-toggle{
+				//border: solid black 1px;
+				//padding-left: 45% !important;
+			}
+			#title{
+				font-size: 0.8em;
+			}
+		}
+		.panel{
+			//border: solid black;
+			//background-color: aqua;
+			background-color: #f8f6f6; 
+			margin: 0% 1%;
+			text-align: left;
+			.row-panel{
+				margin: 1%;
+				//background-color: aqua;
+				#title{
+					font-size: 0.8em;
+				}
+				#contenido{
+					font-size: 1em;
+					text-align: center;
+				}
+			}
+		}
+		#row-cont-btn{
+			font-size:1.2em;
+		}
+	}
 }

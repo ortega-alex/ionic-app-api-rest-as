@@ -1,3 +1,45 @@
 page-perfil {
+    .content{
+        font-size: 0.8 em;
+        height: 100% !important;
+        width: 100% !important;
+        .content-header{           
+			border: solid #f8f8f8 1px;
+            text-align: center;
+            width: 100% !important;
+            .conten-row{
+                #conten-row{
+                    #title{
+                        margin-top: 4%;
+                       font-size: 1.5em;
+                    }    
+                    #icon{
+                        font-size: 3em;
+                    }
+                }
+            }
+        }
+        #conten-from{
+            width: 90% !important;
+            margin: 0% 5% !important;
+            padding: 0% !important;
+            #conten-label{
+                font-size: 0.8em;
+            }
 
+            #conten-input{
+                font-size: 1.0em;
+            }
+        }
+        .conten-row{
+            width: 90% !important;
+            margin: 0% 5% !important;
+            padding: 0% !important;
+            #conten-row{
+                #conten-row-btn{
+                    font-size: 1.0em;
+                }
+            }
+        }
+    }  
 }

@@ -1,3 +1,145 @@
 page-sms {
+    font-size: 0.8 em;
+    height: 100% !important;
+    width: 100% !important;
+    .content-header{           
+        text-align: center;
+        width: 100% !important;
+        .conten-row{
+            #conten-row{
+                #title{
+                    margin-top: 4%;
+                   font-size: 1.5em;
+                }    
+                #icon{
+                    font-size: 3em;
+                }
+            }
+        }
+    }
 
+    .content-historial{
+        .row-historial{
+            text-align: center;
+            #row-historial{
+                .togglel_title{
+                    background: #f8f8f8;
+                    #title{
+                        font-size: 1.2em;
+                    }
+                    #togglel_icon{
+                        position: absolute;
+                        top: 30%;
+                        right: 5%;
+                        font-size: 2em;
+                    }
+                }
+                #sms_text{
+                    border: solid #f8f8f8 1px;
+                    padding: 2%;
+                    margin: 0%;
+                }
+                #icon-historial{
+                    font-size: 2em;
+                }
+            }
+            #row-historial-b{
+                //border:solid gray 3px;
+                border-radius: 10%;
+                width: 98% !important;
+                margin: 0% 1% 1%;
+                padding: 2% 0%;
+                color:white;
+                text-align: center;
+                font-weight: bold;
+                font-size:0.5em;
+                #valor{
+                    font-size:1.2em;
+                }
+            }            
+        }
+        .progress-outer {
+            width: 90%;
+            height: 90%;
+            margin: 0% 5%;
+            padding: 3px;
+            text-align: center;
+            background-color: #f4f4f4;
+            color: #fff;
+        }
+        .progress-inner {
+            height: 100%;
+            min-width: 15%;
+            white-space: nowrap;
+            overflow: hidden;
+            padding: 0%;
+            // border-radius: 20px;
+            background-color: map-get($colors, dark);
+            font-size: 0.7em;
+         }
+    }
+
+    .content-sms{
+        .row-info{
+            margin: 0%;
+            padding: 0%;
+            #row-info{
+                    #row-info-label{
+                        margin: 0% !important;
+                        width: 100% !important;
+                        font-size: 0.8em;
+                    }
+                    #row-info-input{
+                        margin: 0% !important;
+                        font-size: 1.2em;
+                        border-bottom:solid #f0f0f0 1px;
+                    }
+                    #row-info-texarea{
+                        margin: 0% !important;
+                        width: 100% !important;
+                        font-size: 1.2em;
+                        border-bottom:solid #f0f0f0 1px;
+                    }     
+                    #row-info-date{
+                        margin: 0% !important;
+                        width: 100% !important;
+                        font-size: 1.2em;
+                        border-bottom:solid #f0f0f0 1px;
+                    }              
+                }
+                #calendar{
+                    //position: absolute;
+                    font-size: 3em;
+                    bottom: 5%;
+                    right: 2%;
+                }
+            
+        }
+        .row-estatus{
+            margin: 0%;
+            padding: 0%;
+            #row-estatus{
+                #title{
+                    font-size: 1.2em;
+                }
+            }
+            #row-estatus-b{
+                //border:solid gray 3px;
+                border-radius: 10%;
+                width: 98% !important;
+                margin: 0% 1% 1%;
+                padding: 3% 0%;
+                color:white;
+                text-align: center;
+                font-weight: bold;
+                font-size:0.6em;
+                #valor{
+                    font-size:2.0em;
+                }
+            }            
+        }
+    }
+
+
+    
 }

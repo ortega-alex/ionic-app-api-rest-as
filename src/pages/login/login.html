@@ -1,18 +1,41 @@
-<!--
-  Generated template for the LoginPage page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
-<ion-header>
-
-  <ion-navbar>
-    <ion-title>login</ion-title>
-  </ion-navbar>
-
-</ion-header>
-
-
-<ion-content padding>
-
+<ion-content class="login-content">
+  <div class="conten-img">
+    <img id="title" src="assets/imgs/logo.png">
+  </div>
+  <ion-row class="content-row">
+    <ion-col id="content-row">
+      <button id="content-row-btn" ion-button small icon-left block (click)="loginFB()">
+        <ion-icon name="logo-facebook"></ion-icon>
+        facebook
+      </button>
+    </ion-col>
+  </ion-row>
+  <form [formGroup]="logIn" class="conten-from">
+    <ion-item class="conten-item">
+      <ion-input id="conten-input" text-center type="email" placeholder="EMAIL" formControlName="correo" text-lg:992px></ion-input>
+    </ion-item>
+    <p id="err" ion-text [hidden]="logIn.controls.correo.valid || submitted === false" color="danger" padding-left>
+      Enter Mail...
+    </p>
+    <ion-item class="conten-item">
+      <ion-input id="conten-input" text-center type="password" placeholder="Password" formControlName="clave" text-lg:992px></ion-input>
+    </ion-item>
+    <p id="err" ion-text [hidden]="logIn.controls.clave.valid || submitted === false" color="danger" padding-left>
+      Enter Password...
+    </p>
+  </form>
+  <ion-row class="content-row">
+    <ion-col id="content-row">
+      <button id="content-row-btn" ion-button small block color="dark" type="submit" (click)="validar()">
+        Login
+      </button>
+    </ion-col>
+  </ion-row>
+  <ion-row class="content-row">
+    <ion-col id="content-row">
+      <button id="content-row-btn" ion-button small block color="dark" (click)="registro()">
+        Register
+      </button>
+    </ion-col>
+  </ion-row>
 </ion-content>

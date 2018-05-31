@@ -1,8 +1,9 @@
 import { NgModule } from '@angular/core';
-import { FiltrosPipe } from './filtros/filtros';
+import { Mayusculas, Minusculas, isEmail, Numerico, Replace, Fechas, Fecha, Hora, getMilisegundos, setMilisegundos, FechaAnterior,FechaPosterios, SetTimeDate, Diferencia } from './filtros/filtros';
 @NgModule({
-	declarations: [FiltrosPipe],
+	declarations: [Mayusculas, Minusculas, isEmail, Numerico, Replace, Fechas, Fecha, Hora, getMilisegundos, setMilisegundos, FechaAnterior, FechaPosterios,SetTimeDate, Diferencia],
 	imports: [],
-	exports: [FiltrosPipe]
+	exports: [Mayusculas, Minusculas, isEmail, Numerico, Replace, Fechas, Fecha, Hora, getMilisegundos, setMilisegundos, FechaAnterior,FechaPosterios, SetTimeDate, Diferencia]
 })
-export class PipesModule {}
+export class PipesModule { }
+

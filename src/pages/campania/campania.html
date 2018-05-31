@@ -1,18 +1,219 @@
-<!--
-  Generated template for the CampaniaPage page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
-<ion-header>
-
-  <ion-navbar>
-    <ion-title>campania</ion-title>
-  </ion-navbar>
-
-</ion-header>
-
-
-<ion-content padding>
-
+<ion-content class="contenido">
+  <div class="content-div" *ngIf="panelLlamada == false">
+    <ion-card class="conten-card">
+      <ion-row class="row-cont">
+        <ion-col col-2 id="row-cont">
+          <ion-icon id="row-cont-btn-f" name="arrow-round-back" (click)="regresar(true)" *ngIf="globalProvider.usuario.mostrar_publicidad_video == 'Y'"></ion-icon>
+        </ion-col>
+        <ion-col id="row-cont" *ngIf="globalProvider.usuario.mostrar_publicidad_video == 'Y'">
+          <button id="row-cont-btn" ion-button small icon-right block color="dark" (click)="showVideo()">
+            {{(segundos == 10) ? 'Get more time ' : segundos }} {{(time && segundos == 10) ? time.hora+":"+time.minuto+":"+time.segundo
+            : (segundos == 10) ? '0' : '' }}
+          </button>
+        </ion-col>
+        <ion-col col-2 id="row-cont-btn">
+        </ion-col>
+      </ion-row>
+      <ion-row class="row-cont">
+        <ion-col col-2 class="row-cont">
+            <ion-icon id="row-cont-btn-f" name="arrow-round-back" (click)="regresar(true)" *ngIf="globalProvider.usuario.mostrar_publicidad_video == 'N'"></ion-icon>
+        </ion-col>
+        <ion-col id="row-cont">
+          <p id="title">{{campania.nombre}}</p>
+        </ion-col>
+        <ion-col col-2 id="row-cont-btn">
+        </ion-col>
+      </ion-row>
+      <ion-row class="row-cont">
+        <ion-col id="row-cont">
+          last call: {{campania.mod_fecha}}
+        </ion-col>
+      </ion-row>
+      <ion-row class="row-cont-b">
+        <ion-col id="row-cont-b" *ngFor="let estado of campania.estados_llamadas ; let i = index" [style.background-color]="'#'+estado.color"
+          [style.border]="stado[i].border" (click)="getContenidoCampania(estado,i)">
+          <b>{{estado.valor}}</b>
+          <br>{{estado.texto}}
+        </ion-col>
+      </ion-row>
+      <ion-row class="row-cont">
+        <ion-col id="row-cont">
+          {{(campania.llamados == 0 ) ? 'Start list' : 'Continue where you stop...'}}
+        </ion-col>
+      </ion-row>
+      <ion-row class="row-cont" *ngIf="no == true">
+        <ion-col id="row-cont-p">
+          <button id="row-cont-btn-p" ion-button icon-left block color="buttom" (click)="llamarLista(boton.key_estado,false,0)">
+            <ion-icon name="play"></ion-icon>
+            start dialing now
+          </button>
+        </ion-col>
+      </ion-row>
+    </ion-card>
+  </div>
+  <ion-spinner *ngIf="spinner" name="bubbles" item-left></ion-spinner>
+  <ion-content class="content-list" *ngIf="panelLlamada == false">
+    <div class="conten-card" *ngFor="let c of contenido ; let i = index">
+      <ion-row class="row-cont">
+        <ion-col id="row-cont-c" col-2>
+          <button id="row-cont-btn-c" ion-button block (click)="llamarLista(boton.key_estado,true,i,false)" [style.background-color]="boton.color">
+            edit
+          </button>
+        </ion-col>
+        <ion-col col-2 id="row-cont-c" *ngIf="c.notas.length > 0">
+          <button id="row-cont-btn-c" ion-button block icon-right color="fondo" (click)="togell(i)">
+            notes
+          </button>
+        </ion-col>
+        <ion-col id="row-cont-c">
+          <button id="row-cont-btn-c" ion-button block icon-right color="fondo" (click)="llamarLista(boton.key_estado,true,i)">
+            {{c.nombre}}
+            <br> {{c.telefono}}
+            <ion-icon name="call"></ion-icon>
+          </button>
+        </ion-col>
+      </ion-row>
+      <ion-row class="row-cont" *ngIf="nota == true && i == nP">
+        <ion-col col-12 id="row-cont" *ngFor="let nota of c.notas">
+          <p id="p-nota">{{nota.nota}}</p>
+        </ion-col>
+      </ion-row>
+    </div>
+  </ion-content>
+  <ion-card *ngIf="panelLlamada == true" class="conten-card">
+    <ion-row class="row-cont">
+      <ion-col col-2 id="row-cont">
+        <ion-icon *ngIf="retroceder == true" id="row-icon"name="arrow-round-back" md="md-arrow-round-back" (click)="pausar()"></ion-icon>
+      </ion-col>
+      <ion-col col-8 id="row-cont">
+        <input id="input-title" type="text" text-center [readonly]="edit_info.readonly" [(ngModel)]="getFilaCampania.nombre" [style.border-bottom]="edit_info.border"
+        />
+      </ion-col>
+      <ion-col col-2 id="row-cont">
+        <ion-icon id="row-icon" *ngIf="edit_info.readonly == true" name="create" (click)="editInfo()"></ion-icon>
+        <ion-icon id="row-icon" *ngIf="edit_info.readonly == false" name="checkmark" (click)="saveInfo()"></ion-icon>
+      </ion-col>
+    </ion-row>
+    <div class="panel">
+      <ion-row class="row-panel">
+        <ion-col id="row-panel" *ngIf="getFilaCampania.columna_campo_1_text != ''">
+          <ion-item class="from-item">
+            <ion-label id="from-label" stacked>{{getFilaCampania.columna_campo_1_text}}</ion-label>
+            <ion-input id="from-input" type="text" text-center [readonly]="edit_info.readonly" [(ngModel)]="getFilaCampania.campo_1"
+              [style.border-bottom]="edit_info.border"></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col id="row-panel" *ngIf="getFilaCampania.columna_campo_2_text != ''">
+          <ion-item class="from-item">
+            <ion-label id="from-label" stacked>{{getFilaCampania.columna_campo_2_text}}</ion-label>
+            <ion-input id="from-input" type="text" text-center [readonly]="edit_info.readonly" [(ngModel)]="getFilaCampania.campo_2"
+              [style.border-bottom]="edit_info.border"></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row class="row-panel">
+        <ion-col id="row-panel" *ngIf="getFilaCampania.columna_campo_3_text != ''">
+          <ion-item class="from-item">
+            <ion-label id="from-label" stacked>{{getFilaCampania.columna_campo_3_text}}</ion-label>
+            <ion-input id="from-input" type="text" text-center [readonly]="edit_info.readonly" [(ngModel)]="getFilaCampania.campo_3"
+              [style.border-bottom]="edit_info.border"></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col id="row-panel" *ngIf="getFilaCampania.columna_campo_4_text != ''">
+          <ion-item class="from-item">
+            <ion-label id="from-label" stacked>{{getFilaCampania.columna_campo_4_text}}</ion-label>
+            <ion-input id="from-input" type="text" text-center [readonly]="edit_info.readonly" [(ngModel)]="getFilaCampania.campo_4"
+              [style.border-bottom]="edit_info.border"></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <!--ion-row class="row-panel">
+          <ion-col id="row-panel">
+            <b id="title">{{getFilaCampania.columna_campo_1_text}}:</b>
+            <div id="contenido">{{getFilaCampania.campo_1}}</div>
+          </ion-col>
+          <ion-col id="row-panel">
+            <b id="title">{{getFilaCampania.columna_campo_2_text}}:</b>
+            <div id="contenido">{{getFilaCampania.campo_2}}</div>
+          </ion-col>
+        </ion-row>
+        <ion-row class="row-panel">
+          <ion-col id="row-panel">
+            <b id="title">{{getFilaCampania.columna_campo_3_text}}:</b>
+            <div id="contenido">{{getFilaCampania.campo_3}}</div>
+          </ion-col>
+          <ion-col id="row-panel">
+            <b id="title">{{getFilaCampania.columna_campo_4_text}}:</b>
+            <div id="contenido">{{getFilaCampania.campo_4}}</div>
+          </ion-col>
+        </ion-row-->
+    </div>
+    <ion-row class="row-cont">
+      <ion-col id="row-cont">
+        <ion-item class="from-item">
+          <ion-label id="from-label" stacked>Notes:</ion-label>
+          <ion-textarea id="textarea-notes" text-center [(ngModel)]="data.notas" text-lg:992px [style.border-bottom]="edit_info.border"></ion-textarea>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <!--div class="toggle-div">
+        <p id="label-div">SMS:</p>
+        <ion-toggle id="from-toggle" color="danger" checked="{{msnS}}" (ionChange)="chekedSms($event)"></ion-toggle>
+      </div-->
+    <ion-row class="row-cont">
+      <ion-col col-3 id="row-cont">
+      </ion-col>
+      <ion-col col-6 id="row-cont">
+        <ion-item class="from-item">
+          <ion-label id="from-label-sms">SMS:</ion-label>
+          <ion-toggle id="from-toggle" color="danger" checked="{{msnS}}" (ionChange)="chekedSms($event)"></ion-toggle>
+        </ion-item>
+      </ion-col>
+      <ion-col col-3 id="row-cont">
+      </ion-col>
+    </ion-row>
+    <ion-row class="row-cont">
+      <ion-col id="row-cont">
+        <ion-item class="from-item">
+          <ion-textarea id="textarea-notes" [(ngModel)]="data.sms" text-center text-lg:992px></ion-textarea>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row class="row-cont">
+      <ion-col col-4 id="row-cont-title">
+        <ion-item class="from-item">
+          <p id="title">Reminder</p>
+        </ion-item>
+      </ion-col>
+      <ion-col id="row-cont">
+        <ion-item class="from-item">
+          <ion-datetime id="from-date" text-center displayFormat="MMM DD, YYYY HH:mm" [(ngModel)]="data.date" text-lg:992px></ion-datetime>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row class="row-cont">
+      <ion-col id="row-cont-b" col-6 *ngFor="let stado of catalogoEstado | slice:1:5;">
+        <button id="row-cont-btn-status" ion-button small block [style.background-color]="'#'+stado.color" (click)="clickStado(stado.key)">
+          {{stado.nombre}}
+        </button>
+      </ion-col>
+    </ion-row>
+    <ion-row class="row-cont">
+      <ion-col id="row-cont-b">
+        <button *ngIf="edit_info.readonly == true" id="row-cont-btn-t" ion-button block small color="secondary" (click)="call(getFilaCampania.telefono)">
+          <ion-icon name="call"></ion-icon>
+          &nbsp;{{getFilaCampania.telefono}}
+        </button>
+        <input *ngIf="edit_info.readonly == false" id="input-title" type="text" text-center [readonly]="edit_info.readonly" [(ngModel)]="getFilaCampania.telefono"
+          [style.border-bottom]="edit_info.border" />
+      </ion-col>
+    </ion-row>
+    <ion-row class="row-cont" *ngIf="retroceder == false">
+      <ion-col id="row-cont-b">
+        <button id="row-cont-btn-t" ion-button small block [style.background-color]="buttom.color" (click)="pausarLlamada()">
+          {{buttom.sms}}
+        </button>
+      </ion-col>
+    </ion-row>
+  </ion-card>
 </ion-content>

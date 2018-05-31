@@ -1,18 +1,137 @@
-<!--
-  Generated template for the ModalPage page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
-<ion-header>
-
-  <ion-navbar>
-    <ion-title>modal</ion-title>
-  </ion-navbar>
-
-</ion-header>
-
-
-<ion-content padding>
-
+<ion-content padding class="content-modal" [style.background-color]="style.background" [style.opacity]="style.opacity">
+  <ion-card class="conten-card" *ngIf="panel_llamada == true && data1.view == 1">
+    <ion-row class="row-cont" *ngIf="globalProvider.usuario.mostrar_publicidad_video == 'Y'">
+      <ion-col id="row-cont">
+        <button id="row-cont-btn" ion-button small icon-right block color="dark" (click)="showVideo()">
+          {{(segundos == 10) ? 'Get more time ' : segundos }} {{(time && segundos == 10) ? time.hora+":"+time.minuto+":"+time.segundo
+          : (segundos == 10) ? '0' : '' }}
+        </button>
+      </ion-col>
+    </ion-row>
+    <ion-row class="row-cont">
+      <ion-col id="row-cont">
+        {{get_fila_contenido.fecha}}
+      </ion-col>
+      <ion-col id="row-cont-title">
+        {{get_fila_contenido.nombre}}
+      </ion-col>
+      <ion-col id="row-cont">
+        {{get_fila_contenido.tipo}}
+      </ion-col>
+    </ion-row>
+    <div class="panel">
+      <ion-row class="row-panel">
+        <ion-col id="row-panel">
+          <b id="title">{{get_fila_contenido.columna_campo_1_text}}:</b>
+          <div id="contenido">{{get_fila_contenido.campo_1}}</div>
+        </ion-col>
+        <ion-col id="row-panel">
+          <b id="title">{{get_fila_contenido.columna_campo_2_text}}:</b>
+          <div id="contenido">{{get_fila_contenido.campo_2}}</div>
+        </ion-col>
+      </ion-row>
+      <ion-row class="row-panel">
+        <ion-col id="row-panel">
+          <b id="title">{{get_fila_contenido.columna_campo_3_text}}:</b>
+          <div id="contenido">{{get_fila_contenido.campo_3}}</div>
+        </ion-col>
+        <ion-col id="row-panel">
+          <b id="title">{{get_fila_contenido.columna_campo_4_text}}:</b>
+          <div id="contenido">{{get_fila_contenido.campo_4}}</div>
+        </ion-col>
+      </ion-row>
+    </div>
+    <ion-row class="row-cont">
+      <ion-col id="row-cont">
+        <ion-item class="from-item">
+          <ion-label id="from-label" stacked>Notes:</ion-label>
+          <ion-textarea id="textarea-notes" text-center [(ngModel)]="data.notas" text-lg:992px></ion-textarea>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <div class="toggle-div">
+      <p id="label-div">SMS:</p>
+      <ion-toggle id="from-toggle" color="danger" checked="{{estado_msn}}" (ionChange)="chekedSms($event)"></ion-toggle>
+    </div>
+    <ion-row class="row-cont">
+      <ion-col id="row-cont">
+        <ion-item class="from-item">
+          <ion-textarea id="textarea-notes" [(ngModel)]="data.sms" text-center text-lg:992px></ion-textarea>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row class="row-cont">
+      <ion-col col-4 id="row-cont-title">
+        <ion-item class="from-item">
+          <p id="title">Reminder</p>
+        </ion-item>
+      </ion-col>
+      <ion-col id="row-cont">
+        <ion-item class="from-item">
+          <ion-datetime id="from-date" text-center displayFormat="MMM DD, YYYY HH:mm" [(ngModel)]="data.date" text-lg:992px></ion-datetime>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row class="row-cont-b">
+      <ion-col id="row-cont-b" col-6 *ngFor="let stado of catalogo_estado | slice:1:5;">
+        <button id="row-cont-btn-status" ion-button small full [style.background-color]="'#'+stado.color" (click)="clickStado(stado.key)">
+          {{stado.nombre}}
+        </button>
+      </ion-col>
+    </ion-row>
+    <ion-row class="row-cont">
+      <ion-col id="row-cont-b">
+        <button id="row-cont-btn-t" ion-button block small color="secondary" (click)="call()">
+          <ion-icon name="call"></ion-icon>
+          &nbsp;{{get_fila_contenido.telefono}}
+        </button>
+      </ion-col>
+    </ion-row>
+  </ion-card>
+  <div class="animacion" *ngIf="panel_llamada == false && data1.view == 1">
+    <img src="assets/imgs/m.gif">
+    <div class="contenedor">
+      <p>{{text}}.
+        <span>&#160;</span>
+      </p>
+    </div>
+    <ion-row id="img" class="content-row">
+      <ion-col id="content-row">
+        <button id="content-row-btn" ion-button block small icon-right (click)="panel_llamada = true">
+          check
+          <ion-icon name="checkmark-circle"></ion-icon>
+        </button>
+      </ion-col>
+    </ion-row>
+  </div>
+  <ion-slides class="slider-content" pager *ngIf="data1.view == 2">
+    <ion-slide class="slider-content">
+      <!--ion-icon id="icon" ios="ios-arrow-round-back" md="md-arrow-round-back" (click)="closeModal()"></ion-icon-->
+      <img id="imagen-demo" src="assets/imgs/demo1.jpg" alt="">
+    </ion-slide>
+    <ion-slide class="slider-content">
+      <!--ion-icon id="icon" ios="ios-arrow-round-back" md="md-arrow-round-back" (click)="closeModal()"></ion-icon-->
+      <img id="imagen-demo" src="assets/imgs/demo2.jpg" alt="">
+    </ion-slide>
+    <ion-slide class="slider-content">
+      <!--ion-icon id="icon" ios="ios-arrow-round-back" md="md-arrow-round-back" (click)="closeModal()"></ion-icon-->
+      <img id="imagen-demo" src="assets/imgs/demo3.jpg" alt="">
+    </ion-slide>
+    <ion-slide class="slider-content">
+      <!--ion-icon id="icon" ios="ios-arrow-round-back" md="md-arrow-round-back" (click)="closeModal()"></ion-icon-->
+      <img id="imagen-demo" src="assets/imgs/demo4.jpg" alt="">
+      <button id="imagen-button" clear ion-button small icon-right color="light" (click)="closeModal()">
+        Close
+        <ion-icon ios="ios-close-circle" md="md-close-circle"></ion-icon>
+      </button>
+    </ion-slide>
+  </ion-slides>
+  <div class="llamada" *ngIf="data1.view == 3">
+    <div id="siguiente" (click)="closeModal(true)">
+      <p id="parrafo">Siguiente</p>
+    </div>
+    <div id="cancelar" (click)="closeModal()">
+      cancelar
+    </div>
+  </div>
 </ion-content>

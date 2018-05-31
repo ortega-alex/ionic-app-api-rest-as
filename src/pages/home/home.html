@@ -1,14 +1,133 @@
-<ion-header>
-  <ion-navbar>
-    <ion-title>
-      Ionic Blank
-    </ion-title>
-  </ion-navbar>
-</ion-header>
-
-<ion-content padding>
-  The world is your oyster.
-  <p>
-    If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will be your guide.
-  </p>
+<ion-content class="contenido-home" no-Lines [style.background]="background">
+  <div class="content-header" *ngIf="conexion == false">
+    <ion-row class="conten-row">
+      <ion-col id="conten-row" col-3>
+        <button id="conten-row-btn" ion-button clear full (click)="crearCampania()" *ngIf="sms_activo == false">
+          <b id="title">+LIST</b>
+        </button>
+      </ion-col>
+      <ion-col id="conten-row">
+        <img id="title" src="assets/imgs/title.png" (click)="perfil()" *ngIf="sms_activo == false">
+        <button id="conten-row-btn" ion-button clear full (click)="smsModal(true)" *ngIf="sms_activo == true">
+          <b id="title">SMS MANAGER</b>
+        </button>
+      </ion-col>
+      <ion-col id="conten-row" col-3>
+        <button id="conten-row-btn" ion-button clear full (click)="selectSms()">
+          <b id="title">{{(sms_activo == false) ? '+' : '-'}}SMS</b>
+        </button>
+      </ion-col>
+    </ion-row>
+  </div>
+  <ion-scroll scrollY="true" class="content-div"  no-Lines no-border *ngIf="conexion == false" [style.background]="background">
+    <ion-refresher (ionRefresh)="doRefresh($event)">
+      <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
+    <!--ion-row class="conten-row" *ngIf="compartir">
+        <ion-col id="conten-row">
+          <button id="content-row-btn" ion-button block icon-left (click)="share()">
+            <ion-icon name="logo-facebook"></ion-icon>
+            share
+          </button>
+        </ion-col>
+      </ion-row-->
+    <div *ngFor="let campania of campanias ; let i = index" class="conten-card" [style.background]="background">
+      <ion-row class="row-cont">
+        <ion-col id="row-cont" col-2>
+        </ion-col>
+        <ion-col id="row-cont">
+          <input id="title" [readonly]="edid_name[i].edit" [(ngModel)]="campania.nombre" text-center type="text" (click)="editName(i)"
+            [style.border-bottom]="edid_name[i].border" />
+          <ion-icon id="icon-delete" *ngIf="edid_name[i].edit == false" name="checkmark" (click)="saveName(campania.id_campania,campania.nombre,i)"></ion-icon>
+        </ion-col>
+        <ion-col id="row-cont" col-2>
+          <ion-icon id="icon-delete" color="dark" name="trash" (click)="setDeleteCampania(campania.id_campania,campania.nombre)"></ion-icon>
+        </ion-col>
+      </ion-row>
+      <ion-row class="row-cont-b">
+        <ion-col id="row-cont-b" *ngFor="let estado of campania.estados_llamadas; let j = index " [style.background-color]="'#'+estado.color"
+          (click)="irACampania(campania,i,estado,j)" [style.border]="edid_name[i].border_stado[j]">
+          <b>{{estado.valor}}</b>
+          <br>{{estado.texto}}
+        </ion-col>
+      </ion-row>
+      <ion-row class="row-cont">
+        <ion-col id="row-cont">
+          last call: {{campania.mod_fecha}}
+        </ion-col>
+      </ion-row>
+    </div>
+  </ion-scroll >
+  <div class="conten-conexion" *ngIf="conexion == true">
+    <ion-row class="conten-row">
+      <ion-col id="conten-row" col-2>
+        <ion-icon id="icon"  name="arrow-round-back" (click)="monitoreo()"></ion-icon>
+      </ion-col>
+      <ion-col id="conten-row" col-8>
+        <p id="title">{{title}}</p>
+      </ion-col>
+      <ion-col id="conten-row" col-2></ion-col>
+    </ion-row>
+    <ion-spinner *ngIf="spinner" name="bubbles" item-left></ion-spinner>
+    <ion-row class="conten-row" *ngIf="compartir">
+      <ion-col id="conten-row">
+        <button id="content-row-btn" ion-button block icon-left (click)="share()">
+          <ion-icon name="logo-facebook"></ion-icon>
+          share
+        </button>
+      </ion-col>
+    </ion-row>
+    <ion-row class="conten-row" *ngIf="spinner == false">
+      <ion-col id="conten-row">
+        <button id="conten-row-btn" ion-button small block icon-right color="danger" (click)="monitoreo()">
+          Stop
+          <ion-icon name="help-circle"></ion-icon>
+        </button>
+      </ion-col>
+      <ion-col col-12 id="conten-row">
+        <br>
+        <p id="parrafo">
+          1. Please login into your pc with the same user and password
+          <a href="http://35.232.20.49/">http://35.232.20.49/</a>
+        </p>
+        <br>
+        <p id="parrafo">
+          2. Select "Enter" into your campaign list you want to call</p>
+        <br>
+        <p id="parrafo">
+          3. Click on the "Continue Calling" button and your phone will start to call the list
+        </p>
+        <br>
+        <p id="parrafo">
+          Enjoy
+          <br> We will occationally ask you to watch a short video to support our app:
+        </p>
+      </ion-col>
+    </ion-row>
+    <ion-row class="conten-row" *ngIf="globalProvider.usuario.mostrar_publicidad_video == 'Y' && spinner == false">
+      <ion-col id="conten-row">
+        <button id="conten-row-btn" ion-button icon-right block color="buttom" (click)="showVideo()">
+          {{(segundos == 10) ? 'Get more time ' : segundos }} {{(time && segundos == 10) ? time.hora+":"+time.minuto+":"+time.segundo
+          : (segundos == 10) ? '0' : '' }}
+        </button>
+      </ion-col>
+    </ion-row>
+    <ion-row class="conten-row" *ngIf="spinner == false">
+      <ion-col id="conten-row">
+        <p id="parrafo">
+          for any comments or support please contact us by whatsapp or phone at:
+          <a href="https://api.whatsapp.com/send?phone=50242297744">+502 4229-7744</a>
+        </p>
+      </ion-col>
+    </ion-row>
+  </div>
 </ion-content>
+<ion-footer no-Lines no-border class="content-footer" *ngIf="conexion == false">
+  <div class="btn-conexion" *ngIf="sms_activo == false" (click)="monitoreo()">
+    <img id="btn-conexion-tex" src="assets/imgs/text.png">
+  </div>
+  <div class="btn-conexion" *ngIf="sms_activo == true" (click)="smsModal()">
+    <p id="btn-conexion-p">sms</p>
+  </div>
+  <img id="btn-conexion" src="assets/imgs/conexion.gif">
+</ion-footer>

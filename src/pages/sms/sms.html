@@ -1,18 +1,109 @@
-<!--
-  Generated template for the SmsPage page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
-<ion-header>
-
-  <ion-navbar>
-    <ion-title>sms</ion-title>
-  </ion-navbar>
-
-</ion-header>
-
-
 <ion-content padding>
-
+  <div class="content-header">
+    <ion-row class="conten-row">
+      <ion-col id="conten-row" col-2>
+        <ion-icon id="icon" name="arrow-round-back" (click)="closeModal(true)"></ion-icon>
+      </ion-col>
+      <ion-col id="conten-row">
+        <p id="title">{{(historial == false) ? 'CAMPAING SMS' : 'SMS MANAGER'}}</p>
+      </ion-col>
+      <ion-col id="conten-row" col-2> </ion-col>
+    </ion-row>
+  </div>
+  <div class="content-historial" *ngIf="historial == true">
+    <ion-refresher (ionRefresh)="doRefresh($event)">
+      <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
+    <div *ngFor="let campania_sms of campaniaSMS ; let i = index">
+      <ion-row class="row-historial">
+        <ion-col col-12 id="row-historial" (click)="togglel(i)">
+          <div class="togglel_title">
+            <b id="title">{{campania_sms.nombre }}</b>
+            <br>{{campania_sms.fecha_inicio}}
+            <br>{{campania_sms.estado}}
+            <div class="progress-outer">
+              <div class="progress-inner" [style.width]="porcentage(campania_sms.sms_enviado,campania_sms.sms_total) + '%'">
+                {{porcentage(campania_sms.sms_enviado,campania_sms.sms_total)}} %
+              </div>
+            </div>
+            <ion-icon id="togglel_icon" small item-right name="arrow-forward" *ngIf="!sms_status[i].togglel"></ion-icon>
+            <ion-icon id="togglel_icon" small item-right name="arrow-down" *ngIf="sms_status[i].togglel"></ion-icon>
+          </div>
+        </ion-col>
+      </ion-row>
+      <div *ngIf="sms_status[i].togglel == true">
+        <ion-row class="row-historial" *ngFor="let campania of campania_sms.campania">
+          <ion-col col-12>
+            <b id="title_campania"> Campaing: {{campania.nombre_campania}}</b>
+          </ion-col>
+          <ion-col col-2 id="row-historial-b" *ngFor="let estado of campania.estado" [style.background-color]="'#'+estado.color">
+            <b id="valor">{{estado.valor}}</b>
+            <br>{{estado.nombre}}
+          </ion-col>
+        </ion-row>
+        <ion-row class="row-historial">
+          <ion-col col-12 id="row-historial">
+            <p id="sms_text">SMS: {{campania_sms.texto_template}}</p>
+          </ion-col>
+        </ion-row>
+        <ion-row class="row-historial">
+          <ion-col id="row-historial">
+            <ion-icon id="icon-historial" name="trash" color="dark" (click)="setDeleteCampaniaSMS(campania_sms.id_campania_sms)"></ion-icon>
+          </ion-col>
+          <!--ion-col id="row-historial">
+            <ion-icon id="icon-historial" name="pause" color="dark" (click)="setDeleteCampaniaSMS(campania_sms.id_campania_sms)"></ion-icon>
+          </ion-col-->
+          <ion-col id="row-historial">
+            <ion-icon id="icon-historial" name="play" color="dark" (click)="getSMSTotalEnviado(campania_sms.id_campania_sms)"></ion-icon>
+          </ion-col>
+        </ion-row>
+      </div>
+    </div>
+  </div>
+  <div class="content-sms" *ngIf="historial == false">
+    <form [formGroup]="sms_from" class="from-content">
+      <ion-row class="row-info">
+        <ion-col id="row-info">
+          <ion-label id="row-info-label" stacked>Name:</ion-label>
+          <ion-input id="row-info-input" autofocus type="text" text-center formControlName="nombre"></ion-input>
+        </ion-col>
+      </ion-row>
+      <p ion-text [hidden]="sms_from.controls.nombre.valid || submitted === false" color="danger" padding-left>
+        Enter name...
+      </p>
+      <ion-row class="row-info">
+        <ion-col id="row-info">
+          <ion-label id="row-info-label" stacked>SMS:</ion-label>
+          <ion-textarea id="row-info-texarea" formControlName="sms_text" placeholder="Write *name* where you want each of the customers name on the text"></ion-textarea>
+        </ion-col>
+      </ion-row>
+      <p ion-text [hidden]="sms_from.controls.sms_text.valid || submitted === false" color="danger" padding-left>
+        Enter SMS......
+      </p>
+      <ion-row class="row-info">
+        <ion-icon id="calendar" name="calendar"></ion-icon>
+        <ion-col id="row-info">
+          <ion-datetime id="row-info-date" text-center displayFormat="MMM DD, YYYY HH:mm" formControlName="fecha"> </ion-datetime>
+        </ion-col>
+      </ion-row>
+    </form>
+    <ion-row class="row-estatus" *ngFor="let sms of campania_sms">
+      <ion-col col-12 id="row-estatus">
+        <b id="title">{{sms.nombre }}</b>
+      </ion-col>
+      <ion-col col-2 id="row-estatus-b" *ngFor="let estado of sms.estados" [style.background-color]="'#'+estado.color">
+        <b id="valor">{{estado.valor}}</b>
+        <br>{{estado.texto}}
+      </ion-col>
+    </ion-row>
+    <ion-row class="row-info">
+      <ion-col col-9 id="row-info"></ion-col>
+      <ion-col id="row-info">
+        <button id="row-info-btn" ion-button full small icon-right color="secondary" type="submit" (click)="setCampaniaSMSUsuario()">
+          send
+          <ion-icon name="checkmark"></ion-icon>
+        </button>
+      </ion-col>
+    </ion-row>
+  </div>
 </ion-content>

@@ -1,3 +1,230 @@
 page-modal {
+    .header-modal{
+        #header-toolbar{
+            #title{
+                font-size: 1.0em;
+                font-weight: bold;
+            }
+        }
+    }	
+    .content-modal{ 
+        font-size: 0.8 em;
+        height: 100% !important;
+        width: 100% !important;
+        //background-color: black;
+        //opacity: 0.9;
 
+        /*vista 1*/	
+		.conter-header{
+			border-bottom: solid #f8f8f8 1px;
+			text-align: center;
+			width: 100% !important;
+			.header-row{
+				#header-row{
+					#title{
+						font-size: 1.5em;
+					}
+					#icon{
+						font-size: 2em;
+					}
+				}
+			}
+		}
+        .conten-card{
+            text-align: center;
+            margin: 1% 0% 0%;
+            padding: 0%;
+            width: 100%;
+            #row-cont{
+                margin: 0%;
+                padding: 1% 0% 0%;
+                #title{
+                    font-size: 1.0em;
+                }
+                #row-cont-btn{
+                    font-size: 0.8em;
+                }
+                #p-nota{
+                    background-color:  #f8f8f8 ;
+					font-size: 0.8em;
+                }
+			}
+			#row-cont-title{
+				font-size: 0.8em;
+				font-weight: bold;
+			}
+			#row-cont-b{
+				margin: 0%;
+				padding: 0.5%; 
+				#row-cont-btn-status{
+					//border: solid black 1px;
+					font-size:1.0em;
+					margin: 0% !important;
+					padding: 0% !important;
+				}
+				#row-cont-btn-t{
+					font-size:1.0em;
+					margin: 0.3% !important;
+					padding: 0% !important;
+				}
+			}
+			#row-cont-c{
+				//border: solid red 1px;				
+				text-align: center;
+				margin: 0% !important;
+				padding: 0% 1% !important;
+				font-size:0.7em;
+			}
+			#row-cont-btn-c{
+				//border: solid black 1px;
+				font-size:1.0em;
+				margin: 0% !important;
+				padding: 0%  !important;
+			}	
+        }
+		.toggle-div{
+			width: 100% !important;
+			padding-left: 45%;
+			#label-div{
+				position: absolute;
+				left: 38%;
+				padding-top: 0.2%; 
+				font-size: 0.7em;
+				opacity: 0.5;
+			}
+			#from-toggle{
+				margin: 0% !important;
+				padding: 1% !important;
+			}
+		}
+        .from-item{
+			#from-label{
+				margin: 0% !important;
+				width: 100% !important;
+				font-size: 0.8em;
+			}
+			#from-input{
+				margin: 0% !important;
+				width: 100% !important;
+				font-size: 0.7em;				
+ 				border-bottom:solid #f0f0f0 1px;
+			}
+			#textarea-notes{
+				margin: 0% !important;
+				width: 100% !important;
+ 				font-size: 0.7em;
+ 				border:solid #f0f0f0 1px;
+			}
+			#from-date{
+				margin: 0% !important;
+				width: 100% !important;
+ 				font-size: 0.7em;
+				border-bottom:solid #f0f0f0 1px;
+			}
+			#from-toggle{
+				//padding-left: 40% !important;
+				//border:solid black 1px;
+				align-items:center;
+			}
+			#title{
+				font-size: 0.8em;
+			}
+		}
+		.panel{
+			//border: solid black;
+			//background-color: aqua;
+			background-color: #f8f6f6; 
+			margin: 0% 1%;
+			text-align: left;
+			.row-panel{
+				margin: 1%;
+				//background-color: aqua;
+				#title{
+					font-size: 0.8em;
+				}
+				#contenido{
+					font-size: 1em;
+					text-align: center;
+				}
+			}
+		}
+		.animacion{
+			.contenedor {
+				//margin: auto;
+				//display: table;
+			}			
+			p { 
+				//position: relative; 
+				//float: left;
+				background: #f8f8f8;
+				//color: #fff;
+				font-size: 1.2em;
+			}			
+			p span {
+				position:absolute;
+				right:0;
+				width:0;
+				background: #f8f8f8;
+				border-left: 1px solid #000;
+				animation: escribir 5s steps(50) infinite;
+			}			
+			@keyframes escribir {
+				from { width: 100% }
+				to { width:0 }
+			}			
+		}
+
+        /*vistas restantes*/
+        .slider-content{    
+            margin: 0% !important;
+            padding: 0% !important;            
+            /*#icon{
+                position: absolute;
+                top: 0%;
+                left: 0%;
+                font-size: 3em;
+                color: white;
+            } */
+            #imagen-button{
+                position: absolute;
+                bottom: 0%;
+                right: 0%;
+                font-size: 1.2em;
+                //color: white;
+            }                  
+            #imagen-demo{      
+                //display: block;
+                //margin: auto;
+                height: 100% !important;
+                width: 100% !important;
+            }
+        }
+        .llamada{
+            height: 100% !important;
+            width: 100% !important;
+            #siguiente{
+                text-align: center;
+                font-size: 2em;
+                border: solid red 1px;
+                background-color: blue;
+                height: 75% !important;
+                width: 100% !important;
+                padding-top: 50%; 
+                #parrafo{
+                    display: block;
+                    margin: auto;
+                }
+            }
+            #cancelar{
+                text-align: center;
+                font-size: 2em;
+                border: solid red 1px;
+                background-color: red;
+                border: solid red 1px;
+                height: 25% !important;
+                width: 100% !important;
+                padding-top: 10%; 
+            }
+        }   
+    } 
 }
