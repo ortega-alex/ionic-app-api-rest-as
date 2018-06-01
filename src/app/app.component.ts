@@ -6,6 +6,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { HomePage } from '../pages/home/home';
 import { LoginPage } from '../pages/login/login';
 import { ModalPage } from '../pages/modal/modal';
+import { SmsPage } from '../pages/sms/sms';
 
 import { GlobalProvider } from '../providers/global/global';
 import { setMilisegundos, Fechas, Numerico } from '../pipes/filtros/filtros';
@@ -28,7 +29,6 @@ export class MyApp {
   private fechas = new Fechas();
   private res = [];
   private respuesta: any;
-  //splash = true;
 
   constructor(
     private platform: Platform,
@@ -62,7 +62,7 @@ export class MyApp {
       // Here you can do any higher level native things you might need.
       statusBar.styleDefault();
       splashScreen.hide();
-      //this.initPushNotification();
+      this.initPushNotification();
     });
   }
 
@@ -94,7 +94,7 @@ export class MyApp {
   }
 
   historialTelefonico() {
-    let d = { view: 1, num: null }
+    let d = { view: 1, num: null };
     this.storage.get('fecha').then(fecha => {
       this.options = [
         {
@@ -128,7 +128,7 @@ export class MyApp {
           this.respuesta = res;
           if (this.respuesta.error == 'false') {
             if (this.respuesta.llamadas && this.respuesta.llamadas.length > 0) {
-              let modal = this.modalControlle.create('ModalPage', { llamadas: this.respuesta.llamadas , data: d });
+              let modal = this.modalControlle.create('ModalPage', { llamadas: this.respuesta.llamadas, data: d });
               modal.present();
             }
           }
@@ -151,7 +151,7 @@ export class MyApp {
     }
     const options: PushOptions = {
       android: {
-        senderID: 'AIzaSyBLBjJZZEFu_gwuhIJrlxK1OxjwxLnAnuo'
+        senderID: 'AIzaSyCtDffZZdDaJ3D99NGrovKac4cJuFlIZvs'
       },
       ios: {
         alert: 'true',
@@ -165,11 +165,11 @@ export class MyApp {
     pushObject.on('registration').subscribe((data: any) => {
       console.log('device token -> ' + data.registrationId);
       this.globalProvider.setToken(data.registrationId);
-    });
+    }, (err) => console.log('err: ' + JSON.stringify(err)));
 
     pushObject.on('notification').subscribe((data: any) => {
-      console.log('message -> ' + data.message);
       //if user using app and push notification comes
+      console.log('data msj: ' + JSON.stringify(data));
       if (data.additionalData.foreground) {
         // if application open, show popup
         let confirmAlert = this.alertController.create({
@@ -181,17 +181,19 @@ export class MyApp {
           }, {
             text: 'View',
             handler: () => {
-              //TODO: Your logic here
-              //this.nav.push(DetailsPage, { message: data.message });
+              if (data.additionalData.id_campania_sms && data.additionalData.id_campania_sms != null) {
+                let modal = this.modalControlle.create('SmsPage', { historial: true, campania_sms: null, id: data.additionalData.id_campania_sms });
+                modal.present();
+              }
             }
           }]
         });
         confirmAlert.present();
       } else {
-        //if user NOT using app and push notification comes
-        //TODO: Your logic on click of push notification directly
-        //this.nav.push(DetailsPage, { message: data.message });
-        console.log('Push notification clicked');
+        if (data.additionalData.id_campania_sms && data.additionalData.id_campania_sms != null) {
+          let modal = this.modalControlle.create('SmsPage', { historial: true, campania_sms: null, id: data.additionalData.id_campania_sms });
+          modal.present();
+        }
       }
     });
     pushObject.on('error').subscribe(error => console.error('Error with Push plugin' + error));

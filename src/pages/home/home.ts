@@ -197,8 +197,9 @@ export class HomePage {
     if (this.inici == false) {
       this.load = this.globalProvider.cargando(this.globalProvider.data.msj.load);
     }
-    let url = 'servicio=getCampaniaUsuario&' +
-      'id_usuario=' + this.globalProvider.usuario.id_usuario;
+    let url = 'servicio=getCampaniaUsuario' +
+      '&id_usuario=' + this.globalProvider.usuario.id_usuario + 
+      '&token=' + this.globalProvider.token;
     this.httpProvider.get(url).then(res => {
       if (this.inici == false) {
         this.load.dismiss();
@@ -516,42 +517,44 @@ export class HomePage {
 
   smsModal(historial: boolean = false) {
     var si: boolean = false;
-    for (let i = 0; i < this.edid_name.length; i++) {
-      for (let j = 0; j < this.edid_name[i].stado.length; j++) {
-        if (this.edid_name[i].stado[j] == true) {
-          if (this.campania_sms && this.campania_sms.length > 0) {
-            for (let k = 0; k < this.campania_sms.length; k++) {
-              if (this.campania_sms[k].id_campania == this.campanias[this.edid_name[i].posicion_campania].id_campania) {
-                this.campania_sms[k].estados.push(
-                  {
-                    color: this.campanias[this.edid_name[i].posicion_campania].estados_llamadas[j].color,
-                    id: this.campanias[this.edid_name[i].posicion_campania].estados_llamadas[j].key_estado,
-                    valor: this.campanias[this.edid_name[i].posicion_campania].estados_llamadas[j].valor,
-                    texto: this.campanias[this.edid_name[i].posicion_campania].estados_llamadas[j].texto,
-                  }
-                );
-                si = true;
-              } else {
-                si = false;
+    if (historial == false) {
+      for (let i = 0; i < this.edid_name.length; i++) {
+        for (let j = 0; j < this.edid_name[i].stado.length; j++) {
+          if (this.edid_name[i].stado[j] == true) {
+            if (this.campania_sms && this.campania_sms.length > 0) {
+              for (let k = 0; k < this.campania_sms.length; k++) {
+                if (this.campania_sms[k].id_campania == this.campanias[this.edid_name[i].posicion_campania].id_campania) {
+                  this.campania_sms[k].estados.push(
+                    {
+                      color: this.campanias[this.edid_name[i].posicion_campania].estados_llamadas[j].color,
+                      id: this.campanias[this.edid_name[i].posicion_campania].estados_llamadas[j].key_estado,
+                      valor: this.campanias[this.edid_name[i].posicion_campania].estados_llamadas[j].valor,
+                      texto: this.campanias[this.edid_name[i].posicion_campania].estados_llamadas[j].texto,
+                    }
+                  );
+                  si = true;
+                } else {
+                  si = false;
+                }
               }
             }
-          }
-          if (si == false) {
-            var estados = [];
-            estados.push({
-              color: this.campanias[this.edid_name[i].posicion_campania].estados_llamadas[j].color,
-              id: this.campanias[this.edid_name[i].posicion_campania].estados_llamadas[j].key_estado,
-              valor: this.campanias[this.edid_name[i].posicion_campania].estados_llamadas[j].valor,
-              texto: this.campanias[this.edid_name[i].posicion_campania].estados_llamadas[j].texto,
-            });
-            this.campania_sms.push(
-              {
-                id_campania: this.campanias[this.edid_name[i].posicion_campania].id_campania,
-                nombre: this.campanias[this.edid_name[i].posicion_campania].nombre,
-                estados: estados,
-                togglel: false
-              }
-            );
+            if (si == false) {
+              var estados = [];
+              estados.push({
+                color: this.campanias[this.edid_name[i].posicion_campania].estados_llamadas[j].color,
+                id: this.campanias[this.edid_name[i].posicion_campania].estados_llamadas[j].key_estado,
+                valor: this.campanias[this.edid_name[i].posicion_campania].estados_llamadas[j].valor,
+                texto: this.campanias[this.edid_name[i].posicion_campania].estados_llamadas[j].texto,
+              });
+              this.campania_sms.push(
+                {
+                  id_campania: this.campanias[this.edid_name[i].posicion_campania].id_campania,
+                  nombre: this.campanias[this.edid_name[i].posicion_campania].nombre,
+                  estados: estados,
+                  togglel: false
+                }
+              );
+            }
           }
         }
       }
@@ -565,7 +568,7 @@ export class HomePage {
       alert.present();
       return false;
     }
-    let modal = this.modalControlle.create('SmsPage', { historial: historial, campania_sms: this.campania_sms });
+    let modal = this.modalControlle.create('SmsPage', { historial: historial, campania_sms: this.campania_sms, id: null });
     modal.present();
     modal.onDidDismiss(data => {
       if (data) {
