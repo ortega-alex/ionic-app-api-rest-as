@@ -28,6 +28,7 @@ export class SmsPage {
   private campaniaSMS = [];
   private sms_status: Array<{ togglel: boolean }> = [];
   private numerico = new Numerico();
+  private stado_sms: { sms: Array<{ telefono: string, text: string }>, id: number, inicio: number, hilo: any, estado: string };
 
   constructor(
     public navCtrl: NavController,
@@ -184,31 +185,40 @@ export class SmsPage {
       if (this.res.error == 'false') {
         this.globalProvider.setListSms(id.toString(), this.res.sms);
         if (empesar == true) {
-          this.setSms(this.res.sms, id, inicio);
+          this.stado_sms = { sms: this.res.sms, id: id, inicio: inicio, hilo: null, estado: '' };
+          this.play();
         }
       }
     }).catch(err => console.log('err: ' + JSON.stringify(err)));
   }
 
   setSms(list_sms: Array<{ telefono: string, text: string }>, id: number, inicio: number) {
-    //console.log('telefono: ' + list_sms, list_sms[inicio].telefono + ' sms: ' + list_sms[inicio].text, id, inicio);
-    this.sms.send(this.numerico.transform(list_sms[inicio].telefono), list_sms[inicio].text);
-    this.setSMSEnviadoCampanaSMS(id);
-    if (list_sms.length - 1 == inicio) {
-      this.setEstadoCampaniaSMS(id, 'T');
-      this.closeModal(true);
-      return false;
-    }
-    inicio++;
-    this.setEstadoCampaniaSMS(id, 'A');
-    this.setSms(list_sms, id, inicio);
+    //console.log('telefono: ' + list_sms[inicio].telefono + ' sms: ' + list_sms[inicio].text, id, inicio);
+    this.sms.send(this.numerico.transform(list_sms[inicio].telefono), list_sms[inicio].text).then(res => {
+      this.setSMSEnviadoCampanaSMS(id);
+      if (list_sms.length - 1 == inicio) {
+        this.setEstadoCampaniaSMS(id, 'T');
+        this.stado_sms.estado = 'T';
+        this.getCampaniaSMSUsuario();
+        this.closeModal(true);
+        return false;
+      }
+      this.stado_sms.inicio++;
+      if (this.stado_sms.estado != 'A') {
+        this.setEstadoCampaniaSMS(id, 'A');
+        this.stado_sms.estado = 'A';
+        this.getCampaniaSMSUsuario();
+      }  
+    }).catch(err => {
+      this.pausar();
+    });   
   }
 
-  setContacto(telefono:string,nombre:string,campania:string) {
+  setContacto(telefono: string, nombre: string, campania: string) {
     let contact: Contact = this.contacts.create();
     contact.name = new ContactName(null, 'PD', nombre);
     contact.nickname = campania;
-    contact.organizations = [new ContactOrganization(null, campania , null)];
+    contact.organizations = [new ContactOrganization(null, campania, null)];
     contact.phoneNumbers = [new ContactField('mobile', this.numerico.transform(telefono))];
     contact.save().then(() => {
       console.log('res:');
@@ -229,6 +239,9 @@ export class SmsPage {
     this.httpProvider.get(url).then(res => {
       this.res = res;
     }).catch(err => console.log('err: ' + JSON.stringify(err)));
+    if (stado == 'P') {
+      this.getCampaniaSMSUsuario();
+    }
   }
 
   getSMSTotalEnviado(id: number) {
@@ -246,5 +259,16 @@ export class SmsPage {
       this.getCampaniaSMSUsuario();
       refresher.complete();
     });
+  }
+
+  play() {
+    this.stado_sms.hilo = setInterval(() => {
+      this.setSms(this.stado_sms.sms, this.stado_sms.id, this.stado_sms.inicio);
+    }, 5000);
+  }
+
+  pausar() {
+    clearInterval(this.stado_sms.hilo);
+    this.setEstadoCampaniaSMS(this.stado_sms.id, 'P');
   }
 }
