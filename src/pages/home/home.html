@@ -2,7 +2,7 @@
   <div class="content-header" *ngIf="conexion == false">
     <ion-row class="conten-row">
       <ion-col id="conten-row" col-3>
-        <button id="conten-row-btn" ion-button clear full (click)="crearCampania()" *ngIf="sms_activo == false">
+        <button id="conten-row-btn" ion-button clear full (click)="crearCampania()" *ngIf="sms_activo == false && plan.plan_restriccion == false">
           <b id="title">+LIST</b>
         </button>
       </ion-col>
@@ -23,14 +23,14 @@
     <ion-refresher (ionRefresh)="doRefresh($event)">
       <ion-refresher-content></ion-refresher-content>
     </ion-refresher>
-    <!--ion-row class="conten-row" *ngIf="compartir">
-        <ion-col id="conten-row">
-          <button id="content-row-btn" ion-button block icon-left (click)="share()">
-            <ion-icon name="logo-facebook"></ion-icon>
-            share
-          </button>
-        </ion-col>
-      </ion-row-->
+    <ion-row class="conten-row" *ngIf="compartir == true">
+      <ion-col id="conten-row">
+        <button id="content-row-btn" ion-button block icon-left (click)="share()">
+          <ion-icon name="logo-facebook"></ion-icon>
+          share
+        </button>
+      </ion-col>
+    </ion-row>
     <div *ngFor="let campania of campanias ; let i = index" class="conten-card" [style.background]="background">
       <ion-row class="row-cont">
         <ion-col id="row-cont" col-2>
@@ -104,7 +104,7 @@
         </p>
       </ion-col>
     </ion-row>
-    <ion-row class="conten-row" *ngIf="globalProvider.usuario.mostrar_publicidad_video == 'Y' && spinner == false">
+    <ion-row class="conten-row" *ngIf="plan.mostrar_publicidad_video == true && spinner == false">
       <ion-col id="conten-row">
         <button id="conten-row-btn" ion-button icon-right block color="buttom" (click)="showVideo()">
           {{(segundos == 10) ? 'Get more time ' : segundos }} {{(time && segundos == 10) ? time.hora+":"+time.minuto+":"+time.segundo

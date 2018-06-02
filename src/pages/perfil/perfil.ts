@@ -21,18 +21,15 @@ export class PerfilPage {
     nombre: null,
     apellido: null,
     correo: null,
-    login: false,
     imgUrl: null,
     clave: null,
-    tipo: null,
-    gratis: null,
-    mostrar_publicidad_video: null,
-    mostrar_publicidad_banner: null,
-    compartir_fb: null
+    logIn: null,
+    log_out: null,
+    tipo_registro: null,
+    tipo_usuario: null,
   };
   private load: any;
   private res: any;
-  private mostrar: boolean;
   private minusculas = new Minusculas();
 
   constructor(
@@ -48,7 +45,7 @@ export class PerfilPage {
   }
 
   ionViewDidLoad() {
-    this.cargarDatosUsuario();
+    this.usuario = this.globalProvider.usuario;
     this.platform.registerBackButtonAction(() => {
       this.closeModal();
     });
@@ -62,11 +59,6 @@ export class PerfilPage {
 
   closeModal() {
     this.viewController.dismiss();
-  }
-
-  cargarDatosUsuario() {
-    this.usuario = this.globalProvider.usuario;
-    this.mostrar = true;
   }
 
   menu() {

@@ -19,6 +19,7 @@ import { SMS } from '@ionic-native/sms';
 import { Calendar } from '@ionic-native/calendar';
 import { AdMobFree, AdMobFreeBannerConfig, AdMobFreeRewardVideoConfig } from '@ionic-native/admob-free';
 import { Facebook, FacebookLoginResponse } from '@ionic-native/facebook';
+import { Usuario, Plan } from '../../model/interfaces';
 
 @Component({
   selector: 'page-home',
@@ -51,6 +52,17 @@ export class HomePage {
   private sms_activo: boolean = false;
   private campania_sms: Array<{ id_campania: number, nombre: string, estados: Array<{ color: number, id: number, valor: number, texto: string }>, togglel: boolean }> = [];
   private background: string;
+  private plan: Plan = {
+    gratis: null,
+    mostrar_publicidad_video: null,
+    mostrar_publicidad_banner: null,
+    compartir_fb: null,
+    plan: null,
+    plan_fecha_expiracion: null,
+    plan_restriccion: null,
+    bloqueo: null,
+    bloqueo_msn: null
+  };
 
   constructor(
     public navCtrl: NavController,
@@ -103,7 +115,7 @@ export class HomePage {
 
   validarTiempo() {
     let date = new Date().getTime();
-    if ((!this.globalProvider.time || date >= this.globalProvider.time) && this.globalProvider.usuario.mostrar_publicidad_video == 'Y') {
+    if ((!this.globalProvider.time || date >= this.globalProvider.time) && this.globalProvider.plan.mostrar_publicidad_video == true) {
       let alert = this.alertController.create({
         title: '',
         subTitle: 'Get more time!',
@@ -180,13 +192,15 @@ export class HomePage {
   }
 
   crearCampania() {
-    let modal = this.modalControlle.create('CrearCampaniaPage');
-    modal.present();
-    modal.onDidDismiss(data => {
-      if (data) {
-        this.getCampaniaUsuario();
-      }
-    });
+    if (this.bloqueo() == false) {
+      let modal = this.modalControlle.create('CrearCampaniaPage');
+      modal.present();
+      modal.onDidDismiss(data => {
+        if (data) {
+          this.getCampaniaUsuario();
+        }
+      });
+    }
   }
 
   perfil() {
@@ -198,7 +212,7 @@ export class HomePage {
       this.load = this.globalProvider.cargando(this.globalProvider.data.msj.load);
     }
     let url = 'servicio=getCampaniaUsuario' +
-      '&id_usuario=' + this.globalProvider.usuario.id_usuario + 
+      '&id_usuario=' + this.globalProvider.usuario.id_usuario +
       '&token=' + this.globalProvider.token;
     this.httpProvider.get(url).then(res => {
       if (this.inici == false) {
@@ -210,21 +224,28 @@ export class HomePage {
           this.edid_name.push({ edit: true, border: 'none', border_stado: ['none', 'none', 'none', 'none', 'none'], posicion_campania: index, stado: [false, false, false, false, false] });
         }
         this.campanias = this.res.campania;
-        this.globalProvider.usuario.compartir_fb = this.res.compartir_fb;
-        this.globalProvider.usuario.mostrar_publicidad_banner = this.res.mostrar_publicidad_banner;
-        this.globalProvider.usuario.mostrar_publicidad_video = this.res.mostrar_publicidad_video;
-        this.globalProvider.setUsuario();
+        this.plan.gratis = (this.res.gratis == 'Y') ? true : false;
+        this.plan.mostrar_publicidad_video = (this.res.mostrar_publicidad_video == 'Y') ? true : false;
+        this.plan.mostrar_publicidad_banner = (this.res.mostrar_publicidad_banner == 'Y') ? true : false;
+        this.plan.compartir_fb = (this.res.compartir_fb == 'Y') ? true : false;
+        this.plan.plan = this.res.plan;
+        this.plan.plan_fecha_expiracion = this.res.plan_fecha_expiracion;
+        this.plan.plan_restriccion = (this.res.plan_restriccion == 'Y') ? true : false;
+        this.plan.bloqueo = (this.res.bloqueo == 'Y') ? true : false;
+        this.plan.bloqueo_msn = this.res.bloqueo_msn;
+        this.globalProvider.plan = this.plan;
+        this.globalProvider.setPlan(this.globalProvider.plan);
         this.inici = false;
         if (this.res.log_out == 'Y') {
           this.globalProvider.deleteUsuario();
           this.globalProvider.getUsuario();
           this.app.getRootNav().setRoot(MyApp);
         }
+        this.free();
       } else {
         this.globalProvider.alerta(this.res.mns);
       }
-      //this.free();
-      if (this.globalProvider.usuario.mostrar_publicidad_banner == 'Y') {
+      if (this.globalProvider.plan.mostrar_publicidad_banner == true) {
         this.banner();
       }
     }).catch(err => console.log('err: ' + JSON.stringify(err)));
@@ -238,32 +259,36 @@ export class HomePage {
   }
 
   irACampania(campania, posicion_campania: number, estado, posicion: number) {
-    if (this.sms_activo == false) {
-      let modal = this.modalControlle.create('CampaniaPage', { campania: campania, posicion_campania: posicion_campania, estado: estado, posicion: posicion });
-      modal.present();
-      modal.onDidDismiss(data => {
-        if (data) {
-          this.getCampaniaUsuario();
-        }
-      });
-    } else {
-      this.edid_name[posicion_campania].stado[posicion] = !this.edid_name[posicion_campania].stado[posicion];
-      (this.edid_name[posicion_campania].stado[posicion] == true) ? this.edid_name[posicion_campania].border_stado[posicion] = "solid gray 4px" : this.edid_name[posicion_campania].border_stado[posicion] = "none";
+    if (this.bloqueo() == false) {
+      if (this.sms_activo == false) {
+        let modal = this.modalControlle.create('CampaniaPage', { campania: campania, posicion_campania: posicion_campania, estado: estado, posicion: posicion });
+        modal.present();
+        modal.onDidDismiss(data => {
+          if (data) {
+            this.getCampaniaUsuario();
+          }
+        });
+      } else {
+        this.edid_name[posicion_campania].stado[posicion] = !this.edid_name[posicion_campania].stado[posicion];
+        (this.edid_name[posicion_campania].stado[posicion] == true) ? this.edid_name[posicion_campania].border_stado[posicion] = "solid gray 4px" : this.edid_name[posicion_campania].border_stado[posicion] = "none";
+      }
     }
   }
 
   monitoreo() {
-    this.spinner = true;
-    this.conexion = !this.conexion;
-    if (this.conexion == true) {
-      this.fila = setInterval(() => {
-        this.setConexionTelefonoUsuario();
-      }, 1000);
-    } else {
-      clearInterval(this.fila);
-      this.setDesConexionTelefonoUsuario();
+    if (this.bloqueo() == false) {
+      this.spinner = true;
+      this.conexion = !this.conexion;
+      if (this.conexion == true) {
+        this.fila = setInterval(() => {
+          this.setConexionTelefonoUsuario();
+        }, 1000);
+      } else {
+        clearInterval(this.fila);
+        this.setDesConexionTelefonoUsuario();
+      }
+      this.tiempoActual();
     }
-    this.tiempoActual();
   }
 
   setConexionTelefonoUsuario() {
@@ -429,10 +454,17 @@ export class HomePage {
           if (this.res.error == 'false') {
             let date = new Date(this.res.tiempo_usuario);
             this.globalProvider.setTime(this.getmilisegundos.transform(date));
-            this.globalProvider.usuario.mostrar_publicidad_banner = this.res.mostrar_publicidad_banner;
-            this.globalProvider.usuario.gratis = this.res.gratis;
-            this.globalProvider.usuario.mostrar_publicidad_video = this.res.mostrar_publicidad_video;
-            this.globalProvider.setUsuario();
+            this.plan.gratis = (this.res.gratis == 'Y') ? true : false;
+            this.plan.mostrar_publicidad_video = (this.res.mostrar_publicidad_video == 'Y') ? true : false;
+            this.plan.mostrar_publicidad_banner = (this.res.mostrar_publicidad_banner == 'Y') ? true : false;
+            this.plan.compartir_fb = (this.res.compartir_fb == 'Y') ? true : false;
+            this.plan.plan = this.res.plan;
+            this.plan.plan_fecha_expiracion = this.res.plan_fecha_expiracion;
+            this.plan.plan_restriccion = (this.res.plan_restriccion == 'Y') ? true : false;
+            this.plan.bloqueo = (this.res.bloqueo == 'Y') ? true : false;
+            this.plan.bloqueo_msn = this.res.bloqueo_msn;
+            this.globalProvider.plan = this.plan;
+            this.globalProvider.setPlan(this.globalProvider.plan);
           }
         }).catch(err => console.log('err: ' + JSON.stringify(err)));
       }).catch(err => console.log('share' + JSON.stringify(err)));
@@ -440,15 +472,13 @@ export class HomePage {
   }
 
   free() {
-    if (this.globalProvider.usuario.gratis == 'Y') {
+    if (this.plan.gratis == true && this.plan.compartir_fb == false) {
       let alert = this.alertController.create({
         title: '',
         subTitle: 'Make a publication so that the application is free!',
         buttons: ['Ok']
       });
       alert.present();
-      this.compartir = true;
-    } else if (this.globalProvider.usuario.compartir_fb == 'Y') {
       this.compartir = true;
     } else {
       this.compartir = false;
@@ -496,19 +526,21 @@ export class HomePage {
   }
 
   selectSms() {
-    this.sms_activo = !this.sms_activo;
-    if (this.sms_activo == true) {
-      this.background = "lightgray";
-    } else {
-      this.background = "";
-      this.campania_sms = [];
-      for (let i = 0; i < this.edid_name.length; i++) {
-        for (let j = 0; j < this.edid_name[i].border_stado.length; j++) {
-          if (this.edid_name[i].border_stado[j] != 'none') {
-            this.edid_name[i].border_stado[j] = 'none';
-          }
-          if (this.edid_name[i].stado[j] != false) {
-            this.edid_name[i].stado[j] = false;
+    if (this.bloqueo() == false) {
+      this.sms_activo = !this.sms_activo;
+      if (this.sms_activo == true) {
+        this.background = "lightgray";
+      } else {
+        this.background = "";
+        this.campania_sms = [];
+        for (let i = 0; i < this.edid_name.length; i++) {
+          for (let j = 0; j < this.edid_name[i].border_stado.length; j++) {
+            if (this.edid_name[i].border_stado[j] != 'none') {
+              this.edid_name[i].border_stado[j] = 'none';
+            }
+            if (this.edid_name[i].stado[j] != false) {
+              this.edid_name[i].stado[j] = false;
+            }
           }
         }
       }
@@ -592,5 +624,18 @@ export class HomePage {
         });
       }
     });
+  }
+
+  bloqueo() {
+    if (this.plan.bloqueo == true) {
+      let alert = this.alertController.create({
+        title: '',
+        subTitle: this.plan.bloqueo_msn,
+        buttons: ['Ok']
+      });
+      alert.present();
+      return true;
+    }
+    return false
   }
 }

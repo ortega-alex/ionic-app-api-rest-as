@@ -5,7 +5,7 @@ import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { MyApp } from '../../app/app.component';
 import { RegistroPage } from '../../pages/registro/registro';
 
-import { Usuario } from '../../model/interfaces';
+import { Usuario, Plan } from '../../model/interfaces';
 import { isEmail, Minusculas, getMilisegundos, Fecha, Hora } from '../../pipes/filtros/filtros';
 import { GlobalProvider } from '../../providers/global/global';
 import { HttpProvider } from '../../providers/http/http';
@@ -24,14 +24,23 @@ export class LoginPage {
     nombre: null,
     apellido: null,
     correo: null,
-    login: false,
     imgUrl: null,
     clave: null,
-    tipo: null,
+    logIn: null,
+    log_out: null,
+    tipo_registro: null,
+    tipo_usuario: null,
+  };
+  private plan: Plan = {
     gratis: null,
     mostrar_publicidad_video: null,
     mostrar_publicidad_banner: null,
-    compartir_fb: null
+    compartir_fb: null,
+    plan: null,
+    plan_fecha_expiracion: null,
+    plan_restriccion: null,
+    bloqueo : null ,
+    bloqueo_msn : null
   };
   private logIn: FormGroup;
   private submitted: boolean = false;
@@ -48,7 +57,7 @@ export class LoginPage {
     private httpProvider: HttpProvider,
     private alertController: AlertController,
     private facebook: Facebook,
-    private storage : Storage
+    private storage: Storage
   ) {
     this.logIn = this.formBuilder.group({
       correo: ['', Validators.required],
@@ -56,7 +65,7 @@ export class LoginPage {
     });
   }
 
-  ionViewDidLoad() {}
+  ionViewDidLoad() { }
 
   menu() {
     this.app.getRootNav().setRoot(MyApp);
@@ -93,23 +102,34 @@ export class LoginPage {
       }
       this.res = res;
       if (this.res.error == 'false') {
-        this.usuario.id_usuario = this.res.id_usuario;
+        this.usuario.id_usuario = parseInt(this.res.id_usuario);
         this.usuario.correo = this.minusculas.transform(correo);
         this.usuario.nombre = this.res.nombre;
         this.usuario.apellido = this.res.apellido;
-        this.usuario.login = (this.res.logIn == 'true') ? true : false;
-        this.usuario.tipo = this.res.tipo_registro;
+        this.usuario.logIn = (this.res.logIn == 'true') ? true : false;
+        this.usuario.tipo_registro = this.res.tipo_registro;
+        this.usuario.tipo_usuario = this.res.tipo_usuario;
         this.usuario.imgUrl = null;
-        this.usuario.gratis = this.res.gratis;
-        this.usuario.mostrar_publicidad_video = this.res.mostrar_publicidad_video;
-        this.usuario.mostrar_publicidad_banner = this.res.mostrar_publicidad_banner;
-        this.usuario.compartir_fb = this.res.compartir_fb
+        this.usuario.log_out = null;
         this.globalProvider.usuario = this.usuario;
-        this.globalProvider.setUsuario();
+        
+        this.plan.gratis = (this.res.gratis == 'Y') ? true : false;
+        this.plan.mostrar_publicidad_video = (this.res.mostrar_publicidad_video == 'Y') ? true : false;
+        this.plan.mostrar_publicidad_banner = (this.res.mostrar_publicidad_banner == 'Y') ? true : false;
+        this.plan.compartir_fb = (this.res.compartir_fb == 'Y') ? true : false;
+        this.plan.plan = this.res.plan;
+        this.plan.plan_fecha_expiracion = this.res.plan_fecha_expiracion;
+        this.plan.plan_restriccion = (this.res.plan_restriccion == 'Y') ? true : false;
+        this.plan.bloqueo = (this.res.bloque == 'Y') ? true : false ;
+        this.plan.bloqueo_msn = this.res.bloqueo_msn;
+        this.globalProvider.plan = this.plan;
+        
+        this.globalProvider.setUsuario(this.usuario);
+        this.globalProvider.setPlan(this.plan);
         this.menu();
         this.storage.get('num').then(num => {
           if (num && num != null) {
-            num ++;
+            num++;
             this.globalProvider.setNum(num);
           } else {
             this.globalProvider.setNum(1);

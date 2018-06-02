@@ -3,9 +3,9 @@
     <ion-card class="conten-card">
       <ion-row class="row-cont">
         <ion-col col-2 id="row-cont">
-          <ion-icon id="row-cont-btn-f" name="arrow-round-back" (click)="regresar(true)" *ngIf="globalProvider.usuario.mostrar_publicidad_video == 'Y'"></ion-icon>
+          <ion-icon id="row-cont-btn-f" name="arrow-round-back" (click)="regresar(true)" *ngIf="globalProvider.plan.mostrar_publicidad_video == true"></ion-icon>
         </ion-col>
-        <ion-col id="row-cont" *ngIf="globalProvider.usuario.mostrar_publicidad_video == 'Y'">
+        <ion-col id="row-cont" *ngIf="globalProvider.plan.mostrar_publicidad_video == true">
           <button id="row-cont-btn" ion-button small icon-right block color="dark" (click)="showVideo()">
             {{(segundos == 10) ? 'Get more time ' : segundos }} {{(time && segundos == 10) ? time.hora+":"+time.minuto+":"+time.segundo
             : (segundos == 10) ? '0' : '' }}
@@ -16,7 +16,7 @@
       </ion-row>
       <ion-row class="row-cont">
         <ion-col col-2 class="row-cont">
-            <ion-icon id="row-cont-btn-f" name="arrow-round-back" (click)="regresar(true)" *ngIf="globalProvider.usuario.mostrar_publicidad_video == 'N'"></ion-icon>
+            <ion-icon id="row-cont-btn-f" name="arrow-round-back" (click)="regresar(true)" *ngIf="globalProvider.plan.mostrar_publicidad_video == false"></ion-icon>
         </ion-col>
         <ion-col id="row-cont">
           <p id="title">{{campania.nombre}}</p>

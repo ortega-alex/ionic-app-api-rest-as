@@ -1,6 +1,6 @@
 <ion-content padding class="content-modal" [style.background-color]="style.background" [style.opacity]="style.opacity">
   <ion-card class="conten-card" *ngIf="panel_llamada == true && data1.view == 1">
-    <ion-row class="row-cont" *ngIf="globalProvider.usuario.mostrar_publicidad_video == 'Y'">
+    <ion-row class="row-cont" *ngIf="globalProvider.plan.mostrar_publicidad_video == true">
       <ion-col id="row-cont">
         <button id="row-cont-btn" ion-button small icon-right block color="dark" (click)="showVideo()">
           {{(segundos == 10) ? 'Get more time ' : segundos }} {{(time && segundos == 10) ? time.hora+":"+time.minuto+":"+time.segundo

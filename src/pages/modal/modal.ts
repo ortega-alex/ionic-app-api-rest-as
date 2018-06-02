@@ -78,7 +78,7 @@ export class ModalPage {
     this.platform.registerBackButtonAction(() => {
       this.closeModal(true);
     });
-    if (this.globalProvider.usuario.mostrar_publicidad_video == 'Y') {
+    if (this.globalProvider.plan.mostrar_publicidad_video == true) {
       this.prepareVideo();
       this.globalProvider.getTime();
     }
@@ -107,7 +107,7 @@ export class ModalPage {
 
   validarTiempo() {
     let date = new Date().getTime();
-    if ((!this.globalProvider.time || date >= this.globalProvider.time) && this.globalProvider.usuario.mostrar_publicidad_video == 'Y') {
+    if ((!this.globalProvider.time || date >= this.globalProvider.time) && this.globalProvider.plan.mostrar_publicidad_video == true) {
       let alert = this.alertController.create({
         title: '',
         subTitle: 'Get more time!',

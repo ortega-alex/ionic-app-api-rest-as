@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import { LoadingController } from 'ionic-angular';
 import { Http } from '@angular/http';
-import { Usuario } from '../../model/interfaces';
+import { Usuario, Plan } from '../../model/interfaces';
 import 'rxjs/add/operator/map';
 import { getMilisegundos } from '../../pipes/filtros/filtros';
 
@@ -11,6 +11,7 @@ import { getMilisegundos } from '../../pipes/filtros/filtros';
 export class GlobalProvider {
 
   public usuario: Usuario;
+  public plan: Plan;
   public data: any;
   private get_milisegundos = new getMilisegundos();
   public time: number;
@@ -39,13 +40,24 @@ export class GlobalProvider {
     });
   }
 
-  setUsuario() {
-    this.strorage.set('usuario', this.usuario);
+  setUsuario(usuario: Usuario): void {
+    this.strorage.set('usuario', usuario);
   }
 
   getUsuario() {
     this.strorage.get('usuario').then(usuario => {
       this.usuario = usuario;
+    });
+  }
+
+  setPlan(plan: Plan): void {
+    this.strorage.set('plan', plan);
+    this.getPlan();
+  }
+
+  getPlan() {
+    this.strorage.get('plan').then(plan => {
+      this.plan = plan;
     });
   }
 
@@ -84,31 +96,31 @@ export class GlobalProvider {
     setTimeout(() => {
       loader.dismiss();
     }, 5000);
-  } 
-
-  setNum(num : number){
-    this.strorage.set('num',num);
   }
 
-  setListSms(nombre:string , list_sms:any) : void {
-    this.strorage.set(nombre,list_sms);
+  setNum(num: number) {
+    this.strorage.set('num', num);
   }
 
-  deleteNum(){
+  setListSms(nombre: string, list_sms: any): void {
+    this.strorage.set(nombre, list_sms);
+  }
+
+  deleteNum() {
     this.strorage.remove('num');
   }
 
-  getListSms(nombre:string){
+  getListSms(nombre: string) {
     console.log(nombre);
     this.strorage.get(nombre).then(list_sms => {
-      if(list_sms && list_sms != null) {
+      if (list_sms && list_sms != null) {
         return list_sms;
       }
       return false;
     });
   }
 
-  deleteListSms(nombre:string){
+  deleteListSms(nombre: string) {
     this.strorage.remove(nombre);
   }
 }

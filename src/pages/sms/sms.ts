@@ -138,6 +138,7 @@ export class SmsPage {
             this.sms_status.push({ togglel: false });
           }
         }
+        this.campaniaSMS = this.res.campaniaSMS;
       }
     }).catch(err => console.log('err: ' + JSON.stringify(err)));
   }
