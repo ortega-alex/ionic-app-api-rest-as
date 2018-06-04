@@ -262,6 +262,8 @@ export class CampaniaPage {
             }
           });
         }
+      } else {
+        this.setFilaActivaCampania();
       }
     }
     if (key == 4) {
@@ -279,6 +281,8 @@ export class CampaniaPage {
             }
           });
         }
+      } else {
+        this.setFilaActivaCampania();
       }
       this.serEventoCalendar();
     }

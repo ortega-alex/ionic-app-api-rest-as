@@ -86,9 +86,8 @@ export class SmsPage {
         fecha = this.sms_from.value.fecha.substr(0, 10);
         hora = this.sms_from.value.fecha.substr(11, 5);
       } else {
-        var date = new Date();
-        fecha = this.fecha.transform(date);
-        hora = this.hora.transform(date);
+        fecha = this.fecha.transform(dispositivo);
+        hora = this.hora.transform(dispositivo);
       }
       let url = "servicio=setCampaniaSMSUsuario";
       let data = {
@@ -104,12 +103,13 @@ export class SmsPage {
       this.httpProvider.post(data, url).then(res => {
         this.res = res;
         if (this.res.error == 'false') {
+          this.historial = true;
           if (this.res.crear_recordatorio == 'N') {
             this.getListaSMSCampaniaSMS(this.res.id, true);
           } else {
             this.getListaSMSCampaniaSMS(this.res.id);
-            this.closeModal(true);
           }
+          this.getCampaniaSMSUsuario();
         } else {
           this.globalProvider.alerta(this.res.msn);
         }

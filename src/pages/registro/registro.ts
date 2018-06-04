@@ -34,7 +34,7 @@ export class RegistroPage {
     public navParams: NavParams,
     public globalProvider: GlobalProvider,
     public httpProvider: HttpProvider,
-    private platform:Platform
+    private platform: Platform
   ) { }
 
   ionViewDidLoad() { }
@@ -78,7 +78,7 @@ export class RegistroPage {
   }
 
   guardarRegistro() {
-    let platform = (this.platform.is('ios')) ? 'ios' : 'android' ;
+    let platform = (this.platform.is('ios')) ? 'ios' : 'android';
     this.load = this.globalProvider.cargando(this.globalProvider.data.msj.load);
     let url = 'servicio=setRegistroUsuario' +
       '&usuario=' + this.minusculas.transform(this.catalogo[2].input) +
@@ -87,7 +87,7 @@ export class RegistroPage {
       '&apellido=' + this.catalogo[1].input +
       '&tipo_registro= R' +
       '&tipo_registro_id' + null +
-      '&token=' + this.globalProvider.token + 
+      '&token=' + this.globalProvider.token +
       '&plataforma=' + platform;
     this.httpProvider.get(url).then(res => {
       this.load.dismiss();
