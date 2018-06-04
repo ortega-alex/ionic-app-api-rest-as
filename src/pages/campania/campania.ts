@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ViewController, Platform, AlertController, List } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ViewController, Platform, AlertController, List, ModalController } from 'ionic-angular';
 
 import { GlobalProvider } from '../../providers/global/global';
 import { HttpProvider } from '../../providers/http/http';
@@ -11,6 +11,8 @@ import { SMS } from '@ionic-native/sms';
 import { Calendar } from '@ionic-native/calendar';
 import { AdMobFree, AdMobFreeBannerConfig, AdMobFreeRewardVideoConfig } from '@ionic-native/admob-free';
 import { Facebook, FacebookLoginResponse } from '@ionic-native/facebook';
+
+import { ModalPage } from '../modal/modal';
 
 @IonicPage()
 @Component({
@@ -70,7 +72,7 @@ export class CampaniaPage {
   private tiempo_restante: any;
   private retroceder: boolean;
   private edit_info = { readonly: true, border: 'solid #f0f0f0 1px' };
-  private dispositivo : boolean ;
+  private dispositivo: boolean;
 
   constructor(
     public navCtrl: NavController,
@@ -84,7 +86,8 @@ export class CampaniaPage {
     private platform: Platform,
     private contacts: Contacts,
     private admobFree: AdMobFree,
-    private alertController: AlertController
+    private alertController: AlertController,
+    private modalController: ModalController
   ) {
     this.campania = this.navParams.get('campania');
     this.posicion_campania = this.navParams.get('posicion_campania');
@@ -100,7 +103,7 @@ export class CampaniaPage {
   }
 
   ionViewDidLoad() {
-    this.dispositivo = (this.platform.is('android') ? true : false ) ;
+    this.dispositivo = (this.platform.is('android') ? true : false);
     if (this.globalProvider.plan.mostrar_publicidad_video == true) {
       this.prepareVideo();
       this.globalProvider.getTime();
@@ -244,17 +247,39 @@ export class CampaniaPage {
       this.setFilaActivaCampania();
     }
     if (key == 3) {
-      if (this.msnS == true && this.dispositivo == true) {
-        this.setSms(this.getFilaCampania.telefono);
+      if (this.msnS == true) {
+        if (this.dispositivo == true) {
+          this.setSms(this.getFilaCampania.telefono);
+          this.setFilaActivaCampania();
+        } else { 
+          this.setSms(this.getFilaCampania.telefono);
+          let data = { view: 4, num: null }
+          let modal = this.modalController.create('ModalPage', { data: data });
+          modal.present();
+          modal.onDidDismiss(data => {
+            this.setFilaActivaCampania();
+          });
+        }
       }
-      this.setFilaActivaCampania();
     }
     if (key == 4) {
-      if (this.msnS == true  && this.dispositivo == true) {
-        this.setSms(this.getFilaCampania.telefono);
+      if (this.msnS == true) {
+        if (this.dispositivo == true) {
+          this.setSms(this.getFilaCampania.telefono);
+        } else {
+          this.setSms(this.getFilaCampania.telefono);
+          let data = { view: 4, num: null }
+          let modal = this.modalController.create('ModalPage', { data: data });
+          modal.present();
+          modal.onDidDismiss(data => {
+            this.setFilaActivaCampania();
+          });
+        }
       }
       this.serEventoCalendar();
-      this.setFilaActivaCampania();
+      if(this.dispositivo == true){
+        this.setFilaActivaCampania();
+      }
     }
   }
 

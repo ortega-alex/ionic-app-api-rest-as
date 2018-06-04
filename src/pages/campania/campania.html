@@ -16,7 +16,7 @@
       </ion-row>
       <ion-row class="row-cont">
         <ion-col col-2 class="row-cont">
-            <ion-icon id="row-cont-btn-f" name="arrow-round-back" (click)="regresar(true)" *ngIf="globalProvider.plan.mostrar_publicidad_video == false"></ion-icon>
+          <ion-icon id="row-cont-btn-f" name="arrow-round-back" (click)="regresar(true)" *ngIf="globalProvider.plan.mostrar_publicidad_video == false"></ion-icon>
         </ion-col>
         <ion-col id="row-cont">
           <p id="title">{{campania.nombre}}</p>
@@ -83,7 +83,7 @@
   <ion-card *ngIf="panelLlamada == true" class="conten-card">
     <ion-row class="row-cont">
       <ion-col col-2 id="row-cont">
-        <ion-icon *ngIf="retroceder == true" id="row-icon"name="arrow-round-back" md="md-arrow-round-back" (click)="pausar()"></ion-icon>
+        <ion-icon *ngIf="retroceder == true" id="row-icon" name="arrow-round-back" md="md-arrow-round-back" (click)="pausar()"></ion-icon>
       </ion-col>
       <ion-col col-8 id="row-cont">
         <input id="input-title" type="text" text-center [readonly]="edit_info.readonly" [(ngModel)]="getFilaCampania.nombre" [style.border-bottom]="edit_info.border"
@@ -97,14 +97,14 @@
     <div class="panel">
       <ion-row class="row-panel">
         <ion-col id="row-panel" *ngIf="getFilaCampania.columna_campo_1_text != ''">
-          <ion-item class="from-item">
+          <ion-item  no-Lines class="from-item">
             <ion-label id="from-label" stacked>{{getFilaCampania.columna_campo_1_text}}</ion-label>
             <ion-input id="from-input" type="text" text-center [readonly]="edit_info.readonly" [(ngModel)]="getFilaCampania.campo_1"
               [style.border-bottom]="edit_info.border"></ion-input>
           </ion-item>
         </ion-col>
         <ion-col id="row-panel" *ngIf="getFilaCampania.columna_campo_2_text != ''">
-          <ion-item class="from-item">
+          <ion-item no-Lines class="from-item">
             <ion-label id="from-label" stacked>{{getFilaCampania.columna_campo_2_text}}</ion-label>
             <ion-input id="from-input" type="text" text-center [readonly]="edit_info.readonly" [(ngModel)]="getFilaCampania.campo_2"
               [style.border-bottom]="edit_info.border"></ion-input>
@@ -113,14 +113,14 @@
       </ion-row>
       <ion-row class="row-panel">
         <ion-col id="row-panel" *ngIf="getFilaCampania.columna_campo_3_text != ''">
-          <ion-item class="from-item">
+          <ion-item no-Lines class="from-item">
             <ion-label id="from-label" stacked>{{getFilaCampania.columna_campo_3_text}}</ion-label>
             <ion-input id="from-input" type="text" text-center [readonly]="edit_info.readonly" [(ngModel)]="getFilaCampania.campo_3"
               [style.border-bottom]="edit_info.border"></ion-input>
           </ion-item>
         </ion-col>
         <ion-col id="row-panel" *ngIf="getFilaCampania.columna_campo_4_text != ''">
-          <ion-item class="from-item">
+          <ion-item no-Lines class="from-item">
             <ion-label id="from-label" stacked>{{getFilaCampania.columna_campo_4_text}}</ion-label>
             <ion-input id="from-input" type="text" text-center [readonly]="edit_info.readonly" [(ngModel)]="getFilaCampania.campo_4"
               [style.border-bottom]="edit_info.border"></ion-input>
@@ -130,7 +130,7 @@
     </div>
     <ion-row class="row-cont">
       <ion-col id="row-cont">
-        <ion-item class="from-item">
+        <ion-item no-Lines class="from-item">
           <ion-label id="from-label" stacked>Notes:</ion-label>
           <ion-textarea id="textarea-notes" text-center [(ngModel)]="data.notas" text-lg:992px [style.border-bottom]="edit_info.border"></ion-textarea>
         </ion-item>
@@ -140,7 +140,7 @@
       <ion-col col-3 id="row-cont">
       </ion-col>
       <ion-col col-6 id="row-cont">
-        <ion-item class="from-item">
+        <ion-item no-Lines class="from-item">
           <ion-label id="from-label-sms">SMS:</ion-label>
           <ion-toggle id="from-toggle" color="danger" checked="{{msnS}}" (ionChange)="chekedSms($event)"></ion-toggle>
         </ion-item>
@@ -150,26 +150,21 @@
     </ion-row>
     <ion-row class="row-cont">
       <ion-col id="row-cont">
-        <ion-item class="from-item">
+        <ion-item no-Lines class="from-item">
           <ion-textarea id="textarea-notes" [(ngModel)]="data.sms" text-center text-lg:992px></ion-textarea>
         </ion-item>
       </ion-col>
     </ion-row>
-    <ion-row class="row-cont" *ngIf="dispositivo == false">
-      <ion-col id="row-cont">
-        <button class="btm-sms" ion-button small color="secondary" (click)="this.setSms(getFilaCampania.telefono)">
-          send
-        </button>
-      </ion-col>
-    </ion-row>
     <ion-row class="row-cont">
       <ion-col col-4 id="row-cont-title">
-        <ion-item class="from-item">
-          <p id="title">Reminder</p>
+        <ion-item no-Lines class="from-item">
+          <p id="title">Reminder
+            <ion-icon id="calendar" name="calendar"></ion-icon>
+          </p>
         </ion-item>
       </ion-col>
       <ion-col id="row-cont">
-        <ion-item class="from-item">
+        <ion-item no-Lines class="from-item">
           <ion-datetime id="from-date" text-center displayFormat="MMM DD, YYYY HH:mm" [(ngModel)]="data.date" text-lg:992px></ion-datetime>
         </ion-item>
       </ion-col>

@@ -28,7 +28,7 @@
       <ion-col id="content-row">
         <ion-item class="from-item">
           <ion-label id="from-label" floating>Campaign name:</ion-label>
-          <ion-input id="from-input" autofocus text-center type="text" [(ngModel)]="nombre_campania" text-lg:992px></ion-input>
+          <ion-input id="from-input" autofocus text-center type="text" [(ngModel)]="new_campania.nombre_campania" text-lg:992px></ion-input>
         </ion-item>
       </ion-col>
     </ion-row>
@@ -181,7 +181,7 @@
 
   <div class="marcador" *ngIf="campania_blanco == true && panel == false">
     <ion-item class="from-item">
-      <ion-input id="from-input" readonly autofocus text-center type="text" [(ngModel)]="telefono" text-lg:992px></ion-input>
+      <ion-input id="from-input" readonly autofocus text-center type="text" [(ngModel)]="new_campania.telefono" text-lg:992px></ion-input>
     </ion-item>
     <ion-row>
       <ion-col col-4 *ngFor="let n of numeros; let i = index">
@@ -202,33 +202,33 @@
       <ion-col id="row-content">
         <ion-item no-Lines class="item-content">
           <ion-label id="item-label" stacked>Campaign name:</ion-label>
-          <ion-input id="item-input" autofocus readonly type="text" [(ngModel)]="nombre_campania" text-lg:992px></ion-input>
+          <ion-input id="item-input" autofocus readonly type="text" [(ngModel)]="new_campania.nombre_campania" text-lg:992px></ion-input>
         </ion-item>
       </ion-col>
     </ion-row>
     <ion-row class="row-content">
       <ion-col id="row-content">
         <ion-item no-Lines class="item-content">
-          <ion-input id="item-input" autofocus type="text" placeholder="Name:" text-lg:992px></ion-input>
+          <ion-input id="item-input" autofocus type="text" placeholder="Name:" [(ngModel)]="new_campania.nombre" text-lg:992px></ion-input>
         </ion-item>
       </ion-col>
     </ion-row>
     <ion-row class="row-content">
       <ion-col id="row-content">
         <ion-item no-Lines class="item-content">
-          <ion-input id="item-input" placeholder="Field 1:" type="text"></ion-input>
+          <ion-input id="item-input" placeholder="Field 1:"  [(ngModel)]="new_campania.campos.uno"  type="text"></ion-input>
         </ion-item>
       </ion-col>
       <ion-col id="row-content">
         <ion-item no-Lines class="item-content">
-          <ion-input id="item-input" placeholder="Field 2:" type="text"></ion-input>
+          <ion-input id="item-input" placeholder="Field 2:"  [(ngModel)]="new_campania.campos.dos"  type="text"></ion-input>
         </ion-item>
       </ion-col>
     </ion-row>
     <ion-row class="row-content">
       <ion-col id="row-content">
         <ion-item no-Lines class="item-content">
-          <ion-textarea id="item-textarea" placeholder="Notes:"></ion-textarea>
+          <ion-textarea id="item-textarea" placeholder="Notes:"  [(ngModel)]="new_campania.nota" ></ion-textarea>
         </ion-item>
       </ion-col>
     </ion-row>
@@ -238,7 +238,7 @@
       <ion-col col-6 id="row-content">
         <ion-item no-Lines class="item-content">
           <ion-label id="item-label-sms">SMS:</ion-label>
-          <ion-toggle id="item-toggle" color="danger"></ion-toggle>
+          <ion-toggle id="item-toggle" color="danger" checked="{{new_campania.sms}}" (ionChange)="chekedSms($event)"></ion-toggle>
         </ion-item>
       </ion-col>
       <ion-col col-3 id="row-content">
@@ -247,7 +247,7 @@
     <ion-row class="row-content">
       <ion-col id="row-content">
         <ion-item no-Lines class="item-content">
-          <ion-textarea id="item-textarea" placeholder="Write *name* where you want each of the customers name on the text" text-lg:992px></ion-textarea>
+          <ion-textarea id="item-textarea" placeholder="Write *name* where you want each of the customers name on the text" [(ngModel)]="new_campania.sms_text" text-lg:992px></ion-textarea>
         </ion-item>
       </ion-col>
     </ion-row>
@@ -260,7 +260,7 @@
         </ion-item>
       </ion-col>
       <ion-col id="row-content">
-        <ion-datetime id="row-content-input" displayFormat="MMM DD, YYYY HH:mm" text-lg:992px></ion-datetime>
+        <ion-datetime id="row-content-input" displayFormat="MMM DD, YYYY HH:mm"  [(ngModel)]="new_campania.fecha" text-lg:992px></ion-datetime>
       </ion-col>
     </ion-row>
     <ion-row class="row-content">
@@ -272,12 +272,12 @@
     </ion-row>
     <ion-row class="row-content">
       <ion-col col-12 id="row-content">
-        <button id="row-content-btn" ion-button icon-right block small color="dark">
-          {{telefono}}
+        <button id="row-content-btn" ion-button icon-right block small color="dark" (click)="llamar(true)">
+          {{new_campania.telefono}}
           <ion-icon name="call"></ion-icon>
           &nbsp;
         </button>
-        <button id="row-content-btn" ion-button block outline small color="dark">
+        <button id="row-content-btn" ion-button block outline small (click)="this.panel = !this.panel" color="dark">
           Don't save and Continue &nbsp;
         </button>
       </ion-col>

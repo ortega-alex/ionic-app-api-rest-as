@@ -11,7 +11,9 @@ import { File } from '@ionic-native/file';
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
 import { IOSFilePicker } from '@ionic-native/file-picker';
 import { CallNumber } from '@ionic-native/call-number';
-import { Numerico } from '../../pipes/filtros/filtros';
+import { Numerico, FechaPosterios } from '../../pipes/filtros/filtros';
+import { SMS } from '@ionic-native/sms';
+import { Calendar } from '@ionic-native/calendar';
 
 @IonicPage()
 @Component({
@@ -38,12 +40,12 @@ export class CrearCampaniaPage {
   private sms: string = 'N';
   private sms_tex: string = '';
   private campania_blanco: boolean = false;
-  private nombre_campania: string;
   private numeros: Array<number> = [];
-  private telefono: string = '';
+  private fechaPosterios = new FechaPosterios();
   private numerico = new Numerico();
   private panel: boolean = false;
   private catalogoEstado: any;
+  private new_campania: { nombre_campania: string, telefono: string, nombre: string, fecha: string, sms: boolean, sms_tex: string, nota: string, campos: { uno: string, dos: string } }
 
   constructor(
     public navCtrl: NavController,
@@ -61,8 +63,12 @@ export class CrearCampaniaPage {
     private iosFilePicker: IOSFilePicker,
     private alertController: AlertController,
     private callNumber: CallNumber,
-    private modalController: ModalController
+    private modalController: ModalController,
+    private Sms:SMS,
+    private calendar:Calendar
   ) {
+    this.new_campania = { nombre_campania: null, telefono: '', nombre: null, fecha: null, sms: true, sms_tex: null, nota: null, campos: { uno: null, dos: null } };
+
     this.ordenarCampania = this.formBuilder.group({
       nombreArchivo: [''],
       nombreCampania: ['', Validators.required],
@@ -259,15 +265,17 @@ export class CrearCampaniaPage {
     this.getCatalogoEstadoFilaCampania();
   }
 
-  llamar() {
-    this.callNumber.callNumber(this.numerico.transform(this.telefono), true).then(res => {
-      this.panel = !this.panel;
+  llamar(individual: boolean = false) {
+    this.callNumber.callNumber(this.numerico.transform(this.new_campania.telefono), true).then(res => {
+      if (individual == false) {
+        this.panel = !this.panel;
+      }
     }).catch(err => console.log('err; ' + JSON.stringify(err)));
   }
 
   armarNumero(i: number) {
     let n: string = (this.numeros[i] != 11) ? this.numeros[i].toString() : '0';
-    this.telefono += n;
+    this.new_campania.telefono += n;
   }
 
   getCatalogoEstadoFilaCampania() {
@@ -282,25 +290,41 @@ export class CrearCampaniaPage {
       this.setFilaActivaCampania();
     }
     if (key == 3) {
-      this.setSms(this.telefono);
+      this.setSms();
       this.setFilaActivaCampania();
     }
     if (key == 4) {
-      this.setSms(this.telefono);
+      this.setSms();
       this.serEventoCalendar();
       this.setFilaActivaCampania();
     }
   }
 
-  setFilaActivaCampania() {
-    console.log('set');
+  setSms() {
+    this.Sms.send(this.numerico.transform(this.new_campania.telefono), this.new_campania.sms_tex).then(res => console.log('res: ' + res)).catch(err => console.log('err: ' + err));
   }
 
   serEventoCalendar() {
-
+    this.calendar.hasReadWritePermission().then(res => {
+      console.log('res: ' + JSON.stringify(res));
+    }).catch(err => alert('err: ' + JSON.stringify(err)));
+    var startDate = new Date(this.new_campania.fecha);
+    this.calendar.createEvent(
+      this.new_campania.nombre_campania,
+      'PowerDialer',
+      'name: ' + this.new_campania.nombre + ' , phone: ' + this.numerico.transform(this.new_campania.telefono) + ' , note: ' + this.new_campania.nota,
+      startDate,
+      this.fechaPosterios.transform(startDate, 1)
+    ).then(res => {
+      this.setFilaActivaCampania();
+    }).catch(err => console.log('err: ' + JSON.stringify(err)));
   }
 
-  setSms(telefono: string) {
+  cheked(event) {
+    this.new_campania.sms = !this.new_campania.sms;
+  }
+
+  setFilaActivaCampania(){
 
   }
 }

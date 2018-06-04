@@ -130,7 +130,7 @@
     <div id="siguiente" (click)="closeModal(true)">
       <p id="parrafo">Siguiente</p>
     </div>
-    <div id="cancelar" >
+    <div id="cancelar">
       <ion-row class="content-row">
         <ion-col id="content-row">
           <button id="content-row-btn" small ion-button block color="danger" (click)="closeModal()">
@@ -139,6 +139,11 @@
           </button>
         </ion-col>
       </ion-row>
+    </div>
+  </div>
+  <div class="sms-content" *ngIf="data1.view == 4">
+    <div id="sms-content" (click)="closeModal(true)">
+      <p id="parrafo">Siguiente</p>
     </div>
   </div>
 </ion-content>

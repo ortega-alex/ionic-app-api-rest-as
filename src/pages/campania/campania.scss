@@ -142,21 +142,6 @@ page-campania {
 				}
 			}
 		}
-		.toggle-div{
-			/*width: 100% !important;
-			padding-left: 30%;
-			#label-div{
-				position: absolute;
-				left: 30%;
-				padding-top: 0.2%; 
-				font-size: 0.7em;
-				opacity: 0.5;
-			}
-			#from-toggle{
-				margin: 0% !important;
-				padding: 1% !important;
-			}*/
-		}
 		.from-item{			
 			margin: 0% 0% 0% 1% !important;
 			padding: 0% !important;
@@ -192,16 +177,16 @@ page-campania {
 				margin: 0% !important;
 				width: 100% !important;
  				font-size: 0.7em;
-				//border-bottom:solid #f0f0f0 1px;
+				border-bottom:solid #f0f0f0 1px;
 				border: none;
 				text-align: center;
 			}
-			#from-toggle{
-				//border: solid black 1px;
-				//padding-left: 45% !important;
+			#from-date{
+				border: solid #f0f0f0 1px;				
 			}
 			#title{
-				font-size: 0.8em;
+				font-size: 1.2em;
+				padding-left: 7px !important;
 			}
 		}
 		.panel{
