@@ -61,7 +61,8 @@ export class HomePage {
     plan_fecha_expiracion: null,
     plan_restriccion: null,
     bloqueo: null,
-    bloqueo_msn: null
+    bloqueo_msn: null,
+    plan_restriccion_msn: null
   };
 
   constructor(
@@ -233,6 +234,7 @@ export class HomePage {
         this.plan.plan_restriccion = (this.res.plan_restriccion == 'Y') ? true : false;
         this.plan.bloqueo = (this.res.bloqueo == 'Y') ? true : false;
         this.plan.bloqueo_msn = this.res.bloqueo_msn;
+        this.plan.plan_restriccion_msn = this.res.plan_restriccion_msn;
         this.globalProvider.plan = this.plan;
         this.globalProvider.setPlan(this.globalProvider.plan);
         this.inici = false;
@@ -463,6 +465,7 @@ export class HomePage {
             this.plan.plan_restriccion = (this.res.plan_restriccion == 'Y') ? true : false;
             this.plan.bloqueo = (this.res.bloqueo == 'Y') ? true : false;
             this.plan.bloqueo_msn = this.res.bloqueo_msn;
+            this.plan.plan_restriccion_msn = this.res.plan_restriccion_msn;
             this.globalProvider.plan = this.plan;
             this.globalProvider.setPlan(this.globalProvider.plan);
           }
@@ -594,7 +597,7 @@ export class HomePage {
     if (historial == false && this.campania_sms.length == 0) {
       let alert = this.alertController.create({
         title: '',
-        subTitle: 'Select a campaign...',
+        subTitle: 'You need to select a minimum of 1 list to create a SMS bulk campaign',
         buttons: ['Ok']
       });
       alert.present();

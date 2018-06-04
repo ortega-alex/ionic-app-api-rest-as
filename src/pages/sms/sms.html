@@ -50,7 +50,7 @@
           <ion-col id="row-historial">
             <ion-icon id="icon-historial" name="trash" color="dark" (click)="setDeleteCampaniaSMS(campania_sms.id_campania_sms)"></ion-icon>
           </ion-col>
-          <ion-col id="row-historial" *ngIf="campania_sms.estado == 'A'">
+          <ion-col id="row-historial" *ngIf="campania_sms.estado == 'A' && dispositivo">
             <ion-icon id="icon-historial" name="pause" color="dark" (click)="pausar()"></ion-icon>
           </ion-col>
           <ion-col id="row-historial" *ngIf="campania_sms.estado == 'P' || campania_sms.estado == 'C'">

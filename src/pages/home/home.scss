@@ -15,12 +15,22 @@ page-home {
             }
             #conten-row-btn{
 				color: #262626;
-            }
+				#btn-title{
+					color:white;
+				}
+			}			
 		}		
 		.content-div{
 			height: 87% !important;
 			width: 100% !important;
 			margin: 5% 0%;
+			#conten-info{
+				text-align: center;
+				width: 100%;
+				margin: 0%;
+				padding: 0%;
+				font-size: 1.2em;
+			}
 			.conten-card{
 				.row-cont-b{								
 					#row-cont-b{
@@ -117,8 +127,11 @@ page-home {
 					height: 4.2vh !important;                
 				}   
 				#btn-conexion-p{
+					//border: solid red 1px;
 					text-align: center;
 					margin: 0%;
+					padding-top: 0.5%;
+					font-size: 1.1em;
 				}
 			}
 			#btn-conexion{			

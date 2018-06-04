@@ -70,6 +70,7 @@ export class CampaniaPage {
   private tiempo_restante: any;
   private retroceder: boolean;
   private edit_info = { readonly: true, border: 'solid #f0f0f0 1px' };
+  private dispositivo : boolean ;
 
   constructor(
     public navCtrl: NavController,
@@ -99,6 +100,7 @@ export class CampaniaPage {
   }
 
   ionViewDidLoad() {
+    this.dispositivo = (this.platform.is('android') ? true : false ) ;
     if (this.globalProvider.plan.mostrar_publicidad_video == true) {
       this.prepareVideo();
       this.globalProvider.getTime();
@@ -242,13 +244,13 @@ export class CampaniaPage {
       this.setFilaActivaCampania();
     }
     if (key == 3) {
-      if (this.msnS == true) {
+      if (this.msnS == true && this.dispositivo == true) {
         this.setSms(this.getFilaCampania.telefono);
       }
       this.setFilaActivaCampania();
     }
     if (key == 4) {
-      if (this.msnS == true) {
+      if (this.msnS == true  && this.dispositivo == true) {
         this.setSms(this.getFilaCampania.telefono);
       }
       this.serEventoCalendar();

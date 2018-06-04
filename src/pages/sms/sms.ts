@@ -29,7 +29,8 @@ export class SmsPage {
   private sms_status: Array<{ togglel: boolean }> = [];
   private numerico = new Numerico();
   private stado_sms: { sms: Array<{ telefono: string, text: string }>, id: number, inicio: number, hilo: any, estado: string };
-  private id : number;
+  private id: number;
+  private dispositivo: boolean;
 
   constructor(
     public navCtrl: NavController,
@@ -53,12 +54,13 @@ export class SmsPage {
         fecha: ['']
       });
     } else {
-      this.id  = this.navParams.get('id');
+      this.id = this.navParams.get('id');
       this.getCampaniaSMSUsuario(this.id);
     }
   }
 
   ionViewDidLoad() {
+    this.dispositivo = (this.platform.is('android')) ? true : false;
     this.platform.registerBackButtonAction(() => {
       this.closeModal(true);
     });
@@ -134,7 +136,7 @@ export class SmsPage {
         for (let i = 0; i < this.res.campaniaSMS.length; i++) {
           if (id != null && this.res.campaniaSMS[i].id_campania_sms == id) {
             this.sms_status.push({ togglel: true });
-          } else { 
+          } else {
             this.sms_status.push({ togglel: false });
           }
         }
@@ -192,7 +194,11 @@ export class SmsPage {
         this.globalProvider.setListSms(id.toString(), this.res.sms);
         if (empesar == true) {
           this.stado_sms = { sms: this.res.sms, id: id, inicio: inicio, hilo: null, estado: '' };
-          this.play();
+          if (this.dispositivo == true) {
+            this.play();
+          } else {
+            this.setSms(this.res.sms, id, inicio);
+          }
         }
       }
     }).catch(err => console.log('err: ' + JSON.stringify(err)));
@@ -209,14 +215,32 @@ export class SmsPage {
         this.closeModal(true);
         return false;
       }
-      this.stado_sms.inicio++;
-      if (this.stado_sms.estado != 'A') {
-        this.setEstadoCampaniaSMS(id, 'A');
-        this.stado_sms.estado = 'A';
-        this.getCampaniaSMSUsuario();
+      if (this.dispositivo == true) {
+        this.stado_sms.inicio++;
+        if (this.stado_sms.estado != 'A') {
+          this.setEstadoCampaniaSMS(id, 'A');
+          this.stado_sms.estado = 'A';
+          this.getCampaniaSMSUsuario();
+        }
+      } else {
+        let data = { view: 3, num: null }
+        let modal = this.modalController.create('ModalPage', { data: data });
+        modal.present();
+        modal.onDidDismiss(data => {
+          if (data == true) {
+            inicio++;
+            this.setEstadoCampaniaSMS(id, 'A');
+            this.setSms(list_sms, id, inicio);
+          } else {
+            this.setEstadoCampaniaSMS(id, 'P');
+            this.closeModal(true);
+            return false;
+          }
+        });
       }
     }).catch(err => {
-      this.pausar();
+      (this.dispositivo == true) ? this.pausar() : console.log('err: ' + JSON.stringify(err));
+      alert('err: ' + JSON.stringify(err));
     });
   }
 

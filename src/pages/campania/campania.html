@@ -43,7 +43,7 @@
       </ion-row>
       <ion-row class="row-cont" *ngIf="no == true">
         <ion-col id="row-cont-p">
-          <button id="row-cont-btn-p" ion-button icon-left block color="buttom" (click)="llamarLista(boton.key_estado,false,0)">
+          <button id="row-cont-btn-p" ion-button icon-left block color="dark" (click)="llamarLista(boton.key_estado,false,0)">
             <ion-icon name="play"></ion-icon>
             start dialing now
           </button>
@@ -127,26 +127,6 @@
           </ion-item>
         </ion-col>
       </ion-row>
-      <!--ion-row class="row-panel">
-          <ion-col id="row-panel">
-            <b id="title">{{getFilaCampania.columna_campo_1_text}}:</b>
-            <div id="contenido">{{getFilaCampania.campo_1}}</div>
-          </ion-col>
-          <ion-col id="row-panel">
-            <b id="title">{{getFilaCampania.columna_campo_2_text}}:</b>
-            <div id="contenido">{{getFilaCampania.campo_2}}</div>
-          </ion-col>
-        </ion-row>
-        <ion-row class="row-panel">
-          <ion-col id="row-panel">
-            <b id="title">{{getFilaCampania.columna_campo_3_text}}:</b>
-            <div id="contenido">{{getFilaCampania.campo_3}}</div>
-          </ion-col>
-          <ion-col id="row-panel">
-            <b id="title">{{getFilaCampania.columna_campo_4_text}}:</b>
-            <div id="contenido">{{getFilaCampania.campo_4}}</div>
-          </ion-col>
-        </ion-row-->
     </div>
     <ion-row class="row-cont">
       <ion-col id="row-cont">
@@ -156,10 +136,6 @@
         </ion-item>
       </ion-col>
     </ion-row>
-    <!--div class="toggle-div">
-        <p id="label-div">SMS:</p>
-        <ion-toggle id="from-toggle" color="danger" checked="{{msnS}}" (ionChange)="chekedSms($event)"></ion-toggle>
-      </div-->
     <ion-row class="row-cont">
       <ion-col col-3 id="row-cont">
       </ion-col>
@@ -177,6 +153,13 @@
         <ion-item class="from-item">
           <ion-textarea id="textarea-notes" [(ngModel)]="data.sms" text-center text-lg:992px></ion-textarea>
         </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row class="row-cont" *ngIf="dispositivo == false">
+      <ion-col id="row-cont">
+        <button class="btm-sms" ion-button small color="secondary" (click)="this.setSms(getFilaCampania.telefono)">
+          send
+        </button>
       </ion-col>
     </ion-row>
     <ion-row class="row-cont">

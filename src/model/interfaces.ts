@@ -27,4 +27,5 @@ export interface Plan {
 	plan_restriccion: boolean;  /*boton agregar list si esta en Y no se le muesta el +list*/
 	bloqueo: boolean; /* bloqueo de app */
 	bloqueo_msn: string; /* motivo del bloqueo */
+	plan_restriccion_msn: string;
 } 

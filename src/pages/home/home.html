@@ -2,19 +2,19 @@
   <div class="content-header" *ngIf="conexion == false">
     <ion-row class="conten-row">
       <ion-col id="conten-row" col-3>
-        <button id="conten-row-btn" ion-button clear full (click)="crearCampania()" *ngIf="sms_activo == false && plan.plan_restriccion == false">
-          <b id="title">+LIST</b>
+        <button id="conten-row-btn" ion-button clear full (click)="crearCampania()" *ngIf="sms_activo == false">
+          <b>+LIST</b>
         </button>
       </ion-col>
       <ion-col id="conten-row">
         <img id="title" src="assets/imgs/title.png" (click)="perfil()" *ngIf="sms_activo == false">
-        <button id="conten-row-btn" ion-button clear full (click)="smsModal(true)" *ngIf="sms_activo == true">
-          <b id="title">SMS MANAGER</b>
+        <button id="conten-row-btn" ion-button full (click)="smsModal(true)" color="dark" *ngIf="sms_activo == true">
+          <b id="btn-title">SMS MANAGER</b>
         </button>
       </ion-col>
       <ion-col id="conten-row" col-3>
         <button id="conten-row-btn" ion-button clear full (click)="selectSms()">
-          <b id="title">{{(sms_activo == false) ? '+' : '-'}}SMS</b>
+          <b>{{(sms_activo == false) ? '+' : '-'}}SMS</b>
         </button>
       </ion-col>
     </ion-row>
@@ -23,7 +23,8 @@
     <ion-refresher (ionRefresh)="doRefresh($event)">
       <ion-refresher-content></ion-refresher-content>
     </ion-refresher>
-    <ion-row class="conten-row" *ngIf="compartir == true">
+    <p id="conten-info" *ngIf="sms_activo == true">Tap on any lists</p>
+    <ion-row class="conten-row" *ngIf="compartir == true && sms_activo == false">
       <ion-col id="conten-row">
         <button id="content-row-btn" ion-button block icon-left (click)="share()">
           <ion-icon name="logo-facebook"></ion-icon>
@@ -126,7 +127,7 @@
       <img id="btn-conexion-tex" src="assets/imgs/text.png">
     </div>
     <div class="btn-conexion" *ngIf="sms_activo == true" (click)="smsModal()">
-      <p id="btn-conexion-p">sms</p>
+      <p id="btn-conexion-p">SMS</p>
     </div>
     <img id="btn-conexion" src="assets/imgs/conexion.gif">
   </div>

@@ -39,8 +39,9 @@ export class LoginPage {
     plan: null,
     plan_fecha_expiracion: null,
     plan_restriccion: null,
-    bloqueo : null ,
-    bloqueo_msn : null
+    bloqueo: null,
+    bloqueo_msn: null,
+    plan_restriccion_msn: null
   };
   private logIn: FormGroup;
   private submitted: boolean = false;
@@ -112,7 +113,7 @@ export class LoginPage {
         this.usuario.imgUrl = null;
         this.usuario.log_out = null;
         this.globalProvider.usuario = this.usuario;
-        
+
         this.plan.gratis = (this.res.gratis == 'Y') ? true : false;
         this.plan.mostrar_publicidad_video = (this.res.mostrar_publicidad_video == 'Y') ? true : false;
         this.plan.mostrar_publicidad_banner = (this.res.mostrar_publicidad_banner == 'Y') ? true : false;
@@ -120,10 +121,10 @@ export class LoginPage {
         this.plan.plan = this.res.plan;
         this.plan.plan_fecha_expiracion = this.res.plan_fecha_expiracion;
         this.plan.plan_restriccion = (this.res.plan_restriccion == 'Y') ? true : false;
-        this.plan.bloqueo = (this.res.bloque == 'Y') ? true : false ;
+        this.plan.bloqueo = (this.res.bloque == 'Y') ? true : false;
         this.plan.bloqueo_msn = this.res.bloqueo_msn;
         this.globalProvider.plan = this.plan;
-        
+
         this.globalProvider.setUsuario(this.usuario);
         this.globalProvider.setPlan(this.plan);
         this.menu();

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ViewController, PopoverController, Platform, Alert } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ViewController, PopoverController, Platform, Alert, AlertController, ModalController } from 'ionic-angular';
 
 import { GlobalProvider } from '../../providers/global/global';
 import { HttpProvider } from '../../providers/http/http';
@@ -9,6 +9,9 @@ import { FileChooser } from '@ionic-native/file-chooser';
 import { FilePath } from '@ionic-native/file-path';
 import { File } from '@ionic-native/file';
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
+import { IOSFilePicker } from '@ionic-native/file-picker';
+import { CallNumber } from '@ionic-native/call-number';
+import { Numerico } from '../../pipes/filtros/filtros';
 
 @IonicPage()
 @Component({
@@ -34,6 +37,13 @@ export class CrearCampaniaPage {
   private msnS: boolean = false;
   private sms: string = 'N';
   private sms_tex: string = '';
+  private campania_blanco: boolean = false;
+  private nombre_campania: string;
+  private numeros: Array<number> = [];
+  private telefono: string = '';
+  private numerico = new Numerico();
+  private panel: boolean = false;
+  private catalogoEstado: any;
 
   constructor(
     public navCtrl: NavController,
@@ -48,6 +58,10 @@ export class CrearCampaniaPage {
     private fileChooser: FileChooser,
     private filePath: FilePath,
     private file: File,
+    private iosFilePicker: IOSFilePicker,
+    private alertController: AlertController,
+    private callNumber: CallNumber,
+    private modalController: ModalController
   ) {
     this.ordenarCampania = this.formBuilder.group({
       nombreArchivo: [''],
@@ -93,36 +107,62 @@ export class CrearCampaniaPage {
   }
 
   setExcelUsuario() {
-    const fileTransfer: FileTransferObject = this.transfer.create();
-    this.fileChooser.open().then(url => {
-      this.filePath.resolveNativePath(url).then(path => {
-        this.file.resolveLocalFilesystemUrl(path).then(newUrl => {
-          this.load = this.globalProvider.cargando(this.globalProvider.data.msj.load);
-          let url = "servicio=setExcelUsuario&id_usuario=" + this.globalProvider.usuario.id_usuario;
+    if (this.globalProvider.plan.plan_restriccion == false) {
+      this.load = this.globalProvider.cargando(this.globalProvider.data.msj.load);
+      if (this.platform.is('android')) {
+        this.fileChooser.open().then(url => {
+          this.filePath.resolveNativePath(url).then(path => {
+            this.file.resolveLocalFilesystemUrl(path).then(newUrl => {
+              let options: FileUploadOptions = {
+                fileKey: 'file',
+                fileName: newUrl.name,
+                headers: {}
+              }
+              this.setFileTrasfder(newUrl.nativeURL, options);
+            });
+          });
+        });
+      }
+      if (this.platform.is('ios')) {
+        this.iosFilePicker.pickFile().then(url => {
+          var array = url.split('/');
+          var nombre = array[array.length - 1];
           let options: FileUploadOptions = {
             fileKey: 'file',
-            fileName: newUrl.name,
+            fileName: nombre,
             headers: {}
           }
-          fileTransfer.upload(newUrl.nativeURL, this.httpProvider.url + url, options)
-            .then((data) => {
-              this.load.dismiss();
-              this.res = JSON.parse(data.response);
-              if (this.res.encabezado) {
-                this.datos = this.res.encabezado;
-                this.id_pre_campania = this.res.id_pre_campania;
-                this.nombre_archivo = this.res.nombre;
-                this.mostrar = true;
-              } else {
-                this.globalProvider.alerta(this.res.msn);
-              }
-            }, (err) => {
-              this.load.dismiss();
-              console.log('err: ' + JSON.stringify(err));
-            });
-        });
+          this.setFileTrasfder(url, options);
+        }).catch(err => console.log('err: ' + JSON.stringify(err)));
+      }
+    } else {
+      let alert = this.alertController.create({
+        title: '',
+        subTitle: this.globalProvider.plan.plan_restriccion_msn,
+        buttons: ['Ok']
       });
-    });
+      alert.present();
+    }
+  }
+
+  setFileTrasfder(path: string, options: any) {
+    let url = "servicio=setExcelUsuario&id_usuario=" + this.globalProvider.usuario.id_usuario;
+    const fileTransfer: FileTransferObject = this.transfer.create();
+    fileTransfer.upload(path, this.httpProvider.url + url, options).then((data) => {
+      this.load.dismiss();
+      this.res = JSON.parse(data.response);
+      if (this.res.encabezado) {
+        this.datos = this.res.encabezado;
+        this.id_pre_campania = this.res.id_pre_campania;
+        this.nombre_archivo = this.res.nombre;
+        this.mostrar = true;
+      } else {
+        this.globalProvider.alerta(this.res.msn);
+      }
+    }, (err) => {
+      this.load.dismiss();
+      console.log('err: ' + JSON.stringify(err));
+    }).catch(err => console.log('err: ' + JSON.stringify(err)));
   }
 
   cancelar(data: boolean = false) {
@@ -204,5 +244,63 @@ export class CrearCampaniaPage {
       this.columna[3].c = this.datos[n].nombre;
       this.columna[3].r = false;
     }
+  }
+
+  newCampania() {
+    for (let i = 1; i < 13; i++) {
+      this.numeros.push(i);
+    }
+    this.campania_blanco = !this.campania_blanco;
+    let url = "servicio=setNewCampania&id_usuario=" + this.globalProvider.usuario.id_usuario;
+    /*this.httpProvider.get(url).then(res => {
+      this.res = res;
+      console.log(JSON.stringify(res));
+    });*/
+    this.getCatalogoEstadoFilaCampania();
+  }
+
+  llamar() {
+    this.callNumber.callNumber(this.numerico.transform(this.telefono), true).then(res => {
+      this.panel = !this.panel;
+    }).catch(err => console.log('err; ' + JSON.stringify(err)));
+  }
+
+  armarNumero(i: number) {
+    let n: string = (this.numeros[i] != 11) ? this.numeros[i].toString() : '0';
+    this.telefono += n;
+  }
+
+  getCatalogoEstadoFilaCampania() {
+    let url = 'servicio=getCatalogoEstadoFilaCampania';
+    this.httpProvider.get(url).then(res => {
+      this.catalogoEstado = res;
+    }).catch(err => console.log('err: ' + JSON.stringify(err)));
+  }
+
+  clickStado(key) {
+    if (key == 1 || key == 2) {
+      this.setFilaActivaCampania();
+    }
+    if (key == 3) {
+      this.setSms(this.telefono);
+      this.setFilaActivaCampania();
+    }
+    if (key == 4) {
+      this.setSms(this.telefono);
+      this.serEventoCalendar();
+      this.setFilaActivaCampania();
+    }
+  }
+
+  setFilaActivaCampania() {
+    console.log('set');
+  }
+
+  serEventoCalendar() {
+
+  }
+
+  setSms(telefono: string) {
+
   }
 }
