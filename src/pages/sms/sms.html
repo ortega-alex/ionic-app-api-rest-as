@@ -53,7 +53,7 @@
           <ion-col id="row-historial" *ngIf="campania_sms.estado == 'A' && dispositivo">
             <ion-icon id="icon-historial" name="pause" color="dark" (click)="pausar()"></ion-icon>
           </ion-col>
-          <ion-col id="row-historial" *ngIf="campania_sms.estado == 'P' || campania_sms.estado == 'C'">
+          <ion-col id="row-historial" *ngIf="(campania_sms.estado == 'P' || campania_sms.estado == 'C') || dispositivo == false">
             <ion-icon id="icon-historial" name="play" color="dark" (click)="getSMSTotalEnviado(campania_sms.id_campania_sms)"></ion-icon>
           </ion-col>
         </ion-row>

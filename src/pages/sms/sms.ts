@@ -212,6 +212,9 @@ export class SmsPage {
         this.setEstadoCampaniaSMS(id, 'T');
         this.stado_sms.estado = 'T';
         this.getCampaniaSMSUsuario();
+        if(this.dispositivo == true) {
+          clearInterval(this.stado_sms.hilo);
+        }
         this.closeModal(true);
         return false;
       }
@@ -239,8 +242,8 @@ export class SmsPage {
         });
       }
     }).catch(err => {
-      (this.dispositivo == true) ? this.pausar() : console.log('err: ' + JSON.stringify(err));
-      alert('err: ' + JSON.stringify(err));
+      //(this.dispositivo == true) ? this.pausar() : console.log('err: ' + JSON.stringify(err));
+      console.log('err: ' + JSON.stringify(err));
     });
   }
 
@@ -294,7 +297,7 @@ export class SmsPage {
   play() {
     this.stado_sms.hilo = setInterval(() => {
       this.setSms(this.stado_sms.sms, this.stado_sms.id, this.stado_sms.inicio);
-    }, 5000);
+    }, 8000);
   }
 
   pausar() {

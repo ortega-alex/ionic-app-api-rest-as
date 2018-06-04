@@ -251,13 +251,15 @@ export class CampaniaPage {
         if (this.dispositivo == true) {
           this.setSms(this.getFilaCampania.telefono);
           this.setFilaActivaCampania();
-        } else { 
+        } else {
           this.setSms(this.getFilaCampania.telefono);
           let data = { view: 4, num: null }
           let modal = this.modalController.create('ModalPage', { data: data });
           modal.present();
           modal.onDidDismiss(data => {
-            this.setFilaActivaCampania();
+            if (data == true) {
+              this.setFilaActivaCampania();
+            }
           });
         }
       }
@@ -272,14 +274,13 @@ export class CampaniaPage {
           let modal = this.modalController.create('ModalPage', { data: data });
           modal.present();
           modal.onDidDismiss(data => {
-            this.setFilaActivaCampania();
+            if (data == true) {
+              this.setFilaActivaCampania();
+            }
           });
         }
       }
       this.serEventoCalendar();
-      if(this.dispositivo == true){
-        this.setFilaActivaCampania();
-      }
     }
   }
 
@@ -351,7 +352,9 @@ export class CampaniaPage {
       startDate,
       this.fechaPosterios.transform(startDate, 1)
     ).then(res => {
-      this.setFilaActivaCampania();
+      if (this.dispositivo == true) {
+        this.setFilaActivaCampania();
+      }
     }).catch(err => console.log('err: ' + JSON.stringify(err)));
   }
 
