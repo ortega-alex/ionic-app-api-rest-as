@@ -204,10 +204,11 @@ page-modal {
             width: 100% !important;
             #siguiente{
                 text-align: center;
-                font-size: 2em;
-                border: solid red 1px;
-                background-color: blue;
-                height: 90% !important;
+                font-size: 3em;
+                //border: solid red 1px;
+                //background-color: blue;
+				color:#666666; 
+				height: 90% !important;
                 width: 100% !important;
                 padding-top: 50%; 
                 #parrafo{
@@ -234,11 +235,12 @@ page-modal {
             width: 100% !important;
 			#sms-content{
 				text-align: center;
-                font-size: 2em;
-                background-color: #666666;
+                font-size: 3em;
+                //background-color: #666666;
                 height: 100% !important;
                 width: 100% !important;
-                padding-top: 50%; 
+				padding-top: 50%;
+				color:#666666; 
 				#parrafo{
                     display: block;
                     margin: auto;

@@ -74,6 +74,7 @@ export class CampaniaPage {
   private edit_info = { readonly: true, border: 'solid #f0f0f0 1px' };
   private dispositivo: boolean;
   private tipo_campania: boolean;
+  private campos: { cambio: boolean, stado: Array<boolean> };
 
   constructor(
     public navCtrl: NavController,
@@ -90,6 +91,7 @@ export class CampaniaPage {
     private alertController: AlertController,
     private modalController: ModalController
   ) {
+    this.campos = { cambio: false, stado: [false, false] };
     this.dispositivo = this.platform.is('android');
     this.campania = this.navParams.get('campania');
     this.posicion_campania = this.navParams.get('posicion_campania');
@@ -341,6 +343,7 @@ export class CampaniaPage {
   }
 
   setEditContenidoCampaniaManual() {
+    let cambio: string = (this.campos.cambio == true) ? 'Y' : 'N';
     let sms = (this.msnS == true) ? 'Y' : 'N';
     let individual = (this.individual == true) ? 'Y' : 'N';
     let fecha = new Date(this.data.date);
@@ -357,8 +360,8 @@ export class CampaniaPage {
       "&sms_text=" + this.data.sms +
       "&fecha_recordatorio=" + this.fecha.transform(fecha) +
       "&hora_recordatorio=" + this.hora.transform(fecha) +
-      "&hidEditField_1=N" +
-      "&hidEditField_2=N" +
+      "&hidEditField_1=" + cambio +
+      "&hidEditField_2=" + cambio +
       "&hidEditField_1_valor=" + this.getFilaCampania.campo_1_text +
       "&hidEditField_2_valor=" + this.getFilaCampania.campo_1_text;
     this.httpProvider.get(url).then(res => {
@@ -373,9 +376,6 @@ export class CampaniaPage {
           if (this.validarTiempo() == false) {
             this.panelLlamada = false;
           }
-          /*if (this.individual == false && this.list_completa == true) {
-            this.getFilaActivaCampania();
-          } else*/
           if (this.mi_list == true) {
             this.llamarLista(this.key_selec, false, this.posicion + 1);
           } else {
@@ -593,7 +593,7 @@ export class CampaniaPage {
         } else {
           this.campania = this.res.manual.campania[this.posicion_campania];
         }
-        console.log('estados_llamadas: ' + JSON.stringify(this.campania.estados_llamadas ));
+        console.log('estados_llamadas: ' + JSON.stringify(this.campania.estados_llamadas));
       } else {
         this.globalProvider.alerta(this.res.mns);
       }
@@ -631,5 +631,10 @@ export class CampaniaPage {
       this.res = res;
       console.log(JSON.stringify(this.res));
     }).catch(err => console.log('err: ' + JSON.stringify(err)));
+  }
+
+  habilitar(i: number) {
+    this.campos.cambio = true;
+    this.campos.stado[i] = !this.campos.stado[i];
   }
 }

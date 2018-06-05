@@ -39,7 +39,7 @@
         <ion-col id="row-cont">
           <input id="title" [readonly]="edid_name[i].edit" [(ngModel)]="campania.nombre" text-center type="text" (click)="editName(i)"
             [style.border-bottom]="edid_name[i].border" />
-          <ion-icon id="icon-delete" *ngIf="edid_name[i].edit == false" name="checkmark" (click)="saveName(campania.id_campania,campania.nombre,i)"></ion-icon>
+          <ion-icon id="icon-delete" *ngIf="edid_name[i].edit == false" name="checkmark" (click)="setDatosEditCampania(campania.id_campania,campania.nombre,i)"></ion-icon>
         </ion-col>
         <ion-col id="row-cont" col-2>
           <ion-icon id="icon-delete" color="dark" name="trash" (click)="setDeleteCampania(campania.id_campania,campania.nombre)"></ion-icon>
@@ -69,7 +69,7 @@
           <ion-col id="row-cont">
             <input id="title" [readonly]="edid_name_manual[i].edit" [(ngModel)]="m.nombre" text-center type="text" (click)="editNameManual(i)"
               [style.border-bottom]="edid_name_manual[i].border" />
-            <ion-icon id="icon-delete" *ngIf="edid_name_manual[i].edit == false" name="checkmark" (click)="saveNameManual(m.id_campania_manual,m.nombre,i)"></ion-icon>
+            <ion-icon id="icon-delete" *ngIf="edid_name_manual[i].edit == false" name="checkmark" (click)="setDatosEditCampaniaManual(m.id_campania_manual,m.nombre,i)"></ion-icon>
           </ion-col>
           <ion-col id="row-cont" col-2>
             <ion-icon id="icon-delete" color="dark" name="trash" (click)="setDeleteCampaniaManual(m.id_campania_manual,m.nombre)"></ion-icon>

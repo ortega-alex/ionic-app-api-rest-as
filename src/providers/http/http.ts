@@ -7,8 +7,8 @@ export class HttpProvider {
   constructor(public http: HttpClient) { }
 
   //  url = 'http://www.intercorps.org/power_dialer/servicio.php?';
-  public url = 'http://35.232.20.49/servicio.php?';
-  //public url = 'http://35.232.20.49/desarrollo/servicio.php?';
+  //public url = 'http://35.232.20.49/servicio.php?';
+  public url = 'http://35.232.20.49/desarrollo/servicio.php?';
 
   post(data, url) {
     return new Promise((resolve, reject) => {

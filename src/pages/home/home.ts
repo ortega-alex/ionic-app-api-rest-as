@@ -567,7 +567,7 @@ export class HomePage {
     (this.edid_name_manual[i].edit == false) ? this.edid_name_manual[i].border = 'solid green 1px' : this.edid_name_manual[i].border = 'none';
   }
 
-  saveName(id: number, name: string, i: number) {
+  setDatosEditCampania(id: number, name: string, i: number) {
     this.editName(i);
     let url = "servicio=setDatosEditCampania" +
       "&id_campania=" + id +
@@ -577,11 +577,10 @@ export class HomePage {
     }).catch(err => console.log('err: ' + JSON.stringify(err)));
   }
 
-  /*pendiente */
-  saveNameManual(id: number, name: string, i: number) {
-    this.editName(i);
+  setDatosEditCampaniaManual(id: number, name: string, i: number) {
+    this.editNameManual(i);
     let url = "servicio=setDatosEditCampaniaManual" +
-      "&id_campania=" + id +
+      "&id_campania_manual=" + id +
       "&nombre=" + name;
     this.httpProvider.get(url).then(res => {
       this.res = res;
