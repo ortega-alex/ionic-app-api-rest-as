@@ -4,7 +4,10 @@
     <ion-card class="conten-card">
       <ion-row class="row-cont">
         <ion-col col-2 id="row-cont">
-          <ion-icon id="row-cont-btn-f" name="arrow-round-back" (click)="regresar(true)" *ngIf="globalProvider.plan.mostrar_publicidad_video == true"></ion-icon>
+          <ion-icon *ngIf="globalProvider.plan.mostrar_publicidad_video == true && dispositivo == false" id="row-cont-btn-f" name="arrow-round-back"
+            (click)="regresar(true)"></ion-icon>
+          <ion-icon *ngIf="globalProvider.plan.mostrar_publicidad_video == true && dispositivo == false" id="row-cont-btn-f" ios="md-arrow-round-back"
+            md="md-arrow-round-back" (click)="regresar(true)"></ion-icon>
         </ion-col>
         <ion-col id="row-cont" *ngIf="globalProvider.plan.mostrar_publicidad_video == true">
           <button id="row-cont-btn" ion-button small icon-right block color="dark" (click)="showVideo()">
@@ -17,7 +20,9 @@
       </ion-row>
       <ion-row class="row-cont">
         <ion-col col-2 class="row-cont">
-          <ion-icon id="row-cont-btn-f" name="arrow-round-back" (click)="regresar(true)" *ngIf="globalProvider.plan.mostrar_publicidad_video == false"></ion-icon>
+          <ion-icon *ngIf="globalProvider.plan.mostrar_publicidad_video == false && dispositivo == true" id="row-cont-btn-f" name="arrow-round-back" (click)="regresar(true)"></ion-icon>
+          <ion-icon *ngIf="globalProvider.plan.mostrar_publicidad_video == false && dispositivo == false" id="row-cont-btn-f" ios="md-arrow-round-back"
+            md="md-arrow-round-back" (click)="regresar(true)"></ion-icon>
         </ion-col>
         <ion-col id="row-cont">
           <p id="title">{{campania.nombre}}</p>
@@ -32,7 +37,7 @@
       </ion-row>
       <ion-row class="row-cont-b">
         <ion-col id="row-cont-b" *ngFor="let estado of campania.estados_llamadas ; let i = index" [style.background-color]="'#'+estado.color"
-          [style.border]="stado[i].border" (click)="getContenidoCampania(estado,i)">
+          [style.border]="stado[i].border" (click)="separacion(1 ,estado,i)">
           <b>{{estado.valor}}</b>
           <br>{{estado.texto}}
         </ion-col>
@@ -85,7 +90,9 @@
     <br>
     <ion-row class="row-cont">
       <ion-col col-2 id="row-cont">
-        <ion-icon *ngIf="retroceder == true" id="row-icon" name="arrow-round-back" md="md-arrow-round-back" (click)="pausar()"></ion-icon>
+        <ion-icon *ngIf="retroceder == true && dispositivo == true" id="row-icon" name="arrow-round-back" md="md-arrow-round-back" (click)="pausar()"></ion-icon>
+        <ion-icon *ngIf="retroceder == true && dispositivo == false" id="row-icon" ios="md-arrow-round-back" md="md-arrow-round-back"
+          (click)="pausar()"></ion-icon>
       </ion-col>
       <ion-col col-8 id="row-cont">
         <input id="input-title" type="text" text-center [readonly]="edit_info.readonly" [(ngModel)]="getFilaCampania.nombre" [style.border-bottom]="edit_info.border"
@@ -99,7 +106,7 @@
     <div class="panel">
       <ion-row class="row-panel">
         <ion-col id="row-panel" *ngIf="getFilaCampania.columna_campo_1_text != ''">
-          <ion-item  no-Lines class="from-item">
+          <ion-item no-Lines class="from-item">
             <ion-label id="from-label" stacked>{{getFilaCampania.columna_campo_1_text}}</ion-label>
             <ion-input id="from-input" type="text" text-center [readonly]="edit_info.readonly" [(ngModel)]="getFilaCampania.campo_1"
               [style.border-bottom]="edit_info.border"></ion-input>
@@ -161,7 +168,8 @@
       <ion-col col-5 id="row-cont-title">
         <ion-item no-Lines class="from-item">
           <p id="title">Reminder
-            <ion-icon id="calendar" name="calendar"></ion-icon>
+            <ion-icon *ngIf="dispositivo == true" id="calendar" name="calendar"></ion-icon>
+            <ion-icon *ngIf="dispositivo == false" id="calendar" ios="md-calendar" md="md-calendar"></ion-icon>
           </p>
         </ion-item>
       </ion-col>

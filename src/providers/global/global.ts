@@ -95,7 +95,7 @@ export class GlobalProvider {
     loader.present();
     setTimeout(() => {
       loader.dismiss();
-    }, 5000);
+    }, 2000);
   }
 
   setNum(num: number) {

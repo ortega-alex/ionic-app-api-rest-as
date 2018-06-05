@@ -45,6 +45,7 @@ export class SmsPage {
     private sms: SMS,
     private contacts: Contacts,
   ) {
+    this.dispositivo = this.platform.is('android');
     this.historial = this.navParams.get('historial');
     this.campania_sms = this.navParams.get('campania_sms');
     if (this.historial == false) {
@@ -60,7 +61,6 @@ export class SmsPage {
   }
 
   ionViewDidLoad() {
-    this.dispositivo = (this.platform.is('android')) ? true : false;
     this.platform.registerBackButtonAction(() => {
       this.closeModal(true);
     });

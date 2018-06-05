@@ -28,6 +28,7 @@ export class RegistroPage {
   private res: any;
   private error: boolean;
   private noValido: boolean;
+  private dispositivo: boolean;
 
   constructor(
     public navCtrl: NavController,
@@ -35,7 +36,9 @@ export class RegistroPage {
     public globalProvider: GlobalProvider,
     public httpProvider: HttpProvider,
     private platform: Platform
-  ) { }
+  ) {
+    this.dispositivo = this.platform.is('android');
+  }
 
   ionViewDidLoad() { }
 

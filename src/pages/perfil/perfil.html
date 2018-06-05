@@ -2,8 +2,9 @@
   <br>
   <div class="content-header">
     <ion-row class="conten-row">
-      <ion-col id="conten-row" col-2> 
-        <ion-icon id="icon" name="arrow-round-back" (click)="closeModal()"></ion-icon>
+      <ion-col id="conten-row" col-2>
+        <ion-icon *ngIf="dispositivo == true" id="icon" name="arrow-round-back" (click)="closeModal()"></ion-icon>
+        <ion-icon *ngIf="dispositivo == false" id="icon" ios="md-arrow-round-back" md="md-arrow-round-back" (click)="closeModal()"></ion-icon>
       </ion-col>
       <ion-col id="conten-row">
         <p id="title">Account</p>

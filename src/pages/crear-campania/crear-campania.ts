@@ -48,6 +48,8 @@ export class CrearCampaniaPage {
   private panel: boolean = false;
   private catalogoEstado: any;
   private new_campania: { id_campania_manual: number; nombre_campania: string, telefono: string, nombre: string, fecha: string, sms: boolean, sms_tex: string, nota: string, stado: number, campos: { uno: string, uno_stado: boolean, dos: string, dos_stado: boolean } }
+  private data : any;
+  private dispositivo : boolean ;
 
   constructor(
     public navCtrl: NavController,
@@ -69,7 +71,17 @@ export class CrearCampaniaPage {
     private Sms: SMS,
     private calendar: Calendar
   ) {
-    this.new_campania = { id_campania_manual: null, nombre_campania: null, telefono: '', nombre: null, fecha: null, sms: false, sms_tex: null, nota: null, stado: null, campos: { uno: null, uno_stado: false, dos: null, dos_stado: false } };
+    this.dispositivo = this.platform.is('android');
+    console.log(this.dispositivo);
+    if(this.navParams.get('data')){
+      this.data = this.navParams.get('data');
+      this.new_campania = { id_campania_manual: this.data.id_campania_manual , nombre_campania: this.data.nombre_campania , telefono: '', nombre: null, fecha: null, sms: false, sms_tex: null, nota: null, stado: null, campos: { uno: null, uno_stado: false, dos: null, dos_stado: false } };
+      this.dialer();        
+      this.getCatalogoEstadoFilaCampania();
+      this.campania_blanco = !this.campania_blanco;
+    }else {
+      this.new_campania = { id_campania_manual: null, nombre_campania: null, telefono: '', nombre: null, fecha: null, sms: false, sms_tex: null, nota: null, stado: null, campos: { uno: null, uno_stado: false, dos: null, dos_stado: false } };
+    }
     this.ordenarCampania = this.formBuilder.group({
       nombreArchivo: [''],
       nombreCampania: ['', Validators.required],
@@ -253,11 +265,15 @@ export class CrearCampaniaPage {
     }
   }
 
-  newCampania() {
-    let sms: string = (this.new_campania.sms == true) ? 'Y' : 'N';
+  dialer(){
     for (let i = 1; i < 13; i++) {
       this.numeros.push(i);
     }
+  }
+
+  newCampania() {
+    this.dialer();
+    let sms: string = (this.new_campania.sms == true) ? 'Y' : 'N';    
     this.getCatalogoEstadoFilaCampania();
     let url = "servicio=setCampaniaManual" +
       "&id_usuario=" + this.globalProvider.usuario.id_usuario +

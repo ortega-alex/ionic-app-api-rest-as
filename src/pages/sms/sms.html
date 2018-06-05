@@ -2,7 +2,8 @@
   <div class="content-header">
     <ion-row class="conten-row">
       <ion-col id="conten-row" col-2>
-        <ion-icon id="icon" name="arrow-round-back" (click)="closeModal(true)"></ion-icon>
+        <ion-icon *ngIf="dispositivo == true" id="icon" name="arrow-round-back" (click)="closeModal()"></ion-icon>
+        <ion-icon *ngIf="dispositivo == false" id="icon" ios="md-arrow-round-back" md="md-arrow-round-back" (click)="closeModal()"></ion-icon>
       </ion-col>
       <ion-col id="conten-row">
         <p id="title">{{(historial == false) ? 'CAMPAING SMS' : 'SMS MANAGER'}}</p>
@@ -81,8 +82,9 @@
         Enter SMS......
       </p>
       <ion-row class="row-info">
-        <ion-icon id="calendar" name="calendar"></ion-icon>
-        <ion-col id="row-info">
+        <ion-icon *ngIf="dispositivo == true" id="calendar" name="calendar"></ion-icon>
+        <ion-icon *ngIf="dispositivo == false" id="calendar" ios="md-calendar" md="md-calendar"></ion-icon>
+         <ion-col id="row-info">
           <ion-datetime id="row-info-date" text-center displayFormat="MMM DD, YYYY HH:mm" formControlName="fecha"> </ion-datetime>
         </ion-col>
       </ion-row>

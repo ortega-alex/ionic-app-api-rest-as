@@ -3,7 +3,9 @@
   <div class="content-header">
     <ion-row class="conten-row">
       <ion-col id="conten-row" col-2>
-        <ion-icon id="icon" name="arrow-round-back" (click)="cancelar()"></ion-icon>
+        <!--ion-icon id="icon" name="arrow-round-back" (click)="cancelar()"></ion-icon-->
+        <ion-icon *ngIf="dispositivo == true" id="icon" name="arrow-round-back" (click)="cancelar(true)"></ion-icon>
+        <ion-icon *ngIf="dispositivo == false" id="icon" ios="md-arrow-round-back" md="md-arrow-round-back" (click)="cancelar(true)"></ion-icon>
       </ion-col>
       <ion-col id="conten-row">
         <p id="title"></p>
@@ -256,7 +258,8 @@
       <ion-col col-5 id="row-content">
         <ion-item no-Lines class="item-content">
           <p id="title">Reminder
-            <ion-icon id="calendar" name="calendar"></ion-icon>
+            <ion-icon *ngIf="dispositivo == true" id="calendar" name="calendar"></ion-icon>
+            <ion-icon *ngIf="dispositivo == false" id="calendar" ios="md-calendar" md="md-calendar"></ion-icon>
           </p>
         </ion-item>
       </ion-col>

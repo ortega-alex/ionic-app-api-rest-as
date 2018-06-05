@@ -49,8 +49,9 @@ export class HomePage {
   private time: { hora: number, minuto: number, segundo: number };
   private tiempo_restante: any;
   private edid_name: Array<{ edit: boolean, border: string, border_stado: Array<any>, posicion_campania: number, stado: Array<any> }> = [];
+  private edid_name_manual: Array<{ edit: boolean, border: string, border_stado: Array<any>, posicion_campania: number, stado: Array<any> }> = [];
   private sms_activo: boolean = false;
-  private campania_sms: Array<{ id_campania: number, nombre: string, estados: Array<{ color: number, id: number, valor: number, texto: string }>, togglel: boolean }> = [];
+  private campania_sms: Array<{ id_campania: number, nombre: string, tipo_campania: number, estados: Array<{ color: number, id: number, valor: number, texto: string }>, togglel: boolean }> = [];
   private background: string;
   private plan: Plan = {
     gratis: null,
@@ -64,7 +65,8 @@ export class HomePage {
     bloqueo_msn: null,
     plan_restriccion_msn: null
   };
-  private dispositivo : boolean ;
+  private dispositivo: boolean;
+  private manual: Array<any> = [];
 
   constructor(
     public navCtrl: NavController,
@@ -195,9 +197,9 @@ export class HomePage {
     });
   }
 
-  crearCampania() {
+  crearCampania(data: any = null) {
     if (this.bloqueo() == false) {
-      let modal = this.modalControlle.create('CrearCampaniaPage');
+      let modal = this.modalControlle.create('CrearCampaniaPage', { data: data });
       modal.present();
       modal.onDidDismiss(data => {
         if (data) {
@@ -227,7 +229,11 @@ export class HomePage {
         for (let index = 0; index < this.res.campania.length; index++) {
           this.edid_name.push({ edit: true, border: 'none', border_stado: ['none', 'none', 'none', 'none', 'none'], posicion_campania: index, stado: [false, false, false, false, false] });
         }
+        for (let index = 0; index < this.res.manual.campania.length; index++) {
+          this.edid_name_manual.push({ edit: true, border: 'none', border_stado: ['none', 'none', 'none', 'none', 'none'], posicion_campania: index, stado: [false, false, false, false, false] });
+        }
         this.campanias = this.res.campania;
+        this.manual = this.res.manual.campania;
         this.plan.gratis = (this.res.gratis == 'Y') ? true : false;
         this.plan.mostrar_publicidad_video = (this.res.mostrar_publicidad_video == 'Y') ? true : false;
         this.plan.mostrar_publicidad_banner = (this.res.mostrar_publicidad_banner == 'Y') ? true : false;
@@ -263,10 +269,10 @@ export class HomePage {
     });
   }
 
-  irACampania(campania, posicion_campania: number, estado, posicion: number) {
+  irACampania(campania: any, posicion_campania: number, estado: number, posicion: number, tipo_campania: boolean = true) {
     if (this.bloqueo() == false) {
       if (this.sms_activo == false) {
-        let modal = this.modalControlle.create('CampaniaPage', { campania: campania, posicion_campania: posicion_campania, estado: estado, posicion: posicion });
+        let modal = this.modalControlle.create('CampaniaPage', { campania: campania, posicion_campania: posicion_campania, estado: estado, posicion: posicion, tipo_campania: tipo_campania });
         modal.present();
         modal.onDidDismiss(data => {
           if (data) {
@@ -274,8 +280,13 @@ export class HomePage {
           }
         });
       } else {
-        this.edid_name[posicion_campania].stado[posicion] = !this.edid_name[posicion_campania].stado[posicion];
-        (this.edid_name[posicion_campania].stado[posicion] == true) ? this.edid_name[posicion_campania].border_stado[posicion] = "solid gray 4px" : this.edid_name[posicion_campania].border_stado[posicion] = "none";
+        if (tipo_campania == true) {
+          this.edid_name[posicion_campania].stado[posicion] = !this.edid_name[posicion_campania].stado[posicion];
+          (this.edid_name[posicion_campania].stado[posicion] == true) ? this.edid_name[posicion_campania].border_stado[posicion] = "solid gray 4px" : this.edid_name[posicion_campania].border_stado[posicion] = "none";
+        } else {
+          this.edid_name_manual[posicion_campania].stado[posicion] = !this.edid_name_manual[posicion_campania].stado[posicion];
+          (this.edid_name_manual[posicion_campania].stado[posicion] == true) ? this.edid_name_manual[posicion_campania].border_stado[posicion] = "solid gray 4px" : this.edid_name_manual[posicion_campania].border_stado[posicion] = "none";
+        }
       }
     }
   }
@@ -419,6 +430,36 @@ export class HomePage {
     confirm.present();
   }
 
+  /*pendiente */
+  setDeleteCampaniaManual(id: number, nombre: string) {
+    let confirm = this.alertController.create({
+      title: '',
+      message: this.globalProvider.data.msj.warning,
+      buttons: [
+        {
+          text: 'No',
+          handler: () => { }
+        },
+        {
+          text: 'Yes',
+          handler: () => {
+            let url = 'servicio=setDeleteCampania&campaniaManual=' + id;
+            this.httpProvider.get(url).then(res => {
+              this.res = res;
+              if (this.res.error == 'false') {
+                //this.removeContact(nombre);
+                this.getCampaniaUsuario();
+              } else {
+                this.globalProvider.alerta(this.res.mns);
+              }
+            }).catch(err => console.log('err: ' + JSON.stringify(err)));
+          }
+        }
+      ]
+    });
+    confirm.present();
+  }
+
   removeContact(nombre: string) {
     var options = {
       filter: "PD",
@@ -521,9 +562,25 @@ export class HomePage {
     (this.edid_name[i].edit == false) ? this.edid_name[i].border = 'solid green 1px' : this.edid_name[i].border = 'none';
   }
 
+  editNameManual(i: number) {
+    this.edid_name_manual[i].edit = !this.edid_name_manual[i].edit;
+    (this.edid_name_manual[i].edit == false) ? this.edid_name_manual[i].border = 'solid green 1px' : this.edid_name_manual[i].border = 'none';
+  }
+
   saveName(id: number, name: string, i: number) {
     this.editName(i);
     let url = "servicio=setDatosEditCampania" +
+      "&id_campania=" + id +
+      "&nombre=" + name;
+    this.httpProvider.get(url).then(res => {
+      this.res = res;
+    }).catch(err => console.log('err: ' + JSON.stringify(err)));
+  }
+
+  /*pendiente */
+  saveNameManual(id: number, name: string, i: number) {
+    this.editName(i);
+    let url = "servicio=setDatosEditCampaniaManual" +
       "&id_campania=" + id +
       "&nombre=" + name;
     this.httpProvider.get(url).then(res => {
@@ -549,53 +606,114 @@ export class HomePage {
             }
           }
         }
+        for (let i = 0; i < this.edid_name_manual.length; i++) {
+          for (let j = 0; j < this.edid_name_manual[i].border_stado.length; j++) {
+            if (this.edid_name_manual[i].border_stado[j] != 'none') {
+              this.edid_name_manual[i].border_stado[j] = 'none';
+            }
+            if (this.edid_name_manual[i].stado[j] != false) {
+              this.edid_name_manual[i].stado[j] = false;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  selectCamapniaSms() {
+    var si: boolean = false;
+    for (let i = 0; i < this.edid_name.length; i++) {
+      for (let j = 0; j < this.edid_name[i].stado.length; j++) {
+        if (this.edid_name[i].stado[j] == true) {
+          if (this.campania_sms && this.campania_sms.length > 0) {
+            for (let k = 0; k < this.campania_sms.length; k++) {
+              if (this.campania_sms[k].id_campania == this.campanias[this.edid_name[i].posicion_campania].id_campania && 1 == this.campania_sms[k].tipo_campania) {
+                this.campania_sms[k].estados.push(
+                  {
+                    color: this.campanias[this.edid_name[i].posicion_campania].estados_llamadas[j].color,
+                    id: this.campanias[this.edid_name[i].posicion_campania].estados_llamadas[j].key_estado,
+                    valor: this.campanias[this.edid_name[i].posicion_campania].estados_llamadas[j].valor,
+                    texto: this.campanias[this.edid_name[i].posicion_campania].estados_llamadas[j].texto,
+                  }
+                );
+                si = true;
+              } else {
+                si = false;
+              }
+            }
+          }
+          if (si == false) {
+            var estados = [];
+            estados.push({
+              color: this.campanias[this.edid_name[i].posicion_campania].estados_llamadas[j].color,
+              id: this.campanias[this.edid_name[i].posicion_campania].estados_llamadas[j].key_estado,
+              valor: this.campanias[this.edid_name[i].posicion_campania].estados_llamadas[j].valor,
+              texto: this.campanias[this.edid_name[i].posicion_campania].estados_llamadas[j].texto,
+            });
+            this.campania_sms.push(
+              {
+                id_campania: this.campanias[this.edid_name[i].posicion_campania].id_campania,
+                nombre: this.campanias[this.edid_name[i].posicion_campania].nombre,
+                tipo_campania: 1,
+                estados: estados,
+                togglel: false
+              }
+            );
+          }
+        }
+      }
+    }
+  }
+
+  selectCamapniaManualSms() {
+    var si: boolean = false;
+    for (let i = 0; i < this.edid_name_manual.length; i++) {
+      for (let j = 0; j < this.edid_name_manual[i].stado.length; j++) {
+        if (this.edid_name_manual[i].stado[j] == true) {
+          if (this.campania_sms && this.campania_sms.length > 0) {
+            for (let k = 0; k < this.campania_sms.length; k++) {
+              if (this.campania_sms[k].id_campania == this.manual[this.edid_name_manual[i].posicion_campania].id_campania_manual && 2 == this.campania_sms[k].tipo_campania) {
+                this.campania_sms[k].estados.push(
+                  {
+                    color: this.manual[this.edid_name_manual[i].posicion_campania].estados_llamadas[j + 1].color,
+                    id: this.manual[this.edid_name_manual[i].posicion_campania].estados_llamadas[j + 1].key_estado,
+                    valor: this.manual[this.edid_name_manual[i].posicion_campania].estados_llamadas[j + 1].valor,
+                    texto: this.manual[this.edid_name_manual[i].posicion_campania].estados_llamadas[j + 1].texto,
+                  }
+                );
+                si = true;
+              } else {
+                si = false;
+              }
+            }
+          }
+          if (si == false) {
+            var estados = [];
+            estados.push({
+              color: this.manual[this.edid_name_manual[i].posicion_campania].estados_llamadas[j + 1].color,
+              id: this.manual[this.edid_name_manual[i].posicion_campania].estados_llamadas[j + 1].key_estado,
+              valor: this.manual[this.edid_name_manual[i].posicion_campania].estados_llamadas[j + 1].valor,
+              texto: this.manual[this.edid_name_manual[i].posicion_campania].estados_llamadas[j + 1].texto,
+            });
+            this.campania_sms.push(
+              {
+                id_campania: this.manual[this.edid_name[i].posicion_campania].id_campania_manual,
+                nombre: this.manual[this.edid_name[i].posicion_campania].nombre,
+                tipo_campania: 2,
+                estados: estados,
+                togglel: false
+              }
+            );
+          }
+        }
       }
     }
   }
 
   smsModal(historial: boolean = false) {
-    var si: boolean = false;
     if (historial == false) {
-      for (let i = 0; i < this.edid_name.length; i++) {
-        for (let j = 0; j < this.edid_name[i].stado.length; j++) {
-          if (this.edid_name[i].stado[j] == true) {
-            if (this.campania_sms && this.campania_sms.length > 0) {
-              for (let k = 0; k < this.campania_sms.length; k++) {
-                if (this.campania_sms[k].id_campania == this.campanias[this.edid_name[i].posicion_campania].id_campania) {
-                  this.campania_sms[k].estados.push(
-                    {
-                      color: this.campanias[this.edid_name[i].posicion_campania].estados_llamadas[j].color,
-                      id: this.campanias[this.edid_name[i].posicion_campania].estados_llamadas[j].key_estado,
-                      valor: this.campanias[this.edid_name[i].posicion_campania].estados_llamadas[j].valor,
-                      texto: this.campanias[this.edid_name[i].posicion_campania].estados_llamadas[j].texto,
-                    }
-                  );
-                  si = true;
-                } else {
-                  si = false;
-                }
-              }
-            }
-            if (si == false) {
-              var estados = [];
-              estados.push({
-                color: this.campanias[this.edid_name[i].posicion_campania].estados_llamadas[j].color,
-                id: this.campanias[this.edid_name[i].posicion_campania].estados_llamadas[j].key_estado,
-                valor: this.campanias[this.edid_name[i].posicion_campania].estados_llamadas[j].valor,
-                texto: this.campanias[this.edid_name[i].posicion_campania].estados_llamadas[j].texto,
-              });
-              this.campania_sms.push(
-                {
-                  id_campania: this.campanias[this.edid_name[i].posicion_campania].id_campania,
-                  nombre: this.campanias[this.edid_name[i].posicion_campania].nombre,
-                  estados: estados,
-                  togglel: false
-                }
-              );
-            }
-          }
-        }
-      }
+      this.selectCamapniaSms();
+      //this.selectCamapniaManualSms();
     }
     if (historial == false && this.campania_sms.length == 0) {
       let alert = this.alertController.create({
@@ -606,6 +724,7 @@ export class HomePage {
       alert.present();
       return false;
     }
+    console.log(JSON.stringify(this.campania_sms))
     let modal = this.modalControlle.create('SmsPage', { historial: historial, campania_sms: this.campania_sms, id: null });
     modal.present();
     modal.onDidDismiss(data => {

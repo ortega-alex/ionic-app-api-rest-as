@@ -31,6 +31,7 @@ export class PerfilPage {
   private load: any;
   private res: any;
   private minusculas = new Minusculas();
+  private dispositivo: boolean;
 
   constructor(
     public navCtrl: NavController,
@@ -41,6 +42,7 @@ export class PerfilPage {
     private viewController: ViewController,
     private platform: Platform
   ) {
+    this.dispositivo = this.platform.is('android');
     this.globalProvider.getUsuario();
   }
 

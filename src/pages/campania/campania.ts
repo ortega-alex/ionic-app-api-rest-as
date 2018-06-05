@@ -73,6 +73,7 @@ export class CampaniaPage {
   private retroceder: boolean;
   private edit_info = { readonly: true, border: 'solid #f0f0f0 1px' };
   private dispositivo: boolean;
+  private tipo_campania: boolean;
 
   constructor(
     public navCtrl: NavController,
@@ -89,11 +90,13 @@ export class CampaniaPage {
     private alertController: AlertController,
     private modalController: ModalController
   ) {
+    this.dispositivo = this.platform.is('android');
     this.campania = this.navParams.get('campania');
     this.posicion_campania = this.navParams.get('posicion_campania');
     this.estado = this.navParams.get('estado');
     this.posicion = this.navParams.get('posicion');
-    this.getContenidoCampania(this.estado, this.posicion);
+    this.tipo_campania = this.navParams.get('tipo_campania');
+    this.separacion(1, this.estado, this.posicion);
     if (this.campania.sms == 'Y') {
       this.data.sms = this.campania.sms_predeterminado;
       this.msnS = true;
@@ -103,7 +106,6 @@ export class CampaniaPage {
   }
 
   ionViewDidLoad() {
-    this.dispositivo = (this.platform.is('android') ? true : false);
     if (this.globalProvider.plan.mostrar_publicidad_video == true) {
       this.prepareVideo();
       this.globalProvider.getTime();
@@ -244,13 +246,15 @@ export class CampaniaPage {
   clickStado(key) {
     this.key = key;
     if (key == 1 || key == 2) {
-      this.setFilaActivaCampania();
+      //this.setFilaActivaCampania();
+      this.separacion(2);
     }
     if (key == 3) {
       if (this.msnS == true) {
         if (this.dispositivo == true) {
           this.setSms(this.getFilaCampania.telefono);
-          this.setFilaActivaCampania();
+          //this.setFilaActivaCampania();
+          this.separacion(2);
         } else {
           this.setSms(this.getFilaCampania.telefono);
           let data = { view: 4, num: null }
@@ -258,12 +262,14 @@ export class CampaniaPage {
           modal.present();
           modal.onDidDismiss(data => {
             if (data == true) {
-              this.setFilaActivaCampania();
+              //this.setFilaActivaCampania();
+              this.separacion(2);
             }
           });
         }
       } else {
-        this.setFilaActivaCampania();
+        //this.setFilaActivaCampania();
+        this.separacion(2);
       }
     }
     if (key == 4) {
@@ -277,12 +283,14 @@ export class CampaniaPage {
           modal.present();
           modal.onDidDismiss(data => {
             if (data == true) {
-              this.setFilaActivaCampania();
+              //this.setFilaActivaCampania();
+              this.separacion(2);
             }
           });
         }
       } else {
-        this.setFilaActivaCampania();
+        //this.setFilaActivaCampania();
+        this.separacion(2);
       }
       this.serEventoCalendar();
     }
@@ -332,6 +340,57 @@ export class CampaniaPage {
     }).catch(err => console.log('err: ' + JSON.stringify(err)));
   }
 
+  setEditContenidoCampaniaManual() {
+    let sms = (this.msnS == true) ? 'Y' : 'N';
+    let individual = (this.individual == true) ? 'Y' : 'N';
+    let fecha = new Date(this.data.date);
+    let url = 'servicio=setEditContenidoCampaniaManual' +
+      "&id_campania_manual_contenido=" + this.getFilaCampania.id_campania_manual_contenido +
+      "&estado=" + this.key +
+      "&telefono=" + this.getFilaCampania.telefono +
+      "&nombre=" + this.getFilaCampania.nombre +
+      "&campo_1=" + this.getFilaCampania.campo_1 +
+      "&campo_2=" + this.getFilaCampania.campo_2 +
+      "&nota=" + this.data.notas +
+      "&otro_telefono=" + this.data.otroTelefono +
+      "&sms=" + sms +
+      "&sms_text=" + this.data.sms +
+      "&fecha_recordatorio=" + this.fecha.transform(fecha) +
+      "&hora_recordatorio=" + this.hora.transform(fecha) +
+      "&hidEditField_1=N" +
+      "&hidEditField_2=N" +
+      "&hidEditField_1_valor=" + this.getFilaCampania.campo_1_text +
+      "&hidEditField_2_valor=" + this.getFilaCampania.campo_1_text;
+    this.httpProvider.get(url).then(res => {
+      this.res = res;
+      if (this.res.error == 'false') {
+        this.data.notas = '';
+        this.data.otroTelefono = null;
+        this.key = null;
+        let date = new Date();
+        this.globalProvider.setFecha(date);
+        if (this.paus == false) {
+          if (this.validarTiempo() == false) {
+            this.panelLlamada = false;
+          }
+          /*if (this.individual == false && this.list_completa == true) {
+            this.getFilaActivaCampania();
+          } else*/
+          if (this.mi_list == true) {
+            this.llamarLista(this.key_selec, false, this.posicion + 1);
+          } else {
+            this.pausar();
+          }
+        } else {
+          this.pausarLlamada();
+          this.pausar();
+        }
+      } else {
+        this.globalProvider.alerta(this.res.mns);
+      }
+    }).catch(err => console.log('err: ' + JSON.stringify(err)));
+  }
+
   call(telefono, nuevo: boolean = true) {
     this.callNumber.callNumber(this.numerico.transform(telefono), true).then(res => {
       if (nuevo == true) {
@@ -357,7 +416,8 @@ export class CampaniaPage {
       this.fechaPosterios.transform(startDate, 1)
     ).then(res => {
       if (this.dispositivo == true) {
-        this.setFilaActivaCampania();
+        //this.setFilaActivaCampania();
+        this.separacion(2);
       }
     }).catch(err => console.log('err: ' + JSON.stringify(err)));
   }
@@ -409,6 +469,28 @@ export class CampaniaPage {
     }
   }
 
+  separacion(tipo: number, estado: any = null, posicion: number = null) {
+    switch (tipo) {
+      case 1:
+        if (this.tipo_campania == true) {
+          this.getContenidoCampania(estado, posicion);
+        } else {
+          this.getContenidoCampaniaManual(estado, posicion);
+        }
+        break;
+      case 2:
+        if (this.tipo_campania == true) {
+          this.setFilaActivaCampania();
+        } else {
+          this.setEditContenidoCampaniaManual();
+        }
+        break;
+      default:
+        console.log('no');
+        break
+    }
+  }
+
   getContenidoCampania(estado: any, posicion: number) {
     if (estado.valor == '0') {
       this.no = false;
@@ -444,11 +526,47 @@ export class CampaniaPage {
     }).catch(err => console.log('err: ' + JSON.stringify(err)));
   }
 
+  getContenidoCampaniaManual(estado: any, posicion: number) {
+    if (estado.valor == '0') {
+      this.no = false;
+    } else {
+      this.no = true;
+    }
+    var date = new Date();
+    this.data.date = this.fechas.transform(date);
+    this.contenido = [];
+    this.spinner = true;
+    for (let s of this.stado) {
+      if (s.border != 'none') {
+        s.border = 'none';
+      }
+    }
+    this.stado[posicion].border = 'solid gray 4px';
+    this.boton.color = '#' + estado.color;
+    this.boton.estado = estado.texto;
+    this.boton.key_estado = estado.key_estado;
+    this.key_selec = estado.key_estado;
+    let url = 'servicio=getContenidoCampaniaManual&id_campania= ' + this.campania.id_campania_manual + '&id_estado=' + estado.key_estado + '&todos=N';
+    this.httpProvider.get(url).then(res => {
+      this.res = res;
+      if (this.res.error == 'false') {
+        if (this.res.contenido.length > 0) {
+          this.contenido = this.res.contenido;
+        }
+        this.spinner = false;
+      } else {
+        this.globalProvider.alerta(this.res.msn);
+        this.spinner = false;
+      }
+    }).catch(err => console.log('err: ' + JSON.stringify(err)));
+  }
+
   pausar() {
     this.getCampaniaUsuario();
     this.panelLlamada = false;
     this.edit_info = { readonly: true, border: 'solid #f0f0f0 1px' };
-    this.getContenidoCampania(this.estado, this.key_selec);
+    //this.getContenidoCampania(this.estado, this.key_selec);
+    this.separacion(1, this.estado, this.key_selec);
   }
 
   togell(i: number) {
@@ -470,7 +588,12 @@ export class CampaniaPage {
     this.httpProvider.get(url).then(res => {
       this.res = res;
       if (this.res.error == 'false') {
-        this.campania = this.res.campania[this.posicion_campania];
+        if (this.tipo_campania == true) {
+          this.campania = this.res.campania[this.posicion_campania];
+        } else {
+          this.campania = this.res.manual.campania[this.posicion_campania];
+        }
+        console.log('estados_llamadas: ' + JSON.stringify(this.campania.estados_llamadas ));
       } else {
         this.globalProvider.alerta(this.res.mns);
       }
