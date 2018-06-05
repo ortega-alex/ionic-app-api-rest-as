@@ -64,6 +64,7 @@ export class HomePage {
     bloqueo_msn: null,
     plan_restriccion_msn: null
   };
+  private dispositivo : boolean ;
 
   constructor(
     public navCtrl: NavController,
@@ -80,7 +81,9 @@ export class HomePage {
     private alertController: AlertController,
     private admobFree: AdMobFree,
     private facebook: Facebook
-  ) { }
+  ) {
+    this.dispositivo = this.platform.is('android');
+  }
 
   ionViewDidLoad() {
     document.addEventListener(this.admobFree.events.REWARD_VIDEO_REWARD, (res) => {
@@ -243,7 +246,7 @@ export class HomePage {
           this.globalProvider.getUsuario();
           this.app.getRootNav().setRoot(MyApp);
         }
-        this.free();
+        //this.free();
       } else {
         this.globalProvider.alerta(this.res.mns);
       }

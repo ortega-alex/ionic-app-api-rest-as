@@ -1,4 +1,5 @@
 <ion-content padding class="content-modal" [style.background-color]="style.background" [style.opacity]="style.opacity">
+  <br>
   <ion-card class="conten-card" *ngIf="panel_llamada == true && data1.view == 1">
     <ion-row class="row-cont" *ngIf="globalProvider.plan.mostrar_publicidad_video == true">
       <ion-col id="row-cont">
@@ -106,19 +107,15 @@
   </div>
   <ion-slides class="slider-content" pager *ngIf="data1.view == 2">
     <ion-slide class="slider-content">
-      <!--ion-icon id="icon" ios="ios-arrow-round-back" md="md-arrow-round-back" (click)="closeModal()"></ion-icon-->
       <img id="imagen-demo" src="assets/imgs/demo1.jpg" alt="">
     </ion-slide>
     <ion-slide class="slider-content">
-      <!--ion-icon id="icon" ios="ios-arrow-round-back" md="md-arrow-round-back" (click)="closeModal()"></ion-icon-->
       <img id="imagen-demo" src="assets/imgs/demo2.jpg" alt="">
     </ion-slide>
     <ion-slide class="slider-content">
-      <!--ion-icon id="icon" ios="ios-arrow-round-back" md="md-arrow-round-back" (click)="closeModal()"></ion-icon-->
       <img id="imagen-demo" src="assets/imgs/demo3.jpg" alt="">
     </ion-slide>
     <ion-slide class="slider-content">
-      <!--ion-icon id="icon" ios="ios-arrow-round-back" md="md-arrow-round-back" (click)="closeModal()"></ion-icon-->
       <img id="imagen-demo" src="assets/imgs/demo4.jpg" alt="">
       <button id="imagen-button" clear ion-button small icon-right color="light" (click)="closeModal()">
         Close

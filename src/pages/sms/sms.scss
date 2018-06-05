@@ -2,7 +2,8 @@ page-sms {
     font-size: 0.8 em;
     height: 100% !important;
     width: 100% !important;
-    .content-header{           
+    .content-header{    
+        margin-top: 10%;            
         text-align: center;
         width: 100% !important;
         .conten-row{
@@ -17,7 +18,6 @@ page-sms {
             }
         }
     }
-
     .content-historial{
         .row-historial{
             text-align: center;
@@ -78,7 +78,6 @@ page-sms {
             font-size: 0.7em;
          }
     }
-
     .content-sms{
         .row-info{
             margin: 0%;
@@ -138,8 +137,5 @@ page-sms {
                 }
             }            
         }
-    }
-
-
-    
+    }    
 }

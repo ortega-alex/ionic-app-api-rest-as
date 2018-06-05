@@ -62,7 +62,8 @@
   <div class="conten-conexion" *ngIf="conexion == true">
     <ion-row class="conten-row">
       <ion-col id="conten-row" col-2>
-        <ion-icon id="icon" name="arrow-round-back" (click)="monitoreo()"></ion-icon>
+        <ion-icon *ngIf="dispositivo == true" id="icon" name="arrow-round-back" (click)="monitoreo()"></ion-icon>
+        <ion-icon *ngIf="dispositivo == false" id="icon" ios="md-arrow-round-back" md="md-arrow-round-back" (click)="monitoreo()"></ion-icon>
       </ion-col>
       <ion-col id="conten-row" col-8>
         <p id="title">{{title}}</p>

@@ -1,4 +1,5 @@
 <ion-content class="contenido">
+  <br>
   <div class="content-div" *ngIf="panelLlamada == false">
     <ion-card class="conten-card">
       <ion-row class="row-cont">
@@ -81,6 +82,7 @@
     </div>
   </ion-content>
   <ion-card *ngIf="panelLlamada == true" class="conten-card">
+    <br>
     <ion-row class="row-cont">
       <ion-col col-2 id="row-cont">
         <ion-icon *ngIf="retroceder == true" id="row-icon" name="arrow-round-back" md="md-arrow-round-back" (click)="pausar()"></ion-icon>
