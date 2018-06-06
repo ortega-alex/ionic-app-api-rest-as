@@ -7,6 +7,6 @@
 	    "err": "An error occurred!..."
 	},
 	"info":[
-        {"title":"SMS predeterminado","msj":"instrucciones de como gurdar el SMS predeterminado."}
+        {"title":"Info","msj":"Write *name* where you want each of the customers name on the text. then press the button # which will save the default sms"}
     ]
 }

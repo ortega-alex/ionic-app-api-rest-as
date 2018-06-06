@@ -141,22 +141,23 @@ page-modal {
 			}
 		}
 		.animacion{		
-			p { 
+			.text { 
+				text-align: center;
 				background: #f8f8f8;
-				font-size: 0.8em;
-			}			
-			p span {
-				position:absolute;
-				right:0;
-				width:0;
-				background: #f8f8f8;
-				border-left: 1px solid #000;
-				animation: escribir 5s steps(50) infinite;
-			}			
-			@keyframes escribir {
-				from { width: 100% }
-				to { width:0 }
-			}			
+				font-size: 0.85em;
+				#text{
+					position:absolute;
+					right:0;
+					width:0;
+					background: #f8f8f8;
+					border-left: 1px solid #000;
+					animation: escribir 5s steps(50) infinite;
+				}			
+				@keyframes escribir {
+					from { width: 100% }
+					to { width:0 }
+				}	
+			}						
 		}
         .slider-content{    
             margin: 0% !important;

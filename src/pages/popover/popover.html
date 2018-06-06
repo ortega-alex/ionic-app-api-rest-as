@@ -5,7 +5,10 @@
     </button>
     <div id="informacion-title">
       <b>{{title}}</b>
+    </div>    
+    <div *ngIf="posicion == 0">
+      <p id="informacion-contenido">{{informacion[0]}} <ion-icon id="icon" name="checkbox-outline"></ion-icon> {{informacion[1]}} </p>
     </div>
-    <p id="informacion-contenido">{{informacion}}</p>
+    <p *ngIf="posicion != 0" id="informacion-contenido">{{informacion}}</p>
   </div>
 </ion-content>
