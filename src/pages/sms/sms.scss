@@ -25,7 +25,7 @@ page-sms {
                 .togglel_title{
                     background: #f8f8f8;
                     #title{
-                        font-size: 1.2em;
+                        font-size: 1.5em;
                     }
                     #togglel_icon{
                         position: absolute;
@@ -44,7 +44,6 @@ page-sms {
                 }
             }
             #row-historial-b{
-                //border:solid gray 3px;
                 border-radius: 10%;
                 width: 98% !important;
                 margin: 0% 1% 1%;
@@ -73,7 +72,6 @@ page-sms {
             white-space: nowrap;
             overflow: hidden;
             padding: 0%;
-            // border-radius: 20px;
             background-color: map-get($colors, dark);
             font-size: 0.7em;
          }
@@ -107,12 +105,10 @@ page-sms {
                     }              
                 }
                 #calendar{
-                    //position: absolute;
                     font-size: 3em;
                     bottom: 5%;
                     right: 2%;
-                }
-            
+                }            
         }
         .row-estatus{
             margin: 0%;
@@ -123,7 +119,6 @@ page-sms {
                 }
             }
             #row-estatus-b{
-                //border:solid gray 3px;
                 border-radius: 10%;
                 width: 98% !important;
                 margin: 0% 1% 1%;

@@ -5,5 +5,8 @@
 	    "warning": "Are you sure?....",
 	    "load": "Loading....",
 	    "err": "An error occurred!..."
-	}
+	},
+	"info":[
+        {"title":"SMS predeterminado","msj":"instrucciones de como gurdar el SMS predeterminado."}
+    ]
 }

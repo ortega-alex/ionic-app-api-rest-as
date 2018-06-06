@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ViewController, Platform, AlertController, List, ModalController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ViewController, Platform, AlertController, List, ModalController, PopoverController } from 'ionic-angular';
 
 import { GlobalProvider } from '../../providers/global/global';
 import { HttpProvider } from '../../providers/http/http';
@@ -13,6 +13,7 @@ import { AdMobFree, AdMobFreeBannerConfig, AdMobFreeRewardVideoConfig } from '@i
 import { Facebook, FacebookLoginResponse } from '@ionic-native/facebook';
 
 import { ModalPage } from '../modal/modal';
+import { PopoverPage } from '../popover/popover'
 
 @IonicPage()
 @Component({
@@ -89,7 +90,8 @@ export class CampaniaPage {
     private contacts: Contacts,
     private admobFree: AdMobFree,
     private alertController: AlertController,
-    private modalController: ModalController
+    private modalController: ModalController,
+    private popoverController: PopoverController
   ) {
     this.campos = { cambio: false, stado: [false, false] };
     this.dispositivo = this.platform.is('android');
@@ -248,14 +250,12 @@ export class CampaniaPage {
   clickStado(key) {
     this.key = key;
     if (key == 1 || key == 2) {
-      //this.setFilaActivaCampania();
       this.separacion(2);
     }
     if (key == 3) {
       if (this.msnS == true) {
         if (this.dispositivo == true) {
           this.setSms(this.getFilaCampania.telefono);
-          //this.setFilaActivaCampania();
           this.separacion(2);
         } else {
           this.setSms(this.getFilaCampania.telefono);
@@ -264,13 +264,11 @@ export class CampaniaPage {
           modal.present();
           modal.onDidDismiss(data => {
             if (data == true) {
-              //this.setFilaActivaCampania();
               this.separacion(2);
             }
           });
         }
       } else {
-        //this.setFilaActivaCampania();
         this.separacion(2);
       }
     }
@@ -285,13 +283,11 @@ export class CampaniaPage {
           modal.present();
           modal.onDidDismiss(data => {
             if (data == true) {
-              //this.setFilaActivaCampania();
               this.separacion(2);
             }
           });
         }
       } else {
-        //this.setFilaActivaCampania();
         this.separacion(2);
       }
       this.serEventoCalendar();
@@ -348,6 +344,7 @@ export class CampaniaPage {
     let individual = (this.individual == true) ? 'Y' : 'N';
     let fecha = new Date(this.data.date);
     let url = 'servicio=setEditContenidoCampaniaManual' +
+      "&id_campania_manual=" + this.campania.id_campania_manual +
       "&id_campania_manual_contenido=" + this.getFilaCampania.id_campania_manual_contenido +
       "&estado=" + this.key +
       "&telefono=" + this.getFilaCampania.telefono +
@@ -392,11 +389,13 @@ export class CampaniaPage {
   }
 
   call(telefono, nuevo: boolean = true) {
-    this.callNumber.callNumber(this.numerico.transform(telefono), true).then(res => {
-      if (nuevo == true) {
-        this.setContacto(telefono);
-      }
-    }).catch(err => console.log('err; ' + JSON.stringify(err)));
+    if (telefono != null && telefono.trim() != '') {
+      this.callNumber.callNumber(this.numerico.transform(telefono), true).then(res => {
+        if (nuevo == true) {
+          this.setContacto(telefono);
+        }
+      }).catch(err => console.log('err; ' + JSON.stringify(err)));
+    }
   }
 
   setSms(telefono: string) {
@@ -416,7 +415,6 @@ export class CampaniaPage {
       this.fechaPosterios.transform(startDate, 1)
     ).then(res => {
       if (this.dispositivo == true) {
-        //this.setFilaActivaCampania();
         this.separacion(2);
       }
     }).catch(err => console.log('err: ' + JSON.stringify(err)));
@@ -424,6 +422,11 @@ export class CampaniaPage {
 
   chekedSms(event) {
     this.msnS = event.value;
+    if (event.value == true) {
+      this.data.sms = this.campania.sms_predeterminado;
+    } else {
+      this.data.sms = null;
+    }
   }
 
   setContacto(telefono) {
@@ -565,7 +568,6 @@ export class CampaniaPage {
     this.getCampaniaUsuario();
     this.panelLlamada = false;
     this.edit_info = { readonly: true, border: 'solid #f0f0f0 1px' };
-    //this.getContenidoCampania(this.estado, this.key_selec);
     this.separacion(1, this.estado, this.key_selec);
   }
 
@@ -593,7 +595,6 @@ export class CampaniaPage {
         } else {
           this.campania = this.res.manual.campania[this.posicion_campania];
         }
-        console.log('estados_llamadas: ' + JSON.stringify(this.campania.estados_llamadas));
       } else {
         this.globalProvider.alerta(this.res.mns);
       }
@@ -629,12 +630,31 @@ export class CampaniaPage {
       "&nota=" + this.data.notas;
     this.httpProvider.get(url).then(res => {
       this.res = res;
-      console.log(JSON.stringify(this.res));
     }).catch(err => console.log('err: ' + JSON.stringify(err)));
   }
 
   habilitar(i: number) {
     this.campos.cambio = true;
     this.campos.stado[i] = !this.campos.stado[i];
+  }
+
+  setSMSPredeterminadoCampania(tipo: number, id: number) {
+    let url = "servicio=setSMSPredeterminadoCampania" +
+      "&id_campania=" + id +
+      "&tipo=" + tipo +
+      "&sms=" + this.data.sms;
+    this.httpProvider.get(url).then(res => {
+      this.res = res;
+      if (this.res.error == 'false') {
+        this.globalProvider.alerta(this.res.msn);
+      } else {
+        this.globalProvider.alerta(this.res.msn);
+      }
+    }).catch(err => console.log('err: ' + JSON.stringify(err)));
+  }
+
+  popoverInfo(posicion: number) {
+    let popover = this.popoverController.create('PopoverPage', { posicion: posicion });
+    popover.present();
   }
 }

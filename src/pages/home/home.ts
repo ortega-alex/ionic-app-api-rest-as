@@ -252,7 +252,7 @@ export class HomePage {
           this.globalProvider.getUsuario();
           this.app.getRootNav().setRoot(MyApp);
         }
-        //this.free();
+        this.free();
       } else {
         this.globalProvider.alerta(this.res.mns);
       }
@@ -353,11 +353,13 @@ export class HomePage {
 
   call(telefono: string, campania: string = null, nombre: string = null, nuevo: boolean = false) {
     if (this.validarTiempo() == true) {
-      this.callNumber.callNumber(this.numerico.transform(telefono), true).then(res => {
-        if (nuevo == true) {
-          this.setContacto(telefono, nombre, campania);
-        }
-      });
+      if (telefono != null && telefono.trim() != '') {
+        this.callNumber.callNumber(this.numerico.transform(telefono), true).then(res => {
+          if (nuevo == true) {
+            this.setContacto(telefono, nombre, campania);
+          }
+        });
+      }
     }
   }
 
@@ -430,8 +432,7 @@ export class HomePage {
     confirm.present();
   }
 
-  /*pendiente */
-  setDeleteCampaniaManual(id: number, nombre: string) {
+  setDeleteCampaniaManual(id: number) {
     let confirm = this.alertController.create({
       title: '',
       message: this.globalProvider.data.msj.warning,
@@ -443,11 +444,10 @@ export class HomePage {
         {
           text: 'Yes',
           handler: () => {
-            let url = 'servicio=setDeleteCampania&campaniaManual=' + id;
+            let url = 'servicio=setDeleteCampaniaManual&id_campania_manual=' + id;
             this.httpProvider.get(url).then(res => {
               this.res = res;
               if (this.res.error == 'false') {
-                //this.removeContact(nombre);
                 this.getCampaniaUsuario();
               } else {
                 this.globalProvider.alerta(this.res.mns);
@@ -674,10 +674,10 @@ export class HomePage {
               if (this.campania_sms[k].id_campania == this.manual[this.edid_name_manual[i].posicion_campania].id_campania_manual && 2 == this.campania_sms[k].tipo_campania) {
                 this.campania_sms[k].estados.push(
                   {
-                    color: this.manual[this.edid_name_manual[i].posicion_campania].estados_llamadas[j + 1].color,
-                    id: this.manual[this.edid_name_manual[i].posicion_campania].estados_llamadas[j + 1].key_estado,
-                    valor: this.manual[this.edid_name_manual[i].posicion_campania].estados_llamadas[j + 1].valor,
-                    texto: this.manual[this.edid_name_manual[i].posicion_campania].estados_llamadas[j + 1].texto,
+                    color: this.manual[this.edid_name_manual[i].posicion_campania].estados_llamadas[j].color,
+                    id: this.manual[this.edid_name_manual[i].posicion_campania].estados_llamadas[j].key_estado,
+                    valor: this.manual[this.edid_name_manual[i].posicion_campania].estados_llamadas[j].valor,
+                    texto: this.manual[this.edid_name_manual[i].posicion_campania].estados_llamadas[j].texto,
                   }
                 );
                 si = true;
@@ -689,10 +689,10 @@ export class HomePage {
           if (si == false) {
             var estados = [];
             estados.push({
-              color: this.manual[this.edid_name_manual[i].posicion_campania].estados_llamadas[j + 1].color,
-              id: this.manual[this.edid_name_manual[i].posicion_campania].estados_llamadas[j + 1].key_estado,
-              valor: this.manual[this.edid_name_manual[i].posicion_campania].estados_llamadas[j + 1].valor,
-              texto: this.manual[this.edid_name_manual[i].posicion_campania].estados_llamadas[j + 1].texto,
+              color: this.manual[this.edid_name_manual[i].posicion_campania].estados_llamadas[j].color,
+              id: this.manual[this.edid_name_manual[i].posicion_campania].estados_llamadas[j].key_estado,
+              valor: this.manual[this.edid_name_manual[i].posicion_campania].estados_llamadas[j].valor,
+              texto: this.manual[this.edid_name_manual[i].posicion_campania].estados_llamadas[j].texto,
             });
             this.campania_sms.push(
               {
@@ -712,7 +712,7 @@ export class HomePage {
   smsModal(historial: boolean = false) {
     if (historial == false) {
       this.selectCamapniaSms();
-      //this.selectCamapniaManualSms();
+      this.selectCamapniaManualSms();
     }
     if (historial == false && this.campania_sms.length == 0) {
       let alert = this.alertController.create({
@@ -723,7 +723,6 @@ export class HomePage {
       alert.present();
       return false;
     }
-    console.log(JSON.stringify(this.campania_sms))
     let modal = this.modalControlle.create('SmsPage', { historial: historial, campania_sms: this.campania_sms, id: null });
     modal.present();
     modal.onDidDismiss(data => {

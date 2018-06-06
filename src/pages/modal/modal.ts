@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, Platform, ViewController, AlertController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Platform, ViewController, AlertController, PopoverController } from 'ionic-angular';
 
 import { GlobalProvider } from '../../providers/global/global';
 import { HttpProvider } from '../../providers/http/http';
@@ -9,6 +9,8 @@ import { CallNumber } from '@ionic-native/call-number';
 import { SMS } from '@ionic-native/sms';
 import { Calendar } from '@ionic-native/calendar';
 import { AdMobFree, AdMobFreeRewardVideoConfig } from '@ionic-native/admob-free';
+
+import { PopoverPage } from '../popover/popover';
 
 @IonicPage()
 @Component({
@@ -57,7 +59,8 @@ export class ModalPage {
     private sms: SMS,
     private calendar: Calendar,
     private alertController: AlertController,
-    private admobFree: AdMobFree
+    private admobFree: AdMobFree,
+    private popoverController: PopoverController
   ) {
     this.data1 = this.navParams.get('data');
     if (this.data1.view == 2) {
@@ -163,14 +166,21 @@ export class ModalPage {
 
   call() {
     if (this.validarTiempo() == true) {
-      this.callNumber.callNumber(this.numerico.transform(this.get_fila_contenido.telefono), true).then(res => {
-        console.log('llamando');
-      }).catch(err => console.log(err));
+      if (this.get_fila_contenido.telefono != null && this.get_fila_contenido.telefono.trim() != '') {
+        this.callNumber.callNumber(this.numerico.transform(this.get_fila_contenido.telefono), true).then(res => {
+          console.log('llamando');
+        }).catch(err => console.log(err));
+      }
     }
   }
 
   chekedSms(event) {
     this.estado_msn = event.value;
+    if (event.value == true) {
+      this.data.sms = this.get_fila_contenido.sms_predeterminado;
+    } else {
+      this.data.sms = null;
+    }
   }
 
   getCatalogoEstadoFilaCampania() {
@@ -281,5 +291,25 @@ export class ModalPage {
       this.globalProvider.setNum(this.data1.num);
     }
     this.viewController.dismiss(data);
+  }
+
+  setSMSPredeterminadoCampania(tipo: number, id: number) {
+    let url = "servicio=setSMSPredeterminadoCampania" +
+      "&id_campania=" + id +
+      "&tipo=" + tipo +
+      "&sms=" + this.data.sms;
+    this.httpProvider.get(url).then(res => {
+      this.res = res;
+      if (this.res.error == 'false') {
+        this.globalProvider.alerta(this.res.msn);
+      } else {
+        this.globalProvider.alerta(this.res.msn);
+      }
+    }).catch(err => console.log('err: ' + JSON.stringify(err)));
+  }
+
+  popoverInfo(posicion: number) {
+    let popover = this.popoverController.create('PopoverPage', { posicion: posicion });
+    popover.present();
   }
 }

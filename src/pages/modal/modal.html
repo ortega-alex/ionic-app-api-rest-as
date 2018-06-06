@@ -50,10 +50,24 @@
         </ion-item>
       </ion-col>
     </ion-row>
-    <div class="toggle-div">
-      <p id="label-div">SMS:</p>
-      <ion-toggle id="from-toggle" color="danger" checked="{{estado_msn}}" (ionChange)="chekedSms($event)"></ion-toggle>
-    </div>
+    <ion-row class="row-cont">
+      <ion-col col-3 id="row-cont">
+        <button id="row-cont-btn" ion-button clear full (click)="popoverInfo(0)">
+          <ion-icon id="icon" name="help-circle"></ion-icon>
+        </button>
+      </ion-col>
+      <ion-col col-6 id="row-cont">
+        <ion-item no-Lines class="from-item">
+          <ion-label id="from-label-sms">SMS:</ion-label>
+          <ion-toggle id="from-toggle" color="danger" checked="{{estado_msn}}" (ionChange)="chekedSms($event)"></ion-toggle>
+        </ion-item>
+      </ion-col>
+      <ion-col col-3 id="row-cont">
+        <button id="row-cont-btn" ion-button clear full (click)="setSMSPredeterminadoCampania(1 , get_fila_contenido.id_campania)">
+          <ion-icon id="icon" name="checkbox-outline"></ion-icon>
+        </button>
+      </ion-col>
+    </ion-row>
     <ion-row class="row-cont">
       <ion-col id="row-cont">
         <ion-item class="from-item">

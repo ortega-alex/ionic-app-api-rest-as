@@ -1,0 +1,26 @@
+page-popover {
+    background-color: #f0f0f0;
+    .informacion{
+        background-color: #f0f0f0;
+        height: 50vh !important;
+        width: 100% !important;
+        margin: 0%;
+        padding: 20% 10%;
+        text-align: center;
+        
+        #informacion-title{
+            padding: 10% 0%;
+            font-size: 1.4em;
+        }
+        #informacion-contenido{
+            margin: auto;
+            font-size: 0.8em;
+            padding: 10% 0%;            
+        }
+        #informacion-button{
+           position: absolute;
+           right: 0%;
+           top: 0%
+        }
+    }
+}

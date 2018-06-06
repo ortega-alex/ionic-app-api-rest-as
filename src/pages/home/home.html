@@ -58,36 +58,33 @@
         </ion-col>
       </ion-row>
     </div>
-    <div *ngIf="sms_activo == false">
-      <div *ngFor="let m of manual ; let i = index" class="conten-card" [style.background]="background">
-        <ion-row class="row-cont">
-          <ion-col id="row-cont" col-2>
-            <!--ion-icon id="icon-delete" name="create" (click)="crearCampania( { id_campania_manual: m.id_campania_manual , nombre_campania: m.nombre})"></ion-icon-->
-            <ion-icon *ngIf="dispositivo == true" id="icon-delete" name="paper-plane" (click)="crearCampania( { id_campania_manual: m.id_campania_manual , nombre_campania: m.nombre})"></ion-icon>
-            <ion-icon *ngIf="dispositivo == false" id="icon-delete" ios="md-paper-plane" md="md-paper-plane" (click)="crearCampania( { id_campania_manual: m.id_campania_manual , nombre_campania: m.nombre})"></ion-icon>
-          </ion-col>
-          <ion-col id="row-cont">
-            <input id="title" [readonly]="edid_name_manual[i].edit" [(ngModel)]="m.nombre" text-center type="text" (click)="editNameManual(i)"
-              [style.border-bottom]="edid_name_manual[i].border" />
-            <ion-icon id="icon-delete" *ngIf="edid_name_manual[i].edit == false" name="checkmark" (click)="setDatosEditCampaniaManual(m.id_campania_manual,m.nombre,i)"></ion-icon>
-          </ion-col>
-          <ion-col id="row-cont" col-2>
-            <ion-icon id="icon-delete" color="dark" name="trash" (click)="setDeleteCampaniaManual(m.id_campania_manual,m.nombre)"></ion-icon>
-          </ion-col>
-        </ion-row>
-        <ion-row class="row-cont-b">
-          <ion-col id="row-cont-b" *ngFor="let estado of m.estados_llamadas ; let j = index " [style.background-color]="'#'+estado.color"
-            (click)="irACampania(m,i,estado,j,false)" [style.border]="edid_name_manual[i].border_stado[j]">
-            <b>{{estado.valor}}</b>
-            <br>{{estado.texto}}
-          </ion-col>
-        </ion-row>
-        <ion-row class="row-cont">
-          <ion-col id="row-cont">
-            last call: {{m.mod_fecha}}
-          </ion-col>
-        </ion-row>
-      </div>
+    <div *ngFor="let m of manual ; let i = index" class="conten-card" [style.background]="background">
+      <ion-row class="row-cont">
+        <ion-col id="row-cont" col-2>
+          <ion-icon *ngIf="dispositivo == true" id="icon-delete" name="paper-plane" (click)="crearCampania( m)"></ion-icon>
+          <ion-icon *ngIf="dispositivo == false" id="icon-delete" ios="md-paper-plane" md="md-paper-plane" (click)="crearCampania( m)"></ion-icon>
+        </ion-col>
+        <ion-col id="row-cont">
+          <input id="title" [readonly]="edid_name_manual[i].edit" [(ngModel)]="m.nombre" text-center type="text" (click)="editNameManual(i)"
+            [style.border-bottom]="edid_name_manual[i].border" />
+          <ion-icon id="icon-delete" *ngIf="edid_name_manual[i].edit == false" name="checkmark" (click)="setDatosEditCampaniaManual(m.id_campania_manual,m.nombre,i)"></ion-icon>
+        </ion-col>
+        <ion-col id="row-cont" col-2>
+          <ion-icon id="icon-delete" color="dark" name="trash" (click)="setDeleteCampaniaManual(m.id_campania_manual,m.nombre)"></ion-icon>
+        </ion-col>
+      </ion-row>
+      <ion-row class="row-cont-b">
+        <ion-col id="row-cont-b" *ngFor="let estado of m.estados_llamadas ; let j = index " [style.background-color]="'#'+estado.color"
+          (click)="irACampania(m,i,estado,j,false)" [style.border]="edid_name_manual[i].border_stado[j]">
+          <b>{{estado.valor}}</b>
+          <br>{{estado.texto}}
+        </ion-col>
+      </ion-row>
+      <ion-row class="row-cont">
+        <ion-col id="row-cont">
+          last call: {{m.mod_fecha}}
+        </ion-col>
+      </ion-row>
     </div>
     <div class="espacio"></div>
   </ion-scroll>

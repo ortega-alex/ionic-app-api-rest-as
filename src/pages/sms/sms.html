@@ -2,8 +2,8 @@
   <div class="content-header">
     <ion-row class="conten-row">
       <ion-col id="conten-row" col-2>
-        <ion-icon *ngIf="dispositivo == true" id="icon" name="arrow-round-back" (click)="closeModal()"></ion-icon>
-        <ion-icon *ngIf="dispositivo == false" id="icon" ios="md-arrow-round-back" md="md-arrow-round-back" (click)="closeModal()"></ion-icon>
+        <ion-icon *ngIf="dispositivo == true" id="icon" name="arrow-round-back" (click)="closeModal(true)"></ion-icon>
+        <ion-icon *ngIf="dispositivo == false" id="icon" ios="md-arrow-round-back" md="md-arrow-round-back" (click)="closeModal(true)"></ion-icon>
       </ion-col>
       <ion-col id="conten-row">
         <p id="title">{{(historial == false) ? 'CAMPAING SMS' : 'SMS MANAGER'}}</p>
@@ -20,8 +20,10 @@
         <ion-col col-12 id="row-historial" (click)="togglel(i)">
           <div class="togglel_title">
             <b id="title">{{campania_sms.nombre }}</b>
-            <br>{{campania_sms.fecha_inicio}}
-            <br>{{campania_sms.estado}}
+            <br>
+            <b>Start date:</b> {{campania_sms.fecha_inicio}}
+            <br>
+            <b>Status:</b> {{campania_sms.estado_campania_sms_text}}
             <div class="progress-outer">
               <div class="progress-inner" [style.width]="porcentage(campania_sms.sms_enviado,campania_sms.sms_total) + '%'">
                 {{porcentage(campania_sms.sms_enviado,campania_sms.sms_total)}} %
@@ -33,15 +35,17 @@
         </ion-col>
       </ion-row>
       <div *ngIf="sms_status[i].togglel == true">
-        <ion-row class="row-historial" *ngFor="let campania of campania_sms.campania">
-          <ion-col col-12>
-            <b id="title_campania"> Campaing: {{campania.nombre_campania}}</b>
-          </ion-col>
-          <ion-col col-2 id="row-historial-b" *ngFor="let estado of campania.estado" [style.background-color]="'#'+estado.color">
-            <b id="valor">{{estado.valor}}</b>
-            <br>{{estado.nombre}}
-          </ion-col>
-        </ion-row>
+        <div *ngFor="let tipo of campania_sms.tipo">
+          <ion-row class="row-historial" *ngFor="let campania of tipo.campania">
+            <ion-col col-12>
+              <b id="title_campania"> Campaing: {{campania.nombre_campania}}</b>
+            </ion-col>
+            <ion-col col-2 id="row-historial-b" *ngFor="let estado of campania.estado" [style.background-color]="'#'+estado.color">
+              <b id="valor">{{estado.valor}}</b>
+              <br>{{estado.nombre}}
+            </ion-col>
+          </ion-row>
+        </div>
         <ion-row class="row-historial">
           <ion-col col-12 id="row-historial">
             <p id="sms_text">SMS: {{campania_sms.texto_template}}</p>
@@ -51,11 +55,11 @@
           <ion-col id="row-historial">
             <ion-icon id="icon-historial" name="trash" color="dark" (click)="setDeleteCampaniaSMS(campania_sms.id_campania_sms)"></ion-icon>
           </ion-col>
-          <ion-col id="row-historial" *ngIf="campania_sms.estado == 'A' && dispositivo">
-            <ion-icon id="icon-historial" name="pause" color="dark" (click)="pausar()"></ion-icon>
+          <ion-col id="row-historial" *ngIf="campania_sms.estado_campania_sms == 'A' && dispositivo == true">
+            <ion-icon id="icon-historial" name="pause" color="dark" (click)="pausar(i)"></ion-icon>
           </ion-col>
-          <ion-col id="row-historial" *ngIf="(campania_sms.estado == 'P' || campania_sms.estado == 'C') || dispositivo == false">
-            <ion-icon id="icon-historial" name="play" color="dark" (click)="getSMSTotalEnviado(campania_sms.id_campania_sms)"></ion-icon>
+          <ion-col id="row-historial" *ngIf="campania_sms.estado_campania_sms == 'P' || campania_sms.estado_campania_sms == 'C'">
+            <ion-icon id="icon-historial" name="play" color="dark" (click)="getSMSTotalEnviado(campania_sms.id_campania_sms,i)"></ion-icon>
           </ion-col>
         </ion-row>
       </div>
@@ -84,7 +88,7 @@
       <ion-row class="row-info">
         <ion-icon *ngIf="dispositivo == true" id="calendar" name="calendar"></ion-icon>
         <ion-icon *ngIf="dispositivo == false" id="calendar" ios="md-calendar" md="md-calendar"></ion-icon>
-         <ion-col id="row-info">
+        <ion-col id="row-info">
           <ion-datetime id="row-info-date" text-center displayFormat="MMM DD, YYYY HH:mm" formControlName="fecha"> </ion-datetime>
         </ion-col>
       </ion-row>

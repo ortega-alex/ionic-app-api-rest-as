@@ -20,7 +20,6 @@ page-crear-campania {
             }
         }
 		.content-botones{
-			//margin-top: 15%; 
 			#instrucciones{
 				padding: 0% 5%;
 				text-align: center;
@@ -57,26 +56,20 @@ page-crear-campania {
 				}	
 				#from-toggle{
 					margin: 0% !important;
-					//padding: 1% !important;
 				}
 			}	
 			.from-item{
-				//text-align: center;
-	        	//border : solid red 1px;
 	          	#from-label{
-	            	//border: solid black 1px;
 	            	margin: 0% !important;
 	            	width: 100% !important;
 	            	font-size: 0.7em;               
 	          	}
 	          	#from-input{
-	            	//border: solid blue 1px;
 					margin: 0% !important;
 	            	width: 100% !important;
 	            	font-size: 0.9em; 
 	          	}
 	          	#from-select{
-					//border: solid green 1px;
 					text-align: center;
 	            	margin: 0% !important;
 	            	width: 100% !important;
@@ -85,42 +78,33 @@ page-crear-campania {
 	          	}
 	        }
 	        .row-from{
-	        	//border-bottom: solid gray 1px;
 	        	#row-from{ 
 					margin: 0% !important;
 					padding: 0% !important;
 					border-bottom:solid #e0e0e0 1px;
 			       	.from-item{
-						//border : solid red 1px;
 			          	#from-label{
-			            	//border: solid black 1px;
 			            	margin: 0% !important;
 			            	width: 100% !important;
 			            	font-size: 0.7em;               
 						}
 						#from-label-sms{
-							//border: solid black 1px;
 							margin: 0% !important;
-							//padding: 0% !important;
 							width: 100% !important;
 							font-size: 0.8em;
 							opacity: 0.5;
 						}
 			          	#from-input{
-			            	//border: solid blue 1px;
 							margin: 0% !important;
 			            	width: 100% !important;
 							font-size: 0.9em;
-			            //	border-bottom:solid #f0f0f0 1px;
 			          	}
 			          	#from-select{
-			            	//border: solid green 1px;
 							margin: 0% !important;
 							padding: 0% !important;
 			            	width: 100% !important;
 			            	font-size: 0.9em;           
 			            	text-align-last:center;
-			            	//border-bottom:solid #f0f0f0 1px;
 			          	}
 			          	#textarea-notes{
 							border: solid black 1px;
@@ -138,12 +122,25 @@ page-crear-campania {
 	        	}
 	        }
 		}
-
 		.content-panel{
 			.row-content{
 				margin: 0%;
 				padding: 0%;
 				#row-content{
+					#row-content-label{
+						text-align: left;
+						font-size: 0.8em;
+						padding-left: 3px; 
+					}
+					#row-content-input{
+						margin: 0%;
+						padding: 0%;
+						max-width: 90% !important;
+						font-size: 0.8em;
+					}
+					#icon{
+						font-size: 3em;
+					}
 					.item-content{
 						margin: 0% 0% 0% 1% !important;
 						padding: 0% !important;
@@ -172,7 +169,7 @@ page-crear-campania {
 							font-size:1.2em;
 						}
 					}
-					#row-content-input{
+					#row-content-datatime{
 						width: 100% !important;
 						font-size: 0.7em;				
 						border:solid #f0f0f0 1px;
@@ -180,6 +177,10 @@ page-crear-campania {
 					#row-content-btn{
 						margin: 0% 0% 1% 0% !important;
 						font-size:1.2em;
+						#icon{
+							font-size: 1.5em;	
+							color: #666666;						
+						}
 					}
 				}				
 				#row-content-b{

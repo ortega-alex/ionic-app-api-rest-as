@@ -50,6 +50,10 @@ export class GlobalProvider {
     });
   }
 
+  deleteUsuario() {
+    this.strorage.remove('usuario');
+  }
+
   setPlan(plan: Plan): void {
     this.strorage.set('plan', plan);
     this.getPlan();
@@ -59,10 +63,6 @@ export class GlobalProvider {
     this.strorage.get('plan').then(plan => {
       this.plan = plan;
     });
-  }
-
-  deleteUsuario() {
-    this.strorage.remove('usuario');
   }
 
   setFecha(date: Date) {
@@ -78,6 +78,32 @@ export class GlobalProvider {
     this.strorage.get('time').then(time => {
       this.time = time;
     });
+  }
+
+  setNum(num: number) {
+    this.strorage.set('num', num);
+  }
+
+  deleteNum() {
+    this.strorage.remove('num');
+  }
+
+  setListSms(nombre: string, list_sms: any): void {
+    this.strorage.set(nombre, list_sms);
+  }
+
+  getListSms(nombre: string) {
+    console.log(nombre);
+    this.strorage.get(nombre).then(list_sms => {
+      if (list_sms && list_sms != null) {
+        return list_sms;
+      }
+      return false;
+    });
+  }
+
+  deleteListSms(nombre: string) {
+    this.strorage.remove(nombre);
   }
 
   cargando(msj) {
@@ -96,31 +122,5 @@ export class GlobalProvider {
     setTimeout(() => {
       loader.dismiss();
     }, 2000);
-  }
-
-  setNum(num: number) {
-    this.strorage.set('num', num);
-  }
-
-  setListSms(nombre: string, list_sms: any): void {
-    this.strorage.set(nombre, list_sms);
-  }
-
-  deleteNum() {
-    this.strorage.remove('num');
-  }
-
-  getListSms(nombre: string) {
-    console.log(nombre);
-    this.strorage.get(nombre).then(list_sms => {
-      if (list_sms && list_sms != null) {
-        return list_sms;
-      }
-      return false;
-    });
-  }
-
-  deleteListSms(nombre: string) {
-    this.strorage.remove(nombre);
   }
 }

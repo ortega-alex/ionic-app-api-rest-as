@@ -44,7 +44,9 @@ export class MyApp {
     private alertController: AlertController
   ) {
     platform.ready().then(() => {
-      //setTimeout(() => this.splash = false, 4000);
+      // Okay, so the platform is ready and our plugins are available.
+      // Here you can do any higher level native things you might need.
+      statusBar.styleDefault();
       if (platform.is('android')) {
         this.permisos();
       }
@@ -58,9 +60,6 @@ export class MyApp {
           this.rootPage = LoginPage;
         }
       });
-      // Okay, so the platform is ready and our plugins are available.
-      // Here you can do any higher level native things you might need.
-      statusBar.styleDefault();
       splashScreen.hide();
       this.initPushNotification();
     });
@@ -79,13 +78,9 @@ export class MyApp {
       this.androidPermissions.PERMISSION.SEND_SMS,
       this.androidPermissions.PERMISSION.ACCESS_FINE_LOCATION
     ]
-    const { hasPermission } = await this.androidPermissions.checkPermission(
-      this.androidPermissions.PERMISSION.CALL_PHONE
-    );
+    const { hasPermission } = await this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.CALL_PHONE);
     if (!hasPermission) {
-      const result = await this.androidPermissions.requestPermissions(
-        list
-      );
+      const result = await this.androidPermissions.requestPermissions(list);
       if (!result.hasPermission) {
         throw new Error('Permisos requeridos');
       }
@@ -95,6 +90,8 @@ export class MyApp {
 
   historialTelefonico() {
     let d = { view: 1, num: null };
+    var hash = {};
+    let numeros: Array<{ numero: string, fecha: string, tipo: string }> = [];
     this.storage.get('fecha').then(fecha => {
       this.options = [
         {
@@ -105,13 +102,11 @@ export class MyApp {
       ];
       this.callLog.getCallLog(this.options).then(res => {
         this.res = res;
-        var hash = {};
         this.res = this.res.filter(function (current) {
           var exists = !hash[current.number] || false;
           hash[current.number] = true;
           return exists;
         });
-        let numeros = [];
         for (let r of this.res) {
           if (r.type == 1 || r.type == 2 || r.type == 3) {
             let fecha = this.fechas.transform(this.set_milisegundos.transform(r.date));
@@ -169,7 +164,6 @@ export class MyApp {
 
     pushObject.on('notification').subscribe((data: any) => {
       //if user using app and push notification comes
-      console.log('data msj: ' + JSON.stringify(data));
       if (data.additionalData.foreground) {
         // if application open, show popup
         let confirmAlert = this.alertController.create({

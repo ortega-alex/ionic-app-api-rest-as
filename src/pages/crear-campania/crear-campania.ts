@@ -15,6 +15,8 @@ import { Numerico, FechaPosterios, Fecha, Hora } from '../../pipes/filtros/filtr
 import { SMS } from '@ionic-native/sms';
 import { Calendar } from '@ionic-native/calendar';
 
+import { PopoverPage } from '../popover/popover';
+
 @IonicPage()
 @Component({
   selector: 'page-crear-campania',
@@ -47,9 +49,10 @@ export class CrearCampaniaPage {
   private hora = new Hora();
   private panel: boolean = false;
   private catalogoEstado: any;
-  private new_campania: { id_campania_manual: number; nombre_campania: string, telefono: string, nombre: string, fecha: string, sms: boolean, sms_tex: string, nota: string, stado: number, campos: { uno: string, uno_stado: boolean, dos: string, dos_stado: boolean } }
-  private data : any;
-  private dispositivo : boolean ;
+  private new_campania: { id_campania_manual: number; nombre_campania: string, telefono: string, nombre: string, fecha: string, sms: boolean, sms_tex: string, nota: string, stado: number, campos: { edit_uno: string, uno: string, uno_stado: boolean, edit_dos: string, dos: string, dos_stado: boolean } }
+  private data: any;
+  private dispositivo: boolean;
+  private campos: { cambio: boolean, stado: Array<boolean> };
 
   constructor(
     public navCtrl: NavController,
@@ -72,15 +75,17 @@ export class CrearCampaniaPage {
     private calendar: Calendar
   ) {
     this.dispositivo = this.platform.is('android');
-    console.log(this.dispositivo);
-    if(this.navParams.get('data')){
+    this.campos = { cambio: false, stado: [false, false] };
+    if (this.navParams.get('data')) {
       this.data = this.navParams.get('data');
-      this.new_campania = { id_campania_manual: this.data.id_campania_manual , nombre_campania: this.data.nombre_campania , telefono: '', nombre: null, fecha: null, sms: false, sms_tex: null, nota: null, stado: null, campos: { uno: null, uno_stado: false, dos: null, dos_stado: false } };
-      this.dialer();        
+      let sms = (this.data.sms == 'Y') ? true : false;
+      let sms_tex = (this.data.sms == 'Y') ? this.data.sms_predeterminado : null;
+      this.new_campania = { id_campania_manual: this.data.id_campania_manual, nombre_campania: this.data.nombre_campania, telefono: '', nombre: null, fecha: null, sms: sms, sms_tex: sms_tex, nota: null, stado: null, campos: { edit_uno: this.data.campo_1_text, uno: null, uno_stado: false, edit_dos: this.data.campo_2_text, dos: null, dos_stado: false } };
+      this.dialer();
       this.getCatalogoEstadoFilaCampania();
       this.campania_blanco = !this.campania_blanco;
-    }else {
-      this.new_campania = { id_campania_manual: null, nombre_campania: null, telefono: '', nombre: null, fecha: null, sms: false, sms_tex: null, nota: null, stado: null, campos: { uno: null, uno_stado: false, dos: null, dos_stado: false } };
+    } else {
+      this.new_campania = { id_campania_manual: null, nombre_campania: null, telefono: '', nombre: null, fecha: null, sms: false, sms_tex: null, nota: null, stado: null, campos: { edit_uno: 'Field 1:', uno: null, uno_stado: false, edit_dos: 'Field 2:', dos: null, dos_stado: false } };
     }
     this.ordenarCampania = this.formBuilder.group({
       nombreArchivo: [''],
@@ -180,7 +185,6 @@ export class CrearCampaniaPage {
       }
     }, (err) => {
       this.load.dismiss();
-      console.log('err: ' + JSON.stringify(err));
     }).catch(err => console.log('err: ' + JSON.stringify(err)));
   }
 
@@ -265,7 +269,7 @@ export class CrearCampaniaPage {
     }
   }
 
-  dialer(){
+  dialer() {
     for (let i = 1; i < 13; i++) {
       this.numeros.push(i);
     }
@@ -273,7 +277,7 @@ export class CrearCampaniaPage {
 
   newCampania() {
     this.dialer();
-    let sms: string = (this.new_campania.sms == true) ? 'Y' : 'N';    
+    let sms: string = (this.new_campania.sms == true) ? 'Y' : 'N';
     this.getCatalogoEstadoFilaCampania();
     let url = "servicio=setCampaniaManual" +
       "&id_usuario=" + this.globalProvider.usuario.id_usuario +
@@ -292,11 +296,13 @@ export class CrearCampaniaPage {
   }
 
   llamar(individual: boolean = false) {
-    this.callNumber.callNumber(this.numerico.transform(this.new_campania.telefono), true).then(res => {
-      if (individual == false) {
-        this.panel = !this.panel;
-      }
-    }).catch(err => console.log('err; ' + JSON.stringify(err)));
+    if (this.new_campania.telefono != null && this.new_campania.telefono.trim() != '') {
+      this.callNumber.callNumber(this.numerico.transform(this.new_campania.telefono), true).then(res => {
+        if (individual == false) {
+          this.panel = !this.panel;
+        }
+      }).catch(err => console.log('err; ' + JSON.stringify(err)));
+    }
   }
 
   armarNumero(i: number) {
@@ -352,6 +358,7 @@ export class CrearCampaniaPage {
   }
 
   setContenidoCampaniaManual() {
+    let cambio: string = (this.campos.cambio == true) ? 'Y' : 'N';
     this.load = this.globalProvider.cargando(this.globalProvider.data.msj.load);
     let info: { sms: string, fecha: Date, uno_stado: string, dos_stado: string, nombre: string, id: number } = {
       sms: (this.new_campania.sms == true) ? 'Y' : 'N',
@@ -375,22 +382,55 @@ export class CrearCampaniaPage {
       "&sms_text=" + this.new_campania.sms_tex +
       "&fecha_recordatorio=" + this.fecha.transform(info.fecha) +
       "&hora_recordatorio=" + this.hora.transform(info.fecha) +
-      "&campo_text_1_edit=" + info.uno_stado +
-      "&campo_text_1=" + null +
-      "&campo_text_2_edit=" + info.dos_stado +
-      "&campo_text_2=" + null;
+      "&campo_text_1_edit=" + cambio +
+      "&campo_text_1=" + this.new_campania.campos.edit_uno +
+      "&campo_text_2_edit=" + cambio +
+      "&campo_text_2=" + this.new_campania.campos.edit_dos;
     this.httpProvider.get(url).then(res => {
       this.load.dismiss();
       this.res = res;
       if (this.res.error == 'false') {
-        this.new_campania = { id_campania_manual: info.id, nombre_campania: info.nombre, telefono: '', nombre: null, fecha: null, sms: false, sms_tex: null, nota: null, stado: null, campos: { uno: null, uno_stado: false, dos: null, dos_stado: false } };
+        this.new_campania = { id_campania_manual: info.id, nombre_campania: info.nombre, telefono: '', nombre: null, fecha: null, sms: false, sms_tex: null, nota: null, stado: null, campos: { edit_uno: 'Field 1:', uno: null, uno_stado: false, edit_dos: 'Field 2:', dos: null, dos_stado: false } };
         this.panel = !this.panel;
       } else {
         this.globalProvider.alerta(this.res.msn);
       }
     }).catch(err => {
-      console.log('err: ' + JSON.stringify(err));
       this.load.dismiss();
-    });
+    }).catch(err => console.log('err: ' + JSON.stringify(err)));
+  }
+
+  habilitar(i: number) {
+    this.campos.cambio = true;
+    this.campos.stado[i] = !this.campos.stado[i];
+  }
+
+  setSMSPredeterminadoCampania(tipo: number, id: number) {
+    let url = "servicio=setSMSPredeterminadoCampania" +
+      "&id_campania=" + id +
+      "&tipo=" + tipo +
+      "&sms=" + this.new_campania.sms_tex;
+    this.httpProvider.get(url).then(res => {
+      this.res = res;
+      if (this.res.error == 'false') {
+        this.globalProvider.alerta(this.res.msn);
+      } else {
+        this.globalProvider.alerta(this.res.msn);
+      }
+    }).catch(err => console.log('err: ' + JSON.stringify(err)));
+  }
+
+  popoverInfo(posicion: number) {
+    let popover = this.popoverController.create('PopoverPage', { posicion: posicion });
+    popover.present();
+  }
+
+  chekedSmsCampania(event) {
+    this.new_campania.sms = event.value;
+    if (event.value == true) {
+      this.new_campania.sms_tex = this.data.sms_predeterminado;
+    } else {
+      this.new_campania.sms_tex = null;
+    }
   }
 }
