@@ -3,7 +3,7 @@ import { IonicPage, NavController, NavParams, ViewController, Platform, AlertCon
 
 import { GlobalProvider } from '../../providers/global/global';
 import { HttpProvider } from '../../providers/http/http';
-import { Numerico, Replace, Fechas, getMilisegundos, Fecha, Hora, Diferencia, FechaPosterios } from '../../pipes/filtros/filtros';
+import { Replace, Fechas, getMilisegundos, Fecha, Hora, Diferencia, FechaPosterios } from '../../pipes/filtros/filtros';
 
 import { CallNumber } from '@ionic-native/call-number';
 import { Contacts, Contact, ContactField, ContactName, ContactOrganization } from '@ionic-native/contacts';
@@ -14,6 +14,7 @@ import { Facebook, FacebookLoginResponse } from '@ionic-native/facebook';
 
 import { ModalPage } from '../modal/modal';
 import { PopoverPage } from '../popover/popover'
+import { Detalle, Stados } from '../../model/interfaces';
 
 @IonicPage()
 @Component({
@@ -25,7 +26,7 @@ export class CampaniaPage {
   private fechaPosterios = new FechaPosterios();
   private getmilisegundos = new getMilisegundos();
   private diferencia = new Diferencia();
-  private numerico = new Numerico();
+  //private numerico = new Numerico();
   private replace = new Replace();
   private fechas = new Fechas();
   private fecha = new Fecha();
@@ -35,9 +36,9 @@ export class CampaniaPage {
   private panelLlamada: boolean = false;
   private res: any;
   private getFilaCampania: any;
-  private getFilaCampaniaC = [];
+  private getFilaCampaniaC: Array<any> = [];
   private catalogoEstado: any;
-  private data = {
+  private data: Detalle = {
     notas: '',
     otroTelefono: null,
     date: null,
@@ -47,7 +48,7 @@ export class CampaniaPage {
   private msnS: boolean;
   private spinner: boolean;
   private contenido = [];
-  private stado = [
+  private stado: Array<Stados> = [
     { border: 'none' },
     { border: 'none' },
     { border: 'none' },
@@ -390,7 +391,8 @@ export class CampaniaPage {
 
   call(telefono, nuevo: boolean = true) {
     if (telefono != null && telefono.trim() != '') {
-      this.callNumber.callNumber(this.numerico.transform(telefono), true).then(res => {
+      //this.callNumber.callNumber(this.numerico.transform(telefono), true).then(res => {
+      this.callNumber.callNumber(telefono, true).then(res => {
         if (nuevo == true) {
           this.setContacto(telefono);
         }
@@ -399,7 +401,8 @@ export class CampaniaPage {
   }
 
   setSms(telefono: string) {
-    this.sms.send(this.numerico.transform(telefono), this.data.sms).then(res => console.log('res: ' + res)).catch(err => console.log('err: ' + err));
+    //this.sms.send(this.numerico.transform(telefono), this.data.sms).then(res => console.log('res: ' + res)).catch(err => console.log('err: ' + err));
+    this.sms.send(telefono, this.data.sms).then(res => console.log('res: ' + res)).catch(err => console.log('err: ' + err));
   }
 
   serEventoCalendar() {
@@ -409,8 +412,9 @@ export class CampaniaPage {
     var startDate = new Date(this.data.date);
     this.calendar.createEvent(
       this.campania.nombre,
-      'PowerDialer',
-      'name: ' + this.getFilaCampania.nombre + ' , phone: ' + this.numerico.transform(this.getFilaCampania.telefono) + ' , note: ' + this.data.notas,
+      'AdvanSales',
+      //'name: ' + this.getFilaCampania.nombre + ' , phone: ' + this.numerico.transform(this.getFilaCampania.telefono) + ' , note: ' + this.data.notas,
+      'name: ' + this.getFilaCampania.nombre + ' , phone: ' + this.getFilaCampania.telefono + ' , note: ' + this.data.notas,
       startDate,
       this.fechaPosterios.transform(startDate, 1)
     ).then(res => {
@@ -431,10 +435,11 @@ export class CampaniaPage {
 
   setContacto(telefono) {
     let contact: Contact = this.contacts.create();
-    contact.name = new ContactName(null, 'PD', this.getFilaCampania.nombre);
+    contact.name = new ContactName(null, this.getFilaCampania.nombre , 'AS' );
     contact.nickname = this.campania.nombre;
     contact.organizations = [new ContactOrganization(null, this.campania.nombre, null)];
-    contact.phoneNumbers = [new ContactField('mobile', this.numerico.transform(telefono))];
+    //contact.phoneNumbers = [new ContactField('mobile', this.numerico.transform(telefono))];
+    contact.phoneNumbers = [new ContactField('mobile', telefono)];
     contact.save().then(() => {
       console.log('res:');
     }).catch(err => console.log('err: ' + JSON.stringify(err)));

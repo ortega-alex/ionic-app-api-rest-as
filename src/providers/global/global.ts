@@ -121,6 +121,6 @@ export class GlobalProvider {
     loader.present();
     setTimeout(() => {
       loader.dismiss();
-    }, 2000);
+    }, 3000);
   }
 }

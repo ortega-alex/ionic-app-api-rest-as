@@ -176,11 +176,14 @@ page-crear-campania {
 					}
 					#row-content-btn{
 						margin: 0% 0% 1% 0% !important;
-						font-size:1.2em;
+						font-size:1.5em;
 						#icon{
 							font-size: 1.5em;	
 							color: #666666;						
 						}
+					}
+					#row-content-btn-tecla{
+						font-size:2em;
 					}
 				}				
 				#row-content-b{
@@ -198,7 +201,24 @@ page-crear-campania {
 		}
 		.marcador{
 			position: absolute;
-			bottom: 0%;
+			bottom: 0%;	
+			.content-row{
+				#content-row{
+					.from-item{
+						#from-input{
+							font-size: 2em;
+						}
+					}
+					#icon{
+						padding-top: 0.5em; 
+						font-size: 3em;
+					}
+					#content-row-btn-tecla{
+						font-size: 2.5em;
+						height: 8vh;
+					}
+				}
+			}		
 		}
 	}
 }

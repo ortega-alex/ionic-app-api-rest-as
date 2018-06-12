@@ -19,7 +19,7 @@ import { SMS } from '@ionic-native/sms';
 import { Calendar } from '@ionic-native/calendar';
 import { AdMobFree, AdMobFreeBannerConfig, AdMobFreeRewardVideoConfig } from '@ionic-native/admob-free';
 import { Facebook, FacebookLoginResponse } from '@ionic-native/facebook';
-import { Usuario, Plan } from '../../model/interfaces';
+import { Usuario, Plan, Persona, CampaniaSms } from '../../model/interfaces';
 
 @Component({
   selector: 'page-home',
@@ -48,10 +48,10 @@ export class HomePage {
   private timer: any;
   private time: { hora: number, minuto: number, segundo: number };
   private tiempo_restante: any;
-  private edid_name: Array<{ edit: boolean, border: string, border_stado: Array<any>, posicion_campania: number, stado: Array<any> }> = [];
-  private edid_name_manual: Array<{ edit: boolean, border: string, border_stado: Array<any>, posicion_campania: number, stado: Array<any> }> = [];
+  private edid_name: Array<Persona> = [];
+  private edid_name_manual: Array<Persona> = [];
   private sms_activo: boolean = false;
-  private campania_sms: Array<{ id_campania: number, nombre: string, tipo_campania: number, estados: Array<{ color: number, id: number, valor: number, texto: string }>, togglel: boolean }> = [];
+  private campania_sms: Array<CampaniaSms> = [];
   private background: string;
   private plan: Plan = {
     gratis: null,
@@ -354,7 +354,8 @@ export class HomePage {
   call(telefono: string, campania: string = null, nombre: string = null, nuevo: boolean = false) {
     if (this.validarTiempo() == true) {
       if (telefono != null && telefono.trim() != '') {
-        this.callNumber.callNumber(this.numerico.transform(telefono), true).then(res => {
+        //this.callNumber.callNumber(this.numerico.transform(telefono), true).then(res => {
+        this.callNumber.callNumber(telefono, true).then(res => {
           if (nuevo == true) {
             this.setContacto(telefono, nombre, campania);
           }
@@ -365,7 +366,7 @@ export class HomePage {
 
   setContacto(telefono: string, nombre: string, campania: string) {
     let contact: Contact = this.contacts.create();
-    contact.name = new ContactName(null, 'PD', nombre);
+    contact.name = new ContactName(null, nombre, 'AS');
     contact.nickname = campania;
     contact.organizations = [new ContactOrganization(null, campania, null)];
     contact.phoneNumbers = [new ContactField('mobile', this.numerico.transform(telefono))];
@@ -384,7 +385,7 @@ export class HomePage {
     var startDate = new Date(this.replace.transform(res.at_calendar_fecha_hora));
     this.calendar.createEvent(
       res.at_calendar_titulo,
-      'PowerDialer',
+      'AdvanSales',
       'name: ' + res.at_telefono_nombre + ' , phone: ' + this.numerico.transform(res.res.at_telefono) + ' , note: ' + res.at_calendar_nota,
       startDate,
       startDate
@@ -462,7 +463,7 @@ export class HomePage {
 
   removeContact(nombre: string) {
     var options = {
-      filter: "PD",
+      filter: "AS",
       organizations: nombre,
       nickname: nombre,
       multiple: true,

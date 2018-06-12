@@ -191,14 +191,14 @@
     </ion-row>
     <ion-row class="row-cont">
       <ion-col id="row-cont-b" col-6 *ngFor="let stado of catalogoEstado | slice:1:5;">
-        <button id="row-cont-btn-status" ion-button small block [style.background-color]="'#'+stado.color" (click)="clickStado(stado.key)">
+        <button id="row-cont-btn-status" ion-button block [style.background-color]="'#'+stado.color" (click)="clickStado(stado.key)">
           {{stado.nombre}}
         </button>
       </ion-col>
     </ion-row>
     <ion-row class="row-cont">
       <ion-col id="row-cont-b">
-        <button *ngIf="edit_info.readonly == true" id="row-cont-btn-t" ion-button block small color="secondary" (click)="call(getFilaCampania.telefono)">
+        <button *ngIf="edit_info.readonly == true" id="row-cont-btn-t" ion-button block color="secondary" (click)="call(getFilaCampania.telefono)">
           <ion-icon name="call"></ion-icon>
           &nbsp;{{getFilaCampania.telefono}}
         </button>
@@ -208,7 +208,7 @@
     </ion-row>
     <ion-row class="row-cont" *ngIf="retroceder == false">
       <ion-col id="row-cont-b">
-        <button id="row-cont-btn-t" ion-button small block [style.background-color]="buttom.color" (click)="pausarLlamada()">
+        <button id="row-cont-btn-t" ion-button block [style.background-color]="buttom.color" (click)="pausarLlamada()">
           {{buttom.sms}}
         </button>
       </ion-col>
@@ -310,19 +310,19 @@
     </ion-row>
     <ion-row class="row-content">
       <ion-col id="row-content-b" col-6 *ngFor="let stado of catalogoEstado | slice:1:5;">
-        <button id="row-content-btn-status" ion-button small block [style.background-color]="'#'+stado.color" (click)="clickStado(stado.key)">
+        <button id="row-content-btn-status" ion-button block [style.background-color]="'#'+stado.color" (click)="clickStado(stado.key)">
           {{stado.nombre}}
         </button>
       </ion-col>
     </ion-row>
     <ion-row class="row-content">
       <ion-col col-12 id="row-content">
-        <button id="row-content-btn" ion-button icon-right block small color="dark" (click)="call(getFilaCampania.telefono)">
+        <button id="row-content-btn" ion-button icon-right block color="dark" (click)="call(getFilaCampania.telefono)">
           {{getFilaCampania.telefono}}
           <ion-icon name="call"></ion-icon>
           &nbsp;
         </button>
-        <button id="row-content-btn" ion-button block outline small (click)="pausar()" color="dark">
+        <button id="row-content-btn" ion-button block outline (click)="pausar()" color="dark">
           Don't save and Continue &nbsp;
         </button>
       </ion-col>

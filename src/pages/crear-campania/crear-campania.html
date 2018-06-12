@@ -19,7 +19,7 @@
     <img id="imagen" src="assets/imgs/ej.jpg">
     <ion-row class="content-row">
       <ion-col id="content-row">
-        <button id="content-row-btn" ion-button small icon-right block color="dark" (click)="setExcelUsuario()">
+        <button id="content-row-btn" ion-button icon-right block color="dark" (click)="setExcelUsuario()">
           Upload xsl/csv file
           <ion-icon name="attach"></ion-icon>
         </button>
@@ -37,7 +37,7 @@
     </ion-row>
     <ion-row class="content-row">
       <ion-col id="content-row">
-        <button id="content-row-btn" ion-button small icon-right block color="dark" (click)="newCampania()">
+        <button id="content-row-btn" ion-button icon-right block color="dark" (click)="newCampania()">
           Create
           <ion-icon name="checkmark-circle-outline"></ion-icon>
         </button>
@@ -169,26 +169,34 @@
   </form>
   <ion-row *ngIf="mostrar == true" class="content-row">
     <ion-col id="content-row">
-      <button id="content-row-btn" small ion-button block color="danger" (click)="cancelar()">
+      <button id="content-row-btn" ion-button block color="danger" (click)="cancelar()">
         <ion-icon name="close"></ion-icon>
         &nbsp;cancel
       </button>
     </ion-col>
     <ion-col id="content-row">
-      <button id="content-row-btn" icon-right small ion-button block color="secondary" type="submit" (click)="guardarRegistro()">
+      <button id="content-row-btn" icon-right ion-button block color="secondary" type="submit" (click)="guardarRegistro()">
         save
         <ion-icon name="checkmark-circle-outline"></ion-icon>
       </button>
     </ion-col>
   </ion-row>
-
   <div class="marcador" *ngIf="campania_blanco == true && panel == false">
-    <ion-item class="from-item">
-      <ion-input id="from-input" readonly autofocus text-center type="text" [(ngModel)]="new_campania.telefono" text-lg:992px></ion-input>
-    </ion-item>
-    <ion-row>
-      <ion-col col-4 *ngFor="let n of numeros; let i = index">
-        <button ion-button color="dark" color="fondo" block *ngIf="n != 10 && n != 12" (click)="armarNumero(i)">{{ (n != 11) ? n : 0 }}</button>
+    <ion-row class="content-row">
+      <ion-col col-1 id="content-row">
+      </ion-col>
+      <ion-col col-9 id="content-row">
+        <ion-item class="from-item">
+          <ion-input id="from-input" readonly autofocus text-center type="text" [(ngModel)]="new_campania.telefono" text-lg:992px></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col col-2 id="content-row">
+        <ion-icon *ngIf="new_campania.telefono != ''" id="icon" name="backspace" (click)="deleteNumber()"></ion-icon>
+      </ion-col>
+    </ion-row>
+    <ion-row class="content-row">
+      <ion-col id="content-row" col-4 *ngFor="let n of numeros; let i = index">
+        <button id="content-row-btn-tecla" ion-button color="fondo" block *ngIf="n != 13 && n != 15" (click)="armarNumero(i)">{{ (n == 10) ? '*' : (n== 11 ) ? '0' : (n==12) ? '#' : (n == 14 ) ? '+' : n }}</button>
       </ion-col>
     </ion-row>
     <ion-row class="content-row">
@@ -296,19 +304,19 @@
     </ion-row>
     <ion-row class="row-content">
       <ion-col id="row-content-b" col-6 *ngFor="let stado of catalogoEstado | slice:1:5;">
-        <button id="row-content-btn-status" ion-button small block [style.background-color]="'#'+stado.color" (click)="clickStado(stado.key)">
+        <button id="row-content-btn-status" ion-button block [style.background-color]="'#'+stado.color" (click)="clickStado(stado.key)">
           {{stado.nombre}}
         </button>
       </ion-col>
     </ion-row>
     <ion-row class="row-content">
       <ion-col col-12 id="row-content">
-        <button id="row-content-btn" ion-button icon-right block small color="dark" (click)="llamar(true)">
+        <button id="row-content-btn" ion-button icon-right block color="dark" (click)="llamar(true)">
           {{new_campania.telefono}}
           <ion-icon name="call"></ion-icon>
           &nbsp;
         </button>
-        <button id="row-content-btn" ion-button block outline small (click)="this.panel = !this.panel" color="dark">
+        <button id="row-content-btn" ion-button block outline (click)="this.panel = !this.panel" color="dark">
           Don't save and Continue &nbsp;
         </button>
       </ion-col>

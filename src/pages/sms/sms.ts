@@ -10,6 +10,7 @@ import { Fecha, Hora, Numerico } from '../../pipes/filtros/filtros';
 
 import { SMS } from '@ionic-native/sms';
 import { Contacts, Contact, ContactField, ContactName, ContactOrganization } from '@ionic-native/contacts';
+import { Stado_sms } from '../../model/interfaces';
 
 @IonicPage()
 @Component({
@@ -19,16 +20,16 @@ import { Contacts, Contact, ContactField, ContactName, ContactOrganization } fro
 export class SmsPage {
 
   private historial: boolean;
-  private campania_sms = [];
+  private campania_sms: Array<any> = [];
   private res: any;
   private sms_from: FormGroup;
   private submitted: boolean = false;
   private fecha = new Fecha();
   private hora = new Hora();
-  private campaniaSMS = [];
+  private campaniaSMS: Array<any> = [];
   private sms_status: Array<{ togglel: boolean }> = [];
   private numerico = new Numerico();
-  private stado_sms: { sms: Array<{ telefono: string, text: string }>, id: number, inicio: number, hilo: any, estado: string };
+  private stado_sms: Stado_sms;
   private id: number;
   private dispositivo: boolean;
 
@@ -206,44 +207,44 @@ export class SmsPage {
 
   setSms(list_sms: Array<{ telefono: string, text: string }>, id: number, inicio: number) {
     this.sms.send(this.numerico.transform(list_sms[inicio].telefono), list_sms[inicio].text).then(res => {
-    this.setSMSEnviadoCampanaSMS(id);
-    if (list_sms.length - 1 == inicio) {
-      this.setEstadoCampaniaSMS(id, 'T');
-      this.stado_sms.estado = 'T';
-      this.getCampaniaSMSUsuario();
-      if (this.dispositivo == true) {
-        clearInterval(this.stado_sms.hilo);
-      }
-      this.closeModal(true);
-      return false;
-    }
-    if (this.dispositivo == true) {
-      this.stado_sms.inicio++;
-      if (this.stado_sms.estado != 'A') {
-        this.setEstadoCampaniaSMS(id, 'A');
-        this.stado_sms.estado = 'A';
+      this.setSMSEnviadoCampanaSMS(id);
+      if (list_sms.length - 1 == inicio) {
+        this.setEstadoCampaniaSMS(id, 'T');
+        this.stado_sms.estado = 'T';
         this.getCampaniaSMSUsuario();
-      }
-    } else {
-      let data = { view: 3, num: null }
-      let modal = this.modalController.create('ModalPage', { data: data });
-      modal.present();
-      modal.onDidDismiss(data => {
-        if (data == true) {
-          inicio++;
-          this.setEstadoCampaniaSMS(id, 'A');
-          this.setSms(list_sms, id, inicio);
-        } else {
-          this.setEstadoCampaniaSMS(id, 'P');
-          this.closeModal(true);
-          return false;
+        if (this.dispositivo == true) {
+          clearInterval(this.stado_sms.hilo);
         }
-      });
-    }
-     }).catch(err => {
-       //(this.dispositivo == true) ? this.pausar() : console.log('err: ' + JSON.stringify(err));
-       console.log('err: ' + JSON.stringify(err));
-     });
+        this.closeModal(true);
+        return false;
+      }
+      if (this.dispositivo == true) {
+        this.stado_sms.inicio++;
+        if (this.stado_sms.estado != 'A') {
+          this.setEstadoCampaniaSMS(id, 'A');
+          this.stado_sms.estado = 'A';
+          this.getCampaniaSMSUsuario();
+        }
+      } else {
+        let data = { view: 3, num: null }
+        let modal = this.modalController.create('ModalPage', { data: data });
+        modal.present();
+        modal.onDidDismiss(data => {
+          if (data == true) {
+            inicio++;
+            this.setEstadoCampaniaSMS(id, 'A');
+            this.setSms(list_sms, id, inicio);
+          } else {
+            this.setEstadoCampaniaSMS(id, 'P');
+            this.closeModal(true);
+            return false;
+          }
+        });
+      }
+    }).catch(err => {
+      //(this.dispositivo == true) ? this.pausar() : console.log('err: ' + JSON.stringify(err));
+      console.log('err: ' + JSON.stringify(err));
+    });
   }
 
   setSMSEnviadoCampanaSMS(id: number) {

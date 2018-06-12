@@ -3,7 +3,7 @@ import { IonicPage, NavController, NavParams, Platform, ViewController, AlertCon
 
 import { GlobalProvider } from '../../providers/global/global';
 import { HttpProvider } from '../../providers/http/http';
-import { Numerico, Fechas, Replace, getMilisegundos, Fecha, Hora, Diferencia } from '../../pipes/filtros/filtros';
+import { Fechas, Replace, getMilisegundos, Fecha, Hora, Diferencia } from '../../pipes/filtros/filtros';
 
 import { CallNumber } from '@ionic-native/call-number';
 import { SMS } from '@ionic-native/sms';
@@ -23,7 +23,7 @@ export class ModalPage {
   private res: any;
   private style: { background: string, opacity: string };
   private diferencia = new Diferencia();
-  private numerico = new Numerico();
+  //private numerico = new Numerico();
   private replace = new Replace();
   private fechas = new Fechas();
   private fecha = new Fecha();
@@ -167,7 +167,8 @@ export class ModalPage {
   call() {
     if (this.validarTiempo() == true) {
       if (this.get_fila_contenido.telefono != null && this.get_fila_contenido.telefono.trim() != '') {
-        this.callNumber.callNumber(this.numerico.transform(this.get_fila_contenido.telefono), true).then(res => {
+        //this.callNumber.callNumber(this.numerico.transform(this.get_fila_contenido.telefono), true).then(res => {
+        this.callNumber.callNumber(this.get_fila_contenido.telefono, true).then(res => {
           console.log('llamando');
         }).catch(err => console.log(err));
       }
@@ -244,15 +245,17 @@ export class ModalPage {
   }
 
   setSms() {
-    this.sms.send(this.numerico.transform(this.get_fila_contenido.telefono), this.data.sms);
+    //this.sms.send(this.numerico.transform(this.get_fila_contenido.telefono), this.data.sms);
+    this.sms.send(this.get_fila_contenido.telefono, this.data.sms);
   }
 
   serEventoCalendar() {
     var startDate = new Date(this.replace.transform(this.data.date));
     this.calendar.createEvent(
       this.get_fila_contenido.nombre_campania,
-      'PowerDialer',
-      'name: ' + this.get_fila_contenido.nombre_campania + ' , phone: ' + this.numerico.transform(this.get_fila_contenido.telefono) + ' , note: ' + this.data.notas,
+      'AdvanSales',
+      //'name: ' + this.get_fila_contenido.nombre_campania + ' , phone: ' + this.numerico.transform(this.get_fila_contenido.telefono) + ' , note: ' + this.data.notas,
+      'name: ' + this.get_fila_contenido.nombre_campania + ' , phone: ' + this.get_fila_contenido.telefono + ' , note: ' + this.data.notas,
       startDate,
       startDate
     ).then(res => {

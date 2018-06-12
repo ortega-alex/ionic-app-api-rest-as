@@ -6,6 +6,7 @@ import { HttpProvider } from '../../providers/http/http';
 import { Minusculas, isEmail } from '../../pipes/filtros/filtros';
 
 import { LoginPage } from '../login/login';
+import { Catalogo } from '../../model/interfaces';
 
 @IonicPage()
 @Component({
@@ -15,8 +16,8 @@ import { LoginPage } from '../login/login';
 export class RegistroPage {
 
   private contador: number = 0;
-  private catalogo = [
-    { label: 'Name', typtipoe: 'text', input: null, color: '#262626', ejemplo: 'e.g. John' },
+  private catalogo: Array<Catalogo> = [
+    { label: 'Name', tipo: 'text', input: null, color: '#262626', ejemplo: 'e.g. John' },
     { label: 'Last Name', tipo: 'text', input: null, color: 'white', ejemplo: 'e.g. Smith' },
     { label: 'Email', tipo: 'emal', input: null, color: 'white', ejemplo: 'e.g. john@email.com' },
     { label: 'Password', tipo: 'password', input: null, color: 'white', ejemplo: 'e.g. Abc123**' },

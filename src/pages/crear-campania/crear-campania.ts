@@ -11,11 +11,12 @@ import { File } from '@ionic-native/file';
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
 import { IOSFilePicker } from '@ionic-native/file-picker';
 import { CallNumber } from '@ionic-native/call-number';
-import { Numerico, FechaPosterios, Fecha, Hora } from '../../pipes/filtros/filtros';
+import { FechaPosterios, Fecha, Hora } from '../../pipes/filtros/filtros';
 import { SMS } from '@ionic-native/sms';
 import { Calendar } from '@ionic-native/calendar';
 
 import { PopoverPage } from '../popover/popover';
+import { Campania, Stados, Stado } from '../../model/interfaces';
 
 @IonicPage()
 @Component({
@@ -44,15 +45,15 @@ export class CrearCampaniaPage {
   private campania_blanco: boolean = false;
   private numeros: Array<number> = [];
   private fechaPosterios = new FechaPosterios();
-  private numerico = new Numerico();
+  //private numerico = new Numerico();
   private fecha = new Fecha();
   private hora = new Hora();
   private panel: boolean = false;
   private catalogoEstado: any;
-  private new_campania: { id_campania_manual: number; nombre_campania: string, telefono: string, nombre: string, fecha: string, sms: boolean, sms_tex: string, nota: string, stado: number, campos: { edit_uno: string, uno: string, uno_stado: boolean, edit_dos: string, dos: string, dos_stado: boolean } }
+  private new_campania: Campania;
   private data: any;
   private dispositivo: boolean;
-  private campos: { cambio: boolean, stado: Array<boolean> };
+  private campos: Stado;
 
   constructor(
     public navCtrl: NavController,
@@ -270,7 +271,7 @@ export class CrearCampaniaPage {
   }
 
   dialer() {
-    for (let i = 1; i < 13; i++) {
+    for (let i = 1; i < 16; i++) {
       this.numeros.push(i);
     }
   }
@@ -297,7 +298,8 @@ export class CrearCampaniaPage {
 
   llamar(individual: boolean = false) {
     if (this.new_campania.telefono != null && this.new_campania.telefono.trim() != '') {
-      this.callNumber.callNumber(this.numerico.transform(this.new_campania.telefono), true).then(res => {
+      //this.callNumber.callNumber(this.numerico.transform(this.new_campania.telefono), true).then(res => {
+      this.callNumber.callNumber(this.new_campania.telefono, true).then(res => {
         if (individual == false) {
           this.panel = !this.panel;
         }
@@ -306,8 +308,13 @@ export class CrearCampaniaPage {
   }
 
   armarNumero(i: number) {
-    let n: string = (this.numeros[i] != 11) ? this.numeros[i].toString() : '0';
+    //let n: string = (this.numeros[i] != 11) ? this.numeros[i].toString() : '0';
+    let n: string = (this.numeros[i] == 10) ? '*' : (this.numeros[i] == 11) ? '0' : (this.numeros[i] == 12) ? '#' : (this.numeros[i] == 14) ? '+' : this.numeros[i].toString();
     this.new_campania.telefono += n;
+  }
+
+  deleteNumber() {
+    this.new_campania.telefono = this.new_campania.telefono.substring(0, this.new_campania.telefono.length - 1);
   }
 
   getCatalogoEstadoFilaCampania() {
@@ -334,7 +341,8 @@ export class CrearCampaniaPage {
   }
 
   setSms() {
-    this.Sms.send(this.numerico.transform(this.new_campania.telefono), this.new_campania.sms_tex).then(res => console.log('res: ' + res)).catch(err => console.log('err: ' + err));
+    //this.Sms.send(this.numerico.transform(this.new_campania.telefono), this.new_campania.sms_tex).then(res => console.log('res: ' + res)).catch(err => console.log('err: ' + err));
+    this.Sms.send(this.new_campania.telefono, this.new_campania.sms_tex).then(res => console.log('res: ' + res)).catch(err => console.log('err: ' + err));
   }
 
   serEventoCalendar() {
@@ -345,7 +353,8 @@ export class CrearCampaniaPage {
     this.calendar.createEvent(
       this.new_campania.nombre_campania,
       'PowerDialer',
-      'name: ' + this.new_campania.nombre + ' , phone: ' + this.numerico.transform(this.new_campania.telefono) + ' , note: ' + this.new_campania.nota,
+      //'name: ' + this.new_campania.nombre + ' , phone: ' + this.numerico.transform(this.new_campania.telefono) + ' , note: ' + this.new_campania.nota,
+      'name: ' + this.new_campania.nombre + ' , phone: ' + this.new_campania.telefono + ' , note: ' + this.new_campania.nota,
       startDate,
       this.fechaPosterios.transform(startDate, 1)
     ).then(res => {
