@@ -262,7 +262,9 @@ export class HomePage {
         this.banner();
       }
     }).catch(err => {
-      this.load.dismiss();
+      if (this.inici == false) {
+        this.load.dismiss();
+      }    
       console.log('err: ' + JSON.stringify(err));
     });
   }
@@ -640,7 +642,7 @@ export class HomePage {
         if (this.edid_name[i].stado[j] == true) {
           if (this.campania_sms && this.campania_sms.length > 0) {
             for (let k = 0; k < this.campania_sms.length; k++) {
-              if (this.campania_sms[k].id_campania == this.campanias[this.edid_name[i].posicion_campania].id_campania && 1 == this.campania_sms[k].tipo_campania) {
+              if (this.campania_sms[k].id_campania == this.campanias[this.edid_name[i].posicion_campania].id_campania && this.campania_sms[k].tipo_campania == 1) {
                 this.campania_sms[k].estados.push(
                   {
                     color: this.campanias[this.edid_name[i].posicion_campania].estados_llamadas[j].color,
@@ -685,7 +687,7 @@ export class HomePage {
         if (this.edid_name_manual[i].stado[j] == true) {
           if (this.campania_sms && this.campania_sms.length > 0) {
             for (let k = 0; k < this.campania_sms.length; k++) {
-              if (this.campania_sms[k].id_campania == this.manual[this.edid_name_manual[i].posicion_campania].id_campania_manual && 2 == this.campania_sms[k].tipo_campania) {
+              if (this.campania_sms[k].id_campania == this.manual[this.edid_name_manual[i].posicion_campania].id_campania_manual && this.campania_sms[k].tipo_campania == 2) {
                 this.campania_sms[k].estados.push(
                   {
                     color: this.manual[this.edid_name_manual[i].posicion_campania].estados_llamadas[j].color,
@@ -710,8 +712,8 @@ export class HomePage {
             });
             this.campania_sms.push(
               {
-                id_campania: this.manual[this.edid_name[i].posicion_campania].id_campania_manual,
-                nombre: this.manual[this.edid_name[i].posicion_campania].nombre,
+                id_campania: this.manual[this.edid_name_manual[i].posicion_campania].id_campania_manual,
+                nombre: this.manual[this.edid_name_manual[i].posicion_campania].nombre,
                 tipo_campania: 2,
                 estados: estados,
                 togglel: false

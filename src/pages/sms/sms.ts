@@ -32,6 +32,7 @@ export class SmsPage {
   private stado_sms: Stado_sms;
   private id: number;
   private dispositivo: boolean;
+  private load : any;
 
   constructor(
     public navCtrl: NavController,
@@ -80,28 +81,30 @@ export class SmsPage {
   setCampaniaSMSUsuario(): void {
     this.submitted = true;
     if (this.sms_from.valid) {
+      this.load = this.globalProvider.cargando(this.globalProvider.data.msj.load);
       var fecha: string;
       var hora: string;
-      var dispositivo = new Date();
+      var fecha_dispositivo = new Date();
       if (this.sms_from.value.fecha != null && this.sms_from.value.fecha != '') {
         fecha = this.sms_from.value.fecha.substr(0, 10);
         hora = this.sms_from.value.fecha.substr(11, 5);
       } else {
-        fecha = this.fecha.transform(dispositivo);
-        hora = this.hora.transform(dispositivo);
+        fecha = this.fecha.transform(fecha_dispositivo);
+        hora = this.hora.transform(fecha_dispositivo);
       }
       let url = "servicio=setCampaniaSMSUsuario";
       let data = {
         id_usuario: this.globalProvider.usuario.id_usuario,
         nombre: this.sms_from.value.nombre,
         mensaje: this.sms_from.value.sms_text,
-        fecha_dispositivo: this.fecha.transform(dispositivo),
-        hora_dispositivo: this.hora.transform(dispositivo),
+        fecha_dispositivo: this.fecha.transform(fecha_dispositivo),
+        hora_dispositivo: this.hora.transform(fecha_dispositivo),
         fecha: fecha,
         hora: hora,
         campaniaSms: this.campania_sms
       };
       this.httpProvider.post(data, url).then(res => {
+        this.load.dismiss();
         this.res = res;
         if (this.res.error == 'false') {
           this.historial = true;
@@ -114,7 +117,10 @@ export class SmsPage {
         } else {
           this.globalProvider.alerta(this.res.msn);
         }
-      }).catch(err => console.log('err: ' + JSON.stringify(err)));
+      }).catch(err => {
+        this.load.dismiss();
+        console.log('err: ' + JSON.stringify(err));        
+      });
     }
   }
 
