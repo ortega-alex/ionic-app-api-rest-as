@@ -4,12 +4,12 @@ import { IonicPage, NavController, NavParams, Platform, ViewController, AlertCon
 import { GlobalProvider } from '../../providers/global/global';
 import { HttpProvider } from '../../providers/http/http';
 import { Fechas, Replace, getMilisegundos, Fecha, Hora, Diferencia } from '../../pipes/filtros/filtros';
+import { Imagenes } from '../../model/interfaces';
 
 import { CallNumber } from '@ionic-native/call-number';
 import { SMS } from '@ionic-native/sms';
 import { Calendar } from '@ionic-native/calendar';
 import { AdMobFree, AdMobFreeRewardVideoConfig } from '@ionic-native/admob-free';
-
 import { PopoverPage } from '../popover/popover';
 
 @IonicPage()
@@ -19,7 +19,7 @@ import { PopoverPage } from '../popover/popover';
 })
 export class ModalPage {
 
-  private data1: { view: number, num: number };
+  private data1: { view: number, num: number, imagenes: Array<Imagenes> };
   private res: any;
   private style: { background: string, opacity: string };
   private diferencia = new Diferencia();
@@ -47,6 +47,7 @@ export class ModalPage {
   private timer: any;
   private time: { hora: number, minuto: number, segundo: number };
   private tiempo_restante: any;
+  private imagenes: Array<Imagenes> = [];
 
   constructor(
     public navCtrl: NavController,
@@ -65,14 +66,24 @@ export class ModalPage {
     this.data1 = this.navParams.get('data');
     if (this.data1.view == 2) {
       this.style = { background: 'black', opacity: '' };
+      if (this.data1.num != null) {
+        this.imagenes = [
+          { url: 'assets/imgs/demo1.jpg' },
+          { url: 'assets/imgs/demo2.jpg' },
+          { url: 'assets/imgs/demo3.jpg' },
+          { url: 'assets/imgs/demo4.jpg' }
+        ];
+      } else {
+        this.imagenes = this.data1.imagenes;
+      }
     } else {
       this.style = { background: '', opacity: '' };
     }
     if (this.data1.view == 1) {
       this.llamadas = this.navParams.get('llamadas');
       this.tamanio_contenido = this.llamadas.length;
-      var date = new Date();
-      this.data.date = this.fechas.transform(date);
+      //var date = new Date();
+      //this.data.date = this.fechas.transform(date);
       this.get_fila_contenido = this.llamadas[this.posicion];
     }
   }
@@ -81,10 +92,6 @@ export class ModalPage {
     this.platform.registerBackButtonAction(() => {
       this.closeModal(true);
     });
-    if (this.globalProvider.plan.mostrar_publicidad_video == true) {
-      this.prepareVideo();
-      this.globalProvider.getTime();
-    }
     document.addEventListener(this.admobFree.events.REWARD_VIDEO_REWARD, (res) => {
       let creditos = res['rewardAmount'];
       let date = new Date();
@@ -150,6 +157,7 @@ export class ModalPage {
   }
 
   showVideo() {
+    this.prepareVideo();
     this.timer = setInterval(() => {
       this.tick();
     }, 1000);
@@ -206,13 +214,16 @@ export class ModalPage {
         if (this.estado_msn == true) {
           this.setSms();
         }
-        this.serEventoCalendar();
+        if (this.data.date != null) {
+          this.serEventoCalendar();
+        }
         this.setFilaActivaCampania(key_estado);
       }
     }
   }
 
   setFilaActivaCampania(key_estado: number) {
+    let fecha = this.fechas.transform(new Date());
     let sms = (this.estado_msn == true) ? 'Y' : 'N';
     let url = 'servicio=setFilaActivaCampania' +
       '&id_campania=' + this.get_fila_contenido.id_campania +
@@ -220,7 +231,7 @@ export class ModalPage {
       '&estado=' + key_estado +
       '&notas=' + this.data.notas +
       '&otro_telefono=' + this.data.otroTelefono +
-      '&fecha_hora=' + this.data.date +
+      '&fecha_hora=' + fecha +
       '&sms=' + sms +
       '&sms_texto=' + this.data.sms +
       '&individual= Y' +
@@ -232,6 +243,7 @@ export class ModalPage {
         this.globalProvider.setFecha(date);
         this.data.notas = null;
         this.data.otroTelefono = null;
+        this.data.date = null;
         if ((this.tamanio_contenido - 1) != this.posicion) {
           this.posicion++;
           this.get_fila_contenido = this.llamadas[this.posicion];
@@ -259,7 +271,7 @@ export class ModalPage {
       startDate,
       startDate
     ).then(res => {
-      console.log(res);
+      this.data.date = null;
     }).catch(err => alert(err));
   }
 

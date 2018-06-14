@@ -19,7 +19,7 @@ import { SMS } from '@ionic-native/sms';
 import { Calendar } from '@ionic-native/calendar';
 import { AdMobFree, AdMobFreeBannerConfig, AdMobFreeRewardVideoConfig } from '@ionic-native/admob-free';
 import { Facebook, FacebookLoginResponse } from '@ionic-native/facebook';
-import { Usuario, Plan, Persona, CampaniaSms } from '../../model/interfaces';
+import { Plan, Persona, CampaniaSms, DataModal } from '../../model/interfaces';
 
 @Component({
   selector: 'page-home',
@@ -214,12 +214,14 @@ export class HomePage {
   }
 
   getCampaniaUsuario() {
+    let platform = (this.platform.is('ios')) ? 'ios' : 'android';
     if (this.inici == false) {
       this.load = this.globalProvider.cargando(this.globalProvider.data.msj.load);
     }
     let url = 'servicio=getCampaniaUsuario' +
       '&id_usuario=' + this.globalProvider.usuario.id_usuario +
-      '&token=' + this.globalProvider.token;
+      '&token=' + this.globalProvider.token +
+      '&plataforma=' + platform;
     this.httpProvider.get(url).then(res => {
       if (this.inici == false) {
         this.load.dismiss();
@@ -259,7 +261,10 @@ export class HomePage {
       if (this.globalProvider.plan.mostrar_publicidad_banner == true) {
         this.banner();
       }
-    }).catch(err => console.log('err: ' + JSON.stringify(err)));
+    }).catch(err => {
+      this.load.dismiss();
+      console.log('err: ' + JSON.stringify(err));
+    });
   }
 
   doRefresh(refresher) {
@@ -483,10 +488,17 @@ export class HomePage {
   }
 
   share() {
+    var url: string;
+    if (this.platform.is('android')) {
+      url = 'https://advansalesapp.page.link/android';
+    }
+    if (this.platform.is('ios')) {
+      url = 'https://advansalesapp.page.link/ios';
+    }
     this.facebook.login(['email', 'public_profile']).then((response: FacebookLoginResponse) => {
       this.facebook.showDialog({
         method: "share",
-        href: 'https://n43qk.app.goo.gl/KPM8',
+        href: url,
         caption: '',
         description: '',
         picture: ''
@@ -558,9 +570,11 @@ export class HomePage {
     }
   }
 
-  editName(i: number) {
-    this.edid_name[i].edit = !this.edid_name[i].edit;
-    (this.edid_name[i].edit == false) ? this.edid_name[i].border = 'solid green 1px' : this.edid_name[i].border = 'none';
+  editName(i: number, propietario: string) {
+    if (propietario == 'Y') {
+      this.edid_name[i].edit = !this.edid_name[i].edit;
+      (this.edid_name[i].edit == false) ? this.edid_name[i].border = 'solid green 1px' : this.edid_name[i].border = 'none';
+    }
   }
 
   editNameManual(i: number) {
@@ -569,7 +583,6 @@ export class HomePage {
   }
 
   setDatosEditCampania(id: number, name: string, i: number) {
-    this.editName(i);
     let url = "servicio=setDatosEditCampania" +
       "&id_campania=" + id +
       "&nombre=" + name;
@@ -737,7 +750,7 @@ export class HomePage {
   demo() {
     this.storage.get('num').then(num => {
       if (num && num != null && num == 1) {
-        let data = { view: 2, num: num }
+        let data: DataModal = { view: 2, num: num, imagenes: null }
         let modal = this.modalControlle.create('ModalPage', { data: data });
         modal.present();
         modal.onDidDismiss(data => {

@@ -133,7 +133,6 @@ export class CrearCampaniaPage {
 
   setExcelUsuario() {
     if (this.globalProvider.plan.plan_restriccion == false) {
-      this.load = this.globalProvider.cargando(this.globalProvider.data.msj.load);
       if (this.platform.is('android')) {
         this.fileChooser.open().then(url => {
           this.filePath.resolveNativePath(url).then(path => {
@@ -144,9 +143,9 @@ export class CrearCampaniaPage {
                 headers: {}
               }
               this.setFileTrasfder(newUrl.nativeURL, options);
-            });
-          });
-        });
+            }).catch(err => console.log('err: ' + JSON.stringify(err)));
+          }).catch(err => console.log('err filePat: ' + JSON.stringify(err)));
+        }).catch(err => console.log('err choset: ' + JSON.stringify(err)));
       }
       if (this.platform.is('ios')) {
         this.iosFilePicker.pickFile().then(url => {
@@ -171,6 +170,7 @@ export class CrearCampaniaPage {
   }
 
   setFileTrasfder(path: string, options: any) {
+    this.load = this.globalProvider.cargando(this.globalProvider.data.msj.load);
     let url = "servicio=setExcelUsuario&id_usuario=" + this.globalProvider.usuario.id_usuario;
     const fileTransfer: FileTransferObject = this.transfer.create();
     fileTransfer.upload(path, this.httpProvider.url + url, options).then((data) => {
@@ -185,8 +185,12 @@ export class CrearCampaniaPage {
         this.globalProvider.alerta(this.res.msn);
       }
     }, (err) => {
+      console.log('err: ' + JSON.stringify(err));
       this.load.dismiss();
-    }).catch(err => console.log('err: ' + JSON.stringify(err)));
+    }).catch(err => {
+      this.load.dismiss();
+      console.log('err: ' + JSON.stringify(err));
+    });
   }
 
   cancelar(data: boolean = false) {
@@ -245,7 +249,10 @@ export class CrearCampaniaPage {
         } else {
           this.globalProvider.alerta(this.res.msn);
         }
-      }).catch(err => console.log('err: ' + JSON.stringify(err)));
+      }).catch(err => {
+        this.load.dismiss();
+        console.log('err: ' + JSON.stringify(err))
+      });
     }
   }
 
@@ -335,7 +342,9 @@ export class CrearCampaniaPage {
     }
     if (stado == 4) {
       this.setSms();
-      this.serEventoCalendar();
+      if(this.new_campania.fecha != null){
+        this.serEventoCalendar();
+      }
       this.setContenidoCampaniaManual();
     }
   }
@@ -348,7 +357,7 @@ export class CrearCampaniaPage {
   serEventoCalendar() {
     this.calendar.hasReadWritePermission().then(res => {
       console.log('res: ' + JSON.stringify(res));
-    }).catch(err => alert('err: ' + JSON.stringify(err)));
+    }).catch(err => console.log('err: ' + JSON.stringify(err)));
     var startDate = new Date(this.new_campania.fecha);
     this.calendar.createEvent(
       this.new_campania.nombre_campania,
@@ -358,7 +367,7 @@ export class CrearCampaniaPage {
       startDate,
       this.fechaPosterios.transform(startDate, 1)
     ).then(res => {
-      //this.setContenidoCampaniaManual();
+      this.new_campania.fecha = null;
     }).catch(err => console.log('err: ' + JSON.stringify(err)));
   }
 
@@ -406,7 +415,10 @@ export class CrearCampaniaPage {
       }
     }).catch(err => {
       this.load.dismiss();
-    }).catch(err => console.log('err: ' + JSON.stringify(err)));
+    }).catch(err => {
+      this.load.dismiss();
+      console.log('err: ' + JSON.stringify(err))
+    });
   }
 
   habilitar(i: number) {
@@ -441,5 +453,11 @@ export class CrearCampaniaPage {
     } else {
       this.new_campania.sms_tex = null;
     }
+  }
+
+  saveAndExit(){
+    this.panel = !this.panel;
+    this.new_campania.telefono = '';
+    this.new_campania.fecha = null;
   }
 }

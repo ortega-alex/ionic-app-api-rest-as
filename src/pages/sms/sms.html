@@ -11,6 +11,9 @@
       <ion-col id="conten-row" col-2> </ion-col>
     </ion-row>
   </div>
+  <div class="info-content" *ngIf="historial == true && campaniaSMS.length == 0">
+    <p id="info-parrafo">Currently you don't have any sms campaigns</p>
+  </div>
   <div class="content-historial" *ngIf="historial == true">
     <ion-refresher (ionRefresh)="doRefresh($event)">
       <ion-refresher-content></ion-refresher-content>

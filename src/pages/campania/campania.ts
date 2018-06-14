@@ -4,17 +4,17 @@ import { IonicPage, NavController, NavParams, ViewController, Platform, AlertCon
 import { GlobalProvider } from '../../providers/global/global';
 import { HttpProvider } from '../../providers/http/http';
 import { Replace, Fechas, getMilisegundos, Fecha, Hora, Diferencia, FechaPosterios } from '../../pipes/filtros/filtros';
+import { Detalle, Stados, DataModal } from '../../model/interfaces';
 
 import { CallNumber } from '@ionic-native/call-number';
 import { Contacts, Contact, ContactField, ContactName, ContactOrganization } from '@ionic-native/contacts';
 import { SMS } from '@ionic-native/sms';
 import { Calendar } from '@ionic-native/calendar';
 import { AdMobFree, AdMobFreeBannerConfig, AdMobFreeRewardVideoConfig } from '@ionic-native/admob-free';
-import { Facebook, FacebookLoginResponse } from '@ionic-native/facebook';
+//import { Facebook, FacebookLoginResponse } from '@ionic-native/facebook';
 
 import { ModalPage } from '../modal/modal';
 import { PopoverPage } from '../popover/popover'
-import { Detalle, Stados } from '../../model/interfaces';
 
 @IonicPage()
 @Component({
@@ -260,7 +260,7 @@ export class CampaniaPage {
           this.separacion(2);
         } else {
           this.setSms(this.getFilaCampania.telefono);
-          let data = { view: 4, num: null }
+          let data : DataModal = { view: 4, num: null , imagenes : null }
           let modal = this.modalController.create('ModalPage', { data: data });
           modal.present();
           modal.onDidDismiss(data => {
@@ -279,7 +279,7 @@ export class CampaniaPage {
           this.setSms(this.getFilaCampania.telefono);
         } else {
           this.setSms(this.getFilaCampania.telefono);
-          let data = { view: 4, num: null }
+          let data : DataModal = { view: 4, num: null , imagenes : null }
           let modal = this.modalController.create('ModalPage', { data: data });
           modal.present();
           modal.onDidDismiss(data => {
@@ -291,11 +291,16 @@ export class CampaniaPage {
       } else {
         this.separacion(2);
       }
-      this.serEventoCalendar();
+      if(this.data.date != null){
+        this.serEventoCalendar();
+      }else{
+        this.separacion(2);
+      }
     }
   }
 
   setFilaActivaCampania() {
+    let fecha = this.fechas.transform(new Date());
     let sms = (this.msnS == true) ? 'Y' : 'N';
     let individual = (this.individual == true) ? 'Y' : 'N';
     let url = 'servicio=setFilaActivaCampania' +
@@ -304,18 +309,19 @@ export class CampaniaPage {
       '&estado=' + this.key +
       '&notas=' + this.data.notas +
       '&otro_telefono=' + this.data.otroTelefono +
-      '&fecha_hora=' + this.data.date +
+      '&fecha_hora=' + fecha +
       '&sms=' + sms +
       '&sms_texto=' + this.data.sms +
       '&individual=' + individual +
       '&id_usuario=' + this.globalProvider.usuario.id_usuario +
-      '&fecha_dispositivo=' + this.data.date.replace('T', ' ');
+      '&fecha_dispositivo=' + fecha.replace('T', ' ');
     this.httpProvider.get(url).then(res => {
       this.res = res;
       if (this.res.error == 'false') {
         this.data.notas = '';
         this.data.otroTelefono = null;
         this.key = null;
+        this.data.date = null;
         let date = new Date();
         this.globalProvider.setFecha(date);
         if (this.paus == false) {
@@ -330,7 +336,7 @@ export class CampaniaPage {
             this.pausar();
           }
         } else {
-          this.pausarLlamada();
+          //this.pausarLlamada();
           this.pausar();
         }
       } else {
@@ -343,7 +349,7 @@ export class CampaniaPage {
     let cambio: string = (this.campos.cambio == true) ? 'Y' : 'N';
     let sms = (this.msnS == true) ? 'Y' : 'N';
     let individual = (this.individual == true) ? 'Y' : 'N';
-    let fecha = new Date(this.data.date);
+    let fecha = new Date();
     let url = 'servicio=setEditContenidoCampaniaManual' +
       "&id_campania_manual=" + this.campania.id_campania_manual +
       "&id_campania_manual_contenido=" + this.getFilaCampania.id_campania_manual_contenido +
@@ -380,7 +386,7 @@ export class CampaniaPage {
             this.pausar();
           }
         } else {
-          this.pausarLlamada();
+          //this.pausarLlamada();
           this.pausar();
         }
       } else {
@@ -408,7 +414,7 @@ export class CampaniaPage {
   serEventoCalendar() {
     this.calendar.hasReadWritePermission().then(res => {
       console.log('res: ' + JSON.stringify(res));
-    }).catch(err => alert('err: ' + JSON.stringify(err)));
+    }).catch(err => console.log('err: ' + JSON.stringify(err)));
     var startDate = new Date(this.data.date);
     this.calendar.createEvent(
       this.campania.nombre,
@@ -418,9 +424,10 @@ export class CampaniaPage {
       startDate,
       this.fechaPosterios.transform(startDate, 1)
     ).then(res => {
-      if (this.dispositivo == true) {
+      this.data.date = null;
+      /*if (this.dispositivo == true) {
         this.separacion(2);
-      }
+      }*/
     }).catch(err => console.log('err: ' + JSON.stringify(err)));
   }
 
@@ -449,7 +456,8 @@ export class CampaniaPage {
     if (this.validarTiempo() == true) {
       this.key_selec = key;
       this.individual = individual;
-      this.retroceder = individual;
+      //this.retroceder = individual;
+      this.retroceder = true;
       this.posicion = posicion;
       if (key == 0 && individual == false) {
         this.getFilaActivaCampania();
@@ -505,8 +513,8 @@ export class CampaniaPage {
     } else {
       this.no = true;
     }
-    var date = new Date();
-    this.data.date = this.fechas.transform(date);
+    //var date = new Date();
+    //this.data.date = this.fechas.transform(date);
     this.contenido = [];
     this.spinner = true;
     for (let s of this.stado) {
@@ -540,8 +548,8 @@ export class CampaniaPage {
     } else {
       this.no = true;
     }
-    var date = new Date();
-    this.data.date = this.fechas.transform(date);
+   // var date = new Date();
+   // this.data.date = this.fechas.transform(date);
     this.contenido = [];
     this.spinner = true;
     for (let s of this.stado) {
@@ -570,6 +578,7 @@ export class CampaniaPage {
   }
 
   pausar() {
+    this.data.date = null;
     this.getCampaniaUsuario();
     this.panelLlamada = false;
     this.edit_info = { readonly: true, border: 'solid #f0f0f0 1px' };
@@ -606,14 +615,14 @@ export class CampaniaPage {
     }).catch(err => console.log('err: ' + JSON.stringify(err)));
   }
 
-  pausarLlamada() {
+  /*pausarLlamada() {
     this.paus = !this.paus;
     if (this.paus == true) {
       this.buttom = { color: '#990000', sms: 'update state and exit' };
     } else {
       this.buttom = { color: '#ff0000', sms: 'stop dialing' };
     }
-  }
+  }*/
 
   editInfo() {
     this.edit_info.readonly = !this.edit_info.readonly;

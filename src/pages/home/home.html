@@ -37,11 +37,11 @@
         <ion-col id="row-cont" col-2>
         </ion-col>
         <ion-col id="row-cont">
-          <input id="title" [readonly]="edid_name[i].edit" [(ngModel)]="campania.nombre" text-center type="text" (click)="editName(i)"
+          <input id="title" [readonly]="edid_name[i].edit" [(ngModel)]="campania.nombre" text-center type="text" (click)="editName(i,campania.propietario)"
             [style.border-bottom]="edid_name[i].border" />
           <ion-icon id="icon-delete" *ngIf="edid_name[i].edit == false" name="checkmark" (click)="setDatosEditCampania(campania.id_campania,campania.nombre,i)"></ion-icon>
         </ion-col>
-        <ion-col id="row-cont" col-2>
+        <ion-col id="row-cont" col-2 *ngIf="campania.propietario == 'Y'">
           <ion-icon id="icon-delete" color="dark" name="trash" (click)="setDeleteCampania(campania.id_campania,campania.nombre)"></ion-icon>
         </ion-col>
       </ion-row>
@@ -119,7 +119,7 @@
         <br>
         <p id="parrafo">
           1. Please login(pc/mac) into Advansales website with the same user and password
-          <a href="http://35.232.20.49/">http://35.232.20.49/</a>
+          <a href="https://advansales.com">advansales.com</a>
         </p>
         <br>
         <p id="parrafo">

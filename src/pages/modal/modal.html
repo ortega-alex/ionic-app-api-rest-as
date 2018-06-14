@@ -120,18 +120,9 @@
     </ion-row>
   </div>
   <ion-slides class="slider-content" pager *ngIf="data1.view == 2">
-    <ion-slide class="slider-content">
-      <img id="imagen-demo" src="assets/imgs/demo1.jpg" alt="">
-    </ion-slide>
-    <ion-slide class="slider-content">
-      <img id="imagen-demo" src="assets/imgs/demo2.jpg" alt="">
-    </ion-slide>
-    <ion-slide class="slider-content">
-      <img id="imagen-demo" src="assets/imgs/demo3.jpg" alt="">
-    </ion-slide>
-    <ion-slide class="slider-content">
-      <img id="imagen-demo" src="assets/imgs/demo4.jpg" alt="">
-      <button id="imagen-button" clear ion-button small icon-right color="light" (click)="closeModal()">
+    <ion-slide class="slider-content" *ngFor="let imagen of imagenes ; let i = index">
+      <img id="imagen-demo" [src]="imagen.url">
+      <button *ngIf="i == imagenes.length-1" id="imagen-button" clear ion-button small icon-right color="danger" (click)="closeModal()">
         Close
         <ion-icon ios="ios-close-circle" md="md-close-circle"></ion-icon>
       </button>

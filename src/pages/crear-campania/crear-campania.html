@@ -29,10 +29,10 @@
     <h2 text-center>New Manual Campaign</h2>
     <ion-row class="content-row">
       <ion-col id="content-row">
-        <ion-item class="from-item">
-          <ion-label id="from-label" floating>Campaign name:</ion-label>
-          <ion-input id="from-input" autofocus text-center type="text" [(ngModel)]="new_campania.nombre_campania" text-lg:992px></ion-input>
-        </ion-item>
+        <!--ion-item class="from-item" no-padding no-lines-->
+        <ion-label id="from-label" stacked>Campaign name:</ion-label>
+        <ion-input id="from-input" autofocus text-center type="text" [(ngModel)]="new_campania.nombre_campania" text-lg:992px></ion-input>
+        <!--/ion-item-->
       </ion-col>
     </ion-row>
     <ion-row class="content-row">
@@ -316,7 +316,7 @@
           <ion-icon name="call"></ion-icon>
           &nbsp;
         </button>
-        <button id="row-content-btn" ion-button block outline (click)="this.panel = !this.panel" color="dark">
+        <button id="row-content-btn" ion-button block outline (click)="saveAndExit()" color="dark">
           Don't save and Continue &nbsp;
         </button>
       </ion-col>

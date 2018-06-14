@@ -156,7 +156,10 @@ export class LoginPage {
           this.globalProvider.alerta(this.res.msn);
         }
       }
-    }).catch(err => console.log('err: ' + JSON.stringify(err)));
+    }).catch(err => {
+      this.load.dismiss();
+      console.log('err: ' + JSON.stringify(err));
+    });
   }
 
   registro() {
@@ -168,6 +171,6 @@ export class LoginPage {
       this.facebook.api('me?fields=id,name,last_name,email,first_name,picture.width(720).height(720).as(picture_large)', []).then(profile => {
         this.login(profile['email'], null, 'F', profile['id'], profile['first_name'], profile['last_name']);
       });
-    });
+    }).catch(err => console.log('err: ' + JSON.stringify(err)));
   }
 }

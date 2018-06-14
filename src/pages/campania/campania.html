@@ -206,13 +206,13 @@
           [style.border-bottom]="edit_info.border" />
       </ion-col>
     </ion-row>
-    <ion-row class="row-cont" *ngIf="retroceder == false">
+    <!--ion-row class="row-cont" *ngIf="retroceder == false">
       <ion-col id="row-cont-b">
         <button id="row-cont-btn-t" ion-button block [style.background-color]="buttom.color" (click)="pausarLlamada()">
           {{buttom.sms}}
         </button>
       </ion-col>
-    </ion-row>
+    </ion-row-->
   </ion-card>
   <div *ngIf="panelLlamada == true && tipo_campania == false" class="content-panel">
     <ion-row class="row-content">

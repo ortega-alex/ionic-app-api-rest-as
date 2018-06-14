@@ -102,6 +102,9 @@ export class RegistroPage {
       } else {
         this.globalProvider.alerta(this.res.msn);
       }
-    }).catch(err => console.log('err: ' + JSON.stringify(err)));
+    }).catch(err => {
+      this.load.dismiss();
+      console.log('err: ' + JSON.stringify(err))
+    });
   }
 }

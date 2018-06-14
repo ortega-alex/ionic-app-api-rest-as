@@ -14,7 +14,7 @@ import { HttpProvider } from '../providers/http/http';
 
 import { Storage } from '@ionic/storage';
 import { AndroidPermissions } from '@ionic-native/android-permissions';
-import { CallLogObject } from '../model/interfaces';
+import { CallLogObject, DataModal } from '../model/interfaces';
 import { CallLog } from '@ionic-native/call-log';
 import { Push, PushObject, PushOptions } from '@ionic-native/push';
 
@@ -89,7 +89,7 @@ export class MyApp {
   }
 
   historialTelefonico() {
-    let d = { view: 1, num: null };
+    let d : DataModal = { view: 1, num: null , imagenes : null };
     var hash = {};
     let numeros: Array<{ numero: string, fecha: string, tipo: string }> = [];
     this.storage.get('fecha').then(fecha => {

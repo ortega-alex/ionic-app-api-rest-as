@@ -27,10 +27,17 @@
   </ion-item>
   <ion-row class="conten-row">
     <ion-col id="conten-row">
-      <button id="conten-row-btn" ion-button block small icon-left color="danger" (click)="cerrarSesion()">
+      <button id="conten-row-btn" ion-button block icon-left color="dark" (click)="cerrarSesion()">
         <ion-icon name="close"></ion-icon>
         Sign Off
       </button>
     </ion-col>
   </ion-row>
+  <ion-list class="list-contend" no-padding no-lines>
+    <h3>Tutorials</h3>
+    <button *ngFor="let tutorial of tutoriales" id="list-contend-btn" ion-button block icon-left color="dark" (click)="demo(tutorial.imagenes)">
+      <ion-icon name="add"></ion-icon>
+      {{tutorial.nombre}}
+    </button>
+  </ion-list>
 </ion-content>

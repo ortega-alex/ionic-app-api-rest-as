@@ -117,3 +117,20 @@ export interface Stado_sms {
 	hilo: any;
 	estado: string
 }
+
+//perfil
+export interface Imagenes {
+	url: string;
+}
+
+export interface Tutorial {
+	nombre: string;
+	imagenes: Array<Imagenes>;
+}
+
+//modal 
+export interface DataModal { 
+	view: number; 
+	num: number; 
+	imagenes: Array<Imagenes> 
+}
