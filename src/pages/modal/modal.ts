@@ -10,7 +10,6 @@ import { CallNumber } from '@ionic-native/call-number';
 import { SMS } from '@ionic-native/sms';
 import { Calendar } from '@ionic-native/calendar';
 import { AdMobFree, AdMobFreeRewardVideoConfig } from '@ionic-native/admob-free';
-import { PopoverPage } from '../popover/popover';
 
 @IonicPage()
 @Component({

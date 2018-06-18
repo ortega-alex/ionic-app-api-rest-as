@@ -3,14 +3,11 @@ import { NavController, App, ModalController, Platform, AlertController } from '
 
 import { GlobalProvider } from '../../providers/global/global';
 import { HttpProvider } from '../../providers/http/http';
-import { Numerico, Replace, Fecha, Hora, getMilisegundos, Diferencia } from '../../pipes/filtros/filtros';
-
-import { MyApp } from '../../app/app.component';
 import { PerfilPage } from '../perfil/perfil';
-import { CrearCampaniaPage } from '../crear-campania/crear-campania';
-import { CampaniaPage } from '../campania/campania';
-import { SmsPage } from '../sms/sms';
-import { ModalPage } from '../modal/modal';
+
+import { Numerico, Replace, Fecha, Hora, getMilisegundos, Diferencia } from '../../pipes/filtros/filtros';
+import { Plan, Persona, CampaniaSms, DataModal, HomeUtil } from '../../model/interfaces';
+import { MyApp } from '../../app/app.component';
 
 import { Storage } from '@ionic/storage';
 import { CallNumber } from '@ionic-native/call-number';
@@ -19,7 +16,6 @@ import { SMS } from '@ionic-native/sms';
 import { Calendar } from '@ionic-native/calendar';
 import { AdMobFree, AdMobFreeBannerConfig, AdMobFreeRewardVideoConfig } from '@ionic-native/admob-free';
 import { Facebook, FacebookLoginResponse } from '@ionic-native/facebook';
-import { Plan, Persona, CampaniaSms, DataModal } from '../../model/interfaces';
 
 @Component({
   selector: 'page-home',
@@ -37,13 +33,10 @@ export class HomePage {
   private res: any;
   private campanias: any;
   private conexion: boolean = false;
-  private title: string = 'Waiting connection with pc ...';
-  private spinner: boolean;
   private fila: any;
   private at_id_telefono: any;
   private at_id_sms_calendar: any;
   private inici: boolean = true;
-  private compartir: boolean;
   private segundos: number = 10;
   private timer: any;
   private time: { hora: number, minuto: number, segundo: number };
@@ -52,7 +45,6 @@ export class HomePage {
   private edid_name_manual: Array<Persona> = [];
   private sms_activo: boolean = false;
   private campania_sms: Array<CampaniaSms> = [];
-  private background: string;
   private plan: Plan = {
     gratis: null,
     mostrar_publicidad_video: null,
@@ -65,8 +57,14 @@ export class HomePage {
     bloqueo_msn: null,
     plan_restriccion_msn: null
   };
-  private dispositivo: boolean;
   private manual: Array<any> = [];
+  private home_util: HomeUtil = {
+    compartir: null,
+    title: 'Waiting connection with pc ...',
+    spinner: null,
+    background: null,
+    dispositivo: null,
+  };
 
   constructor(
     public navCtrl: NavController,
@@ -84,7 +82,7 @@ export class HomePage {
     private admobFree: AdMobFree,
     private facebook: Facebook
   ) {
-    this.dispositivo = this.platform.is('android');
+    this.home_util.dispositivo = this.platform.is('android');
   }
 
   ionViewDidLoad() {
@@ -264,7 +262,7 @@ export class HomePage {
     }).catch(err => {
       if (this.inici == false) {
         this.load.dismiss();
-      }    
+      }
       console.log('err: ' + JSON.stringify(err));
     });
   }
@@ -300,7 +298,7 @@ export class HomePage {
 
   monitoreo() {
     if (this.bloqueo() == false) {
-      this.spinner = true;
+      this.home_util.spinner = true;
       this.conexion = !this.conexion;
       if (this.conexion == true) {
         this.fila = setInterval(() => {
@@ -319,9 +317,9 @@ export class HomePage {
     this.httpProvider.get(url).then(res => {
       this.res = res;
       if (this.res.error == 'false') {
-        this.spinner = false;
+        this.home_util.spinner = false;
         this.getAccionTelefono();
-        this.title = 'Established connection';
+        this.home_util.title = 'Established connection';
       }
     }).catch(err => console.log('err: ' + JSON.stringify(err)));
   }
@@ -406,7 +404,7 @@ export class HomePage {
     this.httpProvider.get(url).then(res => {
       this.res = res;
       if (this.res.error == 'false') {
-        this.title = 'Waiting connection with pc ...';
+        this.home_util.title = 'Waiting connection with pc ...';
       }
     }).catch(err => console.log('err: ' + JSON.stringify(err)));
   }
@@ -541,9 +539,9 @@ export class HomePage {
         buttons: ['Ok']
       });
       alert.present();
-      this.compartir = true;
+      this.home_util.compartir = true;
     } else {
-      this.compartir = false;
+      this.home_util.compartir = false;
     }
   }
 
@@ -607,9 +605,9 @@ export class HomePage {
     if (this.bloqueo() == false) {
       this.sms_activo = !this.sms_activo;
       if (this.sms_activo == true) {
-        this.background = "lightgray";
+        this.home_util.background = "lightgray";
       } else {
-        this.background = "";
+        this.home_util.background = "";
         this.campania_sms = [];
         for (let i = 0; i < this.edid_name.length; i++) {
           for (let j = 0; j < this.edid_name[i].border_stado.length; j++) {

@@ -10,11 +10,7 @@ import { CallNumber } from '@ionic-native/call-number';
 import { Contacts, Contact, ContactField, ContactName, ContactOrganization } from '@ionic-native/contacts';
 import { SMS } from '@ionic-native/sms';
 import { Calendar } from '@ionic-native/calendar';
-import { AdMobFree, AdMobFreeBannerConfig, AdMobFreeRewardVideoConfig } from '@ionic-native/admob-free';
-//import { Facebook, FacebookLoginResponse } from '@ionic-native/facebook';
-
-import { ModalPage } from '../modal/modal';
-import { PopoverPage } from '../popover/popover'
+import { AdMobFree, AdMobFreeRewardVideoConfig } from '@ionic-native/admob-free';
 
 @IonicPage()
 @Component({

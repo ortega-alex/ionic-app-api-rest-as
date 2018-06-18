@@ -6,7 +6,6 @@ import { HttpProvider } from '../../providers/http/http';
 
 import { MyApp } from '../../app/app.component';
 import { Usuario, Tutorial, Imagenes } from '../../model/interfaces';
-import { Minusculas } from '../../pipes/filtros/filtros';
 
 @IonicPage()
 @Component({
@@ -15,6 +14,7 @@ import { Minusculas } from '../../pipes/filtros/filtros';
 })
 export class PerfilPage {
 
+  private res: any;
   public submitted: boolean = false;
   private usuario: Usuario = {
     id_usuario: null,
@@ -28,9 +28,6 @@ export class PerfilPage {
     tipo_registro: null,
     tipo_usuario: null,
   };
-  private load: any;
-  private res: any;
-  private minusculas = new Minusculas();
   private dispositivo: boolean;
   private tutoriales: Array<Tutorial> = [];
 

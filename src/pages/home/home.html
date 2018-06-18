@@ -1,4 +1,4 @@
-<ion-content class="contenido-home" no-Lines [style.background]="background">
+<ion-content class="contenido-home" no-Lines [style.background]="home_util.background">
   <div class="content-header" *ngIf="conexion == false">
     <ion-row class="conten-row">
       <ion-col id="conten-row" col-3>
@@ -19,12 +19,12 @@
       </ion-col>
     </ion-row>
   </div>
-  <ion-scroll scrollY="true" class="content-div" no-Lines no-border *ngIf="conexion == false" [style.background]="background">
+  <ion-scroll scrollY="true" class="content-div" no-Lines no-border *ngIf="conexion == false" [style.background]="home_util.background">
     <ion-refresher (ionRefresh)="doRefresh($event)">
       <ion-refresher-content></ion-refresher-content>
     </ion-refresher>
     <p id="conten-info" *ngIf="sms_activo == true">Tap on any lists</p>
-    <ion-row class="conten-row" *ngIf="compartir == true && sms_activo == false">
+    <ion-row class="conten-row" *ngIf="home_util.compartir == true && sms_activo == false">
       <ion-col id="conten-row">
         <button id="content-row-btn" ion-button block icon-left (click)="share()">
           <ion-icon name="logo-facebook"></ion-icon>
@@ -32,7 +32,7 @@
         </button>
       </ion-col>
     </ion-row>
-    <div *ngFor="let campania of campanias ; let i = index" class="conten-card" [style.background]="background">
+    <div *ngFor="let campania of campanias ; let i = index" class="conten-card" [style.background]="home_util.background">
       <ion-row class="row-cont">
         <ion-col id="row-cont" col-2>
         </ion-col>
@@ -58,11 +58,11 @@
         </ion-col>
       </ion-row>
     </div>
-    <div *ngFor="let m of manual ; let i = index" class="conten-card" [style.background]="background">
+    <div *ngFor="let m of manual ; let i = index" class="conten-card" [style.background]="home_util.background">
       <ion-row class="row-cont">
         <ion-col id="row-cont" col-2>
-          <ion-icon *ngIf="dispositivo == true" id="icon-delete" name="paper-plane" (click)="crearCampania( m)"></ion-icon>
-          <ion-icon *ngIf="dispositivo == false" id="icon-delete" ios="md-paper-plane" md="md-paper-plane" (click)="crearCampania( m)"></ion-icon>
+          <ion-icon *ngIf="home_util.dispositivo == true" id="icon-delete" name="paper-plane" (click)="crearCampania( m)"></ion-icon>
+          <ion-icon *ngIf="home_util.dispositivo == false" id="icon-delete" ios="md-paper-plane" md="md-paper-plane" (click)="crearCampania( m)"></ion-icon>
         </ion-col>
         <ion-col id="row-cont">
           <input id="title" [readonly]="edid_name_manual[i].edit" [(ngModel)]="m.nombre" text-center type="text" (click)="editNameManual(i)"
@@ -91,16 +91,16 @@
   <div class="conten-conexion" *ngIf="conexion == true">
     <ion-row class="conten-row">
       <ion-col id="conten-row" col-2>
-        <ion-icon *ngIf="dispositivo == true" id="icon" name="arrow-round-back" (click)="monitoreo()"></ion-icon>
-        <ion-icon *ngIf="dispositivo == false" id="icon" ios="md-arrow-round-back" md="md-arrow-round-back" (click)="monitoreo()"></ion-icon>
+        <ion-icon *ngIf="home_util.dispositivo == true" id="icon" name="arrow-round-back" (click)="monitoreo()"></ion-icon>
+        <ion-icon *ngIf="home_util.dispositivo == false" id="icon" ios="md-arrow-round-back" md="md-arrow-round-back" (click)="monitoreo()"></ion-icon>
       </ion-col>
       <ion-col id="conten-row" col-8>
-        <p id="title">{{title}}</p>
+        <p id="title">{{home_util.title}}</p>
       </ion-col>
       <ion-col id="conten-row" col-2></ion-col>
     </ion-row>
-    <ion-spinner *ngIf="spinner" name="bubbles" item-left></ion-spinner>
-    <ion-row class="conten-row" *ngIf="compartir">
+    <ion-spinner *ngIf="home_util.spinner" name="bubbles" item-left></ion-spinner>
+    <ion-row class="conten-row" *ngIf="home_util.compartir">
       <ion-col id="conten-row">
         <button id="content-row-btn" ion-button block icon-left (click)="share()">
           <ion-icon name="logo-facebook"></ion-icon>
@@ -108,7 +108,7 @@
         </button>
       </ion-col>
     </ion-row>
-    <ion-row class="conten-row" *ngIf="spinner == false">
+    <ion-row class="conten-row" *ngIf="home_util.spinner == false">
       <ion-col id="conten-row">
         <button id="conten-row-btn" ion-button block icon-right color="danger" (click)="monitoreo()">
           Stop
@@ -119,7 +119,7 @@
         <br>
         <p id="parrafo">
           1. Please login(pc/mac) into Advansales website with the same user and password
-          <a href="https://advansales.com">advansales.com</a>
+          <!--a href="https://advansales.com">advansales.com</a--><!--solo para android-->
         </p>
         <br>
         <p id="parrafo">
@@ -129,13 +129,9 @@
           3. Click on the "Continue Calling" button and your phone will start to call the list
         </p>
         <br>
-        <!--Quitar p id="parrafo">
-          Enjoy
-          <br> We will occationally ask you to watch a short video to support our app:
-        </p-->
       </ion-col>
     </ion-row>
-    <ion-row class="conten-row" *ngIf="plan.mostrar_publicidad_video == true && spinner == false">
+    <ion-row class="conten-row" *ngIf="plan.mostrar_publicidad_video == true && home_util.spinner == false">
       <ion-col id="conten-row">
         <button id="conten-row-btn" ion-button icon-right block color="buttom" (click)="showVideo()">
           {{(segundos == 10) ? 'Get more time ' : segundos }} {{(time && segundos == 10) ? time.hora+":"+time.minuto+":"+time.segundo
@@ -143,14 +139,6 @@
         </button>
       </ion-col>
     </ion-row>
-    <!--Quitar ion-row class="conten-row" *ngIf="spinner == false">
-      <ion-col id="conten-row">
-        <p id="parrafo">
-          for any comments or support please contact us by whatsapp or phone at:
-          <a href="https://api.whatsapp.com/send?phone=50242297744">+502 4229-7744</a>
-        </p>
-      </ion-col>
-    </ion-row-->
   </div>
   <div no-Lines no-border ion-fixed class="content-footer" *ngIf="conexion == false">
     <div class="btn-conexion" *ngIf="sms_activo == false" (click)="monitoreo()">

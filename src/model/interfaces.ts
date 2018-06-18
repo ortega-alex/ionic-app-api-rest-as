@@ -9,13 +9,13 @@ export interface Usuario {
 	log_out: boolean;
 	tipo_registro: string;
 	tipo_usuario: string;
-}
+};
 
 export interface CallLogObject {
 	name: string;
 	value: string | Array<string>;
 	operator: '==' | '!=' | '>' | '>=' | '<' | '<=' | 'like';
-}
+};
 
 export interface Plan {
 	gratis: boolean; /* hasta que comparta en fb no podra realizar ningun tipo de accion */
@@ -28,7 +28,7 @@ export interface Plan {
 	bloqueo: boolean; /* bloqueo de app */
 	bloqueo_msn: string; /* motivo del bloqueo */
 	plan_restriccion_msn: string;
-}
+};
 
 //campania
 export interface Detalle {
@@ -36,11 +36,11 @@ export interface Detalle {
 	otroTelefono: string;
 	date: string;
 	sms: string;
-}
+};
 
 export interface Stados {
 	border: string;
-}
+};
 
 //crear campania
 
@@ -51,7 +51,7 @@ export interface Campos {
 	edit_dos: string;
 	dos: string;
 	dos_stado: boolean;
-}
+};
 
 export interface Campania {
 	id_campania_manual: number;
@@ -64,12 +64,12 @@ export interface Campania {
 	nota: string;
 	stado: number;
 	campos: Campos;
-}
+};
 
 export interface Stado {
 	cambio: boolean;
 	stado: Array<boolean>;
-}
+};
 
 //home
 export interface Persona {
@@ -78,14 +78,14 @@ export interface Persona {
 	border_stado: Array<any>;
 	posicion_campania: number;
 	stado: Array<any>
-}
+};
 
 export interface Estados {
 	color: number;
 	id: number;
 	valor: number;
 	texto: string;
-}
+};
 
 export interface CampaniaSms {
 	id_campania: number;
@@ -93,7 +93,15 @@ export interface CampaniaSms {
 	tipo_campania: number;
 	estados: Array<Estados>;
 	togglel: boolean;
-}
+};
+
+export interface HomeUtil{
+	 compartir: boolean;
+	 title: string ;
+	 spinner: boolean;
+	 background: string;
+	 dispositivo: boolean;
+};
 
 //registro
 export interface Catalogo {
@@ -102,10 +110,9 @@ export interface Catalogo {
 	input: string;
 	color: string;
 	ejemplo: string;
-}
+};
 
 //sms 
-
 export interface Telefono {
 	telefono: string;
 	text: string;
@@ -121,16 +128,16 @@ export interface Stado_sms {
 //perfil
 export interface Imagenes {
 	url: string;
-}
+};
 
 export interface Tutorial {
 	nombre: string;
 	imagenes: Array<Imagenes>;
-}
+};
 
 //modal 
 export interface DataModal { 
 	view: number; 
 	num: number; 
 	imagenes: Array<Imagenes> 
-}
+};

@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ViewController, PopoverController, Platform, Alert, AlertController, ModalController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ViewController, PopoverController, Platform, AlertController } from 'ionic-angular';
 
 import { GlobalProvider } from '../../providers/global/global';
 import { HttpProvider } from '../../providers/http/http';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
+import { Campania, Stado } from '../../model/interfaces';
 
 import { FileChooser } from '@ionic-native/file-chooser';
 import { FilePath } from '@ionic-native/file-path';
@@ -14,9 +15,6 @@ import { CallNumber } from '@ionic-native/call-number';
 import { FechaPosterios, Fecha, Hora } from '../../pipes/filtros/filtros';
 import { SMS } from '@ionic-native/sms';
 import { Calendar } from '@ionic-native/calendar';
-
-import { PopoverPage } from '../popover/popover';
-import { Campania, Stados, Stado } from '../../model/interfaces';
 
 @IonicPage()
 @Component({
@@ -71,7 +69,6 @@ export class CrearCampaniaPage {
     private iosFilePicker: IOSFilePicker,
     private alertController: AlertController,
     private callNumber: CallNumber,
-    private modalController: ModalController,
     private Sms: SMS,
     private calendar: Calendar
   ) {
@@ -342,7 +339,7 @@ export class CrearCampaniaPage {
     }
     if (stado == 4) {
       this.setSms();
-      if(this.new_campania.fecha != null){
+      if (this.new_campania.fecha != null) {
         this.serEventoCalendar();
       }
       this.setContenidoCampaniaManual();
@@ -455,7 +452,7 @@ export class CrearCampaniaPage {
     }
   }
 
-  saveAndExit(){
+  saveAndExit() {
     this.panel = !this.panel;
     this.new_campania.telefono = '';
     this.new_campania.fecha = null;

@@ -2,14 +2,11 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, Platform, ViewController, AlertController, ModalController } from 'ionic-angular';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 
-import { ModalPage } from '../modal/modal';
-
 import { GlobalProvider } from '../../providers/global/global';
 import { HttpProvider } from '../../providers/http/http';
 import { Fecha, Hora, Numerico } from '../../pipes/filtros/filtros';
 
 import { SMS } from '@ionic-native/sms';
-import { Contacts, Contact, ContactField, ContactName, ContactOrganization } from '@ionic-native/contacts';
 import { Stado_sms } from '../../model/interfaces';
 
 @IonicPage()
@@ -23,7 +20,6 @@ export class SmsPage {
   private campania_sms: Array<any> = [];
   private res: any;
   private sms_from: FormGroup;
-  private submitted: boolean = false;
   private fecha = new Fecha();
   private hora = new Hora();
   private campaniaSMS: Array<any> = [];
@@ -33,6 +29,7 @@ export class SmsPage {
   private id: number;
   private dispositivo: boolean;
   private load : any;
+  private submitted: boolean = false;
 
   constructor(
     public navCtrl: NavController,
@@ -44,8 +41,7 @@ export class SmsPage {
     private formBuilder: FormBuilder,
     private alertController: AlertController,
     private modalController: ModalController,
-    private sms: SMS,
-    private contacts: Contacts,
+    private sms: SMS
   ) {
     this.dispositivo = this.platform.is('android');
     this.historial = this.navParams.get('historial');

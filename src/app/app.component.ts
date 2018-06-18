@@ -1,20 +1,18 @@
-import { Component, ViewChild } from '@angular/core';
-import { Platform, ModalController, Nav, AlertController } from 'ionic-angular';
+import { Component } from '@angular/core';
+import { Platform, ModalController, AlertController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { HomePage } from '../pages/home/home';
 import { LoginPage } from '../pages/login/login';
-import { ModalPage } from '../pages/modal/modal';
-import { SmsPage } from '../pages/sms/sms';
 
 import { GlobalProvider } from '../providers/global/global';
-import { setMilisegundos, Fechas, Numerico } from '../pipes/filtros/filtros';
+import { setMilisegundos, Fechas } from '../pipes/filtros/filtros';
 import { HttpProvider } from '../providers/http/http';
+import { CallLogObject, DataModal } from '../model/interfaces';
 
 import { Storage } from '@ionic/storage';
 import { AndroidPermissions } from '@ionic-native/android-permissions';
-import { CallLogObject, DataModal } from '../model/interfaces';
 import { CallLog } from '@ionic-native/call-log';
 import { Push, PushObject, PushOptions } from '@ionic-native/push';
 
@@ -44,8 +42,6 @@ export class MyApp {
     private alertController: AlertController
   ) {
     platform.ready().then(() => {
-      // Okay, so the platform is ready and our plugins are available.
-      // Here you can do any higher level native things you might need.
       statusBar.styleDefault();
       if (platform.is('android')) {
         this.permisos();
@@ -89,7 +85,7 @@ export class MyApp {
   }
 
   historialTelefonico() {
-    let d : DataModal = { view: 1, num: null , imagenes : null };
+    let d: DataModal = { view: 1, num: null, imagenes: null };
     var hash = {};
     let numeros: Array<{ numero: string, fecha: string, tipo: string }> = [];
     this.storage.get('fecha').then(fecha => {
@@ -158,14 +154,12 @@ export class MyApp {
     const pushObject: PushObject = this.push.init(options);
 
     pushObject.on('registration').subscribe((data: any) => {
-      console.log('device token -> ' + data.registrationId);
+      //console.log('device token -> ' + data.registrationId);
       this.globalProvider.setToken(data.registrationId);
     }, (err) => console.log('err: ' + JSON.stringify(err)));
 
     pushObject.on('notification').subscribe((data: any) => {
-      //if user using app and push notification comes
       if (data.additionalData.foreground) {
-        // if application open, show popup
         let confirmAlert = this.alertController.create({
           title: 'New Notification',
           message: data.message,

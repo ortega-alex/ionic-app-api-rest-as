@@ -2,14 +2,14 @@
   <div class="conten-img">
     <img id="title" src="assets/imgs/logo.png">
   </div>
-  <ion-row class="content-row">
+  <!--ion-row class="content-row">
     <ion-col id="content-row">
       <button id="content-row-btn" ion-button small icon-left block (click)="loginFB()">
         <ion-icon name="logo-facebook"></ion-icon>
         facebook
       </button>
     </ion-col>
-  </ion-row>
+  </ion-row-->
   <form [formGroup]="logIn" class="conten-from">
     <ion-item class="conten-item">
       <ion-input id="conten-input" text-center type="email" placeholder="EMAIL" formControlName="correo" text-lg:992px></ion-input>
@@ -33,9 +33,14 @@
   </ion-row>
   <ion-row class="content-row">
     <ion-col id="content-row">
+      <p id="parrafo">To register please go to advansales.com</p>
+    </ion-col>
+  </ion-row>
+  <!--ion-row class="content-row">
+    <ion-col id="content-row">
       <button id="content-row-btn" ion-button small block color="dark" (click)="registro()">
         Register
       </button>
     </ion-col>
-  </ion-row>
+  </ion-row-->
 </ion-content>
