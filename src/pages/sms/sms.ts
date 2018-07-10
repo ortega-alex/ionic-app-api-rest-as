@@ -7,7 +7,7 @@ import { HttpProvider } from '../../providers/http/http';
 import { Fecha, Hora, Numerico } from '../../pipes/filtros/filtros';
 
 import { SMS } from '@ionic-native/sms';
-import { Stado_sms } from '../../model/interfaces';
+import { Stado_sms, Util } from '../../model/interfaces';
 
 @IonicPage()
 @Component({
@@ -28,8 +28,20 @@ export class SmsPage {
   private stado_sms: Stado_sms;
   private id: number;
   private dispositivo: boolean;
-  private load : any;
-  private submitted: boolean = false;
+  private load: any;
+  private util: Util = {
+    submitted: false,
+    error: null,
+    noValido: null,
+    dispositivo: null,
+    mostrar: null,
+    msnS: null,
+    catalogoEstado: [],
+    nombre_archivo: null,
+    sms_tex: null,
+    style: null,
+    panel_llamada: null
+  };
 
   constructor(
     public navCtrl: NavController,
@@ -75,7 +87,7 @@ export class SmsPage {
   }
 
   setCampaniaSMSUsuario(): void {
-    this.submitted = true;
+    this.util.submitted = true;
     if (this.sms_from.valid) {
       this.load = this.globalProvider.cargando(this.globalProvider.data.msj.load);
       var fecha: string;
@@ -115,7 +127,7 @@ export class SmsPage {
         }
       }).catch(err => {
         this.load.dismiss();
-        console.log('err: ' + JSON.stringify(err));        
+        console.log('err: ' + JSON.stringify(err));
       });
     }
   }
@@ -244,7 +256,6 @@ export class SmsPage {
         });
       }
     }).catch(err => {
-      //(this.dispositivo == true) ? this.pausar() : console.log('err: ' + JSON.stringify(err));
       console.log('err: ' + JSON.stringify(err));
     });
   }

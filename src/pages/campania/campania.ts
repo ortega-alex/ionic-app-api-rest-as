@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ViewController, Platform, AlertController, List, ModalController, PopoverController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ViewController, Platform, AlertController, ModalController, PopoverController } from 'ionic-angular';
 
 import { GlobalProvider } from '../../providers/global/global';
 import { HttpProvider } from '../../providers/http/http';
-import { Replace, Fechas, getMilisegundos, Fecha, Hora, Diferencia, FechaPosterios } from '../../pipes/filtros/filtros';
-import { Detalle, Stados, DataModal } from '../../model/interfaces';
+import { Fechas, getMilisegundos, Fecha, Hora, Diferencia, FechaPosterios } from '../../pipes/filtros/filtros';
+import { Util, Detalle, Stados, DataModal } from '../../model/interfaces';
 
 import { CallNumber } from '@ionic-native/call-number';
 import { Contacts, Contact, ContactField, ContactName, ContactOrganization } from '@ionic-native/contacts';
@@ -22,18 +22,12 @@ export class CampaniaPage {
   private fechaPosterios = new FechaPosterios();
   private getmilisegundos = new getMilisegundos();
   private diferencia = new Diferencia();
-  //private numerico = new Numerico();
-  private replace = new Replace();
   private fechas = new Fechas();
   private fecha = new Fecha();
   private hora = new Hora();
-  private key_estado: number;
   private campania: any;
-  private panelLlamada: boolean = false;
   private res: any;
   private getFilaCampania: any;
-  private getFilaCampaniaC: Array<any> = [];
-  private catalogoEstado: any;
   private data: Detalle = {
     notas: '',
     otroTelefono: null,
@@ -42,7 +36,6 @@ export class CampaniaPage {
   };
   private key: any;
   private msnS: boolean;
-  private spinner: boolean;
   private contenido = [];
   private stado: Array<Stados> = [
     { border: 'none' },
@@ -63,16 +56,28 @@ export class CampaniaPage {
   private posicion_campania: number;
   private segundos: number = 10;
   private timer: any;
-  private no: boolean;
-  private buttom = { color: '#ff0000', sms: 'stop dialing' };
   private paus: boolean = false;
   private time: { hora: number, minuto: number, segundo: number };
   private tiempo_restante: any;
-  private retroceder: boolean;
   private edit_info = { readonly: true, border: 'solid #f0f0f0 1px' };
-  private dispositivo: boolean;
   private tipo_campania: boolean;
   private campos: { cambio: boolean, stado: Array<boolean> };
+  private spinner: boolean;
+  private no: boolean;
+  private retroceder: boolean;
+  private util: Util = {
+    submitted: null,
+    error: null,
+    noValido: null,
+    dispositivo: null,
+    mostrar: null,
+    msnS: null,
+    catalogoEstado: [],
+    nombre_archivo: null,
+    sms_tex: null,
+    style: { background: '', opacity: '' },
+    panel_llamada: false
+  };
 
   constructor(
     public navCtrl: NavController,
@@ -91,7 +96,7 @@ export class CampaniaPage {
     private popoverController: PopoverController
   ) {
     this.campos = { cambio: false, stado: [false, false] };
-    this.dispositivo = this.platform.is('android');
+    this.util.dispositivo = this.platform.is('android');
     this.campania = this.navParams.get('campania');
     this.posicion_campania = this.navParams.get('posicion_campania');
     this.estado = this.navParams.get('estado');
@@ -107,6 +112,7 @@ export class CampaniaPage {
   }
 
   ionViewDidLoad() {
+    console.log(this.no + ' ' + this.spinner + ' ' + this.retroceder);
     if (this.globalProvider.plan.mostrar_publicidad_video == true) {
       this.prepareVideo();
       this.globalProvider.getTime();
@@ -187,7 +193,7 @@ export class CampaniaPage {
       this.res = res;
       if (this.res.error == 'false') {
         let date = new Date(this.res.tiempo_usuario);
-        let hora = this.res.tiempo_suma;
+        //let hora = this.res.tiempo_suma;
         this.globalProvider.setTime(this.getmilisegundos.transform(date));
         this.tiempoActual();
       }
@@ -226,7 +232,7 @@ export class CampaniaPage {
         if (this.res.estado != 'F') {
           this.getFilaCampania = this.res;
           this.data.sms = this.res.sms_predeterminado;
-          this.panelLlamada = true;
+          this.util.panel_llamada = true;
           this.call(this.getFilaCampania.telefono, true);
         } else {
           this.pausar();
@@ -240,7 +246,8 @@ export class CampaniaPage {
   getCatalogoEstadoFilaCampania() {
     let url = 'servicio=getCatalogoEstadoFilaCampania';
     this.httpProvider.get(url).then(res => {
-      this.catalogoEstado = res;
+      this.res = res;
+      this.util.catalogoEstado = this.res;
     }).catch(err => console.log('err: ' + JSON.stringify(err)));
   }
 
@@ -251,12 +258,12 @@ export class CampaniaPage {
     }
     if (key == 3) {
       if (this.msnS == true) {
-        if (this.dispositivo == true) {
+        if (this.util.dispositivo == true) {
           this.setSms(this.getFilaCampania.telefono);
           this.separacion(2);
         } else {
           this.setSms(this.getFilaCampania.telefono);
-          let data : DataModal = { view: 4, num: null , imagenes : null }
+          let data: DataModal = { view: 4, num: null, imagenes: null }
           let modal = this.modalController.create('ModalPage', { data: data });
           modal.present();
           modal.onDidDismiss(data => {
@@ -271,11 +278,11 @@ export class CampaniaPage {
     }
     if (key == 4) {
       if (this.msnS == true) {
-        if (this.dispositivo == true) {
+        if (this.util.dispositivo == true) {
           this.setSms(this.getFilaCampania.telefono);
         } else {
           this.setSms(this.getFilaCampania.telefono);
-          let data : DataModal = { view: 4, num: null , imagenes : null }
+          let data: DataModal = { view: 4, num: null, imagenes: null }
           let modal = this.modalController.create('ModalPage', { data: data });
           modal.present();
           modal.onDidDismiss(data => {
@@ -287,9 +294,9 @@ export class CampaniaPage {
       } else {
         this.separacion(2);
       }
-      if(this.data.date != null){
+      if (this.data.date != null) {
         this.serEventoCalendar();
-      }else{
+      } else {
         this.separacion(2);
       }
     }
@@ -322,7 +329,7 @@ export class CampaniaPage {
         this.globalProvider.setFecha(date);
         if (this.paus == false) {
           if (this.validarTiempo() == false) {
-            this.panelLlamada = false;
+            this.util.panel_llamada = false;
           }
           if (this.individual == false && this.list_completa == true) {
             this.getFilaActivaCampania();
@@ -332,7 +339,6 @@ export class CampaniaPage {
             this.pausar();
           }
         } else {
-          //this.pausarLlamada();
           this.pausar();
         }
       } else {
@@ -344,7 +350,7 @@ export class CampaniaPage {
   setEditContenidoCampaniaManual() {
     let cambio: string = (this.campos.cambio == true) ? 'Y' : 'N';
     let sms = (this.msnS == true) ? 'Y' : 'N';
-    let individual = (this.individual == true) ? 'Y' : 'N';
+    //let individual = (this.individual == true) ? 'Y' : 'N';
     let fecha = new Date();
     let url = 'servicio=setEditContenidoCampaniaManual' +
       "&id_campania_manual=" + this.campania.id_campania_manual +
@@ -374,7 +380,7 @@ export class CampaniaPage {
         this.globalProvider.setFecha(date);
         if (this.paus == false) {
           if (this.validarTiempo() == false) {
-            this.panelLlamada = false;
+            this.util.panel_llamada = false;
           }
           if (this.mi_list == true) {
             this.llamarLista(this.key_selec, false, this.posicion + 1);
@@ -382,7 +388,6 @@ export class CampaniaPage {
             this.pausar();
           }
         } else {
-          //this.pausarLlamada();
           this.pausar();
         }
       } else {
@@ -393,7 +398,6 @@ export class CampaniaPage {
 
   call(telefono, nuevo: boolean = true) {
     if (telefono != null && telefono.trim() != '') {
-      //this.callNumber.callNumber(this.numerico.transform(telefono), true).then(res => {
       this.callNumber.callNumber(telefono, true).then(res => {
         if (nuevo == true) {
           this.setContacto(telefono);
@@ -403,7 +407,6 @@ export class CampaniaPage {
   }
 
   setSms(telefono: string) {
-    //this.sms.send(this.numerico.transform(telefono), this.data.sms).then(res => console.log('res: ' + res)).catch(err => console.log('err: ' + err));
     this.sms.send(telefono, this.data.sms).then(res => console.log('res: ' + res)).catch(err => console.log('err: ' + err));
   }
 
@@ -415,15 +418,11 @@ export class CampaniaPage {
     this.calendar.createEvent(
       this.campania.nombre,
       'AdvanSales',
-      //'name: ' + this.getFilaCampania.nombre + ' , phone: ' + this.numerico.transform(this.getFilaCampania.telefono) + ' , note: ' + this.data.notas,
       'name: ' + this.getFilaCampania.nombre + ' , phone: ' + this.getFilaCampania.telefono + ' , note: ' + this.data.notas,
       startDate,
       this.fechaPosterios.transform(startDate, 1)
     ).then(res => {
       this.data.date = null;
-      /*if (this.dispositivo == true) {
-        this.separacion(2);
-      }*/
     }).catch(err => console.log('err: ' + JSON.stringify(err)));
   }
 
@@ -438,10 +437,9 @@ export class CampaniaPage {
 
   setContacto(telefono) {
     let contact: Contact = this.contacts.create();
-    contact.name = new ContactName(null, this.getFilaCampania.nombre , 'AS' );
+    contact.name = new ContactName(null, this.getFilaCampania.nombre, 'AS');
     contact.nickname = this.campania.nombre;
     contact.organizations = [new ContactOrganization(null, this.campania.nombre, null)];
-    //contact.phoneNumbers = [new ContactField('mobile', this.numerico.transform(telefono))];
     contact.phoneNumbers = [new ContactField('mobile', telefono)];
     contact.save().then(() => {
       console.log('res:');
@@ -452,7 +450,6 @@ export class CampaniaPage {
     if (this.validarTiempo() == true) {
       this.key_selec = key;
       this.individual = individual;
-      //this.retroceder = individual;
       this.retroceder = true;
       this.posicion = posicion;
       if (key == 0 && individual == false) {
@@ -460,7 +457,7 @@ export class CampaniaPage {
         this.list_completa = true;
       } else if (individual == true) {
         this.getFilaCampania = this.contenido[posicion];
-        this.panelLlamada = true;
+        this.util.panel_llamada = true;
         if (llamar == true) {
           this.call(this.getFilaCampania.telefono, true);
         }
@@ -468,7 +465,7 @@ export class CampaniaPage {
       if (key > 0 && individual == false) {
         if (this.contenido[posicion]) {
           this.getFilaCampania = this.contenido[posicion];
-          this.panelLlamada = true;
+          this.util.panel_llamada = true;
           if (llamar == true) {
             this.call(this.getFilaCampania.telefono, true);
           }
@@ -509,8 +506,6 @@ export class CampaniaPage {
     } else {
       this.no = true;
     }
-    //var date = new Date();
-    //this.data.date = this.fechas.transform(date);
     this.contenido = [];
     this.spinner = true;
     for (let s of this.stado) {
@@ -544,8 +539,6 @@ export class CampaniaPage {
     } else {
       this.no = true;
     }
-   // var date = new Date();
-   // this.data.date = this.fechas.transform(date);
     this.contenido = [];
     this.spinner = true;
     for (let s of this.stado) {
@@ -576,7 +569,7 @@ export class CampaniaPage {
   pausar() {
     this.data.date = null;
     this.getCampaniaUsuario();
-    this.panelLlamada = false;
+    this.util.panel_llamada = false;
     this.edit_info = { readonly: true, border: 'solid #f0f0f0 1px' };
     this.separacion(1, this.estado, this.key_selec);
   }
@@ -610,15 +603,6 @@ export class CampaniaPage {
       }
     }).catch(err => console.log('err: ' + JSON.stringify(err)));
   }
-
-  /*pausarLlamada() {
-    this.paus = !this.paus;
-    if (this.paus == true) {
-      this.buttom = { color: '#990000', sms: 'update state and exit' };
-    } else {
-      this.buttom = { color: '#ff0000', sms: 'stop dialing' };
-    }
-  }*/
 
   editInfo() {
     this.edit_info.readonly = !this.edit_info.readonly;

@@ -6,9 +6,18 @@ export class HttpProvider {
 
   constructor(public http: HttpClient) { }
 
-  //  url = 'http://www.intercorps.org/power_dialer/servicio.php?';
-  public url = 'http://35.232.20.49/servicio.php?';
+  /** 
+   * produccion
+   */
+  //public url = 'http://35.232.20.49/servicio.php?';
+  /**
+   * desarrollo
+   */
   //public url = 'http://35.232.20.49/desarrollo/servicio.php?';
+  /**
+   * si panel
+   */
+  public url : string = "https://openfut.com/advansales/servicio.php?"
 
   post(data, url) {
     return new Promise((resolve, reject) => {

@@ -1,6 +1,6 @@
-<ion-content padding class="content-modal" [style.background-color]="style.background" [style.opacity]="style.opacity">
+<ion-content padding class="content-modal" [style.background-color]="util.style.background" [style.opacity]="util.style.opacity">
   <br>
-  <ion-card class="conten-card" *ngIf="panel_llamada == true && data1.view == 1">
+  <ion-card class="conten-card" *ngIf="util.panel_llamada == true && data1.view == 1">
     <ion-row class="row-cont" *ngIf="globalProvider.plan.mostrar_publicidad_video == true">
       <ion-col id="row-cont">
         <button id="row-cont-btn" ion-button small icon-right block color="dark" (click)="showVideo()">
@@ -88,7 +88,7 @@
       </ion-col>
     </ion-row>
     <ion-row class="row-cont-b">
-      <ion-col id="row-cont-b" col-6 *ngFor="let stado of catalogo_estado | slice:1:5;">
+      <ion-col id="row-cont-b" col-6 *ngFor="let stado of util.catalogoEstado | slice:1:5;">
         <button id="row-cont-btn-status" ion-button small full [style.background-color]="'#'+stado.color" (click)="clickStado(stado.key)">
           {{stado.nombre}}
         </button>
@@ -103,7 +103,7 @@
       </ion-col>
     </ion-row>
   </ion-card>
-  <div class="animacion" *ngIf="panel_llamada == false && data1.view == 1">
+  <div class="animacion" *ngIf="util.panel_llamada == false && data1.view == 1">
     <img src="assets/imgs/m.gif">
     <div class="contenedor">
       <p class="text">{{text}}.
@@ -112,7 +112,7 @@
     </div>
     <ion-row id="img" class="content-row">
       <ion-col id="content-row">
-        <button id="content-row-btn" ion-button block small icon-right (click)="panel_llamada = true">
+        <button id="content-row-btn" ion-button block small icon-right (click)="util.panel_llamada = true">
           check
           <ion-icon name="checkmark-circle"></ion-icon>
         </button>
@@ -120,9 +120,9 @@
     </ion-row>
   </div>
   <ion-slides class="slider-content" pager *ngIf="data1.view == 2">
-    <ion-slide class="slider-content" *ngFor="let imagen of imagenes ; let i = index">
+    <ion-slide class="slider-content" *ngFor="let imagen of tutorial.imagenes ; let i = index">
       <img id="imagen-demo" [src]="imagen.url">
-      <button *ngIf="i == imagenes.length-1" id="imagen-button" clear ion-button small icon-right color="danger" (click)="closeModal()">
+      <button *ngIf="i == tutorial.imagenes.length-1" id="imagen-button" clear ion-button small icon-right color="danger" (click)="closeModal()">
         Close
         <ion-icon ios="ios-close-circle" md="md-close-circle"></ion-icon>
       </button>

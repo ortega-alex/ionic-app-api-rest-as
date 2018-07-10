@@ -43,7 +43,6 @@ export interface Stados {
 };
 
 //crear campania
-
 export interface Campos {
 	edit_uno: string;
 	uno: string;
@@ -95,12 +94,12 @@ export interface CampaniaSms {
 	togglel: boolean;
 };
 
-export interface HomeUtil{
-	 compartir: boolean;
-	 title: string ;
-	 spinner: boolean;
-	 background: string;
-	 dispositivo: boolean;
+export interface HomeUtil {
+	compartir: boolean;
+	title: string;
+	spinner: boolean;
+	background: string;
+	dispositivo: boolean;
 };
 
 //registro
@@ -117,6 +116,7 @@ export interface Telefono {
 	telefono: string;
 	text: string;
 }
+
 export interface Stado_sms {
 	sms: Array<Telefono>;
 	id: number;
@@ -136,8 +136,22 @@ export interface Tutorial {
 };
 
 //modal 
-export interface DataModal { 
-	view: number; 
-	num: number; 
-	imagenes: Array<Imagenes> 
+export interface DataModal {
+	view: number;
+	num: number;
+	imagenes: Array<Imagenes>
+};
+
+export interface Util {
+	submitted: boolean;
+	error: boolean;
+	noValido: boolean;
+	dispositivo: boolean;
+	mostrar: boolean;
+	msnS: boolean;
+	catalogoEstado: Array<any>;
+	nombre_archivo: string;
+	sms_tex: string;
+	style: { background: string, opacity: string };
+	panel_llamada: boolean;
 };

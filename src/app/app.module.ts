@@ -8,7 +8,6 @@ import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { PerfilPage } from '../pages/perfil/perfil';
 import { LoginPage } from '../pages/login/login';
-import { RegistroPage } from '../pages/registro/registro';
 
 import { GlobalProvider } from '../providers/global/global';
 import { HttpProvider } from '../providers/http/http';
@@ -36,8 +35,7 @@ import { IOSFilePicker } from '@ionic-native/file-picker';
     MyApp,
     HomePage,
     PerfilPage,
-    LoginPage,
-    RegistroPage,
+    LoginPage
   ],
   imports: [
     BrowserModule,
@@ -51,8 +49,7 @@ import { IOSFilePicker } from '@ionic-native/file-picker';
     MyApp,
     HomePage,
     PerfilPage,
-    LoginPage,
-    RegistroPage,
+    LoginPage
   ],
   providers: [
     StatusBar,

@@ -5,7 +5,7 @@ import { GlobalProvider } from '../../providers/global/global';
 import { HttpProvider } from '../../providers/http/http';
 
 import { MyApp } from '../../app/app.component';
-import { Usuario, Tutorial, Imagenes } from '../../model/interfaces';
+import { Tutorial, Imagenes } from '../../model/interfaces';
 
 @IonicPage()
 @Component({
@@ -16,18 +16,6 @@ export class PerfilPage {
 
   private res: any;
   public submitted: boolean = false;
-  private usuario: Usuario = {
-    id_usuario: null,
-    nombre: null,
-    apellido: null,
-    correo: null,
-    imgUrl: null,
-    clave: null,
-    logIn: null,
-    log_out: null,
-    tipo_registro: null,
-    tipo_usuario: null,
-  };
   private dispositivo: boolean;
   private tutoriales: Array<Tutorial> = [];
 
@@ -46,8 +34,8 @@ export class PerfilPage {
   }
 
   ionViewDidLoad() {
+    console.log(this.tutoriales);
     this.getTutorialPlateforma();
-    this.usuario = this.globalProvider.usuario;
     this.platform.registerBackButtonAction(() => {
       this.closeModal();
     });

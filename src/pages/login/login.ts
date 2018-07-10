@@ -3,14 +3,12 @@ import { IonicPage, NavController, NavParams, App, AlertController } from 'ionic
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 
 import { MyApp } from '../../app/app.component';
-import { RegistroPage } from '../../pages/registro/registro';
 
-import { Usuario, Plan } from '../../model/interfaces';
-import { isEmail, Minusculas, getMilisegundos, Fecha, Hora } from '../../pipes/filtros/filtros';
+import { Usuario, Plan, Util } from '../../model/interfaces';
+import { isEmail, Minusculas } from '../../pipes/filtros/filtros';
 import { GlobalProvider } from '../../providers/global/global';
 import { HttpProvider } from '../../providers/http/http';
 import { Storage } from '@ionic/storage';
-import { Facebook, FacebookLoginResponse } from '@ionic-native/facebook';
 
 @IonicPage()
 @Component({
@@ -44,7 +42,19 @@ export class LoginPage {
     plan_restriccion_msn: null
   };
   private logIn: FormGroup;
-  private submitted: boolean = false;
+  private util: Util = {
+    submitted: false,
+    error: null,
+    noValido: null,
+    dispositivo: null,
+    mostrar: null,
+    msnS: null,
+    catalogoEstado: [],
+    nombre_archivo: null,
+    sms_tex: null,
+    style: null,
+    panel_llamada: null
+  };
   private res: any;
   private load: any;
   private minusculas = new Minusculas();
@@ -57,7 +67,6 @@ export class LoginPage {
     public formBuilder: FormBuilder,
     private httpProvider: HttpProvider,
     private alertController: AlertController,
-    private facebook: Facebook,
     private storage: Storage
   ) {
     this.logIn = this.formBuilder.group({
@@ -73,7 +82,7 @@ export class LoginPage {
   }
 
   validar() {
-    this.submitted = true;
+    this.util.submitted = true;
     if (this.logIn.valid) {
       let email = new isEmail();
       if (!email.transform(this.logIn.value.correo)) {
@@ -160,17 +169,5 @@ export class LoginPage {
       this.load.dismiss();
       console.log('err: ' + JSON.stringify(err));
     });
-  }
-
-  registro() {
-    this.navCtrl.push(RegistroPage);
-  }
-
-  loginFB() {
-    this.facebook.login(['email', 'public_profile']).then((response: FacebookLoginResponse) => {
-      this.facebook.api('me?fields=id,name,last_name,email,first_name,picture.width(720).height(720).as(picture_large)', []).then(profile => {
-        this.login(profile['email'], null, 'F', profile['id'], profile['first_name'], profile['last_name']);
-      });
-    }).catch(err => console.log('err: ' + JSON.stringify(err)));
   }
 }

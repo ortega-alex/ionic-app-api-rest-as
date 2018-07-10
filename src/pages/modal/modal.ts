@@ -4,7 +4,7 @@ import { IonicPage, NavController, NavParams, Platform, ViewController, AlertCon
 import { GlobalProvider } from '../../providers/global/global';
 import { HttpProvider } from '../../providers/http/http';
 import { Fechas, Replace, getMilisegundos, Fecha, Hora, Diferencia } from '../../pipes/filtros/filtros';
-import { Imagenes } from '../../model/interfaces';
+import { Util, Tutorial, DataModal } from '../../model/interfaces';
 
 import { CallNumber } from '@ionic-native/call-number';
 import { SMS } from '@ionic-native/sms';
@@ -18,11 +18,9 @@ import { AdMobFree, AdMobFreeRewardVideoConfig } from '@ionic-native/admob-free'
 })
 export class ModalPage {
 
-  private data1: { view: number, num: number, imagenes: Array<Imagenes> };
+  private data1: DataModal // { view: number, num: number, imagenes: Array<Imagenes> };
   private res: any;
-  private style: { background: string, opacity: string };
   private diferencia = new Diferencia();
-  //private numerico = new Numerico();
   private replace = new Replace();
   private fechas = new Fechas();
   private fecha = new Fecha();
@@ -30,7 +28,6 @@ export class ModalPage {
   private llamadas = [];
   private getmilisegundos = new getMilisegundos();
   private get_fila_contenido: any;
-  private panel_llamada: boolean = false;
   private tamanio_contenido: number;
   private data = {
     notas: null,
@@ -39,14 +36,29 @@ export class ModalPage {
     sms: null
   };
   private estado_msn: boolean;
-  private catalogo_estado: any;
   private posicion: number = 0;
   private text: string = "You contacted ";
   private segundos: number = 10;
   private timer: any;
   private time: { hora: number, minuto: number, segundo: number };
   private tiempo_restante: any;
-  private imagenes: Array<Imagenes> = [];
+  private tutorial: Tutorial = {
+    nombre: null,
+    imagenes: []
+  }
+  private util: Util = {
+    submitted: null,
+    error: null,
+    noValido: null,
+    dispositivo: null,
+    mostrar: null,
+    msnS: null,
+    catalogoEstado: [], //catalogo_estado
+    nombre_archivo: null,
+    sms_tex: null,
+    style: { background: '', opacity: '' },
+    panel_llamada: false
+  };
 
   constructor(
     public navCtrl: NavController,
@@ -64,25 +76,23 @@ export class ModalPage {
   ) {
     this.data1 = this.navParams.get('data');
     if (this.data1.view == 2) {
-      this.style = { background: 'black', opacity: '' };
+      this.util.style = { background: 'black', opacity: '' };
       if (this.data1.num != null) {
-        this.imagenes = [
+        this.tutorial.imagenes = [
           { url: 'assets/imgs/demo1.jpg' },
           { url: 'assets/imgs/demo2.jpg' },
           { url: 'assets/imgs/demo3.jpg' },
           { url: 'assets/imgs/demo4.jpg' }
         ];
       } else {
-        this.imagenes = this.data1.imagenes;
+        this.tutorial.imagenes = this.data1.imagenes;
       }
     } else {
-      this.style = { background: '', opacity: '' };
+      this.util.style = { background: '', opacity: '' };
     }
     if (this.data1.view == 1) {
       this.llamadas = this.navParams.get('llamadas');
       this.tamanio_contenido = this.llamadas.length;
-      //var date = new Date();
-      //this.data.date = this.fechas.transform(date);
       this.get_fila_contenido = this.llamadas[this.posicion];
     }
   }
@@ -174,7 +184,6 @@ export class ModalPage {
   call() {
     if (this.validarTiempo() == true) {
       if (this.get_fila_contenido.telefono != null && this.get_fila_contenido.telefono.trim() != '') {
-        //this.callNumber.callNumber(this.numerico.transform(this.get_fila_contenido.telefono), true).then(res => {
         this.callNumber.callNumber(this.get_fila_contenido.telefono, true).then(res => {
           console.log('llamando');
         }).catch(err => console.log(err));
@@ -194,7 +203,8 @@ export class ModalPage {
   getCatalogoEstadoFilaCampania() {
     let url = 'servicio=getCatalogoEstadoFilaCampania';
     this.httpProvider.get(url).then(res => {
-      this.catalogo_estado = res;
+      this.res = res;
+      this.util.catalogoEstado = this.res;
     })
   }
 
@@ -237,6 +247,7 @@ export class ModalPage {
       '&id_usuario=' + this.globalProvider.usuario.id_usuario;
     this.httpProvider.get(url).then(res => {
       this.res = res;
+      alert('url: ' + url);
       if (this.res.error == 'false') {
         let date = new Date();
         this.globalProvider.setFecha(date);
@@ -252,11 +263,10 @@ export class ModalPage {
       } else {
         this.globalProvider.alerta(this.res.mns);
       }
-    })
+    }).catch(err => alert('err: ' + JSON.stringify(err)));
   }
 
   setSms() {
-    //this.sms.send(this.numerico.transform(this.get_fila_contenido.telefono), this.data.sms);
     this.sms.send(this.get_fila_contenido.telefono, this.data.sms);
   }
 
@@ -265,7 +275,6 @@ export class ModalPage {
     this.calendar.createEvent(
       this.get_fila_contenido.nombre_campania,
       'AdvanSales',
-      //'name: ' + this.get_fila_contenido.nombre_campania + ' , phone: ' + this.numerico.transform(this.get_fila_contenido.telefono) + ' , note: ' + this.data.notas,
       'name: ' + this.get_fila_contenido.nombre_campania + ' , phone: ' + this.get_fila_contenido.telefono + ' , note: ' + this.data.notas,
       startDate,
       startDate

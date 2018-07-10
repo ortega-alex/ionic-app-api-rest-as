@@ -76,7 +76,7 @@
           <ion-input id="row-info-input" autofocus type="text" text-center formControlName="nombre"></ion-input>
         </ion-col>
       </ion-row>
-      <p ion-text [hidden]="sms_from.controls.nombre.valid || submitted === false" color="danger" padding-left>
+      <p ion-text [hidden]="sms_from.controls.nombre.valid || util.submitted === false" color="danger" padding-left>
         Enter name...
       </p>
       <ion-row class="row-info">
@@ -85,7 +85,7 @@
           <ion-textarea id="row-info-texarea" formControlName="sms_text" placeholder="Write *name* where you want each of the customers name on the text"></ion-textarea>
         </ion-col>
       </ion-row>
-      <p ion-text [hidden]="sms_from.controls.sms_text.valid || submitted === false" color="danger" padding-left>
+      <p ion-text [hidden]="sms_from.controls.sms_text.valid || util.submitted === false" color="danger" padding-left>
         Enter SMS......
       </p>
       <ion-row class="row-info">

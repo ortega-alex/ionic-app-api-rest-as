@@ -55,6 +55,7 @@ export class MyApp {
         } else {
           this.rootPage = LoginPage;
         }
+        console.log('rootPage: ' + this.rootPage);
       });
       splashScreen.hide();
       this.initPushNotification();
@@ -123,7 +124,7 @@ export class MyApp {
               modal.present();
             }
           }
-        });
+        }).catch(err => console.log('err http: ' + JSON.stringify(err)));
       }).catch(err => console.log('err calLog: ' + JSON.stringify(err)));
     }).catch(err => console.log('err storage: ' + JSON.stringify(err)));
   }

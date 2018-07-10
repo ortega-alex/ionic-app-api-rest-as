@@ -14,15 +14,15 @@
   </div>
   <ion-item id="conten-from">
     <ion-label id="conten-label" stacked>Name:</ion-label>
-    <ion-input id="conten-input" readonly text-center type="text" [(ngModel)]="usuario.nombre" text-lg:992px></ion-input>
+    <ion-input id="conten-input" readonly text-center type="text" [(ngModel)]="globalProvider.usuario.nombre" text-lg:992px></ion-input>
   </ion-item>
   <ion-item id="conten-from">
     <ion-label id="conten-label" stacked>Last Name:</ion-label>
-    <ion-input id="conten-input" type="text" readonly text-center [(ngModel)]="usuario.apellido" text-lg:992px></ion-input>
+    <ion-input id="conten-input" type="text" readonly text-center [(ngModel)]="globalProvider.usuario.apellido" text-lg:992px></ion-input>
   </ion-item>
   <ion-item id="conten-from">
     <ion-label id="conten-label" stacked>Emal:</ion-label>
-    <ion-input id="conten-input" type="text" readonly text-center [(ngModel)]="usuario.correo" placeholder="Correo Electrónico"
+    <ion-input id="conten-input" type="text" readonly text-center [(ngModel)]="globalProvider.usuario.correo" placeholder="Correo Electrónico"
       text-lg:992px></ion-input>
   </ion-item>
   <ion-row class="conten-row">

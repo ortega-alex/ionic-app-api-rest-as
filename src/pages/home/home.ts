@@ -359,7 +359,6 @@ export class HomePage {
   call(telefono: string, campania: string = null, nombre: string = null, nuevo: boolean = false) {
     if (this.validarTiempo() == true) {
       if (telefono != null && telefono.trim() != '') {
-        //this.callNumber.callNumber(this.numerico.transform(telefono), true).then(res => {
         this.callNumber.callNumber(telefono, true).then(res => {
           if (nuevo == true) {
             this.setContacto(telefono, nombre, campania);
@@ -476,7 +475,7 @@ export class HomePage {
     };
     this.contacts.find(["*"], options).then((res) => {
       this.res = res;
-      let hash = [];
+      //let hash = [];
       this.res = this.res.filter(function (current) {
         var exists = current.nickname == nombre;
         return exists;
@@ -760,7 +759,7 @@ export class HomePage {
           }
         });
       }
-    });
+    });  
   }
 
   bloqueo() {
