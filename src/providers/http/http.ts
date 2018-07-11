@@ -17,7 +17,8 @@ export class HttpProvider {
   /**
    * si panel
    */
-  public url : string = "https://openfut.com/advansales/servicio.php?"
+  //public url : string = "https://openfut.com/advansales/servicio.php?"
+  public url : string = "http://intercorps.org/advansales/servicio.php?"
 
   post(data, url) {
     return new Promise((resolve, reject) => {
