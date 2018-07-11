@@ -4,10 +4,12 @@ import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 
 import { MyApp } from '../../app/app.component';
 
-import { Usuario, Plan, Util } from '../../model/interfaces';
+import {  Util } from '../../model/interfaces';
 import { isEmail, Minusculas } from '../../pipes/filtros/filtros';
 import { GlobalProvider } from '../../providers/global/global';
 import { HttpProvider } from '../../providers/http/http';
+import { Usuario, Plan } from '../../model/Usuario';
+
 import { Storage } from '@ionic/storage';
 
 @IonicPage()
@@ -17,30 +19,8 @@ import { Storage } from '@ionic/storage';
 })
 export class LoginPage {
 
-  private usuario: Usuario = {
-    id_usuario: null,
-    nombre: null,
-    apellido: null,
-    correo: null,
-    imgUrl: null,
-    clave: null,
-    logIn: null,
-    log_out: null,
-    tipo_registro: null,
-    tipo_usuario: null,
-  };
-  private plan: Plan = {
-    gratis: null,
-    mostrar_publicidad_video: null,
-    mostrar_publicidad_banner: null,
-    compartir_fb: null,
-    plan: null,
-    plan_fecha_expiracion: null,
-    plan_restriccion: null,
-    bloqueo: null,
-    bloqueo_msn: null,
-    plan_restriccion_msn: null
-  };
+  private usuario: Usuario;
+  private plan: Plan;
   private logIn: FormGroup;
   private util: Util = {
     submitted: false,
@@ -69,6 +49,8 @@ export class LoginPage {
     private alertController: AlertController,
     private storage: Storage
   ) {
+    this.usuario = new Usuario();
+    this.plan = new Plan();
     this.logIn = this.formBuilder.group({
       correo: ['', Validators.required],
       clave: ['', Validators.required]

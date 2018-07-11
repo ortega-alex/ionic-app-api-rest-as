@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import { LoadingController } from 'ionic-angular';
 import { Http } from '@angular/http';
-import { Usuario, Plan } from '../../model/interfaces';
+import { Usuario, Plan } from '../../model/Usuario';
 import 'rxjs/add/operator/map';
 import { getMilisegundos } from '../../pipes/filtros/filtros';
 

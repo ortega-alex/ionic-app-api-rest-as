@@ -6,8 +6,9 @@ import { HttpProvider } from '../../providers/http/http';
 import { PerfilPage } from '../perfil/perfil';
 
 import { Numerico, Replace, Fecha, Hora, getMilisegundos, Diferencia } from '../../pipes/filtros/filtros';
-import { Plan, Persona, CampaniaSms, DataModal, HomeUtil } from '../../model/interfaces';
+import {  Persona , CampaniaSms, DataModal, HomeUtil } from '../../model/interfaces';
 import { MyApp } from '../../app/app.component';
+import { Plan } from '../../model/Usuario';
 
 import { Storage } from '@ionic/storage';
 import { CallNumber } from '@ionic-native/call-number';
@@ -45,18 +46,7 @@ export class HomePage {
   private edid_name_manual: Array<Persona> = [];
   private sms_activo: boolean = false;
   private campania_sms: Array<CampaniaSms> = [];
-  private plan: Plan = {
-    gratis: null,
-    mostrar_publicidad_video: null,
-    mostrar_publicidad_banner: null,
-    compartir_fb: null,
-    plan: null,
-    plan_fecha_expiracion: null,
-    plan_restriccion: null,
-    bloqueo: null,
-    bloqueo_msn: null,
-    plan_restriccion_msn: null
-  };
+  private plan: Plan; 
   private manual: Array<any> = [];
   private home_util: HomeUtil = {
     compartir: null,
@@ -82,6 +72,7 @@ export class HomePage {
     private admobFree: AdMobFree,
     private facebook: Facebook
   ) {
+    this.plan = new Plan();
     this.home_util.dispositivo = this.platform.is('android');
   }
 
