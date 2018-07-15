@@ -9,7 +9,7 @@ export class HttpProvider {
   /** 
    * produccion
    */
-  //public url = 'http://35.232.20.49/servicio.php?';
+  public url = 'http://35.232.20.49/servicio.php?';
   /**
    * desarrollo
    */
@@ -18,7 +18,7 @@ export class HttpProvider {
    * si panel
    */
   //public url : string = "https://openfut.com/advansales/servicio.php?"
-  public url : string = "http://intercorps.org/advansales/servicio.php?"
+  //public url : string = "http://intercorps.org/advansales/servicio.php?"
 
   post(data, url) {
     return new Promise((resolve, reject) => {
