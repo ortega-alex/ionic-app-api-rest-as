@@ -75,6 +75,15 @@
     <p ion-text [hidden]="ordenarCampania.controls.telefono.valid || util.submitted === false" color="danger" padding-left>
       select lead name...
     </p>
+    <ion-item class="from-item">
+        <ion-label id="from-label" floating>Note:</ion-label>
+        <ion-select id="from-select" text-center formControlName="nota" interface="action-sheet" placeholder="Mandatory">
+          <ion-option *ngFor="let dato of datos;let i = index" value="{{i}}">{{dato.nombre}}</ion-option>
+        </ion-select>
+      </ion-item>
+      <p ion-text [hidden]="ordenarCampania.controls.nota.valid || util.submitted === false" color="danger" padding-left>
+        Select note...
+      </p>
     <ion-row class="row-from">
       <ion-col id="row-from">
         <ion-item no-lines class="from-item">
@@ -85,7 +94,7 @@
       </ion-col>
       <ion-col id="row-from">
         <ion-item no-lines class="from-item">
-          <ion-label id="from-label" floating>:</ion-label>
+          <ion-label id="from-label" floating></ion-label>
           <ion-select id="from-select" formControlName="c1" interface="action-sheet" placeholder="Optional" (ionChange)="getNombre(1)">
             <ion-option *ngFor="let dato of datos;let i = index" value="{{i}}">{{dato.nombre}}</ion-option>
           </ion-select>

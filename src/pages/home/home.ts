@@ -6,7 +6,7 @@ import { HttpProvider } from '../../providers/http/http';
 import { PerfilPage } from '../perfil/perfil';
 
 import { Numerico, Replace, Fecha, Hora, getMilisegundos, Diferencia } from '../../pipes/filtros/filtros';
-import {  Persona , CampaniaSms, DataModal, HomeUtil } from '../../model/interfaces';
+import { Persona, CampaniaSms, DataModal, HomeUtil } from '../../model/interfaces';
 import { MyApp } from '../../app/app.component';
 import { Plan } from '../../model/Usuario';
 
@@ -17,6 +17,7 @@ import { SMS } from '@ionic-native/sms';
 import { Calendar } from '@ionic-native/calendar';
 import { AdMobFree, AdMobFreeBannerConfig, AdMobFreeRewardVideoConfig } from '@ionic-native/admob-free';
 import { Facebook, FacebookLoginResponse } from '@ionic-native/facebook';
+import { InAppPurchase2, IAPProduct } from '@ionic-native/in-app-purchase-2';
 
 @Component({
   selector: 'page-home',
@@ -46,7 +47,7 @@ export class HomePage {
   private edid_name_manual: Array<Persona> = [];
   private sms_activo: boolean = false;
   private campania_sms: Array<CampaniaSms> = [];
-  private plan: Plan; 
+  private plan: Plan;
   private manual: Array<any> = [];
   private home_util: HomeUtil = {
     compartir: null,
@@ -70,7 +71,8 @@ export class HomePage {
     private calendar: Calendar,
     private alertController: AlertController,
     private admobFree: AdMobFree,
-    private facebook: Facebook
+    private facebook: Facebook,
+    private store: InAppPurchase2
   ) {
     this.plan = new Plan();
     this.home_util.dispositivo = this.platform.is('android');
@@ -93,6 +95,7 @@ export class HomePage {
     }
     this.isLogin();
     this.tiempoActual();
+    this.purchase(this.globalProvider.producto_id);
   }
 
   ionViewWillUnload() {
@@ -750,7 +753,7 @@ export class HomePage {
           }
         });
       }
-    });  
+    });
   }
 
   bloqueo() {
@@ -764,5 +767,58 @@ export class HomePage {
       return true;
     }
     return false
+  }
+
+  async purchase(producto_id: any) {
+    this.configurePurchasing(producto_id);
+    try {
+      let product = this.store.get('nsingledialer');
+      console.log('product: ' + JSON.stringify(product));
+    } catch (err) {
+      console.log('Error Ordering ' + JSON.stringify(err));
+    }
+  }
+
+  async configurePurchasing(id_producto: any) {
+    try {
+      this.store.verbosity = this.store.INFO;
+      this.store.register({
+        id: id_producto,
+        alias: id_producto,
+        type: this.store.PAID_SUBSCRIPTION
+      });
+
+      this.registerHandlers(id_producto)
+      this.store.ready((status) => {
+        console.log('Store is Ready: ' + JSON.stringify(status));
+      });
+
+      this.store.when(id_producto).error((error) => {
+        console.log('An Error Occured' + JSON.stringify(error));
+      });
+
+      this.store.refresh();
+    } catch (err) {
+      console.log('Error On Store Issues' + JSON.stringify(err));
+    }
+  }
+
+  registerHandlers(id_producto: any) {
+
+    this.store.when(id_producto).updated((product: IAPProduct) => {
+      console.log('Loaded' + JSON.stringify(product));
+    });
+
+    this.store.when(id_producto).cancelled((product) => {
+      console.log('Purchase was Cancelled');
+    });
+
+    this.store.once(id_producto).expired((product) => {
+      alert('expired: ' + JSON.stringify(product));
+    });
+
+    this.store.error((err) => {
+      console.log('Store Error ' + JSON.stringify(err));
+    });
   }
 }

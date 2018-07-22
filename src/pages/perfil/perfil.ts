@@ -78,4 +78,10 @@ export class PerfilPage {
     let modal = this.modalController.create('ModalPage', { data: data });
     modal.present();
   }
+
+  paquetes(){
+    let data: { view: number, num: number, imagenes: Array<Imagenes> } = { view: 5, num: null, imagenes: null};
+    let modal = this.modalController.create('ModalPage', { data: data });
+    modal.present();
+  }
 }

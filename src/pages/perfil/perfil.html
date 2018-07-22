@@ -25,8 +25,13 @@
     <ion-input id="conten-input" type="text" readonly text-center [(ngModel)]="globalProvider.usuario.correo" placeholder="Correo Electrónico"
       text-lg:992px></ion-input>
   </ion-item>
-  <ion-row class="conten-row">
-    <ion-col id="conten-row">
+  <ion-row  no-paddding class="conten-row">
+    <ion-col col-12 id="conten-row">
+      <button id="conten-row-btn" ion-button block icon-left color="dark" (click)="paquetes()">
+        Packages
+      </button>
+    </ion-col>
+    <ion-col col-12 id="conten-row">
       <button id="conten-row-btn" ion-button block icon-left color="dark" (click)="cerrarSesion()">
         <ion-icon name="close"></ion-icon>
         Sign Off

@@ -29,6 +29,7 @@ import { AdMobFree } from '@ionic-native/admob-free';
 import { Push } from '@ionic-native/push';
 import { Facebook } from '@ionic-native/facebook';
 import { IOSFilePicker } from '@ionic-native/file-picker';
+import { InAppPurchase2 } from '@ionic-native/in-app-purchase-2';
 
 @NgModule({
   declarations: [
@@ -73,7 +74,8 @@ import { IOSFilePicker } from '@ionic-native/file-picker';
     AdMobFree,
     Push,
     Facebook,
-    IOSFilePicker
+    IOSFilePicker,
+    InAppPurchase2
   ]
 })
 export class AppModule { }

@@ -16,6 +16,7 @@ export class GlobalProvider {
   private get_milisegundos = new getMilisegundos();
   public time: number;
   public token: any;
+  public producto_id : string;
 
   constructor(
     public http: HttpClient,
@@ -24,9 +25,24 @@ export class GlobalProvider {
     private htt: Http
   ) {
     this.getUsuario();
+    this.getProductoId();
     this.htt.get('assets/utilitario.json').map(res => res.json()).subscribe(data => {
       this.data = data;
     });
+  }
+
+  setProductoId(producto_id : string) : void {
+    this.strorage.set('producto_id' , producto_id);
+  }
+
+  deleteProductoId() : void{
+    this.strorage.remove('producto_id');
+  }
+
+  getProductoId(){
+   this.strorage.get('producto_id').then((producto_id) => {
+     this.producto_id = producto_id;
+   }); 
   }
 
   setToken(token: any): void {

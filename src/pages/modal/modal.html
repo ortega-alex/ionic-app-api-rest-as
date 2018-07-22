@@ -1,151 +1,222 @@
 <ion-content padding class="content-modal" [style.background-color]="util.style.background" [style.opacity]="util.style.opacity">
-  <br>
-  <ion-card class="conten-card" *ngIf="util.panel_llamada == true && data1.view == 1">
-    <ion-row class="row-cont" *ngIf="globalProvider.plan.mostrar_publicidad_video == true">
-      <ion-col id="row-cont">
-        <button id="row-cont-btn" ion-button small icon-right block color="dark" (click)="showVideo()">
-          {{(segundos == 10) ? 'Get more time ' : segundos }} {{(time && segundos == 10) ? time.hora+":"+time.minuto+":"+time.segundo
-          : (segundos == 10) ? '0' : '' }}
-        </button>
-      </ion-col>
-    </ion-row>
-    <ion-row class="row-cont">
-      <ion-col id="row-cont">
-        {{get_fila_contenido.fecha}}
-      </ion-col>
-      <ion-col id="row-cont-title">
-        {{get_fila_contenido.nombre}}
-      </ion-col>
-      <ion-col id="row-cont">
-        {{get_fila_contenido.tipo}}
-      </ion-col>
-    </ion-row>
-    <div class="panel">
-      <ion-row class="row-panel">
-        <ion-col id="row-panel">
-          <b id="title">{{get_fila_contenido.columna_campo_1_text}}:</b>
-          <div id="contenido">{{get_fila_contenido.campo_1}}</div>
-        </ion-col>
-        <ion-col id="row-panel">
-          <b id="title">{{get_fila_contenido.columna_campo_2_text}}:</b>
-          <div id="contenido">{{get_fila_contenido.campo_2}}</div>
-        </ion-col>
-      </ion-row>
-      <ion-row class="row-panel">
-        <ion-col id="row-panel">
-          <b id="title">{{get_fila_contenido.columna_campo_3_text}}:</b>
-          <div id="contenido">{{get_fila_contenido.campo_3}}</div>
-        </ion-col>
-        <ion-col id="row-panel">
-          <b id="title">{{get_fila_contenido.columna_campo_4_text}}:</b>
-          <div id="contenido">{{get_fila_contenido.campo_4}}</div>
-        </ion-col>
-      </ion-row>
+    <br/>
+    <ion-card class="conten-card" *ngIf="util.panel_llamada == true && data1.view == 1">
+        <ion-row class="row-cont" *ngIf="globalProvider.plan.mostrar_publicidad_video == true">
+            <ion-col id="row-cont">
+                <button id="row-cont-btn" ion-button small icon-right block color="dark" (click)="showVideo()">
+                    {{ (segundos == 10) ? 'Get more time ' : segundos }} {{ (time && segundos == 10) ? time.hora+":"+time.minuto+":"+time.segundo: (segundos == 10) ? '0' : '' }}
+                </button>
+            </ion-col>
+        </ion-row>
+        <ion-row class="row-cont">
+            <ion-col id="row-cont">
+                {{ get_fila_contenido.fecha }}
+            </ion-col>
+            <ion-col id="row-cont-title">
+                {{ get_fila_contenido.nombre }}
+            </ion-col>
+            <ion-col id="row-cont">
+                {{ get_fila_contenido.tipo }}
+            </ion-col>
+        </ion-row>
+        <div class="panel">
+            <ion-row class="row-panel">
+                <ion-col id="row-panel">
+                    <b id="title">
+                        {{ get_fila_contenido.columna_campo_1_text }}:
+                    </b>
+                    <div id="contenido">
+                        {{ get_fila_contenido.campo_1 }}
+                    </div>
+                </ion-col>
+                <ion-col id="row-panel">
+                    <b id="title">
+                        {{ get_fila_contenido.columna_campo_2_text }}:
+                    </b>
+                    <div id="contenido">
+                        {{ get_fila_contenido.campo_2 }}
+                    </div>
+                </ion-col>
+            </ion-row>
+            <ion-row class="row-panel">
+                <ion-col id="row-panel">
+                    <b id="title">
+                        {{ get_fila_contenido.columna_campo_3_text }}:
+                    </b>
+                    <div id="contenido">
+                        {{ get_fila_contenido.campo_3 }}
+                    </div>
+                </ion-col>
+                <ion-col id="row-panel">
+                    <b id="title">
+                        {{ get_fila_contenido.columna_campo_4_text }}:
+                    </b>
+                    <div id="contenido">
+                        {{ get_fila_contenido.campo_4 }}
+                    </div>
+                </ion-col>
+            </ion-row>
+        </div>
+        <ion-row class="row-cont">
+            <ion-col id="row-cont">
+                <ion-item class="from-item">
+                    <ion-label id="from-label" stacked>
+                        Notes:
+                    </ion-label>
+                    <ion-textarea id="textarea-notes" text-center [(ngModel)]="data.notas" text-lg:992px>
+                    </ion-textarea>
+                </ion-item>
+            </ion-col>
+        </ion-row>
+        <ion-row class="row-cont">
+            <ion-col col-3 id="row-cont">
+                <button id="row-cont-btn" ion-button clear full (click)="popoverInfo(0)">
+                    <ion-icon id="icon" name="help-circle">
+                    </ion-icon>
+                </button>
+            </ion-col>
+            <ion-col col-6 id="row-cont">
+                <ion-item no-Lines class="from-item">
+                    <ion-label id="from-label-sms">
+                        SMS:
+                    </ion-label>
+                    <ion-toggle id="from-toggle" color="danger" checked="{{ estado_msn }}" (ionChange)="chekedSms($event)">
+                    </ion-toggle>
+                </ion-item>
+            </ion-col>
+            <ion-col col-3 id="row-cont">
+                <button id="row-cont-btn" ion-button clear full (click)="setSMSPredeterminadoCampania(1 , get_fila_contenido.id_campania)">
+                    <ion-icon id="icon" name="checkbox-outline">
+                    </ion-icon>
+                </button>
+            </ion-col>
+        </ion-row>
+        <ion-row class="row-cont">
+            <ion-col id="row-cont">
+                <ion-item class="from-item">
+                    <ion-textarea id="textarea-notes" [(ngModel)]="data.sms" text-center text-lg:992px>
+                    </ion-textarea>
+                </ion-item>
+            </ion-col>
+        </ion-row>
+        <ion-row class="row-cont">
+            <ion-col col-4 id="row-cont-title">
+                <ion-item class="from-item">
+                    <p id="title">
+                        Reminder
+                    </p>
+                </ion-item>
+            </ion-col>
+            <ion-col id="row-cont">
+                <ion-item class="from-item">
+                    <ion-datetime id="from-date" text-center displayFormat="MMM DD, YYYY HH:mm" [(ngModel)]="data.date" text-lg:992px>
+                    </ion-datetime>
+                </ion-item>
+            </ion-col>
+        </ion-row>
+        <ion-row class="row-cont-b">
+            <ion-col id="row-cont-b" col-6 *ngFor="let stado of util.catalogoEstado | slice:1:5;">
+                <button id="row-cont-btn-status" ion-button small full [style.background-color]="'#'+stado.color" (click)="clickStado(stado.key)">
+                    {{ stado.nombre }}
+                </button>
+            </ion-col>
+        </ion-row>
+        <ion-row class="row-cont">
+            <ion-col id="row-cont-b">
+                <button id="row-cont-btn-t" ion-button block small color="secondary" (click)="call()">
+                    <ion-icon name="call">
+                    </ion-icon>
+                    &nbsp;{{ get_fila_contenido.telefono }}
+                </button>
+            </ion-col>
+        </ion-row>
+    </ion-card>
+    <div class="animacion" *ngIf="util.panel_llamada == false && data1.view == 1">
+        <img src="assets/imgs/m.gif"/>
+        <div class="contenedor">
+            <p class="text">
+                {{ text }}.
+                <span id="text">
+                    &#160;
+                </span>
+            </p>
+        </div>
+        <ion-row id="img" class="content-row">
+            <ion-col id="content-row">
+                <button id="content-row-btn" ion-button block small icon-right (click)="util.panel_llamada = true">
+                    check
+                    <ion-icon name="checkmark-circle">
+                    </ion-icon>
+                </button>
+            </ion-col>
+        </ion-row>
     </div>
-    <ion-row class="row-cont">
-      <ion-col id="row-cont">
-        <ion-item class="from-item">
-          <ion-label id="from-label" stacked>Notes:</ion-label>
-          <ion-textarea id="textarea-notes" text-center [(ngModel)]="data.notas" text-lg:992px></ion-textarea>
-        </ion-item>
-      </ion-col>
-    </ion-row>
-    <ion-row class="row-cont">
-      <ion-col col-3 id="row-cont">
-        <button id="row-cont-btn" ion-button clear full (click)="popoverInfo(0)">
-          <ion-icon id="icon" name="help-circle"></ion-icon>
-        </button>
-      </ion-col>
-      <ion-col col-6 id="row-cont">
-        <ion-item no-Lines class="from-item">
-          <ion-label id="from-label-sms">SMS:</ion-label>
-          <ion-toggle id="from-toggle" color="danger" checked="{{estado_msn}}" (ionChange)="chekedSms($event)"></ion-toggle>
-        </ion-item>
-      </ion-col>
-      <ion-col col-3 id="row-cont">
-        <button id="row-cont-btn" ion-button clear full (click)="setSMSPredeterminadoCampania(1 , get_fila_contenido.id_campania)">
-          <ion-icon id="icon" name="checkbox-outline"></ion-icon>
-        </button>
-      </ion-col>
-    </ion-row>
-    <ion-row class="row-cont">
-      <ion-col id="row-cont">
-        <ion-item class="from-item">
-          <ion-textarea id="textarea-notes" [(ngModel)]="data.sms" text-center text-lg:992px></ion-textarea>
-        </ion-item>
-      </ion-col>
-    </ion-row>
-    <ion-row class="row-cont">
-      <ion-col col-4 id="row-cont-title">
-        <ion-item class="from-item">
-          <p id="title">Reminder</p>
-        </ion-item>
-      </ion-col>
-      <ion-col id="row-cont">
-        <ion-item class="from-item">
-          <ion-datetime id="from-date" text-center displayFormat="MMM DD, YYYY HH:mm" [(ngModel)]="data.date" text-lg:992px></ion-datetime>
-        </ion-item>
-      </ion-col>
-    </ion-row>
-    <ion-row class="row-cont-b">
-      <ion-col id="row-cont-b" col-6 *ngFor="let stado of util.catalogoEstado | slice:1:5;">
-        <button id="row-cont-btn-status" ion-button small full [style.background-color]="'#'+stado.color" (click)="clickStado(stado.key)">
-          {{stado.nombre}}
-        </button>
-      </ion-col>
-    </ion-row>
-    <ion-row class="row-cont">
-      <ion-col id="row-cont-b">
-        <button id="row-cont-btn-t" ion-button block small color="secondary" (click)="call()">
-          <ion-icon name="call"></ion-icon>
-          &nbsp;{{get_fila_contenido.telefono}}
-        </button>
-      </ion-col>
-    </ion-row>
-  </ion-card>
-  <div class="animacion" *ngIf="util.panel_llamada == false && data1.view == 1">
-    <img src="assets/imgs/m.gif">
-    <div class="contenedor">
-      <p class="text">{{text}}.
-        <span id="text">&#160;</span>
-      </p>
+    <ion-slides class="slider-content" pager *ngIf="data1.view == 2">
+        <ion-slide class="slider-content" *ngFor="let imagen of tutorial.imagenes ; let i = index">
+            <img id="imagen-demo" [src]="imagen.url"/>
+            <button *ngIf="i == tutorial.imagenes.length-1" id="imagen-button" clear ion-button small icon-right color="danger" (click)="closeModal()">
+                Close
+                <ion-icon ios="ios-close-circle" md="md-close-circle">
+                </ion-icon>
+            </button>
+        </ion-slide>
+    </ion-slides>
+    <div class="llamada" *ngIf="data1.view == 3">
+        <div id="siguiente" (click)="closeModal(true)">
+            <p id="parrafo">
+                Tap
+            </p>
+            <p id="parrafo">
+                me
+            </p>
+        </div>
+        <ion-row class="content-row">
+            <ion-col id="content-row">
+                <button id="content-row-btn" small ion-button block color="danger" (click)="closeModal()">
+                    <ion-icon name="close">
+                    </ion-icon>
+                    &nbsp;Cancel
+                </button>
+            </ion-col>
+        </ion-row>
     </div>
-    <ion-row id="img" class="content-row">
-      <ion-col id="content-row">
-        <button id="content-row-btn" ion-button block small icon-right (click)="util.panel_llamada = true">
-          check
-          <ion-icon name="checkmark-circle"></ion-icon>
-        </button>
-      </ion-col>
-    </ion-row>
-  </div>
-  <ion-slides class="slider-content" pager *ngIf="data1.view == 2">
-    <ion-slide class="slider-content" *ngFor="let imagen of tutorial.imagenes ; let i = index">
-      <img id="imagen-demo" [src]="imagen.url">
-      <button *ngIf="i == tutorial.imagenes.length-1" id="imagen-button" clear ion-button small icon-right color="danger" (click)="closeModal()">
-        Close
-        <ion-icon ios="ios-close-circle" md="md-close-circle"></ion-icon>
-      </button>
-    </ion-slide>
-  </ion-slides>
-  <div class="llamada" *ngIf="data1.view == 3">
-    <div id="siguiente" (click)="closeModal(true)">
-      <p id="parrafo">Tap</p>
-      <p id="parrafo">me</p>
+    <div class="sms-content" *ngIf="data1.view == 4">
+        <div id="sms-content" (click)="closeModal(true)">
+            <p id="parrafo">
+                Tap
+            </p>
+            <p id="parrafo">
+                me
+            </p>
+        </div>
     </div>
-    <ion-row class="content-row">
-      <ion-col id="content-row">
-        <button id="content-row-btn" small ion-button block color="danger" (click)="closeModal()">
-          <ion-icon name="close"></ion-icon>
-          &nbsp;Cancel
+    <div class="paqueres" *ngIf="data1.view == 5">
+        <button clear ion-button small icon-right color="danger" (click)="closeModal()">
+            Close
+            <ion-icon ios="ios-close-circle" md="md-close-circle">
+            </ion-icon>
         </button>
-      </ion-col>
-    </ion-row>
-  </div>
-  <div class="sms-content" *ngIf="data1.view == 4">
-    <div id="sms-content" (click)="closeModal(true)">
-      <p id="parrafo">Tap</p>
-      <p id="parrafo">me</p>
+        <p id="info">
+            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Mollitia explicabo autem tempore iure inventore quod? Magni
+            ea vitae nulla repellendus, illo atque? Excepturi, quaerat ullam! Reprehenderit doloribus ab possimus enim!
+        </p>
+        <ion-row no-padding>
+            <ion-col col-4 *ngFor=" let product of products ; let i = index">
+                <div class="paquete">
+                    <div id="title">
+                        {{ product.titulo }}
+                    </div>
+                    <p id="descripcion">
+                        {{ product.descripcion }}
+                    </p>
+                    <!--button  id="btn-paquete"  [disabled]="readonly[i].product" ion-button block (click)="purchase(product)">
+                      {{product.precio}}
+                    </button-->
+                    <button  id="btn-paquete"  ion-button block (click)="purchase(product)">
+                        {{ product.precio }}
+                    </button>
+                </div>
+            </ion-col>
+        </ion-row>
     </div>
-  </div>
 </ion-content>

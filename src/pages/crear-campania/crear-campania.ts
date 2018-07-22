@@ -95,6 +95,7 @@ export class CrearCampaniaPage {
       nombreCampania: ['', Validators.required],
       telefono: ['', Validators.required],
       nombre: ['', Validators.required],
+      nota: ['', Validators.required],
       c1Nombre: [''],
       c1: [''],
       c2Nombre: [''],
@@ -218,6 +219,7 @@ export class CrearCampaniaPage {
       let url = 'servicio=setCampania';
       let posicion: number = parseInt(this.ordenarCampania.value.telefono);
       let posicion1: number = parseInt(this.ordenarCampania.value.nombre);
+      let posicion2: number = parseInt(this.ordenarCampania.value.nota);
       let c1: number = parseInt(this.ordenarCampania.value.c1);
       let c2: number = parseInt(this.ordenarCampania.value.c2);
       let c3: number = parseInt(this.ordenarCampania.value.c3);
@@ -229,6 +231,7 @@ export class CrearCampaniaPage {
         nombre_campania: this.ordenarCampania.value.nombreCampania,
         telefono: this.datos[posicion],
         nombre: this.datos[posicion1],
+        nota : this.datos[posicion2],
         contenido1: { nombre_input: this.ordenarCampania.value.c1Nombre, key1: this.datos[c1] },
         contenido2: { nombre_input: this.ordenarCampania.value.c2Nombre, key2: this.datos[c2] },
         contenido3: { nombre_input: this.ordenarCampania.value.c3Nombre, key3: this.datos[c3] },

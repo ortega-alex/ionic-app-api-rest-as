@@ -2,30 +2,30 @@
  * @author Alex ortega
  */
 
- export class Usuario{
-    id_usuario: number;
-	nombre: string;
-	apellido: string;
-	correo: string;
-	imgUrl: string;
-	clave: string;
-	logIn: boolean;
-	log_out: boolean;
-	tipo_registro: string;
-    tipo_usuario: string;
-    
+export class Usuario {
+    public id_usuario: number;
+    public nombre: string;
+    public apellido: string;
+    public correo: string;
+    public imgUrl: string;
+    public clave: string;
+    public logIn: boolean;
+    public log_out: boolean;
+    public tipo_registro: string;
+    public tipo_usuario: string;
+
     constructor(
         id_usuario = null,
-    nombre = null,
-    apellido = null,
-    correo = null,
-    imgUrl = null,
-    clave = null,
-    logIn = null,
-    log_out = null,
-    tipo_registro = null,
-    tipo_usuario = null
-    ){
+        nombre = null,
+        apellido = null,
+        correo = null,
+        imgUrl = null,
+        clave = null,
+        logIn = null,
+        log_out = null,
+        tipo_registro = null,
+        tipo_usuario = null
+    ) {
         this.id_usuario = id_usuario;
         this.nombre = nombre;
         this.apellido = apellido;
@@ -37,20 +37,26 @@
         this.tipo_registro = tipo_registro;
         this.tipo_usuario = tipo_usuario;
     }
- }
+}
 
- export class Plan {
-    gratis: boolean; /* hasta que comparta en fb no podra realizar ningun tipo de accion */
-	mostrar_publicidad_video: boolean; /* y mostrar publicidad de video */
-	mostrar_publicidad_banner: boolean; /* y mostrar publiciodad de banner */
-	compartir_fb: boolean; /* compartir fb bandera */
-	plan: string; /* cutro planes A :  , B : , C :  , D :  */
-	plan_fecha_expiracion: string; /* fecha anio-mes-dia  */
-	plan_restriccion: boolean;  /*boton agregar list si esta en Y no se le muesta el +list*/
-	bloqueo: boolean; /* bloqueo de app */
-	bloqueo_msn: string; /* motivo del bloqueo */
-    plan_restriccion_msn: string;
-    
+export class Plan {
+    public gratis: boolean; /* hasta que comparta en fb no podra realizar ningun tipo de accion */
+    public mostrar_publicidad_video: boolean; /* y mostrar publicidad de video */
+    public mostrar_publicidad_banner: boolean; /* y mostrar publiciodad de banner */
+    public compartir_fb: boolean; /* compartir fb bandera */
+    public plan: string; /* cutro planes A :  , B : , C :  , D :  */
+    public plan_fecha_expiracion: string; /* fecha anio-mes-dia  */
+    public plan_restriccion: boolean;  /*boton agregar list si esta en Y no se le muesta el +list*/
+    public bloqueo: boolean; /* bloqueo de app */
+    public bloqueo_msn: string; /* motivo del bloqueo */
+    public plan_restriccion_msn: string;
+
+    public activo: boolean;
+    public leads: boolean;
+    public sms_leads: boolean;
+    public suscripcion_error_msn: string;
+    public suscripcion: boolean;
+
     constructor(
         gratis = null,
         mostrar_publicidad_video = null,
@@ -62,7 +68,7 @@
         bloqueo = null,
         bloqueo_msn = null,
         plan_restriccion_msn = null
-    ){ 
+    ) {
         this.gratis = gratis;
         this.mostrar_publicidad_video = mostrar_publicidad_video;
         this.mostrar_publicidad_banner = mostrar_publicidad_banner;
@@ -74,4 +80,4 @@
         this.bloqueo_msn = bloqueo_msn;
         this.plan_restriccion_msn = plan_restriccion_msn;
     }
- }
+}
