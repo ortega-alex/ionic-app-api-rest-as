@@ -10,7 +10,7 @@ import { CallNumber } from '@ionic-native/call-number';
 import { SMS } from '@ionic-native/sms';
 import { Calendar } from '@ionic-native/calendar';
 import { AdMobFree, AdMobFreeRewardVideoConfig } from '@ionic-native/admob-free';
-import { InAppPurchase2, IAPProduct , IAPProductOptions } from '@ionic-native/in-app-purchase-2';
+import { InAppPurchase2, IAPProduct } from '@ionic-native/in-app-purchase-2';
 import { Producto } from '../../model/Producto';
 
 @IonicPage()

@@ -75,7 +75,6 @@ export class HomePage {
     private facebook: Facebook,
     private store: InAppPurchase2
   ) {
-    //this.vcard = new Vcard();
     this.plan = new Plan();
     this.home_util.dispositivo = this.platform.is('android');
   }

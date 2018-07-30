@@ -205,34 +205,34 @@
             </ion-row>
         </div>
         <h1 id="info">
-           The most powerful tool to grow your business
+            Get the most powerful tool to grow your business
         </h1>
-        <ion-row no-padding>
+        <ion-row no-padding text-center>
             <ion-col class="paquete" no-padding col-4 *ngFor=" let product of products ; let i = index">
-               
-                    <div id="title">
-                        {{ product.titulo }}
-                    </div>
-
-                    <button  no-padding id="btn-paquete" ion-button block color="#745af2" (click)="purchase(product)">
-                        {{ product.precio }}
-                    </button>
-
-
-
-                    <div id="descripcion" >
-                        <p id="detalle" *ngFor="let des of product.descripcion">
-
-                            <ion-icon name="checkmark"></ion-icon>
-                            &nbsp;{{des}}
-                        </p>
-                    </div>
-
-                    <!--button  id="btn-paquete"  [disabled]="readonly[i].product" ion-button block (click)="purchase(product)">
-                      {{product.precio}}
-                    </button-->
-
+                <div id="title">
+                    {{ product.titulo }}
+                </div>
+                <button no-padding id="btn-paquete" ion-button block (click)="purchase(product)">
+                    {{ product.precio }}
+                    <br> Monthly
+                </button>
+                <div id="descripcion">
+                    <p id="detalle" *ngFor="let des of product.descripcion">
+                        <ion-icon name="checkmark"></ion-icon>
+                        &nbsp;{{des}}
+                    </p>
+                </div>
             </ion-col>
         </ion-row>
+        <p *ngIf="dispositivo == false" id="informacion">Payment will be charged to your iTunes Account at confirmation of purchase Subscription automatically renews unless
+            auto-renew is turned off at least 24-hours before the end of the current period Account will be charged for renewal
+            within 24-hours prior to the end of the current period, and identify the cost of the renewal Subscriptions may
+            be managed by the user and auto-renewal may be turned off by going to the user's Account Settings after purchase
+            Any unused portion of a free trial period, if offered, will be forfeited when the user purchases a subscription
+            to that publication, where applicable
+            <a href=" https://advansales.com/terms.html"> https://advansales.com/terms.html</a>
+            <a href="https://advansales.com/privacy_policies.html">https://advansales.com/privacy_policies.html</a>
+            <a href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/">https://www.apple.com/legal/internet-services/itunes/dev/stdeula/</a>
+        </p>
     </div>
 </ion-content>

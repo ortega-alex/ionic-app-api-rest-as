@@ -10,15 +10,15 @@
         <p id="title">Account</p>
       </ion-col>
       <ion-col id="conten-row" col-2>
-        <!--ion-icon id="icon" name="person" (click)="activarVcad()"></ion-icon-->
+        <ion-icon id="icon" name="person" (click)="activarVcad()"></ion-icon>
       </ion-col>
     </ion-row>
   </div>
   <div *ngIf="vcard_activa == false">
     <ion-row no-paddding class="conten-row">
       <ion-col col-12 id="conten-row">
-        <button id="conten-row-btn" ion-button block icon-left color="dark" (click)="paquetes()">
-          Packages
+        <button id="conten-row-btn" ion-button block icon-left style="background: #745af2;" (click)="paquetes()">
+          Get Advansales Pro
         </button>
       </ion-col>
     </ion-row>
@@ -52,6 +52,16 @@
         {{tutorial.nombre}}
       </button>
     </ion-list>
+    <p *ngIf="dispositivo == false" id="informacion">Payment will be charged to your iTunes Account at confirmation of purchase Subscription automatically renews unless
+        auto-renew is turned off at least 24-hours before the end of the current period Account will be charged for renewal
+        within 24-hours prior to the end of the current period, and identify the cost of the renewal Subscriptions may
+        be managed by the user and auto-renewal may be turned off by going to the user's Account Settings after purchase
+        Any unused portion of a free trial period, if offered, will be forfeited when the user purchases a subscription
+        to that publication, where applicable
+        <a href=" https://advansales.com/terms.html"> https://advansales.com/terms.html</a>
+        <a href="https://advansales.com/privacy_policies.html">https://advansales.com/privacy_policies.html</a>
+        <a href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/">https://www.apple.com/legal/internet-services/itunes/dev/stdeula/</a>
+    </p>
 
   </div>
 
@@ -75,20 +85,20 @@
     <img [src]="getImg()">
     <span [style.font-size]="vcard.tamanio" [style.font-weight]="vcard.bold" [style.font-style]="vcard.italic" [style.text-decoration]="vcard.subrayar"
       [style.text-color]="vcard.text_color">Company: {{vcard.profesion}}</span>
-      <br>
+    <br>
     <span [style.font-size]="vcard.tamanio" [style.font-weight]="vcard.bold" [style.font-style]="vcard.italic" [style.text-decoration]="vcard.subrayar"
       [style.text-color]="vcard.text_color"> Name: {{vcard.nombre}} {{vcard.apellido}}</span>
     <ion-row no-paddin no-Lines>
       <ion-col>
-        <button ion-button style="background: linear-gradient(to bottom left, #515BD4 , #8134AF , #DD2A7B , #FEDA77 , #F58529 ); color: white;">
+        <button ion-button small style="background: linear-gradient(to bottom left, #515BD4 , #8134AF , #DD2A7B , #FEDA77 , #F58529 ); color: white;">
           <ion-icon name="logo-instagram"></ion-icon>
         </button>
 
-        <button ion-button color="tw">
+        <button ion-button small color="tw">
           <ion-icon name="logo-twitter"></ion-icon>
         </button>
 
-        <button ion-button color="fb">
+        <button ion-button small color="fb">
           <ion-icon name="logo-facebook"></ion-icon>
         </button>
       </ion-col>

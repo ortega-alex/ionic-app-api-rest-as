@@ -21,7 +21,7 @@
   </div>
   <ion-scroll scrollY="true" class="content-div" no-Lines no-border no-padding *ngIf="conexion == false" [style.background]="home_util.background">
     <div no-padding col-12 class="paquete" *ngIf="plan.suscrito == false" (click)="modalP()">
-      Special 70% Off
+      Get Advansales Pro
     </div>
     <ion-refresher (ionRefresh)="doRefresh($event)">
       <ion-refresher-content></ion-refresher-content>
@@ -135,16 +135,16 @@
         </p>
         <br>
       </ion-col>
-    <!--ios-->
-    <ion-col col-12 id="conten-row" *ngIf="home_util.dispositivo == false">
-      <br>
-      <p id="parrafo">
-        To use Sync technology login(pc/mac) into Advansales.com now
-       </p>
-      <br>
-    </ion-col>
+      <!--ios-->
+      <ion-col col-12 id="conten-row" *ngIf="home_util.dispositivo == false">
+        <br>
+        <p id="parrafo">
+          To use Sync technology login(pc/mac) into Advansales.com now
+        </p>
+        <br>
+      </ion-col>
 
-  </ion-row>
+    </ion-row>
     <ion-row class="conten-row" *ngIf="plan.mostrar_publicidad_video == true && home_util.spinner == false">
       <ion-col id="conten-row">
         <button id="conten-row-btn" ion-button icon-right block color="buttom" (click)="showVideo()">
