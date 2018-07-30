@@ -4,7 +4,8 @@
         <ion-row class="row-cont" *ngIf="globalProvider.plan.mostrar_publicidad_video == true">
             <ion-col id="row-cont">
                 <button id="row-cont-btn" ion-button small icon-right block color="dark" (click)="showVideo()">
-                    {{ (segundos == 10) ? 'Get more time ' : segundos }} {{ (time && segundos == 10) ? time.hora+":"+time.minuto+":"+time.segundo: (segundos == 10) ? '0' : '' }}
+                    {{ (segundos == 10) ? 'Get more time ' : segundos }} {{ (time && segundos == 10) ? time.hora+":"+time.minuto+":"+time.segundo:
+                    (segundos == 10) ? '0' : '' }}
                 </button>
             </ion-col>
         </ion-row>
@@ -132,7 +133,7 @@
         </ion-row>
     </ion-card>
     <div class="animacion" *ngIf="util.panel_llamada == false && data1.view == 1">
-        <img src="assets/imgs/m.gif"/>
+        <img src="assets/imgs/m.gif" />
         <div class="contenedor">
             <p class="text">
                 {{ text }}.
@@ -153,7 +154,7 @@
     </div>
     <ion-slides class="slider-content" pager *ngIf="data1.view == 2">
         <ion-slide class="slider-content" *ngFor="let imagen of tutorial.imagenes ; let i = index">
-            <img id="imagen-demo" [src]="imagen.url"/>
+            <img id="imagen-demo" [src]="imagen.url" />
             <button *ngIf="i == tutorial.imagenes.length-1" id="imagen-button" clear ion-button small icon-right color="danger" (click)="closeModal()">
                 Close
                 <ion-icon ios="ios-close-circle" md="md-close-circle">
@@ -191,31 +192,46 @@
         </div>
     </div>
     <div class="paqueres" *ngIf="data1.view == 5">
-        <button clear ion-button small icon-right color="danger" (click)="closeModal()">
-            Close
-            <ion-icon ios="ios-close-circle" md="md-close-circle">
-            </ion-icon>
-        </button>
-        <p id="info">
-            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Mollitia explicabo autem tempore iure inventore quod? Magni
-            ea vitae nulla repellendus, illo atque? Excepturi, quaerat ullam! Reprehenderit doloribus ab possimus enim!
-        </p>
+        <div class="content-header">
+            <ion-row no-padding class="conten-row">
+                <ion-col no-padding id="conten-row" col-2>
+                    <ion-icon *ngIf="dispositivo == true" id="icon" name="arrow-round-back" (click)="closeModal(true)"></ion-icon>
+                    <ion-icon *ngIf="dispositivo == false" id="icon" ios="md-arrow-round-back" md="md-arrow-round-back" (click)="closeModal(true)"></ion-icon>
+                </ion-col>
+                <ion-col no-padding id="conten-row">
+                    <p id="title"></p>
+                </ion-col>
+                <ion-col id="conten-row" col-2> </ion-col>
+            </ion-row>
+        </div>
+        <h1 id="info">
+           The most powerful tool to grow your business
+        </h1>
         <ion-row no-padding>
-            <ion-col col-4 *ngFor=" let product of products ; let i = index">
-                <div class="paquete">
+            <ion-col class="paquete" no-padding col-4 *ngFor=" let product of products ; let i = index">
+               
                     <div id="title">
                         {{ product.titulo }}
                     </div>
-                    <p id="descripcion">
-                        {{ product.descripcion }}
-                    </p>
+
+                    <button  no-padding id="btn-paquete" ion-button block color="#745af2" (click)="purchase(product)">
+                        {{ product.precio }}
+                    </button>
+
+
+
+                    <div id="descripcion" >
+                        <p id="detalle" *ngFor="let des of product.descripcion">
+
+                            <ion-icon name="checkmark"></ion-icon>
+                            &nbsp;{{des}}
+                        </p>
+                    </div>
+
                     <!--button  id="btn-paquete"  [disabled]="readonly[i].product" ion-button block (click)="purchase(product)">
                       {{product.precio}}
                     </button-->
-                    <button  id="btn-paquete"  ion-button block (click)="purchase(product)">
-                        {{ product.precio }}
-                    </button>
-                </div>
+
             </ion-col>
         </ion-row>
     </div>

@@ -1,0 +1,53 @@
+page-registro {
+	.contenido-registro{
+		background-color: white;
+		.content-header{
+			.content-row{
+				#content-row{
+					#row-icon{
+						color: #262626  ;
+						font-size: 3em;
+					}
+					#content-progres{
+						margin-top: 35% !important; 
+						height: 20% !important;
+						border: solid gray 1px;						
+					}
+				}
+			}
+		}
+		.content-from{
+			margin-top: 15%;
+			.content-row{
+				margin: 0% 5% !important;
+				width: 90% !important;
+				#content-row{
+					.content-item{							
+						#content-label{
+							margin: 0% !important;
+							padding: 0% !important;
+							font-size: 0.7em;
+						}
+						#content-input{
+							padding: 0% !important;			
+							margin: 0% !important;
+							font-size: 1.5em;
+						}
+					}
+					#content-errror{
+						color: red;
+						font-size: 0.8em;
+						text-align: center;
+					}
+				}
+				#content-row-btn{
+					margin: 0%;
+					font-size: 1.4em;
+					#content-row-icon{
+						font-size: 2em;
+					}
+				}
+			}
+		}
+	}
+}

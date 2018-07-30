@@ -6,17 +6,12 @@ export class HttpProvider {
 
   constructor(public http: HttpClient) { }
 
-  /** 
-   * produccion
-   */
+  // produccion
   public url = 'http://35.232.20.49/servicio.php?';
-  /**
-   * desarrollo
-   */
+  //local public url = 'http://localhost/power_dialer/servicio.php?';
+  // desarrollo
   //public url = 'http://35.232.20.49/desarrollo/servicio.php?';
-  /**
-   * si panel
-   */
+  // si panel
   //public url : string = "https://openfut.com/advansales/servicio.php?"
   //public url : string = "http://intercorps.org/advansales/servicio.php?"
 

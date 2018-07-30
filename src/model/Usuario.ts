@@ -55,7 +55,7 @@ export class Plan {
     public leads: boolean;
     public sms_leads: boolean;
     public suscripcion_error_msn: string;
-    public suscripcion: boolean;
+    public suscrito: boolean;
 
     constructor(
         gratis = null,
@@ -67,7 +67,8 @@ export class Plan {
         plan_restriccion = null,
         bloqueo = null,
         bloqueo_msn = null,
-        plan_restriccion_msn = null
+        plan_restriccion_msn = null ,
+        suscrito = null
     ) {
         this.gratis = gratis;
         this.mostrar_publicidad_video = mostrar_publicidad_video;
@@ -79,5 +80,6 @@ export class Plan {
         this.bloqueo = bloqueo;
         this.bloqueo_msn = bloqueo_msn;
         this.plan_restriccion_msn = plan_restriccion_msn;
+        this.suscrito = suscrito;
     }
 }

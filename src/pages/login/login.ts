@@ -3,14 +3,16 @@ import { IonicPage, NavController, NavParams, App, AlertController } from 'ionic
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 
 import { MyApp } from '../../app/app.component';
+import { RegistroPage } from '../registro/registro';
 
-import {  Util } from '../../model/interfaces';
+import { Util } from '../../model/interfaces';
 import { isEmail, Minusculas } from '../../pipes/filtros/filtros';
 import { GlobalProvider } from '../../providers/global/global';
 import { HttpProvider } from '../../providers/http/http';
 import { Usuario, Plan } from '../../model/Usuario';
 
 import { Storage } from '@ionic/storage';
+import { Facebook, FacebookLoginResponse } from '@ionic-native/facebook';
 
 @IonicPage()
 @Component({
@@ -39,6 +41,8 @@ export class LoginPage {
   private load: any;
   private minusculas = new Minusculas();
 
+  private vcard: any;
+
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -47,7 +51,8 @@ export class LoginPage {
     public formBuilder: FormBuilder,
     private httpProvider: HttpProvider,
     private alertController: AlertController,
-    private storage: Storage
+    private storage: Storage,
+    private facebook: Facebook
   ) {
     this.usuario = new Usuario();
     this.plan = new Plan();
@@ -118,6 +123,14 @@ export class LoginPage {
 
         this.globalProvider.setUsuario(this.usuario);
         this.globalProvider.setPlan(this.plan);
+
+        if (this.res.vcard) {
+          this.vcard = this.res.vcard;
+          console.log('vicar: ', JSON.stringify(this.vcard));
+        } else {
+          console.log('vicar: null');
+        }
+
         this.menu();
         this.storage.get('num').then(num => {
           if (num && num != null) {
@@ -136,7 +149,9 @@ export class LoginPage {
             '&apellido=' + apellido +
             '&tipo_registro= ' + tipo +
             '&tipo_registro_id=' + id +
-            '&token=' + this.globalProvider.token;
+            '&token=' + this.globalProvider.token +
+            '&telefono=' + null +
+            '&timezone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
           this.httpProvider.get(url).then(res => {
             this.res = res;
             if (this.res.error == 'false') {
@@ -151,5 +166,17 @@ export class LoginPage {
       this.load.dismiss();
       console.log('err: ' + JSON.stringify(err));
     });
+  }
+
+  registro() {
+    this.navCtrl.push(RegistroPage);
+  }
+
+  loginFB() {
+    this.facebook.login(['email', 'public_profile']).then((response: FacebookLoginResponse) => {
+      this.facebook.api('me?fields=id,name,last_name,email,first_name,picture.width(720).height(720).as(picture_large)', []).then(profile => {
+        this.login(profile['email'], null, 'F', profile['id'], profile['first_name'], profile['last_name']);
+      });
+    }).catch(err => console.log('err: ' + JSON.stringify(err)));
   }
 }

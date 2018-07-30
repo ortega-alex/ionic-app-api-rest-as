@@ -10,7 +10,7 @@ import { CallNumber } from '@ionic-native/call-number';
 import { SMS } from '@ionic-native/sms';
 import { Calendar } from '@ionic-native/calendar';
 import { AdMobFree, AdMobFreeRewardVideoConfig } from '@ionic-native/admob-free';
-import { InAppPurchase2, IAPProduct } from '@ionic-native/in-app-purchase-2';
+import { InAppPurchase2, IAPProduct , IAPProductOptions } from '@ionic-native/in-app-purchase-2';
 import { Producto } from '../../model/Producto';
 
 @IonicPage()
@@ -392,12 +392,12 @@ export class ModalPage {
 
   async configurePurchasing(arg: any) {
     try {
-      this.store.verbosity = this.store.INFO;
+      //this.store.verbosity = this.store.INFO;
 
       this.store.register({
         id: arg.id_producto,
         alias: arg.id_producto,
-        type: this.store.PAID_SUBSCRIPTION
+        type: this.store.PAID_SUBSCRIPTION,
       });
 
       this.registerHandlers(arg)
@@ -441,7 +441,7 @@ export class ModalPage {
     });
 
     this.store.error((err) => {
-      alert('Store Error ' + JSON.stringify(err));
+      console.log('Store Error ' + JSON.stringify(err));
     });
   }
 

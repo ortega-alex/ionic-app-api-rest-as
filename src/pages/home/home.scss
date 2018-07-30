@@ -1,11 +1,11 @@
 page-home {
-	.contenido-home{
+	.contenido-home{		
 		height: 100% !important;
         width: 100% !important;
 		font-size: 1.0em;		
 		.content-header{
 			padding-top: 1%;
-			height: 6% !important;
+			height: 8% !important;
 			text-align: center;
 			#title{
 				display: block;
@@ -18,12 +18,24 @@ page-home {
 				#btn-title{
 					color:white;
 				}
-			}			
+			}					
 		}		
 		.content-div{
 			height: 87% !important;
 			width: 100% !important;
-			margin: 5% 0%;
+			padding: 0%;
+			margin: 0%;
+			.scroll-content{
+				padding: 0% !important;
+				margin: 0% !important;
+			}
+			.paquete{
+				background-color: #745af2;
+				color: white;
+				padding:2%;
+				text-align: center;
+				margin: 0%;
+			}	
 			#conten-info{
 				text-align: center;
 				width: 100%;
@@ -34,20 +46,20 @@ page-home {
 			.conten-card{
 				.row-cont-b{								
 					#row-cont-b{
-					border-radius: 10%;
-					width: 98% !important;
-					margin: 0% 1% 1%;
-					padding: 3% 0%;
-					color:white;
-					text-align: center;
-					font-weight: bold;
-					font-size:0.6em;
+						border-radius: 10%;
+						width: 98% !important;
+						margin: 0% 1% 1%;
+						padding: 3% 0%;
+						color:white;
+						text-align: center;
+						font-weight: bold;
+						font-size:0.6em;
 						b{
 							font-size:2.0em;
 						}
 					}
 				}
-				.row-cont{ 
+				.row-cont{ 					
 					#row-cont{
 						font-size:0.8em;
 						text-align: center;

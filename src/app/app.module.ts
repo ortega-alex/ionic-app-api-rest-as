@@ -8,6 +8,7 @@ import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { PerfilPage } from '../pages/perfil/perfil';
 import { LoginPage } from '../pages/login/login';
+import { RegistroPage } from '../pages/registro/registro'
 
 import { GlobalProvider } from '../providers/global/global';
 import { HttpProvider } from '../providers/http/http';
@@ -36,7 +37,8 @@ import { InAppPurchase2 } from '@ionic-native/in-app-purchase-2';
     MyApp,
     HomePage,
     PerfilPage,
-    LoginPage
+    LoginPage,
+    RegistroPage
   ],
   imports: [
     BrowserModule,
@@ -50,7 +52,8 @@ import { InAppPurchase2 } from '@ionic-native/in-app-purchase-2';
     MyApp,
     HomePage,
     PerfilPage,
-    LoginPage
+    LoginPage,
+    RegistroPage
   ],
   providers: [
     StatusBar,

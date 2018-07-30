@@ -6,6 +6,7 @@ import { HttpProvider } from '../../providers/http/http';
 
 import { MyApp } from '../../app/app.component';
 import { Tutorial, Imagenes } from '../../model/interfaces';
+//import { Vcard } from '../../model/Vcard';
 
 @IonicPage()
 @Component({
@@ -18,6 +19,9 @@ export class PerfilPage {
   public submitted: boolean = false;
   private dispositivo: boolean;
   private tutoriales: Array<Tutorial> = [];
+  //private vcard : Vcard;
+  private vcard: any;
+  private vcard_activa: boolean = false;
 
   constructor(
     public navCtrl: NavController,
@@ -31,6 +35,7 @@ export class PerfilPage {
   ) {
     this.dispositivo = this.platform.is('android');
     this.globalProvider.getUsuario();
+    this.vcard = this.navParams.get('vcard');
   }
 
   ionViewDidLoad() {
@@ -79,9 +84,21 @@ export class PerfilPage {
     modal.present();
   }
 
-  paquetes(){
-    let data: { view: number, num: number, imagenes: Array<Imagenes> } = { view: 5, num: null, imagenes: null};
+  paquetes() {
+    let data: { view: number, num: number, imagenes: Array<Imagenes> } = { view: 5, num: null, imagenes: null };
     let modal = this.modalController.create('ModalPage', { data: data });
     modal.present();
+  }
+
+  getImg() {
+    return "http://localhost/power_dialer/imgAdvansales.php?src=" + this.vcard.ruta_img;
+  }
+
+  getLogo() {
+    return "http://localhost/power_dialer/imgAdvansales.php?src=" + this.vcard.ruta_logo;
+  }
+
+  activarVcad() {
+    this.vcard_activa = !this.vcard_activa;
   }
 }

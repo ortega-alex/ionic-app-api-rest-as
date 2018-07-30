@@ -9,40 +9,90 @@
       <ion-col id="conten-row">
         <p id="title">Account</p>
       </ion-col>
-      <ion-col id="conten-row" col-2> </ion-col>
+      <ion-col id="conten-row" col-2>
+        <!--ion-icon id="icon" name="person" (click)="activarVcad()"></ion-icon-->
+      </ion-col>
     </ion-row>
   </div>
-  <ion-item id="conten-from">
-    <ion-label id="conten-label" stacked>Name:</ion-label>
-    <ion-input id="conten-input" readonly text-center type="text" [(ngModel)]="globalProvider.usuario.nombre" text-lg:992px></ion-input>
-  </ion-item>
-  <ion-item id="conten-from">
-    <ion-label id="conten-label" stacked>Last Name:</ion-label>
-    <ion-input id="conten-input" type="text" readonly text-center [(ngModel)]="globalProvider.usuario.apellido" text-lg:992px></ion-input>
-  </ion-item>
-  <ion-item id="conten-from">
-    <ion-label id="conten-label" stacked>Emal:</ion-label>
-    <ion-input id="conten-input" type="text" readonly text-center [(ngModel)]="globalProvider.usuario.correo" placeholder="Correo Electrónico"
-      text-lg:992px></ion-input>
-  </ion-item>
-  <ion-row  no-paddding class="conten-row">
-    <ion-col col-12 id="conten-row">
-      <button id="conten-row-btn" ion-button block icon-left color="dark" (click)="paquetes()">
-        Packages
+  <div *ngIf="vcard_activa == false">
+    <ion-row no-paddding class="conten-row">
+      <ion-col col-12 id="conten-row">
+        <button id="conten-row-btn" ion-button block icon-left color="dark" (click)="paquetes()">
+          Packages
+        </button>
+      </ion-col>
+    </ion-row>
+
+    <ion-item id="conten-from">
+      <ion-label id="conten-label" stacked>Name:</ion-label>
+      <ion-input id="conten-input" readonly text-center type="text" [(ngModel)]="globalProvider.usuario.nombre" text-lg:992px></ion-input>
+    </ion-item>
+    <ion-item id="conten-from">
+      <ion-label id="conten-label" stacked>Last Name:</ion-label>
+      <ion-input id="conten-input" type="text" readonly text-center [(ngModel)]="globalProvider.usuario.apellido" text-lg:992px></ion-input>
+    </ion-item>
+    <ion-item id="conten-from">
+      <ion-label id="conten-label" stacked>Emal:</ion-label>
+      <ion-input id="conten-input" type="text" readonly text-center [(ngModel)]="globalProvider.usuario.correo" placeholder="Correo Electrónico"
+        text-lg:992px></ion-input>
+    </ion-item>
+
+    <ion-row no-paddding class="conten-row">
+      <ion-col col-12 id="conten-row">
+        <button id="conten-row-btn" ion-button block icon-left color="dark" (click)="cerrarSesion()">
+          <ion-icon name="close"></ion-icon>
+          Sign Off
+        </button>
+      </ion-col>
+    </ion-row>
+    <ion-list class="list-contend" no-padding no-lines>
+      <h3>Tutorials</h3>
+      <button *ngFor="let tutorial of tutoriales" id="list-contend-btn" ion-button block icon-left color="dark" (click)="demo(tutorial.imagenes)">
+        <ion-icon name="add"></ion-icon>
+        {{tutorial.nombre}}
       </button>
-    </ion-col>
-    <ion-col col-12 id="conten-row">
-      <button id="conten-row-btn" ion-button block icon-left color="dark" (click)="cerrarSesion()">
-        <ion-icon name="close"></ion-icon>
-        Sign Off
-      </button>
-    </ion-col>
-  </ion-row>
-  <ion-list class="list-contend" no-padding no-lines>
-    <h3>Tutorials</h3>
-    <button *ngFor="let tutorial of tutoriales" id="list-contend-btn" ion-button block icon-left color="dark" (click)="demo(tutorial.imagenes)">
-      <ion-icon name="add"></ion-icon>
-      {{tutorial.nombre}}
-    </button>
-  </ion-list>
+    </ion-list>
+
+  </div>
+
+
+  <div *ngIf="vcard_activa == true" text-center [style.background]="vcard.fondo">
+    <img [src]="getLogo()">
+    <ion-row no-paddin no-Lines>
+      <ion-col col-6>
+        <button ion-button small block [style.background]="vcard.btn_color" [style.font-size]="vcard.tamanio" [style.font-weight]="vcard.bold"
+          [style.font-style]="vcard.italic" [style.text-decoration]="vcard.subrayar" [style.text-color]="vcard.text_color">
+          {{vcard.telefono}}
+        </button>
+      </ion-col>
+      <ion-col col-6>
+        <button ion-button small block [style.background]="vcard.btn_color" [style.font-size]="vcard.tamanio" [style.font-weight]="vcard.bold"
+          [style.font-style]="vcard.italic" [style.text-decoration]="vcard.subrayar" [style.text-color]="vcard.text_color">
+          {{vcard.usuario_presentacion}}
+        </button>
+      </ion-col>
+    </ion-row>
+    <img [src]="getImg()">
+    <span [style.font-size]="vcard.tamanio" [style.font-weight]="vcard.bold" [style.font-style]="vcard.italic" [style.text-decoration]="vcard.subrayar"
+      [style.text-color]="vcard.text_color">Company: {{vcard.profesion}}</span>
+      <br>
+    <span [style.font-size]="vcard.tamanio" [style.font-weight]="vcard.bold" [style.font-style]="vcard.italic" [style.text-decoration]="vcard.subrayar"
+      [style.text-color]="vcard.text_color"> Name: {{vcard.nombre}} {{vcard.apellido}}</span>
+    <ion-row no-paddin no-Lines>
+      <ion-col>
+        <button ion-button style="background: linear-gradient(to bottom left, #515BD4 , #8134AF , #DD2A7B , #FEDA77 , #F58529 ); color: white;">
+          <ion-icon name="logo-instagram"></ion-icon>
+        </button>
+
+        <button ion-button color="tw">
+          <ion-icon name="logo-twitter"></ion-icon>
+        </button>
+
+        <button ion-button color="fb">
+          <ion-icon name="logo-facebook"></ion-icon>
+        </button>
+      </ion-col>
+    </ion-row>
+  </div>
+
 </ion-content>

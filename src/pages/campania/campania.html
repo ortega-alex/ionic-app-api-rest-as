@@ -43,12 +43,12 @@
           <br>{{estado.texto}}
         </ion-col>
       </ion-row>
-      <ion-row class="row-cont">
+      <ion-row class="row-cont" *ngIf="util.dispositivo == true">
         <ion-col id="row-cont">
           {{(campania.llamados == 0 ) ? 'Start list' : 'Continue where you stop...'}}
         </ion-col>
       </ion-row>
-      <ion-row class="row-cont" *ngIf="no == true">
+      <ion-row class="row-cont" *ngIf="no == true && util.dispositivo == true">
         <ion-col id="row-cont-p">
           <button id="row-cont-btn-p" ion-button icon-left block color="dark" (click)="llamarLista(boton.key_estado,false,0)">
             <ion-icon name="play"></ion-icon>

@@ -6,7 +6,7 @@ import { HttpProvider } from '../../providers/http/http';
 import { PerfilPage } from '../perfil/perfil';
 
 import { Numerico, Replace, Fecha, Hora, getMilisegundos, Diferencia } from '../../pipes/filtros/filtros';
-import { Persona, CampaniaSms, DataModal, HomeUtil } from '../../model/interfaces';
+import { Persona, CampaniaSms, DataModal, HomeUtil, Imagenes } from '../../model/interfaces';
 import { MyApp } from '../../app/app.component';
 import { Plan } from '../../model/Usuario';
 
@@ -56,6 +56,7 @@ export class HomePage {
     background: null,
     dispositivo: null,
   };
+  private vcard: any;
 
   constructor(
     public navCtrl: NavController,
@@ -74,6 +75,7 @@ export class HomePage {
     private facebook: Facebook,
     private store: InAppPurchase2
   ) {
+    //this.vcard = new Vcard();
     this.plan = new Plan();
     this.home_util.dispositivo = this.platform.is('android');
   }
@@ -202,7 +204,7 @@ export class HomePage {
   }
 
   perfil() {
-    this.navCtrl.push(PerfilPage);
+    this.navCtrl.push(PerfilPage , { vcard : this.vcard });
   }
 
   getCampaniaUsuario() {
@@ -238,9 +240,15 @@ export class HomePage {
         this.plan.bloqueo = (this.res.bloqueo == 'Y') ? true : false;
         this.plan.bloqueo_msn = this.res.bloqueo_msn;
         this.plan.plan_restriccion_msn = this.res.plan_restriccion_msn;
+        this.plan.suscrito = (this.res.suscrito == 'Y') ? true : false;
         this.globalProvider.plan = this.plan;
         this.globalProvider.setPlan(this.globalProvider.plan);
         this.inici = false;
+        if (this.res.vcard) {
+          //this.vcard = new Vcard();
+          this.vcard = this.res.vcard;
+        }
+
         if (this.res.log_out == 'Y') {
           this.globalProvider.deleteUsuario();
           this.globalProvider.getUsuario();
@@ -516,6 +524,7 @@ export class HomePage {
             this.plan.bloqueo = (this.res.bloqueo == 'Y') ? true : false;
             this.plan.bloqueo_msn = this.res.bloqueo_msn;
             this.plan.plan_restriccion_msn = this.res.plan_restriccion_msn;
+            this.plan.suscrito = (this.res.suscrito == 'Y') ? true : false;
             this.globalProvider.plan = this.plan;
             this.globalProvider.setPlan(this.globalProvider.plan);
           }
@@ -820,5 +829,11 @@ export class HomePage {
     this.store.error((err) => {
       console.log('Store Error ' + JSON.stringify(err));
     });
+  }
+
+  modalP() {
+    let data: { view: number, num: number, imagenes: Array<Imagenes> } = { view: 5, num: null, imagenes: null };
+    let modal = this.modalControlle.create('ModalPage', { data: data });
+    modal.present();
   }
 }

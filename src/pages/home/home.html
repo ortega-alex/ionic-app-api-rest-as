@@ -1,25 +1,28 @@
 <ion-content class="contenido-home" no-Lines [style.background]="home_util.background">
   <div class="content-header" *ngIf="conexion == false">
-    <ion-row class="conten-row">
-      <ion-col id="conten-row" col-3>
+    <ion-row no-padding class="conten-row">
+      <ion-col no-padding id="conten-row" col-3>
         <button id="conten-row-btn" ion-button clear full (click)="crearCampania()" *ngIf="sms_activo == false">
           <b>+LIST</b>
         </button>
       </ion-col>
-      <ion-col id="conten-row">
+      <ion-col no-padding id="conten-row">
         <img id="title" src="assets/imgs/title.png" (click)="perfil()" *ngIf="sms_activo == false">
         <button id="conten-row-btn" ion-button full (click)="smsModal(true)" color="dark" *ngIf="sms_activo == true">
           <b id="btn-title">SMS MANAGER</b>
         </button>
       </ion-col>
-      <ion-col id="conten-row" col-3>
+      <ion-col no-padding id="conten-row" col-3>
         <button id="conten-row-btn" ion-button clear full (click)="selectSms()">
           <b>{{(sms_activo == false) ? '+' : '-'}}SMS</b>
         </button>
       </ion-col>
     </ion-row>
   </div>
-  <ion-scroll scrollY="true" class="content-div" no-Lines no-border *ngIf="conexion == false" [style.background]="home_util.background">
+  <ion-scroll scrollY="true" class="content-div" no-Lines no-border no-padding *ngIf="conexion == false" [style.background]="home_util.background">
+    <div no-padding col-12 class="paquete" *ngIf="plan.suscrito == false" (click)="modalP()">
+      Special 70% Off
+    </div>
     <ion-refresher (ionRefresh)="doRefresh($event)">
       <ion-refresher-content></ion-refresher-content>
     </ion-refresher>
@@ -115,11 +118,13 @@
           <ion-icon name="help-circle"></ion-icon>
         </button>
       </ion-col>
-      <ion-col col-12 id="conten-row">
+      <!--android-->
+      <ion-col col-12 id="conten-row" *ngIf="home_util.dispositivo == true">
         <br>
         <p id="parrafo">
-          1. Please login(pc/mac) into Advansales website with the same user and password
-          <!--a href="https://advansales.com">advansales.com</a--><!--solo para android-->
+          1. To use Sync technology login(pc/mac) into Advansales.com with the same user and password
+          <!--a href="https://advansales.com">advansales.com</a-->
+          <!--solo para android-->
         </p>
         <br>
         <p id="parrafo">
@@ -130,7 +135,16 @@
         </p>
         <br>
       </ion-col>
-    </ion-row>
+    <!--ios-->
+    <ion-col col-12 id="conten-row" *ngIf="home_util.dispositivo == false">
+      <br>
+      <p id="parrafo">
+        To use Sync technology login(pc/mac) into Advansales.com now
+       </p>
+      <br>
+    </ion-col>
+
+  </ion-row>
     <ion-row class="conten-row" *ngIf="plan.mostrar_publicidad_video == true && home_util.spinner == false">
       <ion-col id="conten-row">
         <button id="conten-row-btn" ion-button icon-right block color="buttom" (click)="showVideo()">
