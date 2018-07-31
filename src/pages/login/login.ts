@@ -41,8 +41,6 @@ export class LoginPage {
   private load: any;
   private minusculas = new Minusculas();
 
-  private vcard: any;
-
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -123,13 +121,6 @@ export class LoginPage {
 
         this.globalProvider.setUsuario(this.usuario);
         this.globalProvider.setPlan(this.plan);
-
-        if (this.res.vcard) {
-          this.vcard = this.res.vcard;
-          console.log('vicar: ', JSON.stringify(this.vcard));
-        } else {
-          console.log('vicar: null');
-        }
 
         this.menu();
         this.storage.get('num').then(num => {

@@ -31,6 +31,7 @@ import { Push } from '@ionic-native/push';
 import { Facebook } from '@ionic-native/facebook';
 import { IOSFilePicker } from '@ionic-native/file-picker';
 import { InAppPurchase2 } from '@ionic-native/in-app-purchase-2';
+import { SocialSharing } from '@ionic-native/social-sharing';
 
 @NgModule({
   declarations: [
@@ -78,7 +79,8 @@ import { InAppPurchase2 } from '@ionic-native/in-app-purchase-2';
     Push,
     Facebook,
     IOSFilePicker,
-    InAppPurchase2
+    InAppPurchase2,
+    SocialSharing
   ]
 })
 export class AppModule { }

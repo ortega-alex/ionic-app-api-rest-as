@@ -1,12 +1,13 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, App, ViewController, Platform, ModalController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, App, ViewController, Platform, ModalController, AlertController } from 'ionic-angular';
 
 import { GlobalProvider } from '../../providers/global/global';
 import { HttpProvider } from '../../providers/http/http';
 
 import { MyApp } from '../../app/app.component';
 import { Tutorial, Imagenes } from '../../model/interfaces';
-//import { Vcard } from '../../model/Vcard';
+
+import { SocialSharing } from '@ionic-native/social-sharing';
 
 @IonicPage()
 @Component({
@@ -19,7 +20,6 @@ export class PerfilPage {
   public submitted: boolean = false;
   private dispositivo: boolean;
   private tutoriales: Array<Tutorial> = [];
-  //private vcard : Vcard;
   private vcard: any;
   private vcard_activa: boolean = false;
 
@@ -31,7 +31,9 @@ export class PerfilPage {
     public httpProvider: HttpProvider,
     private viewController: ViewController,
     private platform: Platform,
-    private modalController: ModalController
+    private modalController: ModalController,
+    private alertController : AlertController,
+    private socialSharing : SocialSharing
   ) {
     this.dispositivo = this.platform.is('android');
     this.globalProvider.getUsuario();
@@ -53,7 +55,11 @@ export class PerfilPage {
   }
 
   closeModal() {
-    this.viewController.dismiss();
+    if (this.vcard_activa == true) {
+      this.activarVcad()
+    } else {
+      this.viewController.dismiss();
+    }
   }
 
   menu() {
@@ -90,15 +96,27 @@ export class PerfilPage {
     modal.present();
   }
 
-  getImg() {
-    return "http://localhost/power_dialer/imgAdvansales.php?src=" + this.vcard.ruta_img;
-  }
-
-  getLogo() {
-    return "http://localhost/power_dialer/imgAdvansales.php?src=" + this.vcard.ruta_logo;
+  getImg(url : string) {
+    return this.httpProvider.img + url;
   }
 
   activarVcad() {
     this.vcard_activa = !this.vcard_activa;
+  }
+
+  compartir(url: string) {
+    if(url){
+      console.log('compartir: ' + url);
+      this.socialSharing.share(url).then(()=> {
+      console.log('success: ')
+      }).catch(err => alert('err: ' + JSON.stringify(err)));
+    } else {
+      let alert = this.alertController.create({
+        title : '',
+        subTitle: 'vacia' ,
+        buttons : ['ok']
+      });
+      alert.present();
+    }
   }
 }

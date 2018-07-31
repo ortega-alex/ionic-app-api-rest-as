@@ -264,7 +264,6 @@ export class ModalPage {
       '&id_usuario=' + this.globalProvider.usuario.id_usuario;
     this.httpProvider.get(url).then(res => {
       this.res = res;
-      alert('url: ' + url);
       if (this.res.error == 'false') {
         let date = new Date();
         this.globalProvider.setFecha(date);
@@ -280,7 +279,10 @@ export class ModalPage {
       } else {
         this.globalProvider.alerta(this.res.mns);
       }
-    }).catch(err => alert('err: ' + JSON.stringify(err)));
+    }).catch(err => { 
+      console.log('err: ' + JSON.stringify(err))
+      this.closeModal(true);
+    });
   }
 
   setSms() {
@@ -297,7 +299,7 @@ export class ModalPage {
       startDate
     ).then(res => {
       this.data.date = null;
-    }).catch(err => alert(err));
+    }).catch(err => console.log(err));
   }
 
   tiempoActual() {

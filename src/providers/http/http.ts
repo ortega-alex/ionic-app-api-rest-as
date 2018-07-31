@@ -9,12 +9,14 @@ export class HttpProvider {
   // produccion
   public url = 'http://35.232.20.49/servicio.php?';
   //local 
-  //public url = 'http://localhost/power_dialer/servicio.php?';
+  //public url = 'http://192.168.1.57/power_dialer/servicio.php?';
   // desarrollo
   //public url = 'http://35.232.20.49/desarrollo/servicio.php?';
   // si panel
   //public url : string = "https://openfut.com/advansales/servicio.php?"
   //public url : string = "http://intercorps.org/advansales/servicio.php?"
+
+  public img : string = "http://192.168.1.57/power_dialer/imgAdvansales.php?src=";
 
   post(data, url) {
     return new Promise((resolve, reject) => {
