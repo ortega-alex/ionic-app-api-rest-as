@@ -21,7 +21,6 @@ export class PerfilPage {
   private dispositivo: boolean;
   private tutoriales: Array<Tutorial> = [];
   private vcard: any;
-  private vcard_activa: boolean = false;
 
   constructor(
     public navCtrl: NavController,
@@ -32,8 +31,8 @@ export class PerfilPage {
     private viewController: ViewController,
     private platform: Platform,
     private modalController: ModalController,
-    private alertController : AlertController,
-    private socialSharing : SocialSharing
+    private alertController: AlertController,
+    private socialSharing: SocialSharing
   ) {
     this.dispositivo = this.platform.is('android');
     this.globalProvider.getUsuario();
@@ -41,7 +40,6 @@ export class PerfilPage {
   }
 
   ionViewDidLoad() {
-    console.log(this.tutoriales);
     this.getTutorialPlateforma();
     this.platform.registerBackButtonAction(() => {
       this.closeModal();
@@ -55,11 +53,7 @@ export class PerfilPage {
   }
 
   closeModal() {
-    if (this.vcard_activa == true) {
-      this.activarVcad()
-    } else {
-      this.viewController.dismiss();
-    }
+    this.viewController.dismiss();
   }
 
   menu() {
@@ -70,7 +64,6 @@ export class PerfilPage {
     if (this.globalProvider.usuario) {
       this.globalProvider.deleteUsuario();
       this.globalProvider.getUsuario();
-      //this.globalProvider.deleteNum();
       this.menu();
     }
   }
@@ -96,27 +89,27 @@ export class PerfilPage {
     modal.present();
   }
 
-  getImg(url : string) {
+  getImg(url: string) {
     return this.httpProvider.img + url;
   }
 
-  activarVcad() {
-    this.vcard_activa = !this.vcard_activa;
-  }
-
   compartir(url: string) {
-    if(url){
+    if (url) {
       console.log('compartir: ' + url);
-      this.socialSharing.share(url).then(()=> {
-      console.log('success: ')
+      this.socialSharing.share(url).then(() => {
+        console.log('success: ')
       }).catch(err => alert('err: ' + JSON.stringify(err)));
     } else {
       let alert = this.alertController.create({
-        title : '',
-        subTitle: 'vacia' ,
-        buttons : ['ok']
+        title: '',
+        subTitle: 'vacia',
+        buttons: ['ok']
       });
       alert.present();
     }
+  }
+
+  nada() {
+    console.log(this.vcard , this.tutoriales);
   }
 }

@@ -55,7 +55,6 @@ export class MyApp {
         } else {
           this.rootPage = LoginPage;
         }
-        console.log('rootPage: ' + this.rootPage);
       });
       splashScreen.hide();
       this.initPushNotification();
@@ -186,5 +185,9 @@ export class MyApp {
       }
     });
     pushObject.on('error').subscribe(error => console.error('Error with Push plugin' + error));
+  }
+
+  nada(){
+    console.log('rootPage: ' + this.rootPage);
   }
 }

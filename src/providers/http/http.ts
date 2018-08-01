@@ -16,7 +16,8 @@ export class HttpProvider {
   //public url : string = "https://openfut.com/advansales/servicio.php?"
   //public url : string = "http://intercorps.org/advansales/servicio.php?"
 
-  public img : string = "http://192.168.1.57/power_dialer/imgAdvansales.php?src=";
+  //public img : string = "http://192.168.1.57/power_dialer/imgAdvansales.php?src=";
+  public img : string = "http://35.232.20.49/imgAdvansales.php?src=";
 
   post(data, url) {
     return new Promise((resolve, reject) => {
