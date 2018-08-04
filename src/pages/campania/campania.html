@@ -43,12 +43,12 @@
           <br>{{estado.texto}}
         </ion-col>
       </ion-row>
-      <ion-row class="row-cont" *ngIf="util.dispositivo == true">
+      <ion-row class="row-cont" *ngIf="panel_ios == false">
         <ion-col id="row-cont">
           {{(campania.llamados == 0 ) ? 'Start list' : 'Continue where you stop...'}}
         </ion-col>
       </ion-row>
-      <ion-row class="row-cont" *ngIf="no == true && util.dispositivo == true">
+      <ion-row class="row-cont" *ngIf="util.dispositivo == true && btn_play == true">
         <ion-col id="row-cont-p">
           <button id="row-cont-btn-p" ion-button icon-left block color="dark" (click)="llamarLista(boton.key_estado,false,0)">
             <ion-icon name="play"></ion-icon>
@@ -56,11 +56,19 @@
           </button>
         </ion-col>
       </ion-row>
+      <ion-row class="row-cont" *ngIf="util.dispositivo == false && panel_ios == false && btn_play == true">
+        <ion-col id="row-cont-p">
+          <button id="row-cont-btn-p" ion-button icon-left block color="dark" (click)="panelIos(boton.key_estado,true,0)">
+            <ion-icon ios="ios-call" md="md-call"></ion-icon>
+            <ion-icon ios="ios-list-box"></ion-icon>
+          </button>
+        </ion-col>
+      </ion-row>
     </ion-card>
   </div>
   <ion-spinner *ngIf="spinner" name="bubbles" item-left></ion-spinner>
-  <ion-content class="content-list" *ngIf="util.panel_llamada == false">
-    <div class="conten-card" *ngFor="let c of contenido ; let i = index">
+  <ion-content class="content-list" *ngIf="util.panel_llamada == false && panel_ios == false">
+    <div class="conten-card" *ngFor="let c of contenido | slice:min:max ; let i = index">
       <ion-row class="row-cont">
         <ion-col id="row-cont-c" col-2>
           <button id="row-cont-btn-c" ion-button block (click)="llamarLista(boton.key_estado,true,i,false)" [style.background-color]="boton.color">
@@ -86,7 +94,26 @@
         </ion-col>
       </ion-row>
     </div>
+    <button ion-button clear color="primary" (click)="cargarMas()" *ngIf="contenido.length > 0 && this.contenido.length != max">
+      <ion-spinner *ngIf="spinner1" name="bubbles" item-left></ion-spinner>
+      <div *ngIf="!spinner1">
+        <ion-icon name="add"></ion-icon>
+        &nbsp;Load more
+      </div>
+    </button>
   </ion-content>
+  <ion-content class="content-list" *ngIf="util.panel_llamada == false && panel_ios == true">
+    <ion-row class="row-cont">
+      <div text-center style="height: 80% !important; width: 100%; padding: 40% 0%; font-size: 2em" (click)="panelIos(boton.key_estado,true,posicion,true)">
+        <span>Tap here if you would like to call:</span>
+        <br> {{ (contenido[posicion]) ? contenido[posicion].nombre : ''}}
+        <br> {{ (contenido[posicion]) ? contenido[posicion].telefono : ''}}
+      </div>
+    </ion-row>
+  </ion-content>
+  <button ion-button block color="dark" (click)="panelIos(boton.key_estado,false,0)" *ngIf="util.panel_llamada == false && panel_ios == true">
+    Exit
+  </button>
   <ion-card *ngIf="util.panel_llamada == true && tipo_campania == true" class="conten-card">
     <br>
     <ion-row class="row-cont">

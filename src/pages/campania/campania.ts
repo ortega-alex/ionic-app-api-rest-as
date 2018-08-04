@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ViewController, Platform, AlertController, ModalController, PopoverController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ViewController, Platform, AlertController, PopoverController } from 'ionic-angular';
 
 import { GlobalProvider } from '../../providers/global/global';
 import { HttpProvider } from '../../providers/http/http';
 import { Fechas, getMilisegundos, Fecha, Hora, Diferencia, FechaPosterios } from '../../pipes/filtros/filtros';
-import { Util, Detalle, Stados, DataModal } from '../../model/interfaces';
+import { Util, Detalle, Stados } from '../../model/interfaces';
 
 import { CallNumber } from '@ionic-native/call-number';
 import { Contacts, Contact, ContactField, ContactName, ContactOrganization } from '@ionic-native/contacts';
@@ -79,6 +79,12 @@ export class CampaniaPage {
     panel_llamada: false
   };
 
+  private min: number = 0;
+  private max: number = 0;
+  private spinner1: boolean;
+  private panel_ios: boolean = false;
+  private btn_play: boolean = false;
+
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -92,7 +98,6 @@ export class CampaniaPage {
     private contacts: Contacts,
     private admobFree: AdMobFree,
     private alertController: AlertController,
-    private modalController: ModalController,
     private popoverController: PopoverController
   ) {
     this.campos = { cambio: false, stado: [false, false] };
@@ -112,7 +117,6 @@ export class CampaniaPage {
   }
 
   ionViewDidLoad() {
-    console.log(this.no + ' ' + this.spinner + ' ' + this.retroceder);
     if (this.globalProvider.plan.mostrar_publicidad_video == true) {
       this.prepareVideo();
       this.globalProvider.getTime();
@@ -193,7 +197,6 @@ export class CampaniaPage {
       this.res = res;
       if (this.res.error == 'false') {
         let date = new Date(this.res.tiempo_usuario);
-        //let hora = this.res.tiempo_suma;
         this.globalProvider.setTime(this.getmilisegundos.transform(date));
         this.tiempoActual();
       }
@@ -258,47 +261,18 @@ export class CampaniaPage {
     }
     if (key == 3) {
       if (this.msnS == true) {
-        if (this.util.dispositivo == true) {
-          this.setSms(this.getFilaCampania.telefono);
-          this.separacion(2);
-        } else {
-          this.setSms(this.getFilaCampania.telefono);
-          let data: DataModal = { view: 4, num: null, imagenes: null }
-          let modal = this.modalController.create('ModalPage', { data: data });
-          modal.present();
-          modal.onDidDismiss(data => {
-            if (data == true) {
-              this.separacion(2);
-            }
-          });
-        }
-      } else {
-        this.separacion(2);
+        this.setSms(this.getFilaCampania.telefono);
       }
+      this.separacion(2);
     }
     if (key == 4) {
       if (this.msnS == true) {
-        if (this.util.dispositivo == true) {
-          this.setSms(this.getFilaCampania.telefono);
-        } else {
-          this.setSms(this.getFilaCampania.telefono);
-          let data: DataModal = { view: 4, num: null, imagenes: null }
-          let modal = this.modalController.create('ModalPage', { data: data });
-          modal.present();
-          modal.onDidDismiss(data => {
-            if (data == true) {
-              this.separacion(2);
-            }
-          });
-        }
-      } else {
-        this.separacion(2);
+        this.setSms(this.getFilaCampania.telefono);
       }
       if (this.data.date != null) {
         this.serEventoCalendar();
-      } else {
-        this.separacion(2);
       }
+      this.separacion(2);
     }
   }
 
@@ -478,10 +452,27 @@ export class CampaniaPage {
     }
   }
 
+  panelIos(key: number, individual: boolean = false, posicion: number = null, llamar: boolean = false) {
+    this.key_selec = key;
+    this.posicion = posicion;
+    if (individual == true && llamar == false) {
+      this.panel_ios = true;
+    }
+    if (individual == true && llamar == true) {
+      this.getFilaCampania = this.contenido[posicion];
+      this.util.panel_llamada = true;
+      this.call(this.getFilaCampania.telefono, true);
+    }
+    if (individual == false) {
+      this.panel_ios = false;
+    }
+  }
+
   separacion(tipo: number, estado: any = null, posicion: number = null) {
     switch (tipo) {
       case 1:
         if (this.tipo_campania == true) {
+          this.estado = estado;
           this.getContenidoCampania(estado, posicion);
         } else {
           this.getContenidoCampaniaManual(estado, posicion);
@@ -513,6 +504,7 @@ export class CampaniaPage {
         s.border = 'none';
       }
     }
+
     this.stado[posicion].border = 'solid gray 4px';
     this.boton.color = '#' + estado.color;
     this.boton.estado = estado.texto;
@@ -524,6 +516,17 @@ export class CampaniaPage {
       if (this.res.error == 'false') {
         if (this.res.contenido.length > 0) {
           this.contenido = this.res.contenido;
+          this.btn_play = true;
+          if (this.contenido.length > 50) {
+            this.max = 50;
+          } else {
+            this.max = this.contenido.length;
+          }
+        } else {
+          if (this.util.dispositivo == false) {
+            this.panel_ios = false;
+          }
+          this.btn_play = false;
         }
         this.spinner = false;
       } else {
@@ -650,5 +653,19 @@ export class CampaniaPage {
   popoverInfo(posicion: number) {
     let popover = this.popoverController.create('PopoverPage', { posicion: posicion });
     popover.present();
+  }
+
+  cargarMas() {
+    this.spinner1 = true;
+    if (this.contenido.length > (this.max + 50)) {
+      this.max += 50;
+    } else {
+      this.max = this.contenido.length;
+    }
+    this.spinner1 = false;
+  }
+
+  desuso() {
+    console.log(this.min + ' ' + this.spinner1 + ' ' + this.spinner + ' ' + this.no + ' ' + this.retroceder + ' ' + this.panel_ios + " " + this.btn_play);
   }
 }
