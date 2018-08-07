@@ -383,6 +383,7 @@ export class ModalPage {
       console.log('product: ' + JSON.stringify(product));
       if (arg.id_producto_antiguo == "") {
         order = await this.store.order(arg.id_producto);
+        this.store.refresh();
       } else {
         order = await this.store.order(arg.id_producto, arg.id_producto_antiguo ? { oldPurchasedSkus: [arg.id_producto_antiguo] } : null);
       }
@@ -419,10 +420,10 @@ export class ModalPage {
   }
 
   registerHandlers(arg: any) {
-    this.store.once(arg.id_producto).approved((product: IAPProduct) => {
+    this.store.when(arg.id_producto).approved((product: IAPProduct) => {
       console.log('approved: ' + JSON.stringify(product));
       this.setSuscrpcionUsuario(product,arg);  
-      product.finish();
+      product.verify();
     });
 
     this.store.when(arg.id_producto).registered((product: IAPProduct) => {
@@ -437,9 +438,14 @@ export class ModalPage {
       console.log('Purchase was Cancelled');
     });
 
-    this.store.once(arg.id_producto).owned((product: IAPProduct) => {
-      console.log('awned: ' + JSON.stringify(product));
+    this.store.when(arg.id_producto).owned((product: IAPProduct) => {
+      console.log('owned: ' + JSON.stringify(product));
       this.setSuscrpcionUsuario(product,arg);      
+    });
+
+    this.store.when(arg.id_producto).verified((product : IAPProduct) => {
+      console.log('verified' + JSON.stringify(product));
+      product.finish();
     });
 
     this.store.error((err) => {
@@ -457,6 +463,7 @@ export class ModalPage {
       "id_producto_antiguo":arg.id_producto_antiguo ,
       "token": product.transaction.purchaseToken
     };
+    console.log(url);
     this.httpProvider.post(data, url).then(() => {
       this.getProductoUsuario();            
       this.globalProvider.setProductoId(product.id);
