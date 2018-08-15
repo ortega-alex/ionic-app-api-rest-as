@@ -67,21 +67,21 @@
     </ion-card>
   </div>
   <ion-spinner *ngIf="spinner" name="bubbles" item-left></ion-spinner>
-  <ion-content class="content-list" *ngIf="util.panel_llamada == false && panel_ios == false">
+  <ion-content no-Lines class="content-list" *ngIf="util.panel_llamada == false && panel_ios == false">
     <div class="conten-card" *ngFor="let c of contenido | slice:min:max ; let i = index">
       <ion-row class="row-cont">
         <ion-col id="row-cont-c" col-2>
-          <button id="row-cont-btn-c" ion-button block (click)="llamarLista(boton.key_estado,true,i,false)" [style.background-color]="boton.color">
+          <button id="row-cont-btn-c" ion-button block (click)="llamarLista(boton.key_estado,true,i,false)" color="white" [style.border]="getBorder(boton.color)">
             edit
           </button>
         </ion-col>
         <ion-col col-2 id="row-cont-c" *ngIf="c.notas.length > 0">
-          <button id="row-cont-btn-c" ion-button block icon-right color="fondo" (click)="togell(i)">
+          <button id="row-cont-btn-c" ion-button block icon-right color="white" [style.border]="getBorder(boton.color)" (click)="togell(i)">
             notes
           </button>
         </ion-col>
         <ion-col id="row-cont-c">
-          <button id="row-cont-btn-c" ion-button block icon-right color="fondo" (click)="llamarLista(boton.key_estado,true,i)">
+          <button id="row-cont-btn-c" ion-button block icon-right color="white" [style.border]="getBorder(boton.color)" (click)="llamarLista(boton.key_estado,true,i)">
             {{c.nombre}}
             <br> {{c.telefono}}
             <ion-icon name="call"></ion-icon>

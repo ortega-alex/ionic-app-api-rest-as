@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 @Injectable()
@@ -17,7 +17,7 @@ export class HttpProvider {
   //public url : string = "http://intercorps.org/advansales/servicio.php?"
 
   //public img : string = "http://192.168.1.57/power_dialer/imgAdvansales.php?src=";
-  public img : string = "http://35.232.20.49/imgAdvansales.php?src=";
+  public img: string = "http://35.232.20.49/imgAdvansales.php?src=";
 
   post(data, url) {
     return new Promise((resolve, reject) => {
@@ -38,6 +38,37 @@ export class HttpProvider {
     return new Promise((resolve, reject) => {
       try {
         this.http.get(this.url + param).subscribe(data => {
+          resolve(data);
+        }, error => {
+          reject(error);
+        });
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
+
+  postTem(data: any, url: string) {
+    return new Promise((resolve, reject) => {
+      try {
+        this.http.post(url, JSON.stringify(data), {
+          headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+        }).subscribe(res => {
+          resolve(res);
+        }, (err) => {
+          reject(err);
+        });
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
+  getTem(url: string) {
+    return new Promise((resolve, reject) => {
+      try {
+        this.http.get(url).subscribe(data => {
           resolve(data);
         }, error => {
           reject(error);

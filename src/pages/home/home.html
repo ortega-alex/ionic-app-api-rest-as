@@ -20,9 +20,20 @@
     </ion-row>
   </div>
   <ion-scroll scrollY="true" class="content-div" no-Lines no-border no-padding *ngIf="conexion == false" [style.background]="home_util.background">
-    <div no-padding col-12 class="paquete" *ngIf="plan.suscrito == false" (click)="modalP()">
+    <!--div no-padding col-6 class="paquete" *ngIf="plan.suscrito == false" (click)="modalP()">
       Get Advansales Pro
     </div>
+    <div no-padding col-6 class="paquete" *ngIf="plan.suscrito == false" (click)="modalP()">
+      Social
+    </div-->
+    <ion-row text-center>
+      <ion-col class="paquete"  *ngIf="plan.suscrito == false" (click)="modalP()">
+        Get Advansales Pro
+      </ion-col>
+      <ion-col class="paquete" (click)="redes()">
+        Advansocial
+      </ion-col>
+    </ion-row>
     <ion-refresher (ionRefresh)="doRefresh($event)">
       <ion-refresher-content></ion-refresher-content>
     </ion-refresher>

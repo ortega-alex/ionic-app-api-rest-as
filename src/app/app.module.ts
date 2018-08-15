@@ -8,7 +8,8 @@ import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { PerfilPage } from '../pages/perfil/perfil';
 import { LoginPage } from '../pages/login/login';
-import { RegistroPage } from '../pages/registro/registro'
+import { RegistroPage } from '../pages/registro/registro';
+import { SharePage } from '../pages/share/share';
 
 import { GlobalProvider } from '../providers/global/global';
 import { HttpProvider } from '../providers/http/http';
@@ -32,6 +33,9 @@ import { Facebook } from '@ionic-native/facebook';
 import { IOSFilePicker } from '@ionic-native/file-picker';
 import { InAppPurchase2 } from '@ionic-native/in-app-purchase-2';
 import { SocialSharing } from '@ionic-native/social-sharing';
+import { Clipboard } from '@ionic-native/clipboard';
+import { Camera } from '@ionic-native/camera';
+import { MediaCapture } from '@ionic-native/media-capture';
 
 @NgModule({
   declarations: [
@@ -39,7 +43,8 @@ import { SocialSharing } from '@ionic-native/social-sharing';
     HomePage,
     PerfilPage,
     LoginPage,
-    RegistroPage
+    RegistroPage,
+    SharePage
   ],
   imports: [
     BrowserModule,
@@ -54,7 +59,8 @@ import { SocialSharing } from '@ionic-native/social-sharing';
     HomePage,
     PerfilPage,
     LoginPage,
-    RegistroPage
+    RegistroPage,
+    SharePage
   ],
   providers: [
     StatusBar,
@@ -80,7 +86,10 @@ import { SocialSharing } from '@ionic-native/social-sharing';
     Facebook,
     IOSFilePicker,
     InAppPurchase2,
-    SocialSharing
+    SocialSharing,
+    Clipboard,
+    Camera,
+    MediaCapture
   ]
 })
 export class AppModule { }

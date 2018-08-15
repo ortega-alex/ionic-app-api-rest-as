@@ -17,7 +17,7 @@ import { SMS } from '@ionic-native/sms';
 import { Calendar } from '@ionic-native/calendar';
 import { AdMobFree, AdMobFreeBannerConfig, AdMobFreeRewardVideoConfig } from '@ionic-native/admob-free';
 import { Facebook, FacebookLoginResponse } from '@ionic-native/facebook';
-import { InAppPurchase2, IAPProduct } from '@ionic-native/in-app-purchase-2';
+import { SharePage } from '../share/share';
 
 @Component({
   selector: 'page-home',
@@ -72,8 +72,7 @@ export class HomePage {
     private calendar: Calendar,
     private alertController: AlertController,
     private admobFree: AdMobFree,
-    private facebook: Facebook,
-    private store: InAppPurchase2
+    private facebook: Facebook
   ) {
     this.plan = new Plan();
     this.home_util.dispositivo = this.platform.is('android');
@@ -781,5 +780,9 @@ export class HomePage {
     let data: { view: number, num: number, imagenes: Array<Imagenes> } = { view: 5, num: null, imagenes: null };
     let modal = this.modalControlle.create('ModalPage', { data: data });
     modal.present();
+  }
+
+  redes(){
+    this.navCtrl.push(SharePage);
   }
 }

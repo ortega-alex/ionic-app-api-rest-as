@@ -668,4 +668,8 @@ export class CampaniaPage {
   desuso() {
     console.log(this.min + ' ' + this.spinner1 + ' ' + this.spinner + ' ' + this.no + ' ' + this.retroceder + ' ' + this.panel_ios + " " + this.btn_play);
   }
+
+  getBorder(color : string){
+    return "solid 1px " + color ;
+  }
 }

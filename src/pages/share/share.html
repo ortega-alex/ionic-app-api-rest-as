@@ -1,0 +1,151 @@
+<ion-content padding no-Lines no-border>
+  <div class="content-header">
+    <ion-row class="conten-row">
+      <ion-col id="conten-row" col-2>
+        <ion-icon *ngIf="dispositivo == true" id="icon" name="arrow-round-back" (click)="closeModal()"></ion-icon>
+        <ion-icon *ngIf="dispositivo == false" id="icon" ios="md-arrow-round-back" md="md-arrow-round-back" (click)="closeModal()"></ion-icon>
+      </ion-col>
+      <ion-col id="conten-row">
+        <img id="title" src="assets/imgs/title.png">
+      </ion-col>
+      <ion-col id="conten-row" col-2>
+        <ion-fab right #fab1 *ngIf="whizar[1] != null">
+          <button ion-fab mini color="dark">
+            {{contadorHashtag()}}
+          </button>
+        </ion-fab>
+      </ion-col>
+    </ion-row>
+  </div>
+
+  <ion-row text-center>
+    <ion-col id="icon-accion" [style.background-color]="(option == 'I') ? ' #745af2' : ''" (click)="reset() ;  option = 'I'">
+      <ion-icon name="image"></ion-icon>
+    </ion-col>
+    <ion-col id="icon-accion" [style.background-color]="(option == 'V') ? ' #745af2' : ''" (click)="reset() ; option = 'V' ">
+      <ion-icon name="film"></ion-icon>
+    </ion-col>
+
+    <ion-col id="icon-accion" [style.background-color]="(option == 'IG') ? ' #745af2' : ''" (click)="reset() ;  option = 'IG' ; tomarForto()">
+      <ion-icon name="camera"></ion-icon>
+    </ion-col>
+    <ion-col id="icon-accion" [style.background-color]="(option == 'VG') ? ' #745af2' : ''" (click)="reset() ;  option = 'VG' ; tomarVideo()">
+      <ion-icon name="videocam"></ion-icon>
+    </ion-col>
+  </ion-row>
+
+
+  <div *ngIf="img_catalogo">
+    <ion-row>
+      <ion-col col-9>
+        <ion-item no-lines no-padding>
+          <ion-input text-center placeholder="search {{(option == 'I') ? 'Image' : 'Video'}}" [(ngModel)]="img_tex"></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col col-3>
+        <button ion-button small color="dark" block (click)="catalogoImg()">
+          <ion-icon name="search"></ion-icon>
+        </button>
+      </ion-col>
+    </ion-row>
+
+    <ion-list no-lines no-padding text-center *ngFor="let img of imagenes">
+      <img [src]="img.urls.small" (click)="selectImg(img.urls.small , img.id)">
+      <p id="author-text"> Photo by {{img.user.name}} on Unsplash </p>
+    </ion-list>
+
+    <ion-list no-lines no-padding text-center *ngFor="let video of videos" (click)="selectImg(video.videos.small.url , video.picture_id)">
+      <video width="300" height="240" controls poster="{{getPoster(video.picture_id)}}">
+        <source [src]="video.videos.tiny.url" type="video/mp4" />
+      </video>
+    </ion-list>
+
+    <button ion-button small block clear color="primary" (click)="cargarMas()" *ngIf="(imagenes && imagenes.length > 0) || (videos && videos.length > 0)">
+      <ion-spinner *ngIf="spinner1" name="bubbles" item-left></ion-spinner>
+      <div *ngIf="!spinner1">
+        <ion-icon name="add"></ion-icon>
+        &nbsp;Load more
+      </div>
+    </button>
+  </div>
+
+
+  <div *ngIf="img_catalogo == false">
+
+
+    <div *ngIf="hashtags_btn">
+      <ion-item no-lines text-center>
+        <ion-textarea placeholder="" [(ngModel)]="hashtag_tex" name="note" autocomplete="on" autocorrect="on" id="hastak-text-area"
+          cols="25" rows="6">
+        </ion-textarea>
+      </ion-item>
+      <ion-row>
+        <ion-col col-6>
+          <ion-item no-lines no-padding>
+            <ion-input text-center placeholder="search hashtag..." [(ngModel)]="busqueda"></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col col-3>
+          <ion-item no-padding no-lines class="item-idioma">
+            <ion-label floating></ion-label>
+            <ion-select id="select-idioma" [(ngModel)]="idioma" interface="action-sheet">
+              <ion-option value="en">en</ion-option>
+              <ion-option value="es">es</ion-option>
+            </ion-select>
+          </ion-item>
+        </ion-col>
+        <ion-col col-3>
+          <button ion-button small color="dark" block (click)="catalogoHashtag()">
+            <ion-icon name="search"></ion-icon>
+          </button>
+        </ion-col>
+      </ion-row>
+      <ion-scroll scrollY="true" no-Lines no-border no-padding>
+        <div id="content-hashtag" *ngFor="let hashtag of hashtags ; let i = index">
+          <button ion-button small outline color="dark" id="hashtag-wold" *ngIf="hashtag_selected[i]" (click)="clickHashtag('#'+replaceEspacio(hashtag.word)) ;  (contadorHashtag() < 29) ? hashtag_selected[i] = false : ''">
+            <b>#{{ replaceEspacio(hashtag.word) }}</b>
+          </button>
+        </div>
+      </ion-scroll>
+    </div>
+
+    <div *ngIf="hashtags_btn == false">
+      <ion-item no-lines text-center>
+        <ion-textarea placeholder="Write a message..." [(ngModel)]="comentario_tex" name="note" autocomplete="on" autocorrect="on"
+          id="hastak-text-area" cols="25" rows="6">
+        </ion-textarea>
+      </ion-item>
+      <div id="img-social" *ngIf="img">
+        <img [src]="img">
+      </div>
+      <div id="img-social" *ngIf="video">
+        <video width="320" height="240" controls poster="{{poster}}">
+          <source [src]="video" type="video/mp4">
+        </video>
+      </div>
+    </div>
+  </div>
+</ion-content>
+
+<ion-footer no-Lines no-border>
+  <ion-toolbar no-lines>
+    <ion-row>
+      <ion-col col-3 text-center>
+        <ion-icon *ngIf="dispositivo == true && whizar[2] != null" id="icon" name="arrow-round-back" (click)="nex()"></ion-icon>
+        <ion-icon *ngIf="dispositivo == false && whizar[2] != null" id="icon" ios="md-arrow-round-back" md="md-arrow-round-back"
+          (click)="nex()"></ion-icon>
+      </ion-col>
+      <ion-col text-center *ngFor="let w of whizar">
+        <div id="content-progres" [style.background-color]="w"></div>
+      </ion-col>
+      <ion-col col-3 text-center>
+        <ion-icon *ngIf="dispositivo == true && whizar[1] !=null && whizar[2] == null" id="icon" name="arrow-round-forward" (click)="nex()"></ion-icon>
+        <ion-icon *ngIf="dispositivo == false && whizar[1] !=null && whizar[2] == null" id="icon" ios="md-arrow-round-forward" md="md-arrow-round-forward"
+          (click)="nex()"></ion-icon>
+        <button *ngIf="whizar[2] != null" ion-button small color="dark" (click)="compartir()">
+          SHARE
+        </button>
+      </ion-col>
+    </ion-row>
+  </ion-toolbar>
+</ion-footer>

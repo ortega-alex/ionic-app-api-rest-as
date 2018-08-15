@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, App, ViewController, Platform, ModalController, AlertController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, App, ViewController, Platform, ModalController } from 'ionic-angular';
 
 import { GlobalProvider } from '../../providers/global/global';
 import { HttpProvider } from '../../providers/http/http';
@@ -31,7 +31,6 @@ export class PerfilPage {
     private viewController: ViewController,
     private platform: Platform,
     private modalController: ModalController,
-    private alertController: AlertController,
     private socialSharing: SocialSharing
   ) {
     this.dispositivo = this.platform.is('android');
@@ -94,19 +93,9 @@ export class PerfilPage {
   }
 
   compartir(url: string) {
-    if (url) {
-      console.log('compartir: ' + url);
       this.socialSharing.share(url).then(() => {
         console.log('success: ')
-      }).catch(err => alert('err: ' + JSON.stringify(err)));
-    } else {
-      let alert = this.alertController.create({
-        title: '',
-        subTitle: 'vacia',
-        buttons: ['ok']
-      });
-      alert.present();
-    }
+      }).catch(err => alert('err: ' + JSON.stringify(err)));    
   }
 
   nada() {

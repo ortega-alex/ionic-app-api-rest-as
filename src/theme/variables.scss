@@ -43,6 +43,7 @@ $colors: (
   fondo:      #666666,
   fb:         #3b5998,
   tw:         #00b0ff,
+  white:      #fff,
 );
 
 // App iOS Variables
@@ -56,7 +57,7 @@ $colors: (
 // --------------------------------------------------
 // Material Design only Sass variables can go here
 
-
+$alert-md-head-text-align: center;
 
 
 // App Windows Variables
