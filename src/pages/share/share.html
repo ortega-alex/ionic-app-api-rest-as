@@ -153,8 +153,9 @@
           </button>
         </ion-col>
         <ion-col>
-          <button ion-button small block color="dark" (click)="compartirSave(save)">
-            SHARE
+          <button ion-button small block color="dark" icon-right (click)="compartirSave(save)">           
+            SHARE 
+            <ion-icon name="checkmark" *ngIf="save.estado == 'S'"></ion-icon>
           </button>
         </ion-col>
       </ion-row>

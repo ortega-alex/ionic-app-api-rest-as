@@ -407,7 +407,7 @@ export class SharePage {
     var hashtag: string = '';
     tem.forEach((element, index) => {
       if (index > 0) {
-        hashtag += "#" + element ;
+        hashtag += "#" + element;
       }
     });
 
@@ -431,6 +431,56 @@ export class SharePage {
   }
 
   compartirSave(social: any) {
-    console.log("comentario : " + social.comentario + ' hashtag: ' + social.hashtag + ' url: ' + social.url);
+    //console.log("comentario : " + social.comentario + ' hashtag: ' + social.hashtag + ' url: ' + social.url);
+    this.load = this.globalProvider.cargando(this.globalProvider.data.msj.load);
+    var a: string = `
+    .
+    .
+    .
+    The Entrepreneurs Technology: https://advansales.com
+    .
+    .
+    .`;
+
+    var tem = social.hashtag.split('#');
+    var mitad: number = Math.round(tem.length / 2);
+    tem.forEach((element, index) => {
+      if (index == 0) {
+        social.comentario += a + element;
+      } else {
+        social.comentario += "#" + element;
+      }
+      if (index == mitad) {
+        social.comentario += "#advansales " + "#" + element;
+      }
+    });
+
+    this.clipboard.copy(social.comentario);
+    this.clipboard.paste().then(
+      (resolve: string) => {
+        console.log(resolve);
+      },
+      (reject: string) => {
+        console.log('Error: ' + reject);
+      }
+    );
+
+    console.log(social.comentario);
+    this.socialSharing.share(social.comentario, null, social.url, null).then(() => {
+      this.reset();
+      this.load.dismiss();
+      this.setEditAdvanSocialShare(social.id_advansocial);
+    }).catch(err => {
+      this.load.dismiss();
+      console.log('err: ' + JSON.stringify(err));
+    });
   }
+
+  setEditAdvanSocialShare(id: string) {
+    let url: string = "servicio=setEditAdvanSocialShare&id_advansocial=" + id;
+    this.httpProvider.get(url).then(() => {
+      console.log('success');
+    }).catch(err => console.log('err:' + JSON.stringify(err)));
+  }
+
 }

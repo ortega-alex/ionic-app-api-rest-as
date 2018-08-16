@@ -52,9 +52,9 @@
   </ion-row>
   <ion-list class="list-contend" no-padding no-lines>
     <h3>Tutorials</h3>
-    <button *ngFor="let tutorial of tutoriales" id="list-contend-btn" ion-button block icon-left color="dark" (click)="demo(tutorial.imagenes)">
+    <button *ngFor="let tutorial of tutoriales" id="list-contend-btn" ion-button block icon-left color="dark">
       <ion-icon name="add"></ion-icon>
-      {{tutorial.nombre}}
+      <a href="{{tutorial.url}}">{{tutorial.nombre}}</a>      
     </button>
   </ion-list>
   <p *ngIf="dispositivo == false" id="informacion">Payment will be charged to your iTunes Account at confirmation of purchase Subscription automatically renews unless auto-renew
