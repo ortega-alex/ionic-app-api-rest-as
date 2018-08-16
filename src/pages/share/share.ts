@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, Platform, ViewController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Platform, ViewController, AlertController } from 'ionic-angular';
 import { HttpProvider } from '../../providers/http/http';
 import { GlobalProvider } from '../../providers/global/global';
 import { SocialSharing } from '@ionic-native/social-sharing';
@@ -48,6 +48,10 @@ export class SharePage {
   hashtags_btn: boolean;
   load: any;
 
+  post_guardados: boolean;
+  list_save: Array<any>;
+  textarea_comentarios: Array<string>;
+
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -58,7 +62,8 @@ export class SharePage {
     private socialSharing: SocialSharing,
     private clipboard: Clipboard,
     private camera: Camera,
-    private mediaCapture: MediaCapture
+    private mediaCapture: MediaCapture,
+    private alertController: AlertController
   ) {
     this.dispositivo = (this.platform.is('android')) ? true : false;
     this.whizar = [
@@ -72,6 +77,9 @@ export class SharePage {
     this.hashtags = [];
     this.idioma = 'en';
     this.hashtags_btn = true;
+
+    this.list_save = [];
+    this.textarea_comentarios = [];
   }
 
   ionViewDidLoad() { }
@@ -205,6 +213,10 @@ export class SharePage {
     this.hashtags = [];
     this.idioma = 'en';
     this.hashtags_btn = true;
+
+    this.post_guardados = undefined;
+    this.list_save = [];
+    this.textarea_comentarios = [];
   }
 
   getPoster(picture_id: string) {
@@ -311,4 +323,114 @@ export class SharePage {
     });
   }
 
+  getAdvanSocial() {
+    this.load = this.globalProvider.cargando(this.globalProvider.data.msj.load)
+    this.post_guardados = true;
+    let url: string = "servicio=getAdvanSocial&id_usuario= " + this.globalProvider.usuario.id_usuario;
+    this.httpProvider.get(url).then((res) => {
+      this.load.dismiss();
+      this.res = res;
+      if (this.res.error == 'false') {
+        this.res.advansocial.forEach(element => {
+          this.textarea_comentarios.push(element.comentario + ' ' + element.hashtag);
+        }, this);
+        this.list_save = this.res.advansocial;
+      }
+    }).catch(err => console.log('err: ' + JSON.stringify(err)));
+  }
+
+  setEliminarAdvanSocial(id_advansocial: string) {
+    let confirm = this.alertController.create({
+      title: '',
+      message: this.globalProvider.data.msj.warning,
+      buttons: [
+        {
+          text: 'No',
+          handler: () => { }
+        },
+        {
+          text: 'Yes',
+          handler: () => {
+            let url: string = "servicio=setEliminarAdvanSocial&id_advansocial=" + id_advansocial;
+            this.httpProvider.get(url).then((res) => {
+              this.res = res;
+              //this.globalProvider.alerta(this.res.msn);
+              if (this.res.error == 'false') {
+                this.getAdvanSocial();
+              } else {
+                this.globalProvider.alerta(this.res.msn);
+              }
+            }).catch(err => console.log('err: ' + JSON.stringify(err)));
+          }
+        }
+      ]
+    });
+    confirm.present();
+  }
+
+  setAdvanSocial() {
+    this.load = this.globalProvider.cargando(this.globalProvider.data.msj.load);
+    var ruta: string;
+    var tipo: string;
+    if (this.img) {
+      ruta = this.img;
+      tipo = 'I';
+    } else {
+      ruta = this.video;
+      tipo = 'V';
+    }
+
+    let url: string = "servicio=setAdvanSocial";
+    let data: any = {
+      id_usuario: this.globalProvider.usuario.id_usuario,
+      comentario: this.comentario_tex,
+      hashtag: this.hashtag_tex,
+      tipo: tipo,
+      url: ruta
+    };
+
+    this.httpProvider.post(data, url).then((res) => {
+      this.load.dismiss();
+      this.res = res;
+      if (this.res.error == 'false') {
+        this.reset();
+      } else {
+        this.globalProvider.alerta(this.res.msn)
+      }
+    }).catch(err => console.log('err: ' + JSON.stringify(err)));
+  }
+
+  setEditAdvanSocial(social: any, i: number) {
+    console.log(this.textarea_comentarios[i])
+    var tem = this.textarea_comentarios[i].split('#')
+    var comentarios = tem[0];
+    var hashtag: string = '';
+    tem.forEach((element, index) => {
+      if (index > 0) {
+        hashtag += "#" + element ;
+      }
+    });
+
+    let url: string = "servicio=setEditAdvanSocial";
+    let data: any = {
+      id_advansocial: social.id_advansocial,
+      comentario: comentarios,
+      hashtag: hashtag,
+      tipo: social.tipo,
+      url: social.url
+    }
+
+    this.httpProvider.post(data, url).then((res) => {
+      this.res = res;
+      if (this.res.error == 'false') {
+        this.getAdvanSocial();
+      } else {
+        this.globalProvider.alerta(this.res.msn);
+      }
+    }).catch(err => console.log(JSON.stringify(err)));
+  }
+
+  compartirSave(social: any) {
+    console.log("comentario : " + social.comentario + ' hashtag: ' + social.hashtag + ' url: ' + social.url);
+  }
 }

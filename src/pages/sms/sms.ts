@@ -42,6 +42,7 @@ export class SmsPage {
     style: null,
     panel_llamada: null
   };
+  mjs : boolean;
 
   constructor(
     public navCtrl: NavController,
@@ -144,11 +145,16 @@ export class SmsPage {
   }
 
   getCampaniaSMSUsuario(id: number = null) {
+    this.load = this.globalProvider.cargando(this.globalProvider.data.msj.load);
     let url = "servicio=getCampaniaSMSUsuario&id_usuario=" + this.globalProvider.usuario.id_usuario;
     this.httpProvider.get(url).then(res => {
+      this.load.dismiss();
       this.res = res;
       if (this.res.error == 'false') {
-        for (let i = 0; i < this.res.campaniaSMS.length; i++) {
+        if(this.res.campaniaSMS.length == 0){
+          this.mjs = true;
+        }
+        for (let i = 0; i < this.res.campaniaSMS.length ; i++) {
           if (id != null && this.res.campaniaSMS[i].id_campania_sms == id) {
             this.sms_status.push({ togglel: true });
           } else {
@@ -157,7 +163,10 @@ export class SmsPage {
         }
         this.campaniaSMS = this.res.campaniaSMS;
       }
-    }).catch(err => console.log('err: ' + JSON.stringify(err)));
+    }).catch(err => {
+      this.load.dismiss();
+      console.log('err: ' + JSON.stringify(err));
+    });
   }
 
   setDeleteCampaniaSMS(id: number) {
