@@ -72,7 +72,8 @@ export class MyApp {
       this.androidPermissions.PERMISSION.READ_EXTERNAL_STORAGE,
       this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE,
       this.androidPermissions.PERMISSION.SEND_SMS,
-      this.androidPermissions.PERMISSION.ACCESS_FINE_LOCATION
+      this.androidPermissions.PERMISSION.ACCESS_FINE_LOCATION,
+      this.androidPermissions.PERMISSION.CAMERA
     ]
     const { hasPermission } = await this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.CALL_PHONE);
     if (!hasPermission) {

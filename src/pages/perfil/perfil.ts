@@ -88,9 +88,9 @@ export class PerfilPage {
     modal.present();
   }
 
-  getImg(url: string) {
+  /*getImg(url: string) {
     return this.httpProvider.img + url;
-  }
+  }*/
 
   compartir(url: string) {
       this.socialSharing.share(url).then(() => {

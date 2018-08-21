@@ -560,6 +560,12 @@ export class CampaniaPage {
       if (this.res.error == 'false') {
         if (this.res.contenido.length > 0) {
           this.contenido = this.res.contenido;
+          this.btn_play = true;
+          if (this.contenido.length > 50) {
+            this.max = 50;
+          } else {
+            this.max = this.contenido.length;
+          }
         }
         this.spinner = false;
       } else {
@@ -669,7 +675,7 @@ export class CampaniaPage {
     console.log(this.min + ' ' + this.spinner1 + ' ' + this.spinner + ' ' + this.no + ' ' + this.retroceder + ' ' + this.panel_ios + " " + this.btn_play);
   }
 
-  getBorder(color : string){
-    return "solid 1px " + color ;
+  getBorder(color: string) {
+    return "solid 1px " + color;
   }
 }

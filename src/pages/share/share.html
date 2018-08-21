@@ -122,9 +122,7 @@
       </div>
     </div>
 
-
   </div>
-
 
   <div *ngIf="post_guardados">
     <ion-list no-padding no-border no-lines *ngFor="let save of list_save ; let i = index">
@@ -153,16 +151,14 @@
           </button>
         </ion-col>
         <ion-col>
-          <button ion-button small block color="dark" icon-right (click)="compartirSave(save)">           
-            SHARE 
+          <button ion-button small block color="dark" icon-right (click)="compartirSave(save)">
+            SHARE
             <ion-icon name="checkmark" *ngIf="save.estado == 'S'"></ion-icon>
           </button>
         </ion-col>
       </ion-row>
-
     </ion-list>
   </div>
-
 
 </ion-content>
 
@@ -176,20 +172,20 @@
       </ion-col>
       <ion-col text-center *ngFor="let w of whizar">
         <div id="content-progres" [style.background-color]="w"></div>
-      </ion-col>   
+      </ion-col>
       <ion-col text-center>
         <button *ngIf="whizar[2] != null && (this.video || this.img)" ion-button small color="dark" (click)="setAdvanSocial()">
           SAVE
         </button>
       </ion-col>
       <ion-col text-center>
-          <ion-icon *ngIf="dispositivo == true && whizar[1] !=null && whizar[2] == null" id="icon" name="arrow-round-forward" (click)="nex()"></ion-icon>
-          <ion-icon *ngIf="dispositivo == false && whizar[1] !=null && whizar[2] == null" id="icon" ios="md-arrow-round-forward" md="md-arrow-round-forward"
-            (click)="nex()"></ion-icon>
-          <button *ngIf="whizar[2] != null && (this.video || this.img)" ion-button small color="dark" (click)="compartir()">
-            SHARE
-          </button>
-        </ion-col>
+        <ion-icon *ngIf="dispositivo == true && whizar[1] !=null && whizar[2] == null" id="icon" name="arrow-round-forward" (click)="nex()"></ion-icon>
+        <ion-icon *ngIf="dispositivo == false && whizar[1] !=null && whizar[2] == null" id="icon" ios="md-arrow-round-forward" md="md-arrow-round-forward"
+          (click)="nex()"></ion-icon>
+        <button *ngIf="whizar[2] != null && (this.video || this.img)" ion-button small color="dark" (click)="compartir()">
+          SHARE
+        </button>
+      </ion-col>
     </ion-row>
   </ion-toolbar>
 </ion-footer>

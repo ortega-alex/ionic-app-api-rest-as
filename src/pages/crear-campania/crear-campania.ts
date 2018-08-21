@@ -176,7 +176,7 @@ export class CrearCampaniaPage {
     this.load = this.globalProvider.cargando(this.globalProvider.data.msj.load);
     let url = "servicio=setExcelUsuario&id_usuario=" + this.globalProvider.usuario.id_usuario;
     const fileTransfer: FileTransferObject = this.transfer.create();
-    fileTransfer.upload(path, this.httpProvider.url + url, options).then((data) => {
+    fileTransfer.upload(path, this.httpProvider.URL + url, options).then((data) => {
       this.load.dismiss();
       this.res = JSON.parse(data.response);
       if (this.res.encabezado) {

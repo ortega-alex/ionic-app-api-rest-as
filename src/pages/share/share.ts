@@ -21,19 +21,6 @@ export class SharePage {
   option: string;
   img_catalogo: boolean;
   img_tex: string;
-  URLS: Array<{ URL: string, QUERY: string, CLIENTE_ID: string, PAGINA: number }> = [
-    {
-      URL: "https://api.unsplash.com/search/photos?page=",
-      QUERY: "&query=",
-      CLIENTE_ID: "&client_id=7e27b730888b9daa33c2b405cefb31c10cb887e8bf931e79cbd97d145019c6c4",
-      PAGINA: 1
-    }, {
-      URL: "https://pixabay.com/api/videos/?pretty=true&page=",
-      QUERY: "&q=",
-      CLIENTE_ID: "&key=9806803-23a988fec28a26e532b3734e4",
-      PAGINA: 1
-    }
-  ];
   imagenes: Array<any>;
   videos: Array<any>;
   res: any;
@@ -98,15 +85,15 @@ export class SharePage {
 
   catalogoImg() {
     if (this.option == 'I') {
-      this.URLS[0].PAGINA = 1;
-      let url: string = this.URLS[0].URL + this.URLS[0].PAGINA + this.URLS[0].QUERY + this.img_tex.replace(/\s/g, "+") + this.URLS[0].CLIENTE_ID;
+      this.httpProvider.URLS[0].PAGINA = 1;
+      let url: string = this.httpProvider.URLS[0].URL + this.httpProvider.URLS[0].PAGINA + this.httpProvider.URLS[0].QUERY + this.img_tex.replace(/\s/g, "+") + this.httpProvider.URLS[0].CLIENTE_ID;
       this.httpProvider.getTem(url).then((res) => {
         this.res = res;
         this.imagenes = this.res.results;
       }).catch(err => console.log('err: ', JSON.stringify(err)));
     } else {
-      this.URLS[1].PAGINA = 1;
-      let url: string = this.URLS[1].URL + this.URLS[1].PAGINA + this.URLS[1].QUERY + this.img_tex + this.URLS[1].CLIENTE_ID;
+      this.httpProvider.URLS[1].PAGINA = 1;
+      let url: string = this.httpProvider.URLS[1].URL + this.httpProvider.URLS[1].PAGINA + this.httpProvider.URLS[1].QUERY + this.img_tex + this.httpProvider.URLS[1].CLIENTE_ID;
       this.httpProvider.getTem(url).then((res) => {
         this.res = res;
         this.videos = this.res.hits;
@@ -117,15 +104,15 @@ export class SharePage {
   cargarMas() {
     this.spinner1 = true;
     if (this.option == 'I') {
-      this.URLS[0].PAGINA = this.URLS[0].PAGINA + 1;
-      let url: string = this.URLS[0].URL + this.URLS[0].PAGINA + this.URLS[0].QUERY + this.img_tex + this.URLS[0].CLIENTE_ID;
+      this.httpProvider.URLS[0].PAGINA = this.httpProvider.URLS[0].PAGINA + 1;
+      let url: string = this.httpProvider.URLS[0].URL + this.httpProvider.URLS[0].PAGINA + this.httpProvider.URLS[0].QUERY + this.img_tex + this.httpProvider.URLS[0].CLIENTE_ID;
       this.httpProvider.getTem(url).then((res) => {
         this.res = res;
         this.imagenes = this.imagenes.concat(this.res.results);
       }).catch(err => console.log('err: ', JSON.stringify(err)));
     } else {
-      this.URLS[1].PAGINA = this.URLS[1].PAGINA + 1;
-      let url: string = this.URLS[1].URL + this.URLS[1].PAGINA + this.URLS[1].QUERY + this.img_tex + this.URLS[1].CLIENTE_ID;
+      this.httpProvider.URLS[1].PAGINA = this.httpProvider.URLS[1].PAGINA + 1;
+      let url: string = this.httpProvider.URLS[1].URL + this.httpProvider.URLS[1].PAGINA + this.httpProvider.URLS[1].QUERY + this.img_tex + this.httpProvider.URLS[1].CLIENTE_ID;
       this.httpProvider.getTem(url).then((res) => {
         this.res = res;
         this.videos = this.videos.concat(this.res.hits);
@@ -179,7 +166,7 @@ export class SharePage {
       this.img = ruta;
     } else {
       this.poster = this.getPoster(poster);
-      let url: string = "http://35.232.20.49/advansocialvideo.php?id=" + poster + "&src=" + ruta;
+      let url: string = this.httpProvider.URL_VIDEO + poster + "&src=" + ruta;
       this.img = undefined;
       this.video = undefined;
       this.httpProvider.getTem(url).then((res) => {
@@ -225,7 +212,7 @@ export class SharePage {
 
   catalogoHashtag() {
     this.hashtag_selected = [];
-    let url: string = "https://api.datamuse.com/words?ml=" + this.busqueda.replace(/\s/g, "+"); + "&v=" + this.idioma;
+    let url: string = this.httpProvider.URL_HASTAG + this.busqueda.replace(/\s/g, "+"); + "&v=" + this.idioma;
     this.httpProvider.getTem(url).then((res) => {
       this.res = res;
       this.res.forEach(() => {
@@ -270,12 +257,10 @@ export class SharePage {
     .
     .
     .`;
-    //var text: string
     if (this.hashtag_tex) {
       var tem = this.hashtag_tex.split('#');
       var mitad: number = Math.round(tem.length / 2);
       console.log(mitad)
-      //this.hashtag_tex = '';     
       tem.forEach((element, index) => {
         if (index == 0) {
           this.comentario_tex += a + element + ' ';
@@ -304,7 +289,7 @@ export class SharePage {
 
     this.clipboard.clear();
     if (this.option == "I") {
-      var t = "http://35.232.20.49/advansocialimg.php?src=" + this.img;
+      var t = this.httpProvider.URL_IMG + this.img;
       file = t.replace(/&/g, "<->");
     } else if (this.option == "IG") {
       file = this.img;
@@ -313,7 +298,6 @@ export class SharePage {
     }
     var tex = this.comentario_tex;
     this.comentario_tex = '';
-    //console.log('t :  ' + file);
     this.socialSharing.share(tex, null, file, null).then(() => {
       this.reset();
       this.load.dismiss();
@@ -354,7 +338,6 @@ export class SharePage {
             let url: string = "servicio=setEliminarAdvanSocial&id_advansocial=" + id_advansocial;
             this.httpProvider.get(url).then((res) => {
               this.res = res;
-              //this.globalProvider.alerta(this.res.msn);
               if (this.res.error == 'false') {
                 this.getAdvanSocial();
               } else {
@@ -386,7 +369,8 @@ export class SharePage {
       comentario: this.comentario_tex,
       hashtag: this.hashtag_tex,
       tipo: tipo,
-      url: ruta
+      url: ruta,
+      poster: this.poster
     };
 
     this.httpProvider.post(data, url).then((res) => {
@@ -401,7 +385,6 @@ export class SharePage {
   }
 
   setEditAdvanSocial(social: any, i: number) {
-    console.log(this.textarea_comentarios[i])
     var tem = this.textarea_comentarios[i].split('#')
     var comentarios = tem[0];
     var hashtag: string = '';
@@ -431,7 +414,6 @@ export class SharePage {
   }
 
   compartirSave(social: any) {
-    //console.log("comentario : " + social.comentario + ' hashtag: ' + social.hashtag + ' url: ' + social.url);
     this.load = this.globalProvider.cargando(this.globalProvider.data.msj.load);
     var a: string = `
     .
