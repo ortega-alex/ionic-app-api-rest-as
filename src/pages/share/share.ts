@@ -1,11 +1,13 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, Platform, ViewController, AlertController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ViewController, Platform, AlertController } from 'ionic-angular';
+
 import { HttpProvider } from '../../providers/http/http';
 import { GlobalProvider } from '../../providers/global/global';
-import { SocialSharing } from '@ionic-native/social-sharing';
-import { Clipboard } from '@ionic-native/clipboard';
+
 import { Camera, CameraOptions } from '@ionic-native/camera';
 import { MediaCapture, MediaFile, CaptureVideoOptions } from '@ionic-native/media-capture';
+import { Clipboard } from '@ionic-native/clipboard';
+import { SocialSharing } from '@ionic-native/social-sharing';
 
 @IonicPage()
 @Component({
@@ -15,72 +17,193 @@ import { MediaCapture, MediaFile, CaptureVideoOptions } from '@ionic-native/medi
 export class SharePage {
 
   dispositivo: boolean;
-  hashtag_tex: string;
-  comentario_tex: string;
-  whizar: Array<string>;
-  option: string;
-  img_catalogo: boolean;
-  img_tex: string;
+  img: string;
+  video: string;
+  whizar: Array<{ color: string, activo: boolean }>;
   imagenes: Array<any>;
   videos: Array<any>;
   res: any;
+  load: any;
+  option: string;
+  img_tem: string;
+  video_tem: string;
+  post_guardados: boolean;
+  img_tex: string;
   spinner1: boolean;
-  img: string;
-  video: string;
   poster: string;
+  poster_tem: string;
+  alto: string;
+  ancho: string;
+  posicion_logo: Array<{ title: string, posicion: number, id: number }>;
+  hashtag_tex: string;
   busqueda: string;
+  idioma: string;
   hashtag_selected: Array<boolean>;
   hashtags: Array<any>;
-  idioma: string;
-  hashtags_btn: boolean;
-  load: any;
-
-  post_guardados: boolean;
+  comentario_tex: string;
+  logos: Array<any>;
+  logo_select: { id: number, posicion: number };
   list_save: Array<any>;
   textarea_comentarios: Array<string>;
 
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
-    private platform: Platform,
     private viewController: ViewController,
-    private httpProvider: HttpProvider,
-    private globalProvider: GlobalProvider,
-    private socialSharing: SocialSharing,
-    private clipboard: Clipboard,
+    private platform: Platform,
     private camera: Camera,
     private mediaCapture: MediaCapture,
-    private alertController: AlertController
+    private httpProvider: HttpProvider,
+    private globalProvider: GlobalProvider,
+    private alertController: AlertController,
+    private clipboard: Clipboard,
+    private socialSharing: SocialSharing
   ) {
     this.dispositivo = (this.platform.is('android')) ? true : false;
     this.whizar = [
-      '#745af2', null, null
+      { color: '#745af2', activo: true },
+      { color: null, activo: false },
+      { color: null, activo: false },
+      { color: null, activo: false }
     ];
     this.option = 'I';
-    this.img_catalogo = true;
     this.imagenes = [];
     this.videos = [];
+    this.posicion_logo = [
+      { title: 'left top', posicion: null, id: null },
+      { title: 'top center', posicion: null, id: null },
+      { title: 'right top', posicion: null, id: null },
+      { title: 'left center', posicion: null, id: null },
+      { title: 'center', posicion: null, id: null },
+      { title: 'right center', posicion: null, id: null },
+      { title: 'left bottom', posicion: null, id: null },
+      { title: 'bottom center', posicion: null, id: null },
+      { title: 'right bottom', posicion: null, id: null }
+    ];
+    this.idioma = 'en';
     this.hashtag_selected = [];
     this.hashtags = [];
-    this.idioma = 'en';
-    this.hashtags_btn = true;
-
+    this.logos = [];
+    this.logo_select = { id: null, posicion: null };
     this.list_save = [];
     this.textarea_comentarios = [];
   }
 
-  ionViewDidLoad() { }
+  ionViewDidLoad() {
+    this.getAdvanSocialLogoUsuario();
+  }
 
   closeModal(): void {
     this.viewController.dismiss();
   }
 
-  contadorHashtag() {
-    if (this.hashtag_tex) {
-      var arr = this.hashtag_tex.split("#");
-      return arr.length - 1;
+  getAdvanSocialLogoUsuario() {
+    let url: string = "servicio=getAdvanSocialLogoUsuario&id_usuario=" + this.globalProvider.usuario.id_usuario;
+    this.httpProvider.get(url).then((res) => {
+      this.res = res;
+      this.logos = this.res.logo;
+    }).catch(err => console.log('err: ' + JSON.stringify(err)))
+  }
+
+  reset(): void {
+    this.res = undefined;
+    this.img = undefined;
+    this.video = undefined;
+    this.whizar = [
+      { color: '#745af2', activo: true },
+      { color: null, activo: false },
+      { color: null, activo: false },
+      { color: null, activo: false }
+    ];
+    this.imagenes = [];
+    this.videos = [];
+    this.option = 'I';
+    this.post_guardados = undefined;
+    this.img_tex = '';
+    this.spinner1 = undefined;
+    this.poster = undefined;
+    this.ancho = undefined;
+    this.alto = undefined;
+    this.idioma = 'en';
+    this.hashtag_tex = undefined;
+    this.busqueda = undefined;
+    this.hashtag_selected = [];
+    this.hashtags = [];
+    this.comentario_tex = undefined;
+    this.hashtag_tex = undefined;
+    this.list_save = [];
+    this.textarea_comentarios = [];
+    this.logo_select = { id: null, posicion: null };
+  }
+
+  menu(i: number) {
+    this.whizar.forEach((element, index) => {
+      if (index <= i) {
+        element.color = "#745af2";
+        if (i == index) {
+          element.activo = true;
+        } else {
+          element.activo = false;
+        }
+      } else {
+        element.color = null;
+        element.activo = false;
+      }
+    });
+  }
+
+  tomarForto() {
+    const options: CameraOptions = {
+      quality: 50,
+      destinationType: this.camera.DestinationType.DATA_URL,
+      encodingType: this.camera.EncodingType.JPEG,
+      mediaType: this.camera.MediaType.PICTURE,
+      targetWidth: 600,
+      targetHeight: 600,
+      correctOrientation: true,
+      saveToPhotoAlbum: true
+    };
+    this.camera.getPicture(options).then(imageData => {
+      this.video_tem = undefined;
+      this.img_tem = "data:image/jpeg;base64," + imageData;
+      if (this.logos.length > 0) {
+        this.menu(1);
+        this.logos.forEach((elemento) => {
+          if (elemento.predeterminado == "Y") {
+            this.inserPosicionLogo(elemento.posicion, elemento.id_advansocial_logo)
+          }
+        }, this);
+      } else {
+        let url: string = "servicio=getUrlImgLogoUsuario&id_usuario=" + this.globalProvider.usuario.id_usuario;
+        let data: any = {
+          imagen: this.img_tem,
+          id_logo: 0,
+          posicion: 7
+        }
+        this.httpProvider.post(data, url).then((res) => {
+          this.res = res;
+          this.img = this.res.url;
+        }).catch(err => console.log('err' + JSON.stringify(err)));
+        this.menu(2);
+        this.logo_select.id = 0;
+        this.logo_select.posicion = 7;
+      }
+    }, err => console.log(JSON.stringify(err)));
+  }
+
+  tomarVideo() {
+    this.img = undefined;
+    let options: CaptureVideoOptions = {
+      limit: 1,
+      duration: 60
     }
-    return 0;
+    this.mediaCapture.captureVideo(options).then((res: MediaFile[]) => {
+      this.img = undefined;
+      this.video = res[0].fullPath;
+      this.menu(2);
+    }, (err) => {
+      console.log(JSON.stringify(err));
+    });
   }
 
   catalogoImg() {
@@ -116,98 +239,114 @@ export class SharePage {
       this.httpProvider.getTem(url).then((res) => {
         this.res = res;
         this.videos = this.videos.concat(this.res.hits);
-      }).catch(err => {
-        console.log('err: ', JSON.stringify(err));
-      });
+      }).catch(err => console.log('err: ', JSON.stringify(err)));
     }
     this.spinner1 = false;
   }
 
-  tomarForto() {
-    const options: CameraOptions = {
-      quality: 50,
-      destinationType: this.camera.DestinationType.DATA_URL,
-      encodingType: this.camera.EncodingType.JPEG,
-      mediaType: this.camera.MediaType.PICTURE,
-      targetWidth: 600,
-      targetHeight: 600,
-      correctOrientation: true,
-      saveToPhotoAlbum: true
-    };
-    this.camera.getPicture(options).then(imageData => {
-      this.img = "data:image/jpeg;base64," + imageData;
-      this.video = undefined;
-      this.whizar[1] = "#745af2";
-      this.img_catalogo = false;
-    }, err => {
-      console.log(JSON.stringify(err));
-    });
-  }
-
-  tomarVideo() {
-    this.img = undefined;
-    let options: CaptureVideoOptions = {
-      limit: 1,
-      duration: 30
-    }
-    this.mediaCapture.captureVideo(options).then((res: MediaFile[]) => {
-      this.video = res[0].fullPath;
-      this.poster = res[0].fullPath;
-      this.whizar[1] = "#745af2";
-      this.img_catalogo = false;
-    }, (err) => {
-      console.log(JSON.stringify(err));
-    });
-  }
-
-  selectImg(ruta: string, poster: string = null) {
+  selectImg(ruta: string, poster: string = null, ancho: string = null, alto: string = null) {
     if (this.option == 'I') {
       this.video = undefined;
-      this.img = ruta;
-    } else {
-      this.poster = this.getPoster(poster);
-      let url: string = this.httpProvider.URL_VIDEO + poster + "&src=" + ruta;
+      this.video_tem = undefined;
       this.img = undefined;
+      this.img_tem = ruta;
+    } else {
+      this.poster_tem = poster;
+      this.alto = alto;
+      this.ancho = ancho;
       this.video = undefined;
-      this.httpProvider.getTem(url).then((res) => {
-        this.res = res;
-        this.video = this.res.url;
-      }).catch(err => console.log('err: ' + JSON.stringify(err)));
+      this.video_tem = ruta;
+      this.img = undefined;
+      this.img_tem = undefined;
     }
-    this.whizar[1] = "#745af2";
-    this.img_catalogo = false;
-  }
-
-  reset(): void {
-    this.hashtag_tex = undefined;
-    this.hashtag_tex = undefined;
-    this.comentario_tex = undefined;
-    this.img_tex = undefined;
-    this.res = undefined;
-    this.spinner1 = undefined;
-    this.img = undefined;
-    this.video = undefined;
-    this.poster = undefined;
-    this.whizar = [
-      '#745af2', null, null
-    ];
-    this.option = 'I';
-    this.img_catalogo = true;
-    this.imagenes = [];
-    this.videos = [];
-    this.busqueda = undefined;
-    this.hashtag_selected = [];
-    this.hashtags = [];
-    this.idioma = 'en';
-    this.hashtags_btn = true;
-
-    this.post_guardados = undefined;
-    this.list_save = [];
-    this.textarea_comentarios = [];
+    if (this.logos.length > 0) {
+      this.logos.forEach((elemento) => {
+        if (elemento.predeterminado == "Y") {
+          this.inserPosicionLogo(elemento.posicion, elemento.id_advansocial_logo)
+        }
+      }, this);
+      this.menu(1);
+    } else {
+      this.menu(2);
+      if (this.option == "I") {
+        var t = this.httpProvider.URL_IMG + this.img_tem;
+        this.img = t.replace(/&/g, "<->");
+        this.img += "&id_usuario=" + this.globalProvider.usuario.id_usuario + "&id_logo=" + 0 + "&pos=" + 7;
+      }
+      if (this.option == "V") {
+        let url: string = this.httpProvider.URL_VIDEO + poster + "&src=" + ruta + "&id=" + poster + "&w=" + ancho + "&h=" + alto + "&id_logo=" + 0 + "&pos=" + 7;
+        this.img = undefined;
+        this.video = undefined;
+        this.httpProvider.getTem(url).then((res) => {
+          this.res = res;
+          this.video = this.res.url;
+          this.poster = this.getPoster(poster);
+        }).catch(err => console.log('err: ' + JSON.stringify(err)));
+      }
+      this.logo_select.id = 0;
+      this.logo_select.posicion = 7;
+    }
   }
 
   getPoster(picture_id: string) {
     return "https://i.vimeocdn.com/video/" + picture_id + "_640x360.jpg";
+  }
+
+  back() {
+    var posicion: number;
+    this.whizar.forEach((element, index) => {
+      if (element.activo) {
+        posicion = index;
+      }
+    });
+    if (posicion == 2 && (this.logos.length == 0 || this.option == "VG")) {
+      //this.menu(0);
+      this.reset();
+    } else {
+      this.menu(posicion - 1);
+    }
+  }
+
+  nex() {
+    var posicion: number;
+    if (this.whizar[1].activo) {
+      if (this.option == "I") {
+        var t = this.httpProvider.URL_IMG + this.img_tem;
+        this.img = t.replace(/&/g, "<->");
+        this.img += "&id_usuario=" + this.globalProvider.usuario.id_usuario + "&id_logo=" + this.logo_select.id + "&pos=" + this.logo_select.posicion;
+      }
+
+      if (this.option == "V") {
+        let url: string = this.httpProvider.URL_VIDEO + this.poster_tem + "&src=" + this.video_tem + "&w=" + this.ancho + "&h=" + this.alto + "&id_logo=" + this.logo_select.id + "&pos=" + this.logo_select.posicion;
+        this.img = undefined;
+        this.video = undefined;
+        this.httpProvider.getTem(url).then((res) => {
+          this.res = res;
+          this.video = this.res.url;
+          this.img = undefined;
+          this.poster = this.getPoster(this.poster_tem);
+        }).catch(err => console.log('err: ' + JSON.stringify(err)));
+      }
+
+      if (this.option == "IG") {
+        let url: string = "servicio=getUrlImgLogoUsuario&id_usuario=" + this.globalProvider.usuario.id_usuario;
+        let data: any = {
+          imagen: this.img_tem,
+          id_logo: this.logo_select.id,
+          posicion: this.logo_select.posicion
+        }
+        this.httpProvider.post(data, url).then((res) => {
+          this.res = res;
+          this.img = this.res.url;
+        }).catch(err => console.log('err' + JSON.stringify(err)));
+      }
+    }
+    this.whizar.forEach((element, index) => {
+      if (element.activo) {
+        posicion = index;
+      }
+    });
+    this.menu(posicion + 1);
   }
 
   catalogoHashtag() {
@@ -222,11 +361,6 @@ export class SharePage {
     }).catch(err => console.log('err: ', JSON.stringify(err)));
   }
 
-  replaceEspacio(text: string) {
-    var t = text.replace(/\s/g, "")
-    return t;
-  }
-
   clickHashtag(text: string) {
     if (this.contadorHashtag() < 29) {
       if (this.hashtag_tex) {
@@ -237,14 +371,43 @@ export class SharePage {
     }
   }
 
-  nex() {
-    this.hashtags_btn = !this.hashtags_btn;
-    if (this.hashtags_btn == false) {
-      this.whizar[2] = "#745af2";
-    } else {
-      this.whizar[2] = null;
+  contadorHashtag() {
+    if (this.hashtag_tex) {
+      var arr = this.hashtag_tex.split("#");
+      return arr.length - 1;
     }
+    return 0;
   }
+
+  replaceEspacio(text: string) {
+    var t = text.replace(/\s/g, "")
+    return t;
+  }
+
+  inserPosicionLogo(posicion: number, id: number) {
+    this.posicion_logo.forEach((element, index) => {
+      if (posicion == index) {
+        element.posicion = posicion;
+        element.id = id;
+        this.logo_select = { id: id, posicion: posicion };
+      } else {
+        element.posicion = null;
+        element.id = null;
+      }
+    }, this);
+  }
+
+  /*posicionLogo(i: number) {
+    if (this.logo_select.id == null) {
+      let alert = this.alertController.create({
+        title: "select logo! ",
+        buttons: ['ok']
+      });
+      alert.present();
+      return false;
+    }
+    this.inserPosicionLogo(i, this.logo_select.id);
+  }*/
 
   compartir() {
     this.load = this.globalProvider.cargando(this.globalProvider.data.msj.load);
@@ -260,7 +423,6 @@ export class SharePage {
     if (this.hashtag_tex) {
       var tem = this.hashtag_tex.split('#');
       var mitad: number = Math.round(tem.length / 2);
-      console.log(mitad)
       tem.forEach((element, index) => {
         if (index == 0) {
           this.comentario_tex += a + element + ' ';
@@ -268,7 +430,6 @@ export class SharePage {
           this.comentario_tex += "#" + element;
         }
         if (index == mitad) {
-          console.log('insert')
           this.comentario_tex += "#advansales ";
         }
       }, this);
@@ -276,7 +437,6 @@ export class SharePage {
       this.comentario_tex + a + "#advansales";
     }
 
-    console.log(this.comentario_tex);
     this.clipboard.copy(this.comentario_tex);
     this.clipboard.paste().then(
       (resolve: string) => {
@@ -288,10 +448,7 @@ export class SharePage {
     );
 
     this.clipboard.clear();
-    if (this.option == "I") {
-      var t = this.httpProvider.URL_IMG + this.img;
-      file = t.replace(/&/g, "<->");
-    } else if (this.option == "IG") {
+    if (this.option == "I" || this.option == "IG") {
       file = this.img;
     } else {
       file = this.video;
@@ -299,7 +456,7 @@ export class SharePage {
     var tex = this.comentario_tex;
     this.comentario_tex = '';
     this.socialSharing.share(tex, null, file, null).then(() => {
-      this.reset();
+      //this.reset();
       this.load.dismiss();
     }).catch(err => {
       this.load.dismiss();
@@ -370,7 +527,9 @@ export class SharePage {
       hashtag: this.hashtag_tex,
       tipo: tipo,
       url: ruta,
-      poster: this.poster
+      poster: this.poster,
+      id_logo: this.logo_select.id,
+      posicion: this.logo_select.posicion
     };
 
     this.httpProvider.post(data, url).then((res) => {
@@ -400,7 +559,9 @@ export class SharePage {
       comentario: comentarios,
       hashtag: hashtag,
       tipo: social.tipo,
-      url: social.url
+      url: social.url,
+      id_logo: social.id_advansocial_logo,
+      posicion: social.posicion
     }
 
     this.httpProvider.post(data, url).then((res) => {
@@ -447,7 +608,6 @@ export class SharePage {
       }
     );
 
-    console.log(social.comentario);
     this.socialSharing.share(social.comentario, null, social.url, null).then(() => {
       this.reset();
       this.load.dismiss();
@@ -463,6 +623,10 @@ export class SharePage {
     this.httpProvider.get(url).then(() => {
       console.log('success');
     }).catch(err => console.log('err:' + JSON.stringify(err)));
+  }
+
+  returnBorder(color: string) {
+    return "solid 5px " + color;
   }
 
 }

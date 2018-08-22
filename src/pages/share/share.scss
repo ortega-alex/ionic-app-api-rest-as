@@ -21,7 +21,10 @@ page-share {
         border-radius: 6px;
     }
     #content-progres{
-        margin: 30% 0% !important; 
+        //margin: 50% 0% !important; 
+        position: relative;
+        top: 50%;
+        transform: perspective(1px) translateY(-50%);
         height: 20% !important;
         border: solid gray 1px;						
     }
@@ -64,5 +67,33 @@ page-share {
             margin: auto;
             display: block;
         }
+    }
+
+    .posicion-logo{
+        position: absolute;
+        top: 37.5%;
+        left: 7%;
+        width: 310px;
+        height: 230px; 
+       
+        #cuadros{
+            border-width: 0.1px; 
+            border-style: dashed; 
+            border-color: black;
+            //font-weight: bold;
+            -webkit-text-stroke: 0.2px white;
+            #btn-cuadro{
+                font-size: 0.9em;
+               // border: solid black 1px;
+                width: 100% !important;
+                height: 100% !important;
+                margin: 0% !important;
+            }
+        }
+    }
+    #logo-title{
+        font-size: 1.3em;
+        font-weight: bold;
+        padding-bottom: 0%; 
     }
 }
