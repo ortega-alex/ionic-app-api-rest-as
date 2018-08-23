@@ -46,6 +46,10 @@ export class SharePage {
   list_save: Array<any>;
   textarea_comentarios: Array<string>;
 
+  pagina_img: number;
+  pagina_video: number;
+  idiomas: Array<any>;
+
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -87,6 +91,10 @@ export class SharePage {
     this.logo_select = { id: null, posicion: null };
     this.list_save = [];
     this.textarea_comentarios = [];
+
+    this.pagina_img = 1;
+    this.pagina_video = 1;
+    this.idiomas = [];
   }
 
   ionViewDidLoad() {
@@ -134,6 +142,10 @@ export class SharePage {
     this.list_save = [];
     this.textarea_comentarios = [];
     this.logo_select = { id: null, posicion: null };
+
+    this.pagina_img = 1;
+    this.pagina_video = 1;
+    this.idiomas = [];
   }
 
   menu(i: number) {
@@ -201,25 +213,23 @@ export class SharePage {
       this.img = undefined;
       this.video = res[0].fullPath;
       this.menu(2);
+      this.logo_select.id = 0;
+      this.logo_select.posicion = 7;
     }, (err) => {
       console.log(JSON.stringify(err));
     });
   }
 
-  catalogoImg() {
+  catalogoImgOVideo() {
     if (this.option == 'I') {
-      this.httpProvider.URLS[0].PAGINA = 1;
-      let url: string = this.httpProvider.URLS[0].URL + this.httpProvider.URLS[0].PAGINA + this.httpProvider.URLS[0].QUERY + this.img_tex.replace(/\s/g, "+") + this.httpProvider.URLS[0].CLIENTE_ID;
-      this.httpProvider.getTem(url).then((res) => {
-        this.res = res;
-        this.imagenes = this.res.results;
-      }).catch(err => console.log('err: ', JSON.stringify(err)));
+      let url: string = "servicio=getFotosAdvanSocial&texto=" + this.img_tex.replace(/\s/g, "+") + "&page=" + this.pagina_img;
+      this.httpProvider.get(url).then((res: Array<any>) => {
+        this.imagenes = res;
+      }).catch(err => console.log('err: ' + JSON.stringify(err)))
     } else {
-      this.httpProvider.URLS[1].PAGINA = 1;
-      let url: string = this.httpProvider.URLS[1].URL + this.httpProvider.URLS[1].PAGINA + this.httpProvider.URLS[1].QUERY + this.img_tex + this.httpProvider.URLS[1].CLIENTE_ID;
-      this.httpProvider.getTem(url).then((res) => {
-        this.res = res;
-        this.videos = this.res.hits;
+      let url: string = "servicio=getVideoAdvanSocial&texto=" + this.img_tex.replace(/\s/g, "+") + "&page=" + this.pagina_video;
+      this.httpProvider.get(url).then((res: Array<any>) => {
+        this.videos = res;
       }).catch(err => console.log('err: ' + JSON.stringify(err)));
     }
   }
@@ -227,31 +237,29 @@ export class SharePage {
   cargarMas() {
     this.spinner1 = true;
     if (this.option == 'I') {
-      this.httpProvider.URLS[0].PAGINA = this.httpProvider.URLS[0].PAGINA + 1;
-      let url: string = this.httpProvider.URLS[0].URL + this.httpProvider.URLS[0].PAGINA + this.httpProvider.URLS[0].QUERY + this.img_tex + this.httpProvider.URLS[0].CLIENTE_ID;
-      this.httpProvider.getTem(url).then((res) => {
-        this.res = res;
-        this.imagenes = this.imagenes.concat(this.res.results);
+      this.pagina_img++;
+      let url: string = "servicio=getFotosAdvanSocial&texto=" + this.img_tex.replace(/\s/g, "+") + "&page=" + this.pagina_img;
+      this.httpProvider.get(url).then((res: Array<any>) => {
+        this.imagenes = this.imagenes.concat(res);
       }).catch(err => console.log('err: ', JSON.stringify(err)));
     } else {
-      this.httpProvider.URLS[1].PAGINA = this.httpProvider.URLS[1].PAGINA + 1;
-      let url: string = this.httpProvider.URLS[1].URL + this.httpProvider.URLS[1].PAGINA + this.httpProvider.URLS[1].QUERY + this.img_tex + this.httpProvider.URLS[1].CLIENTE_ID;
-      this.httpProvider.getTem(url).then((res) => {
-        this.res = res;
-        this.videos = this.videos.concat(this.res.hits);
-      }).catch(err => console.log('err: ', JSON.stringify(err)));
+      this.pagina_video++;
+      let url: string = "servicio=getVideoAdvanSocial&texto=" + this.img_tex.replace(/\s/g, "+") + "&page=" + this.pagina_video;
+      this.httpProvider.get(url).then((res: Array<any>) => {
+        this.videos = this.videos.concat(res);
+      }).catch(err => console.log('err: ' + JSON.stringify(err)));
     }
     this.spinner1 = false;
   }
 
-  selectImg(ruta: string, poster: string = null, ancho: string = null, alto: string = null) {
+  selectImg(ruta: string, poster: string = null, ancho: string = null, alto: string = null, id: string = null) {
     if (this.option == 'I') {
       this.video = undefined;
       this.video_tem = undefined;
       this.img = undefined;
       this.img_tem = ruta;
     } else {
-      this.poster_tem = poster;
+      this.poster_tem = id;
       this.alto = alto;
       this.ancho = ancho;
       this.video = undefined;
@@ -274,22 +282,18 @@ export class SharePage {
         this.img += "&id_usuario=" + this.globalProvider.usuario.id_usuario + "&id_logo=" + 0 + "&pos=" + 7;
       }
       if (this.option == "V") {
-        let url: string = this.httpProvider.URL_VIDEO + poster + "&src=" + ruta + "&id=" + poster + "&w=" + ancho + "&h=" + alto + "&id_logo=" + 0 + "&pos=" + 7;
+        let url: string = this.httpProvider.URL_VIDEO + id + "&src=" + ruta + "&id=" + id + "&w=" + ancho + "&h=" + alto + "&id_logo=" + 0 + "&pos=" + 7;
         this.img = undefined;
         this.video = undefined;
         this.httpProvider.getTem(url).then((res) => {
           this.res = res;
           this.video = this.res.url;
-          this.poster = this.getPoster(poster);
+          this.poster = poster;
         }).catch(err => console.log('err: ' + JSON.stringify(err)));
       }
       this.logo_select.id = 0;
       this.logo_select.posicion = 7;
     }
-  }
-
-  getPoster(picture_id: string) {
-    return "https://i.vimeocdn.com/video/" + picture_id + "_640x360.jpg";
   }
 
   back() {
@@ -300,7 +304,6 @@ export class SharePage {
       }
     });
     if (posicion == 2 && (this.logos.length == 0 || this.option == "VG")) {
-      //this.menu(0);
       this.reset();
     } else {
       this.menu(posicion - 1);
@@ -324,7 +327,7 @@ export class SharePage {
           this.res = res;
           this.video = this.res.url;
           this.img = undefined;
-          this.poster = this.getPoster(this.poster_tem);
+          this.poster = this.poster;
         }).catch(err => console.log('err: ' + JSON.stringify(err)));
       }
 
@@ -346,19 +349,26 @@ export class SharePage {
         posicion = index;
       }
     });
+    this.getCatlogoLenguajeAdvanSocial();
     this.menu(posicion + 1);
   }
 
-  catalogoHashtag() {
+  getCatlogoLenguajeAdvanSocial() {
+    let url: string = "servicio=getCatlogoLenguajeAdvanSocial";
+    this.httpProvider.get(url).then((res: Array<any>) => {
+      this.idiomas = res;
+    }).catch(err => console.log('err: ' + JSON.stringify(err)));
+  }
+
+  getHashtagAdvanSocial() {
     this.hashtag_selected = [];
-    let url: string = this.httpProvider.URL_HASTAG + this.busqueda.replace(/\s/g, "+"); + "&v=" + this.idioma;
-    this.httpProvider.getTem(url).then((res) => {
-      this.res = res;
-      this.res.forEach(() => {
+    let url: string = "servicio=getHashtagAdvanSocial&texto=" + this.busqueda.replace(/\s/g, "+") + "&lenguaje=" + this.idioma;
+    this.httpProvider.get(url).then((res: Array<any>) => {
+      res.forEach(() => {
         this.hashtag_selected.push(true);
       }, this);
-      this.hashtags = this.res;
-    }).catch(err => console.log('err: ', JSON.stringify(err)));
+      this.hashtags = res;
+    }).catch(err => console.log('err: ' + JSON.stringify(err)));
   }
 
   clickHashtag(text: string) {
@@ -396,18 +406,6 @@ export class SharePage {
       }
     }, this);
   }
-
-  /*posicionLogo(i: number) {
-    if (this.logo_select.id == null) {
-      let alert = this.alertController.create({
-        title: "select logo! ",
-        buttons: ['ok']
-      });
-      alert.present();
-      return false;
-    }
-    this.inserPosicionLogo(i, this.logo_select.id);
-  }*/
 
   compartir() {
     this.load = this.globalProvider.cargando(this.globalProvider.data.msj.load);
@@ -456,7 +454,6 @@ export class SharePage {
     var tex = this.comentario_tex;
     this.comentario_tex = '';
     this.socialSharing.share(tex, null, file, null).then(() => {
-      //this.reset();
       this.load.dismiss();
     }).catch(err => {
       this.load.dismiss();

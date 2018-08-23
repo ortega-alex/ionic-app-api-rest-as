@@ -290,7 +290,7 @@ export class HomePage {
           (this.edid_name[posicion_campania].stado[posicion] == true) ? this.edid_name[posicion_campania].border_stado[posicion] = "solid white 4px" : this.edid_name[posicion_campania].border_stado[posicion] = "none";
         } else {
           this.edid_name_manual[posicion_campania].stado[posicion] = !this.edid_name_manual[posicion_campania].stado[posicion];
-          (this.edid_name_manual[posicion_campania].stado[posicion] == true) ? this.edid_name_manual[posicion_campania].border_stado[posicion] = "solid gray 4px" : this.edid_name_manual[posicion_campania].border_stado[posicion] = "none";
+          (this.edid_name_manual[posicion_campania].stado[posicion] == true) ? this.edid_name_manual[posicion_campania].border_stado[posicion] = "solid white 4px" : this.edid_name_manual[posicion_campania].border_stado[posicion] = "none";
         }
       }
     }

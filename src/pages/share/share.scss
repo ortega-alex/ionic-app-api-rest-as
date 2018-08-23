@@ -5,8 +5,6 @@ page-share {
         .conten-row{
             #conten-row{
                 #title{
-                   // margin-top: 4%;
-                   //font-size: 1.5em;
                    height: 2.7em;
                 }    
                
@@ -21,7 +19,6 @@ page-share {
         border-radius: 6px;
     }
     #content-progres{
-        //margin: 50% 0% !important; 
         position: relative;
         top: 50%;
         transform: perspective(1px) translateY(-50%);
@@ -69,22 +66,32 @@ page-share {
         }
     }
 
-    .posicion-logo{
+    #img-social-marca{
         position: absolute;
-        top: 37.5%;
-        left: 7%;
+        top: 40%;
         width: 310px;
         height: 230px; 
-       
+        left: 0;
+        right: 0;
+        margin: 0 auto;
+    }
+
+    .posicion-logo{
+        position: absolute;
+        top: 41%;
+        width: 310px;
+        height: 230px; 
+        left: 0;
+        right: 0;
+        margin: 0 auto;
+      
         #cuadros{
             border-width: 0.1px; 
             border-style: dashed; 
             border-color: black;
-            //font-weight: bold;
             -webkit-text-stroke: 0.2px white;
             #btn-cuadro{
                 font-size: 0.9em;
-               // border: solid black 1px;
                 width: 100% !important;
                 height: 100% !important;
                 margin: 0% !important;

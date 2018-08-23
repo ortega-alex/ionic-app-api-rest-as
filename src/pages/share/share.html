@@ -53,21 +53,21 @@
           </ion-item>
         </ion-col>
         <ion-col col-3>
-          <button ion-button small color="dark" block (click)="catalogoImg()">
+          <button ion-button small color="dark" block (click)="catalogoImgOVideo()">
             <ion-icon name="search">
             </ion-icon>
           </button>
         </ion-col>
       </ion-row>
       <ion-list no-lines no-padding text-center *ngFor="let img of imagenes">
-        <img [src]="img.urls.small" (click)="selectImg(img.urls.small , img.id)" />
-        <p id="author-text">
-          Photo by {{ img.user.name }} on Unsplash
+        <img [src]="img.url_pre" width="100%" (click)="selectImg(img.url , img.id)" />
+        <p id="author-text" *ngIf="img.power_by_name">
+          Photo by {{ img.power_by_name }} on Unsplash
         </p>
       </ion-list>
-      <ion-list no-lines no-padding text-center *ngFor="let video of videos" (click)="selectImg(video.videos.small.url , video.picture_id , video.videos.tiny.width , video.videos.tiny.height)">
-        <video width="300" height="240" *ngIf="video.duration  <= 60" controls poster="{{ getPoster(video.picture_id) }}">
-          <source [src]="video.videos.tiny.url" type="video/mp4" />
+      <ion-list no-lines no-padding text-center *ngFor="let video of videos" (click)="selectImg(video.url , video.url_img_pre , video.width , video.heigth , video.id)">
+        <video width="300" height="240" *ngIf="video.duration  <= 60" controls poster="{{ video.url_img_pre }}">
+          <source [src]="video.url" type="video/mp4" />
         </video>
       </ion-list>
       <button ion-button small block clear color="primary" (click)="cargarMas()" *ngIf="(imagenes && imagenes.length> 0) || (videos && videos.length> 0)">
@@ -93,7 +93,7 @@
             (click)="inserPosicionLogo(logo.posicion , logo.id_advansocial_logo)" />
         </ion-col>
       </ion-row>
-      <div id="img-social">
+      <div id="img-social-marca">
         <img src="assets/imgs/default.png" width="320" height="240" />
       </div>
       <ion-row class="posicion-logo" no-padding no-lines>
@@ -127,17 +127,12 @@
             <ion-label floating>
             </ion-label>
             <ion-select id="select-idioma" [(ngModel)]="idioma" interface="action-sheet">
-              <ion-option value="en">
-                en
-              </ion-option>
-              <ion-option value="es">
-                es
-              </ion-option>
+              <ion-option *ngFor="let idi of idiomas" value="{{idi.text}}">{{idi.text}}</ion-option>
             </ion-select>
           </ion-item>
         </ion-col>
         <ion-col col-3>
-          <button ion-button small color="dark" block (click)="catalogoHashtag()">
+          <button ion-button small color="dark" block (click)="getHashtagAdvanSocial()">
             <ion-icon name="search">
             </ion-icon>
           </button>
@@ -145,9 +140,9 @@
       </ion-row>
       <ion-scroll scrollY="true" no-Lines no-border no-padding>
         <div id="content-hashtag" *ngFor="let hashtag of hashtags ; let i = index">
-          <button ion-button small outline color="dark" id="hashtag-wold" *ngIf="hashtag_selected[i]" (click)="clickHashtag('#'+replaceEspacio(hashtag.word)) ;  (contadorHashtag() < 29) ? hashtag_selected[i] = false : ''">
+          <button ion-button small outline color="dark" id="hashtag-wold" *ngIf="hashtag_selected[i]" (click)="clickHashtag(replaceEspacio(hashtag.texto)) ;  (contadorHashtag() < 29) ? hashtag_selected[i] = false : ''">
             <b>
-              #{{ replaceEspacio(hashtag.word) }}
+              {{ replaceEspacio(hashtag.texto) }}
             </b>
           </button>
         </div>
@@ -201,8 +196,7 @@
         </ion-col>
         <ion-col col-3>
           <button ion-button small block color="dark" (click)="setEditAdvanSocial(save , i)">
-            <ion-icon name="create">
-            </ion-icon>
+            SAVE
           </button>
         </ion-col>
         <ion-col>
