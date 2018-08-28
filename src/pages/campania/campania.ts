@@ -108,11 +108,15 @@ export class CampaniaPage {
     this.posicion = this.navParams.get('posicion');
     this.tipo_campania = this.navParams.get('tipo_campania');
     this.separacion(1, this.estado, this.posicion);
-    if (this.campania.sms == 'Y') {
+    if (this.campania.sms == 'Y') {     
+      if (this.globalProvider.plan.leads == false) {       
+        this.msnS = false;
+        return;
+      }
       this.data.sms = this.campania.sms_predeterminado;
       this.msnS = true;
     } else {
-      this.msnS = false;
+      this.msnS = false;     
     }
   }
 
@@ -234,7 +238,12 @@ export class CampaniaPage {
       if (this.res.error == 'false') {
         if (this.res.estado != 'F') {
           this.getFilaCampania = this.res;
-          this.data.sms = this.res.sms_predeterminado;
+          if(this.globalProvider.plan.leads == false){
+            this.data.sms = null;
+            this.msnS = false;
+          } else { 
+            this.data.sms = this.res.sms_predeterminado;
+          }          
           this.util.panel_llamada = true;
           this.call(this.getFilaCampania.telefono, true);
         } else {
@@ -401,11 +410,17 @@ export class CampaniaPage {
   }
 
   chekedSms(event) {
-    this.msnS = event.value;
-    if (event.value == true) {
-      this.data.sms = this.campania.sms_predeterminado;
+   
+    if (this.globalProvider.plan.leads == true) {
+      this.msnS = event.value;
+      if (event.value == true) {
+        this.data.sms = this.campania.sms_predeterminado;
+      } else {
+        this.data.sms = null;
+      }
     } else {
       this.data.sms = null;
+      this.msnS = false;
     }
   }
 

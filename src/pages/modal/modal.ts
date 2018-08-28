@@ -63,7 +63,7 @@ export class ModalPage {
   };
 
 
-  private products: Array<Producto>;
+  products: Array<Producto>;
   private dispositivo: boolean;
   private readonly: Array<{ product: boolean }>;
   //private id : any ;
@@ -368,8 +368,8 @@ export class ModalPage {
         let product: boolean = (p.suscrito == 'Y') ? true : false;
         this.readonly.push({ product: product });
       }
-      this.products = this.res;
-      console.log(this.products);
+      this.products = this.res.producto_disponible;
+     // console.log(this.products);
     }).catch(err => console.log('err: ' + err));
   }
 

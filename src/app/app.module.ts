@@ -10,6 +10,7 @@ import { PerfilPage } from '../pages/perfil/perfil';
 import { LoginPage } from '../pages/login/login';
 import { RegistroPage } from '../pages/registro/registro';
 import { SharePage } from '../pages/share/share';
+import { VcardPage } from '../pages/vcard/vcard';
 
 import { GlobalProvider } from '../providers/global/global';
 import { HttpProvider } from '../providers/http/http';
@@ -36,6 +37,8 @@ import { SocialSharing } from '@ionic-native/social-sharing';
 import { Clipboard } from '@ionic-native/clipboard';
 import { Camera } from '@ionic-native/camera';
 import { MediaCapture } from '@ionic-native/media-capture';
+import { AppRate } from '@ionic-native/app-rate';
+import { ColorPickerModule } from 'ngx-color-picker';
 
 @NgModule({
   declarations: [
@@ -44,14 +47,16 @@ import { MediaCapture } from '@ionic-native/media-capture';
     PerfilPage,
     LoginPage,
     RegistroPage,
-    SharePage
+    SharePage,
+    VcardPage
   ],
   imports: [
     BrowserModule,
     HttpModule,
     HttpClientModule,
     IonicModule.forRoot(MyApp),
-    IonicStorageModule.forRoot()
+    IonicStorageModule.forRoot(),
+    ColorPickerModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -60,7 +65,8 @@ import { MediaCapture } from '@ionic-native/media-capture';
     PerfilPage,
     LoginPage,
     RegistroPage,
-    SharePage
+    SharePage,
+    VcardPage
   ],
   providers: [
     StatusBar,
@@ -89,7 +95,8 @@ import { MediaCapture } from '@ionic-native/media-capture';
     SocialSharing,
     Clipboard,
     Camera,
-    MediaCapture
+    MediaCapture,
+    AppRate
   ]
 })
 export class AppModule { }

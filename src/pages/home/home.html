@@ -27,7 +27,7 @@
       Social
     </div-->
     <ion-row text-center>
-      <ion-col class="paquete"  *ngIf="plan.suscrito == false" (click)="modalP()">
+      <ion-col class="paquete" *ngIf="plan.suscrito == false" (click)="modalP()">
         Get Advansales Pro
       </ion-col>
       <ion-col class="paquete" (click)="redes()">
@@ -165,7 +165,8 @@
       </ion-col>
     </ion-row>
   </div>
-  <div no-Lines no-border ion-fixed class="content-footer" *ngIf="conexion == false">
+
+  <!--div no-Lines no-border ion-fixed class="content-footer" *ngIf="conexion == false">
     <div class="btn-conexion" *ngIf="sms_activo == false" (click)="monitoreo()">
       <img id="btn-conexion-tex" src="assets/imgs/text.png">
     </div>
@@ -173,5 +174,16 @@
       <p id="btn-conexion-p">SMS</p>
     </div>
     <img id="btn-conexion" src="assets/imgs/conexion.gif">
-  </div>
+  </div-->
+
+  <ion-fab bottom center *ngIf="conexion == false">
+    <button ion-fab color="dark" *ngIf="sms_activo == false" (click)="monitoreo()">
+      SYNC
+    </button>
+
+    <button ion-fab color="light" *ngIf="sms_activo == true" (click)="smsModal()">
+      SMS
+    </button>
+  </ion-fab>
+
 </ion-content>

@@ -15,18 +15,19 @@ import { Storage } from '@ionic/storage';
 import { AndroidPermissions } from '@ionic-native/android-permissions';
 import { CallLog } from '@ionic-native/call-log';
 import { Push, PushObject, PushOptions } from '@ionic-native/push';
+import { AppRate } from '@ionic-native/app-rate';
 
 @Component({
   templateUrl: 'app.html'
 })
 export class MyApp {
 
-  private rootPage: any;
-  private options: Array<CallLogObject>;
-  private set_milisegundos = new setMilisegundos();
-  private fechas = new Fechas();
-  private res = [];
-  private respuesta: any;
+  rootPage: any;
+  options: Array<CallLogObject>;
+  set_milisegundos = new setMilisegundos();
+  fechas = new Fechas();
+  res = [];
+  respuesta: any;
 
   constructor(
     private platform: Platform,
@@ -39,19 +40,24 @@ export class MyApp {
     private httProvider: HttpProvider,
     private modalControlle: ModalController,
     private push: Push,
-    private alertController: AlertController
+    private alertController: AlertController,
+    private appRate: AppRate
   ) {
     platform.ready().then(() => {
       statusBar.styleDefault();
       if (platform.is('android')) {
         this.permisos();
       }
+
       this.storage.get('usuario').then(usuario => {
         if (usuario) {
           this.rootPage = HomePage;
           if (platform.is('android')) {
             this.historialTelefonico();
           }
+
+          this.ranqui();
+
         } else {
           this.rootPage = LoginPage;
         }
@@ -188,7 +194,39 @@ export class MyApp {
     pushObject.on('error').subscribe(error => console.error('Error with Push plugin' + error));
   }
 
-  nada(){
-    console.log('rootPage: ' + this.rootPage);
+  ranqui() {
+   /* this.appRate.preferences.storeAppURL = {
+      ios: '1394472577',
+      android: 'market://details?id=com.httpsAdvanSales.AdvanSales8'
+    };    
+    this.appRate.promptForRating(true);*/
+
+    this.appRate.preferences = {
+      displayAppName: 'AdvanSales',
+      usesUntilPrompt: 2,
+      promptAgainForEachNewVersion: false,
+      
+      storeAppURL: {
+        ios: '1394472577',
+        android: 'market://details?id=com.httpsAdvanSales.AdvanSales8'
+      },
+      /*customLocale: {
+        title: 'Do you enjoy AdvanSales?',
+        message: 'If you enjoy using AdvanSales, would you mind taking a moment to rate it? Thanks so much!',
+        cancelButtonLabel: 'No, Thanks',
+        laterButtonLabel: 'Remind Me Later',
+        rateButtonLabel: 'Rate It Now'
+      },*/
+      callbacks: {
+        onRateDialogShow: function (callback) {
+          console.log('rate dialog shown!' + callback);
+        },
+        onButtonClicked: function (buttonIndex) {
+          console.log('Selected index: -> ' + buttonIndex);
+        }
+      }
+    };
+    // Opens the rating immediately no matter what preferences you set
+    this.appRate.promptForRating(false);
   }
 }

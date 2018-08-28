@@ -246,14 +246,17 @@ page-modal {
 				
 				padding: 0%;
 			}
+
+			
 			.paquete{
 				border: solid 0.1px #a4a4a4;
 				//height: 100%;
-				height: 25em; 
+				//height: 25em; 
+				padding: 5% 0%;
 				text-align: center;
 				#title{	
-					padding: 0% 1%;				
-					height: 15%;
+					padding: 2% 1%;				
+					height: 30%;
 					display: flex;
 					justify-content: center;
 					align-content: center;
@@ -264,16 +267,19 @@ page-modal {
 				#btn-paquete{
 					border: solid 0.5px black;
 					//border-radius: 50%;
-					height: 20%;
+					height: 40px;
+					
 					width: 100%;
 					//margin: 5% 12%;
 					background: #745af2;
+					padding: 2% 0% !important; 
 				}
 				#descripcion{
-					height: 50%;
+					height: 45%;
 					font-size: 0.8em;
 					width: 100%;
 					text-align: center;  
+					margin: 2% 0%;
 					#detalle{
 						padding: 0% 5%;
 						margin: 0%;
@@ -289,5 +295,10 @@ page-modal {
 			}
 		}
 	} 
+	.col{
+		//min-height: 100% !important;
+		//height: 100% !important;
+		padding: 2% 0% !important;
+	}
 
 }

@@ -176,7 +176,7 @@
     </ion-row>
     <ion-row class="row-cont">
       <ion-col col-3 id="row-cont">
-        <button id="row-cont-btn" ion-button clear full (click)="popoverInfo(0)">
+        <button id="row-cont-btn" ion-button clear full [disabled]="(globalProvider.plan.leads == false ) ? true : false" (click)="popoverInfo(0)">
           <ion-icon id="icon" *ngIf="util.dispositivo == true" name="help-circle"></ion-icon>
           <ion-icon id="icon" *ngIf="util.dispositivo == false" ios="ios-help-circle-outline" md="md-help-circle"></ion-icon>
         </button>
@@ -184,11 +184,12 @@
       <ion-col col-6 id="row-cont">
         <ion-item no-Lines class="from-item">
           <ion-label id="from-label-sms">SMS:</ion-label>
-          <ion-toggle id="from-toggle" color="danger" checked="{{msnS}}" (ionChange)="chekedSms($event)"></ion-toggle>
+          <ion-toggle id="from-toggle" color="danger" [disabled]="(globalProvider.plan.leads == false ) ? true : false" checked="{{msnS}}"
+            (ionChange)="chekedSms($event)"></ion-toggle>
         </ion-item>
       </ion-col>
       <ion-col col-3 id="row-cont">
-        <button id="row-cont-btn" ion-button clear full (click)="setSMSPredeterminadoCampania(1, campania.id_campania)">
+        <button id="row-cont-btn" ion-button clear full [disabled]="(globalProvider.plan.leads == false ) ? true : false" (click)="setSMSPredeterminadoCampania(1, campania.id_campania)">
           <ion-icon id="icon" *ngIf="util.dispositivo == true" name="checkbox-outline"></ion-icon>
           <ion-icon id="icon" *ngIf="util.dispositivo == false" ios="md-checkbox-outline" md="md-checkbox-outline"></ion-icon>
         </button>
@@ -197,7 +198,9 @@
     <ion-row class="row-cont">
       <ion-col id="row-cont">
         <ion-item no-Lines class="from-item">
-          <ion-textarea id="textarea-notes" [(ngModel)]="data.sms" text-center text-lg:992px></ion-textarea>
+          <ion-textarea id="textarea-notes" [readonly]="(globalProvider.plan.leads == false ) ? true : false" [(ngModel)]="data.sms"
+            [placeholder]="(globalProvider.plan.leads == false ) ? 'Renew or subscribe to the Dialer product' : 'Write *name* where you want each of the customers name on the text'"
+            text-center text-lg:992px></ion-textarea>
         </ion-item>
       </ion-col>
     </ion-row>
@@ -298,7 +301,7 @@
     </ion-row>
     <ion-row class="row-content">
       <ion-col col-3 id="row-content">
-        <button id="row-content-btn" ion-button clear full (click)="popoverInfo(0)">
+        <button id="row-content-btn" ion-button clear full [disabled]="(globalProvider.plan.leads == false ) ? true : false" (click)="popoverInfo(0)">
           <ion-icon id="icon" *ngIf="util.dispositivo == true" name="help-circle"></ion-icon>
           <ion-icon id="icon" *ngIf="util.dispositivo == false" ios="ios-help-circle-outline" md="md-help-circle"></ion-icon>
         </button>
@@ -306,11 +309,12 @@
       <ion-col col-6 id="row-content">
         <ion-item no-Lines class="item-content">
           <ion-label id="item-label-sms">SMS:</ion-label>
-          <ion-toggle id="item-toggle" color="danger" checked="{{msnS}}" (ionChange)="chekedSms($event)"></ion-toggle>
+          <ion-toggle id="item-toggle" color="danger" [disabled]="(globalProvider.plan.leads == false ) ? true : false" checked="{{msnS}}"
+            (ionChange)="chekedSms($event)"></ion-toggle>
         </ion-item>
       </ion-col>
       <ion-col col-3 id="row-content">
-        <button id="row-content-btn" ion-button clear full (click)="setSMSPredeterminadoCampania(2, campania.id_campania_manual )">
+        <button id="row-content-btn" ion-button clear [disabled]="(globalProvider.plan.leads == false ) ? true : false" full (click)="setSMSPredeterminadoCampania(2, campania.id_campania_manual )">
           <ion-icon id="icon" *ngIf="util.dispositivo == true" name="checkbox-outline"></ion-icon>
           <ion-icon id="icon" *ngIf="util.dispositivo == false" ios="md-checkbox-outline" md="md-checkbox-outline"></ion-icon>
         </button>
@@ -319,8 +323,8 @@
     <ion-row class="row-content">
       <ion-col id="row-content">
         <ion-item no-Lines class="item-content">
-          <ion-textarea id="item-textarea" placeholder="Write *name* where you want each of the customers name on the text" [(ngModel)]="data.sms"
-            text-lg:992px></ion-textarea>
+          <ion-textarea id="item-textarea" [readonly]="(globalProvider.plan.leads == false ) ? true : false" [placeholder]="(globalProvider.plan.leads == false ) ? 'renew or subscribe to the Dialer product' : 'Write *name* where you want each of the customers name on the text'"
+            [(ngModel)]="data.sms" text-lg:992px></ion-textarea>
         </ion-item>
       </ion-col>
     </ion-row>

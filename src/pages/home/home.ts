@@ -190,19 +190,19 @@ export class HomePage {
   }
 
   crearCampania(data: any = null) {
-    if (this.bloqueo() == false) {
-      let modal = this.modalControlle.create('CrearCampaniaPage', { data: data });
-      modal.present();
-      modal.onDidDismiss(data => {
-        if (data) {
-          this.getCampaniaUsuario();
-        }
-      });
-    }
+    //if (this.bloqueo() == false) {
+    let modal = this.modalControlle.create('CrearCampaniaPage', { data: data });
+    modal.present();
+    modal.onDidDismiss(data => {
+      if (data) {
+        this.getCampaniaUsuario();
+      }
+    });
+    //}
   }
 
   perfil() {
-    this.navCtrl.push(PerfilPage , { vcard : this.vcard });
+    this.navCtrl.push(PerfilPage, { vcard: this.vcard });
   }
 
   getCampaniaUsuario() {
@@ -239,8 +239,17 @@ export class HomePage {
         this.plan.bloqueo_msn = this.res.bloqueo_msn;
         this.plan.plan_restriccion_msn = this.res.plan_restriccion_msn;
         this.plan.suscrito = (this.res.suscrito == 'Y') ? true : false;
+
+        this.plan.activo = (this.res.plan == 'Y') ? true : false;
+        this.plan.leads = (this.res.leads == 'Y') ? true : false;
+        this.plan.sms_leads = (this.res.sms_leads == 'Y') ? true : false;
+        this.plan.suscripcion_error_msn = this.res.suscripcion_error_msn;
+        this.plan.advanvcard = (this.res.advanvcard == 'Y') ? true : false;
+
         this.globalProvider.plan = this.plan;
         this.globalProvider.setPlan(this.globalProvider.plan);
+
+
         this.inici = false;
         if (this.res.vcard) {
           //this.vcard = new Vcard();
@@ -782,7 +791,7 @@ export class HomePage {
     modal.present();
   }
 
-  redes(){
+  redes() {
     this.navCtrl.push(SharePage);
   }
 }

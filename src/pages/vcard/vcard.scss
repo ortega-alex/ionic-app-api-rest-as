@@ -1,0 +1,77 @@
+page-vcard {
+    .color-picker{
+        position: absolute !important;
+        top: 10% !important;
+        left: 20% !important;
+    }
+    #btn-color{
+        width: 31% !important;
+        -webkit-text-stroke: 0.3px black;
+    }
+    .content-header{           
+        text-align: center;
+        width: 100% !important;
+        .conten-row{
+            #conten-row{
+                #title{
+                   height: 2.7em;
+                }    
+               
+            }
+        }
+    }
+    #icon{
+        font-size: 3em;
+    }
+    #item-tamanio{
+        margin: 0%;
+        font-size: 1em;
+       
+    }
+    #content-row{
+        margin: 0% !important;
+        padding: 0% !important;
+    }
+    ion-col{
+        margin: 0% !important;
+        padding: 0% 1% !important;
+    }
+    select{
+        margin-top: 5%; 
+    }
+
+    img{
+        margin: auto;
+        display: block;
+    }
+
+    #icon-facebook{
+        background: #3b5998;
+        color: white;
+    }
+    #icon-twitter{
+        background:  #00b0ff; 
+        color: white;
+    }
+    #icon-instagram{
+        background: linear-gradient(to bottom left, #515BD4 , #8134AF , #DD2A7B , #FEDA77 , #F58529 ); 
+        color: white;
+    }
+
+  
+    #href-social{
+        text-decoration:none; 
+        color : white;
+        ion-icon{
+            color : white;
+        }
+    }
+    
+    .preview{
+        height: 94% !important;
+    }
+    #restriccion{
+     //   padding: 2% 0% ;
+        text-align: center;
+    }
+}

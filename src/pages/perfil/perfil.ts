@@ -6,8 +6,9 @@ import { HttpProvider } from '../../providers/http/http';
 
 import { MyApp } from '../../app/app.component';
 import { Tutorial, Imagenes } from '../../model/interfaces';
+import { VcardPage } from '../vcard/vcard';
 
-import { SocialSharing } from '@ionic-native/social-sharing';
+//import { SocialSharing } from '@ionic-native/social-sharing';
 
 @IonicPage()
 @Component({
@@ -16,11 +17,11 @@ import { SocialSharing } from '@ionic-native/social-sharing';
 })
 export class PerfilPage {
 
-  private res: any;
-  public submitted: boolean = false;
-  private dispositivo: boolean;
-  private tutoriales: Array<Tutorial> = [];
-  private vcard: any;
+  res: any;
+  submitted: boolean;
+  dispositivo: boolean;
+  tutoriales: Array<Tutorial>;
+  //private vcard: any;
 
   constructor(
     public navCtrl: NavController,
@@ -31,11 +32,13 @@ export class PerfilPage {
     private viewController: ViewController,
     private platform: Platform,
     private modalController: ModalController,
-    private socialSharing: SocialSharing
+    //private socialSharing: SocialSharing
   ) {
     this.dispositivo = this.platform.is('android');
     this.globalProvider.getUsuario();
-    this.vcard = this.navParams.get('vcard');
+    //this.vcard = this.navParams.get('vcard');
+    this.tutoriales = [];   
+    this.submitted = false; 
   }
 
   ionViewDidLoad() {
@@ -92,13 +95,18 @@ export class PerfilPage {
     return this.httpProvider.img + url;
   }*/
 
-  compartir(url: string) {
+  /*compartir(url: string) {
       this.socialSharing.share(url).then(() => {
         console.log('success: ')
       }).catch(err => alert('err: ' + JSON.stringify(err)));    
+  }*/
+
+  /*nada() {
+    console.log(this.vcard , this.tutoriales);
+  }*/
+
+  vcard() {
+    this.navCtrl.push(VcardPage);
   }
 
-  nada() {
-    console.log(this.vcard , this.tutoriales);
-  }
 }

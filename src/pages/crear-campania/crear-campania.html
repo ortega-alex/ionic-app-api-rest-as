@@ -76,14 +76,14 @@
       select lead name...
     </p>
     <ion-item class="from-item">
-        <ion-label id="from-label" floating>Note:</ion-label>
-        <ion-select id="from-select" text-center formControlName="nota" interface="action-sheet" placeholder="Mandatory">
-          <ion-option *ngFor="let dato of datos;let i = index" value="{{i}}">{{dato.nombre}}</ion-option>
-        </ion-select>
-      </ion-item>
-      <p ion-text [hidden]="ordenarCampania.controls.nota.valid || util.submitted === false" color="danger" padding-left>
-        Select note...
-      </p>
+      <ion-label id="from-label" floating>Note:</ion-label>
+      <ion-select id="from-select" text-center formControlName="nota" interface="action-sheet" placeholder="Mandatory">
+        <ion-option *ngFor="let dato of datos;let i = index" value="{{i}}">{{dato.nombre}}</ion-option>
+      </ion-select>
+    </ion-item>
+    <p ion-text [hidden]="ordenarCampania.controls.nota.valid || util.submitted === false" color="danger" padding-left>
+      Select note...
+    </p>
     <ion-row class="row-from">
       <ion-col id="row-from">
         <ion-item no-lines class="from-item">
@@ -205,7 +205,8 @@
     </ion-row>
     <ion-row class="content-row">
       <ion-col id="content-row" col-4 *ngFor="let n of numeros; let i = index">
-        <button id="content-row-btn-tecla" ion-button color="fondo" block *ngIf="n != 13 && n != 15" (click)="armarNumero(i)">{{ (n == 10) ? '*' : (n== 11 ) ? '0' : (n==12) ? '#' : (n == 14 ) ? '+' : n }}</button>
+        <button id="content-row-btn-tecla" ion-button color="fondo" block *ngIf="n != 13 && n != 15" (click)="armarNumero(i)">{{
+          (n == 10) ? '*' : (n== 11 ) ? '0' : (n==12) ? '#' : (n == 14 ) ? '+' : n }}</button>
       </ion-col>
     </ion-row>
     <ion-row class="content-row">
@@ -242,7 +243,8 @@
         </ion-label>
         <input *ngIf="campos.stado[0] == true" id="row-content-input" [(ngModel)]="new_campania.campos.edit_uno" type="text" />
         <ion-icon *ngIf="campos.stado[0] == true && util.dispositivo == true" name="checkbox-outline" (click)="habilitar(0)"></ion-icon>
-        <ion-icon *ngIf="campos.stado[0] == true && util.dispositivo == false" ios="md-checkbox-outline" md="md-checkbox-outline" (click)="habilitar(0)"></ion-icon>
+        <ion-icon *ngIf="campos.stado[0] == true && util.dispositivo == false" ios="md-checkbox-outline" md="md-checkbox-outline"
+          (click)="habilitar(0)"></ion-icon>
         <ion-item no-Lines class="item-content">
           <ion-input id="item-input" text-center placeholder="{{new_campania.campos.edit_uno}}" [(ngModel)]="new_campania.campos.uno"
             type="text"></ion-input>
@@ -256,7 +258,8 @@
         </ion-label>
         <input *ngIf="campos.stado[1] == true" id="row-content-input" [(ngModel)]="new_campania.campos.edit_dos" type="text" />
         <ion-icon *ngIf="campos.stado[1] == true && util.dispositivo == true" name="checkbox-outline" (click)="habilitar(1)"></ion-icon>
-        <ion-icon *ngIf="campos.stado[1] == true && util.dispositivo == false" ios="md-checkbox-outline" md="md-checkbox-outline" (click)="habilitar(1)"></ion-icon>
+        <ion-icon *ngIf="campos.stado[1] == true && util.dispositivo == false" ios="md-checkbox-outline" md="md-checkbox-outline"
+          (click)="habilitar(1)"></ion-icon>
         <ion-item no-Lines class="item-content">
           <ion-input id="item-input" placeholder="{{new_campania.campos.edit_dos}}" text-center [(ngModel)]="new_campania.campos.dos"
             type="text"></ion-input>
@@ -272,7 +275,7 @@
     </ion-row>
     <ion-row class="row-content">
       <ion-col col-3 id="row-content">
-        <button id="row-content-btn" ion-button clear full (click)="popoverInfo(0)">
+        <button id="row-content-btn" ion-button clear full [disabled]="(globalProvider.plan.leads == false ) ? true : false" (click)="popoverInfo(0)">
           <ion-icon id="icon" *ngIf="util.dispositivo == true" name="help-circle"></ion-icon>
           <ion-icon id="icon" *ngIf="util.dispositivo == false" ios="ios-help-circle-outline" md="md-help-circle"></ion-icon>
         </button>
@@ -280,11 +283,12 @@
       <ion-col col-6 id="row-content">
         <ion-item no-Lines class="item-content">
           <ion-label id="item-label-sms">SMS:</ion-label>
-          <ion-toggle id="item-toggle" color="danger" checked="{{new_campania.sms}}" (ionChange)="chekedSmsCampania($event)"></ion-toggle>
+          <ion-toggle id="item-toggle" color="danger" [disabled]="(globalProvider.plan.leads == false ) ? true : false" checked="{{new_campania.sms}}"
+            (ionChange)="chekedSmsCampania($event)"></ion-toggle>
         </ion-item>
       </ion-col>
       <ion-col col-3 id="row-content">
-        <button id="row-content-btn" ion-button clear full (click)="setSMSPredeterminadoCampania(2, new_campania.id_campania_manual )">
+        <button id="row-content-btn" ion-button clear full [disabled]="(globalProvider.plan.leads == false ) ? true : false" (click)="setSMSPredeterminadoCampania(2, new_campania.id_campania_manual )">
           <ion-icon id="icon" *ngIf="util.dispositivo == true" name="checkbox-outline"></ion-icon>
           <ion-icon id="icon" *ngIf="util.dispositivo == false" ios="md-checkbox-outline" md="md-checkbox-outline"></ion-icon>
         </button>
@@ -293,8 +297,8 @@
     <ion-row class="row-content">
       <ion-col id="row-content">
         <ion-item no-Lines class="item-content">
-          <ion-textarea id="item-textarea" placeholder="Write *name* where you want each of the customers name on the text" [(ngModel)]="new_campania.sms_tex"
-            text-lg:992px></ion-textarea>
+          <ion-textarea id="item-textarea" [readonly]="(globalProvider.plan.leads == false ) ? true : false" [placeholder]="(globalProvider.plan.leads == false ) ? 'Renew or subscribe to the Dialer product' : 'Write *name* where you want each of the customers name on the text'"
+            [(ngModel)]="new_campania.sms_tex" text-lg:992px></ion-textarea>
         </ion-item>
       </ion-col>
     </ion-row>

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ViewController, PopoverController, Platform, AlertController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ViewController, PopoverController, Platform } from 'ionic-angular';
 
 import { GlobalProvider } from '../../providers/global/global';
 import { HttpProvider } from '../../providers/http/http';
@@ -72,23 +72,35 @@ export class CrearCampaniaPage {
     private filePath: FilePath,
     private file: File,
     private iosFilePicker: IOSFilePicker,
-    private alertController: AlertController,
+    //private alertController: AlertController,
     private callNumber: CallNumber,
     private Sms: SMS,
     private calendar: Calendar
   ) {
     this.util.dispositivo = this.platform.is('android');
     this.campos = { cambio: false, stado: [false, false] };
+    var sms: boolean;
+    var sms_tex: string;
     if (this.navParams.get('data')) {
       this.data = this.navParams.get('data');
-      let sms = (this.data.sms == 'Y') ? true : false;
-      let sms_tex = (this.data.sms == 'Y') ? this.data.sms_predeterminado : null;
+      if (this.globalProvider.plan.leads == false) {
+        sms = false;
+        sms_tex = null;
+      } else {
+        sms = (this.data.sms == 'Y') ? true : false;
+        sms_tex = (this.data.sms == 'Y') ? this.data.sms_predeterminado : null;
+      }
+
       this.new_campania = { id_campania_manual: this.data.id_campania_manual, nombre_campania: this.data.nombre_campania, telefono: '', nombre: null, fecha: null, sms: sms, sms_tex: sms_tex, nota: null, stado: null, campos: { edit_uno: this.data.campo_1_text, uno: null, uno_stado: false, edit_dos: this.data.campo_2_text, dos: null, dos_stado: false } };
       this.dialer();
       this.getCatalogoEstadoFilaCampania();
       this.campania_blanco = !this.campania_blanco;
     } else {
-      this.new_campania = { id_campania_manual: null, nombre_campania: null, telefono: '', nombre: null, fecha: null, sms: false, sms_tex: null, nota: null, stado: null, campos: { edit_uno: 'Field 1:', uno: null, uno_stado: false, edit_dos: 'Field 2:', dos: null, dos_stado: false } };
+      if (this.globalProvider.plan.leads == false) {
+        sms = false;
+        sms_tex = null;
+      }
+      this.new_campania = { id_campania_manual: null, nombre_campania: null, telefono: '', nombre: null, fecha: null, sms: sms, sms_tex: sms_tex, nota: null, stado: null, campos: { edit_uno: 'Field 1:', uno: null, uno_stado: false, edit_dos: 'Field 2:', dos: null, dos_stado: false } };
     }
     this.ordenarCampania = this.formBuilder.group({
       nombreArchivo: [''],
@@ -135,41 +147,41 @@ export class CrearCampaniaPage {
   }
 
   setExcelUsuario() {
-    if (this.globalProvider.plan.plan_restriccion == false) {
-      if (this.platform.is('android')) {
-        this.fileChooser.open().then(url => {
-          this.filePath.resolveNativePath(url).then(path => {
-            this.file.resolveLocalFilesystemUrl(path).then(newUrl => {
-              let options: FileUploadOptions = {
-                fileKey: 'file',
-                fileName: newUrl.name,
-                headers: {}
-              }
-              this.setFileTrasfder(newUrl.nativeURL, options);
-            }).catch(err => console.log('err: ' + JSON.stringify(err)));
-          }).catch(err => console.log('err filePat: ' + JSON.stringify(err)));
-        }).catch(err => console.log('err choset: ' + JSON.stringify(err)));
-      }
-      if (this.platform.is('ios')) {
-        this.iosFilePicker.pickFile().then(url => {
-          var array = url.split('/');
-          var nombre = array[array.length - 1];
-          let options: FileUploadOptions = {
-            fileKey: 'file',
-            fileName: nombre,
-            headers: {}
-          }
-          this.setFileTrasfder(url, options);
-        }).catch(err => console.log('err: ' + JSON.stringify(err)));
-      }
-    } else {
-      let alert = this.alertController.create({
-        title: '',
-        subTitle: this.globalProvider.plan.plan_restriccion_msn,
-        buttons: ['Ok']
-      });
-      alert.present();
+    //if (this.globalProvider.plan.plan_restriccion == false) {
+    if (this.platform.is('android')) {
+      this.fileChooser.open().then(url => {
+        this.filePath.resolveNativePath(url).then(path => {
+          this.file.resolveLocalFilesystemUrl(path).then(newUrl => {
+            let options: FileUploadOptions = {
+              fileKey: 'file',
+              fileName: newUrl.name,
+              headers: {}
+            }
+            this.setFileTrasfder(newUrl.nativeURL, options);
+          }).catch(err => console.log('err: ' + JSON.stringify(err)));
+        }).catch(err => console.log('err filePat: ' + JSON.stringify(err)));
+      }).catch(err => console.log('err choset: ' + JSON.stringify(err)));
     }
+    if (this.platform.is('ios')) {
+      this.iosFilePicker.pickFile().then(url => {
+        var array = url.split('/');
+        var nombre = array[array.length - 1];
+        let options: FileUploadOptions = {
+          fileKey: 'file',
+          fileName: nombre,
+          headers: {}
+        }
+        this.setFileTrasfder(url, options);
+      }).catch(err => console.log('err: ' + JSON.stringify(err)));
+    }
+    /* } else {
+       let alert = this.alertController.create({
+         title: '',
+         subTitle: this.globalProvider.plan.plan_restriccion_msn,
+         buttons: ['Ok']
+       });
+       alert.present();
+     }*/
   }
 
   setFileTrasfder(path: string, options: any) {
@@ -201,14 +213,20 @@ export class CrearCampaniaPage {
   }
 
   chekedSms(event) {
-    if (event.value == true) {
-      this.util.msnS = event.value;
-      this.sms = 'Y';
-      this.util.sms_tex = null;
+    if (this.globalProvider.plan.leads == true) {
+      if (event.value == true) {
+        this.util.msnS = event.value;
+        this.sms = 'Y';
+        this.util.sms_tex = null;
+      } else {
+        this.util.msnS = event.value;
+        this.sms = 'N';
+        this.util.sms_tex = ''
+      }
     } else {
-      this.util.msnS = event.value;
+      this.util.msnS = false;
       this.sms = 'N';
-      this.util.sms_tex = ''
+      this.util.sms_tex = "Renew or subscribe to one of our products";
     }
   }
 
@@ -231,7 +249,7 @@ export class CrearCampaniaPage {
         nombre_campania: this.ordenarCampania.value.nombreCampania,
         telefono: this.datos[posicion],
         nombre: this.datos[posicion1],
-        nota : this.datos[posicion2],
+        nota: this.datos[posicion2],
         contenido1: { nombre_input: this.ordenarCampania.value.c1Nombre, key1: this.datos[c1] },
         contenido2: { nombre_input: this.ordenarCampania.value.c2Nombre, key2: this.datos[c2] },
         contenido3: { nombre_input: this.ordenarCampania.value.c3Nombre, key3: this.datos[c3] },
