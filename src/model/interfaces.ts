@@ -73,7 +73,7 @@ export interface HomeUtil {
 	title: string;
 	spinner: boolean;
 	background: string;
-	dispositivo: boolean;
+	//dispositivo: boolean;
 };
 
 //registro
@@ -87,6 +87,7 @@ export interface Catalogo {
 
 //sms 
 export interface Telefono {
+	id : string;
 	telefono: string;
 	text: string;
 }
@@ -120,7 +121,7 @@ export interface Util {
 	submitted: boolean;
 	error: boolean;
 	noValido: boolean;
-	dispositivo: boolean;
+	//dispositivo: boolean;
 	mostrar: boolean;
 	msnS: boolean;
 	catalogoEstado: Array<any>;

@@ -2,20 +2,18 @@
   <div class="content-header">
     <ion-row class="conten-row">
       <ion-col id="conten-row" col-2>
-        <ion-icon *ngIf="dispositivo == true" id="icon" name="arrow-round-back" (click)="closeModal()"></ion-icon>
-        <ion-icon *ngIf="dispositivo == false" id="icon" ios="md-arrow-round-back" md="md-arrow-round-back" (click)="closeModal()"></ion-icon>
+        <ion-icon *ngIf="globalProvider.dispositivo == true" id="icon" name="arrow-round-back" (click)="closeModal()"></ion-icon>
+        <ion-icon *ngIf="globalProvider.dispositivo == false" id="icon" ios="md-arrow-round-back" md="md-arrow-round-back" (click)="closeModal()"></ion-icon>
       </ion-col>
       <ion-col id="conten-row">
         <img id="title" src="assets/imgs/title.png">
       </ion-col>
       <ion-col id="conten-row" col-2>
-
       </ion-col>
     </ion-row>
   </div>
-
-  <p id="restriccion" *ngIf="globalProvider.plan.advanvcard == false">
-    Renew or subscribe to the vcad product
+  <p id="restriccion" *ngIf="globalProvider.plan.advanvcard != 'P'">
+   {{globalProvider.plan.advanvcard_msn}}
   </p>
   <div *ngIf="edit">
     <button id="btn-color" #someInput ion-button small [(colorPicker)]="vcard.btn_color" [style.background]="(vcard.btn_color != 'null' && vcard.btn_color != null) ?  vcard.btn_color : 'black'"
@@ -111,7 +109,7 @@
 
     <ion-row id="content-row" no-padding no-Lines no-border text-center>
       <ion-col>
-        <button ion-button small clear (click)="galeriaImagenes('logo')" color="dark">
+        <button ion-button small clear [disabled]="(globalProvider.plan.advanvcard == 'N') ? true : false" (click)="galeriaImagenes('logo')" color="dark">
           <ion-icon name="images"></ion-icon>
           &nbsp;logo
         </button>
@@ -151,11 +149,11 @@
     <ion-row id="content-row" no-padding no-Lines no-border text-center>
       <ion-col>
         <button ion-button small block color="dark" (click)="edit = false">
-          preview
+          Preview
         </button>
       </ion-col>
       <ion-col>
-        <button ion-button small block color="dark" [disabled]="(globalProvider.plan.advanvcard == false) ? true : false" (click)="setOrUpdateVcardUsuario()">
+        <button ion-button small block color="dark" (click)="setOrUpdateVcardUsuario()">
           {{(!vcard.id_vcard_usuario) ? 'Save' : 'Edit'}}
         </button>
       </ion-col>
@@ -164,10 +162,8 @@
   </div>
 
   <div class="preview" *ngIf="edit == false" [style.background]="vcard.fondo">
-
-    <!--img [src]="(vcard.ruta_logo) ? vcard.ruta_logo : 'assets/imgs/title.png'" height="130" width="300"-->
-    <img [src]="getImg(vcard.ruta_logo , 'L')" height="130" width="300">
-
+    <img *ngIf="globalProvider.plan.advanvcard != 'N'" [src]="getImg(vcard.ruta_logo , 'L')" height="130" width="300">
+    <img *ngIf="globalProvider.plan.advanvcard == 'N'" src="https://advansales.com/images/logo-text.jpg" height="130" width="300">
     <ion-row id="content-row" no-padding no-Lines no-border text-center>
       <ion-col>
         <div *ngFor="let telefono of vcard.telefonos">
@@ -177,12 +173,6 @@
               {{(telefono.telefono != null) ? telefono.telefono : 'Phone'}}
             </button>
           </div>
-          <!--div *ngIf="telefono.tipo != '0' && telefono.tipo != '1'">
-            <button ion-button small block [style.background]="vcard.btn_color" [style.font-size]="vcard.tamanio" [style.font-weight]="vcard.bold"
-              [style.font-style]="vcard.italic" [style.text-decoration]="vcard.subrayar" [style.color]="vcard.text_color">
-              Phone
-            </button>
-          </div-->
         </div>
       </ion-col>
       <ion-col>
@@ -192,10 +182,7 @@
         </button>
       </ion-col>
     </ion-row>
-
-    <!--img [src]="(vcard.ruta_img) ? vcard.ruta_img : 'assets/imgs/title.png'" height="240" width="300"-->
     <img [src]="getImg(vcard.ruta_img , 'I')" height="240" width="300">
-
     <div text-center [style.font-size]="vcard.tamanio" [style.font-weight]="vcard.bold" [style.font-style]="vcard.italic" [style.text-decoration]="vcard.subrayar"
       [style.color]="vcard.text_color">
       <span *ngIf="vcard.nombre">
@@ -210,7 +197,6 @@
         Company: {{vcard.organisacion}}
       </span>
     </div>
-
     <ion-row id="content-row" no-padding no-Lines no-border text-center>
       <ion-col>
         <div *ngFor="let telefono of vcard.telefonos">
@@ -265,7 +251,5 @@
       </ion-col>
       <ion-col col-3></ion-col>
     </ion-row>
-
   </div>
-
 </ion-content>

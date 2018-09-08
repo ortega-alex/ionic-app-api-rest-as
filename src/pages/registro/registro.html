@@ -2,8 +2,8 @@
   <div class="content-header">
     <ion-row class="content-row">
       <ion-col id="content-row">
-        <ion-icon *ngIf="dispositivo == true" id="row-icon" name="arrow-round-back" (click)="retroceder()"></ion-icon>
-        <ion-icon *ngIf="dispositivo == false" id="row-icon" ios="md-arrow-round-back" md="md-arrow-round-back" (click)="retroceder()"></ion-icon>
+        <ion-icon *ngIf="globalProvider.dispositivo == true" id="row-icon" name="arrow-round-back" (click)="retroceder()"></ion-icon>
+        <ion-icon *ngIf="globalProvider.dispositivo == false" id="row-icon" ios="md-arrow-round-back" md="md-arrow-round-back" (click)="retroceder()"></ion-icon>
       </ion-col>
       <ion-col id="content-row" *ngFor="let cata of catalogo">
         <div id="content-progres" [style.background-color]="cata.color"></div>
@@ -24,8 +24,8 @@
       </ion-col>
       <ion-col col-2 id="content-row">
         <button id="content-row-btn" ion-button block color="dark" (click)="siguente()">
-          <ion-icon *ngIf="contador <= 3 && dispositivo == true" id="content-row-icon" name="arrow-round-forward"></ion-icon>
-          <ion-icon *ngIf="contador <= 3 && dispositivo == false" id="content-row-icon" ios="md-arrow-round-forward" md="md-arrow-round-forward"></ion-icon>
+          <ion-icon *ngIf="contador <= 3 && globalProvider.dispositivo == true" id="content-row-icon" name="arrow-round-forward"></ion-icon>
+          <ion-icon *ngIf="contador <= 3 && globalProvider.dispositivo == false" id="content-row-icon" ios="md-arrow-round-forward" md="md-arrow-round-forward"></ion-icon>
           <ion-icon *ngIf="contador == 4" id="content-row-icon" name="checkmark"></ion-icon>
         </button>
       </ion-col>

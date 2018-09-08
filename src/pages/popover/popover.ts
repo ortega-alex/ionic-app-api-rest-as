@@ -9,9 +9,9 @@ import { GlobalProvider } from '../../providers/global/global';
 })
 export class PopoverPage {
 
-  private title: string;
-  private informacion: string;
-  private posicion: number;
+  title: string;
+  informacion: string;
+  posicion: number;
 
   constructor(
     public navCtrl: NavController,
@@ -29,9 +29,7 @@ export class PopoverPage {
     }
   }
 
-  ionViewDidLoad() {
-    console.log(this.title + ' ' + this.informacion);
-  }
+  ionViewDidLoad() {}
 
   closeModal() {
     this.viewController.dismiss();

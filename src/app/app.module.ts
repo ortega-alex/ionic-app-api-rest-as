@@ -9,8 +9,9 @@ import { HomePage } from '../pages/home/home';
 import { PerfilPage } from '../pages/perfil/perfil';
 import { LoginPage } from '../pages/login/login';
 import { RegistroPage } from '../pages/registro/registro';
-import { SharePage } from '../pages/share/share';
+import { SocialPage } from '../pages/social/social';
 import { VcardPage } from '../pages/vcard/vcard';
+import { ProductoPage } from  '../pages/producto/producto';
 
 import { GlobalProvider } from '../providers/global/global';
 import { HttpProvider } from '../providers/http/http';
@@ -47,8 +48,9 @@ import { ColorPickerModule } from 'ngx-color-picker';
     PerfilPage,
     LoginPage,
     RegistroPage,
-    SharePage,
-    VcardPage
+    SocialPage,
+    VcardPage,
+    ProductoPage
   ],
   imports: [
     BrowserModule,
@@ -65,8 +67,9 @@ import { ColorPickerModule } from 'ngx-color-picker';
     PerfilPage,
     LoginPage,
     RegistroPage,
-    SharePage,
-    VcardPage
+    SocialPage,
+    VcardPage,
+    ProductoPage
   ],
   providers: [
     StatusBar,

@@ -1,70 +1,24 @@
 page-perfil {
-    .content{
-        font-size: 0.8 em;
-        height: 100% !important;
-        width: 100% !important;
-        .content-header{           
-			border: solid #f8f8f8 1px;
-            text-align: center;
-            width: 100% !important;
-            .conten-row{
-                #conten-row{
-                    #title{
-                        margin-top: 4%;
-                       font-size: 1.5em;
-                    }    
-                    #icon{
-                        font-size: 3em;
-                    }
-                }
-            }
-        }
-        #conten-from{
-            width: 90% !important;
-            margin: 0% 5% !important;
-            padding: 0% !important;
-            #conten-label{
-                font-size: 0.8em;
-            }
-
-            #conten-input{
-                font-size: 1.0em;
-            }
-        }
-        .conten-row{
-            width: 90% !important;
-            margin: 0% 5% !important;
-            padding: 0% !important;
-            #conten-row{
-                margin: 0%;
-                padding: 0%;
-                #conten-row-btn{
-                    margin: 1% 0%;
-                    padding: 0%;
-                    font-size: 1.0em;
-                }
-            }
-        }
-
-
-        .list-contend{
-            text-align: center;
-            #list-contend-btn{
-                width: 90%;
-                margin: 1% 5%;
-                font-size: 1.0em;
-            }
-        }
-    }
-    
-    #informacion{
+    .content-header{           
         text-align: center;
-        font-size: 0.7em;
-        padding: 0%;
-        margin: 0%;
-    }
+        width: 100% !important;
+        .conten-row{
+            #conten-row{
+                #title{
+                    margin-top: 4%;
+                   font-size: 1.5em;
+                }    
+                #icon{
+                    font-size: 3em;
+                }
+            }
+        }
+    }   
     a{
         text-decoration:none; 
         color : white;
+    }
+    ion-item{
+        margin-left: -2% !important; 
     }
 }

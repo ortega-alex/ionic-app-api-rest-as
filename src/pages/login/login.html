@@ -1,46 +1,24 @@
-<ion-content class="login-content">
-  <div class="conten-img">
-    <img id="title" src="assets/imgs/logo.png">
-  </div>
-  <ion-row class="content-row">
-    <ion-col id="content-row">
-      <button id="content-row-btn" ion-button small icon-left block color="fb" (click)="loginFB()">
-        <ion-icon name="logo-facebook"></ion-icon>
-        facebook
-      </button>
-    </ion-col>
-  </ion-row>
-  <form [formGroup]="logIn" class="conten-from">
-    <ion-item class="conten-item">
-      <ion-input id="conten-input" text-center type="email" placeholder="EMAIL" formControlName="correo" text-lg:992px></ion-input>
+<ion-content padding>
+  <img src="assets/imgs/logo.png">
+  <br>
+  <form [formGroup]="logIn" (ngSubmit)="login()">
+    <ion-item no-padding no-lines>
+      <ion-input text-center type="email" placeholder="EMAIL" formControlName="correo"></ion-input>
     </ion-item>
-    <p id="err" ion-text [hidden]="logIn.controls.correo.valid || util.submitted === false" color="danger" padding-left>
+    <p id="err" ion-text [hidden]="logIn.controls.correo.valid || submitted === false" color="danger" padding-left>
       Enter Mail...
     </p>
-    <ion-item class="conten-item">
-      <ion-input id="conten-input" text-center type="password" placeholder="Password" formControlName="clave" text-lg:992px></ion-input>
+    <ion-item no-padding no-lines>
+      <ion-input text-center type="password" placeholder="Password" formControlName="clave"></ion-input>
     </ion-item>
-    <p id="err" ion-text [hidden]="logIn.controls.clave.valid || util.submitted === false" color="danger" padding-left>
+    <p id="err" ion-text [hidden]="logIn.controls.clave.valid || submitted === false" color="danger" padding-left>
       Enter Password...
     </p>
+    <button ion-button block color="dark" type="submit">
+      LOGIN
+    </button>
   </form>
-  <ion-row class="content-row">
-    <ion-col id="content-row">
-      <button id="content-row-btn" ion-button small block color="dark" type="submit" (click)="validar()">
-        Login
-      </button>
-    </ion-col>
-  </ion-row>
-  <ion-row class="content-row">
-    <ion-col id="content-row">
-      <button id="content-row-btn" ion-button small block color="dark" (click)="registro()">
-        Register
-      </button>
-    </ion-col>
-  </ion-row>
-  <!--ion-row class="content-row">
-    <ion-col id="content-row">
-      <p id="parrafo">To register please go to advansales.com</p>
-    </ion-col>
-  </ion-row-->
+  <button ion-button block color="dark" (click)="registro()">
+    REGISTER
+  </button>
 </ion-content>

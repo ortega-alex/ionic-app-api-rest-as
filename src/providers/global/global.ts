@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
-import { LoadingController } from 'ionic-angular';
+import { LoadingController, Platform } from 'ionic-angular';
 import { Http } from '@angular/http';
 import { Usuario, Plan } from '../../model/Usuario';
 import 'rxjs/add/operator/map';
@@ -17,13 +17,16 @@ export class GlobalProvider {
   public time: number;
   public token: any;
   public producto_id : string;
+  public dispositivo : boolean;
 
   constructor(
     public http: HttpClient,
-    private strorage: Storage,
+    private storage: Storage,
     private load: LoadingController,
-    private htt: Http
+    private htt: Http,
+    private platFrom : Platform
   ) {
+    this.dispositivo = (this.platFrom.is('android')) ? true : false;
     this.getUsuario();
     this.getProductoId();
     this.htt.get('assets/utilitario.json').map(res => res.json()).subscribe(data => {
@@ -32,85 +35,84 @@ export class GlobalProvider {
   }
 
   setProductoId(producto_id : string) : void {
-    this.strorage.set('producto_id' , producto_id);
+    this.storage.set('producto_id' , producto_id);
   }
 
   deleteProductoId() : void{
-    this.strorage.remove('producto_id');
+    this.storage.remove('producto_id');
   }
 
   getProductoId(){
-   this.strorage.get('producto_id').then((producto_id) => {
+   this.storage.get('producto_id').then((producto_id) => {
      this.producto_id = producto_id;
    }); 
   }
 
   setToken(token: any): void {
-    this.strorage.set('token', token);
+    this.storage.set('token', token);
     this.getToken();
   }
 
   getToken() {
-    this.strorage.get('token').then(token => {
+    this.storage.get('token').then(token => {
       this.token = token;
     });
   }
 
   setUsuario(usuario: Usuario): void {
-    this.strorage.set('usuario', usuario);
+    this.storage.set('usuario', usuario);
   }
 
   getUsuario() {
-    this.strorage.get('usuario').then(usuario => {
+    this.storage.get('usuario').then(usuario => {
       this.usuario = usuario;
     });
   }
 
   deleteUsuario() {
-    this.strorage.remove('usuario');
+    this.storage.remove('usuario');
   }
 
   setPlan(plan: Plan): void {
-    this.strorage.set('plan', plan);
+    this.storage.set('plan', plan);
     this.getPlan();
   }
 
   getPlan() {
-    this.strorage.get('plan').then(plan => {
+    this.storage.get('plan').then(plan => {
       this.plan = plan;
     });
   }
 
   setFecha(date: Date) {
-    this.strorage.set('fecha', this.get_milisegundos.transform(date));
+    this.storage.set('fecha', this.get_milisegundos.transform(date));
   }
 
   setTime(time) {
-    this.strorage.set('time', time);
+    this.storage.set('time', time);
     this.getTime();
   }
 
   getTime(): void {
-    this.strorage.get('time').then(time => {
+    this.storage.get('time').then(time => {
       this.time = time;
     });
   }
 
   setNum(num: number) {
-    this.strorage.set('num', num);
+    this.storage.set('num', num);
   }
 
   deleteNum() {
-    this.strorage.remove('num');
+    this.storage.remove('num');
   }
 
   setListSms(nombre: string, list_sms: any): void {
-    this.strorage.set(nombre, list_sms);
+    this.storage.set(nombre, list_sms);
   }
 
   getListSms(nombre: string) {
-    console.log(nombre);
-    this.strorage.get(nombre).then(list_sms => {
+    this.storage.get(nombre).then(list_sms => {
       if (list_sms && list_sms != null) {
         return list_sms;
       }
@@ -119,7 +121,7 @@ export class GlobalProvider {
   }
 
   deleteListSms(nombre: string) {
-    this.strorage.remove(nombre);
+    this.storage.remove(nombre);
   }
 
   cargando(msj) {

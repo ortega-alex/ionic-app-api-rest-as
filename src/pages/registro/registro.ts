@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, Platform } from 'ionic-angular';
+import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
 import { GlobalProvider } from '../../providers/global/global';
 import { HttpProvider } from '../../providers/http/http';
@@ -15,32 +15,29 @@ import { Catalogo } from '../../model/interfaces';
 })
 export class RegistroPage {
 
-  private contador: number = 0;
-  private catalogo: Array<Catalogo> = [
-    { label: 'Name', tipo: 'text', input: null, color: '#262626', ejemplo: 'e.g. John' },
-    { label: 'Last Name', tipo: 'text', input: null, color: 'white', ejemplo: 'e.g. Smith' },
-    { label: 'Email', tipo: 'emal', input: null, color: 'white', ejemplo: 'e.g. john@email.com' },
-    { label: 'Password', tipo: 'password', input: null, color: 'white', ejemplo: 'e.g. Abc123**' },
-    { label: 'Phone', tipo: 'text', input: null, color: 'white', ejemplo: 'e.g. 001-512-944-6475.' },
-    { label: 'Nombre Completo', tipo: 'text', input: null, color: 'white', ejemplo: 'e.g. text' }
-  ];
-  private load: any;
-  private minusculas = new Minusculas();
-  private esImal = new isEmail();
-  private res: any;
-  private error: boolean;
-  private noValido: boolean;
-  private dispositivo: boolean;
+  contador: number;
+  catalogo: Array<Catalogo>;
+  load: any;
+  minusculas = new Minusculas();
+  esImal = new isEmail();
+  error: boolean;
+  noValido: boolean;
 
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
     public globalProvider: GlobalProvider,
-    public httpProvider: HttpProvider,
-    private platform: Platform
+    public httpProvider: HttpProvider
   ) {
-    this.dispositivo = this.platform.is('android');
-    console.log(this.noValido + ' ' + this.error)
+    this.contador = 0;
+    this.catalogo = [
+      { label: 'Name', tipo: 'text', input: null, color: '#262626', ejemplo: 'e.g. John' },
+      { label: 'Last Name', tipo: 'text', input: null, color: 'white', ejemplo: 'e.g. Smith' },
+      { label: 'Email', tipo: 'emal', input: null, color: 'white', ejemplo: 'e.g. john@email.com' },
+      { label: 'Password', tipo: 'password', input: null, color: 'white', ejemplo: 'e.g. Abc123**' },
+      { label: 'Phone', tipo: 'text', input: null, color: 'white', ejemplo: 'e.g. 001-512-944-6475.' },
+      { label: 'Nombre Completo', tipo: 'text', input: null, color: 'white', ejemplo: 'e.g. text' }
+    ];
   }
 
   ionViewDidLoad() { }
@@ -84,7 +81,7 @@ export class RegistroPage {
   }
 
   guardarRegistro() {
-    let platform = (this.dispositivo == true) ? 'android' : 'ios';
+    let platform = (this.globalProvider.dispositivo == true) ? 'android' : 'ios';
     this.load = this.globalProvider.cargando(this.globalProvider.data.msj.load);
     let url = 'servicio=setRegistroUsuario' +
       '&usuario=' + this.minusculas.transform(this.catalogo[2].input) +
@@ -97,16 +94,15 @@ export class RegistroPage {
       '&plataforma=' + platform +
       '&telefono=' + this.catalogo[4].input +
       '&timezone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
-    this.httpProvider.get(url).then(res => {
+    this.httpProvider.get(url).then((res : any) => {
       this.load.dismiss();
-      this.res = res;
-      if (this.res.error == 'false') {
-        this.globalProvider.alerta(this.res.msn);
+      if (res.error == 'false') {
+        this.globalProvider.alerta(res.msn);
         this.salir();
       } else {
-        this.globalProvider.alerta(this.res.msn);
+        this.globalProvider.alerta(res.msn);
       }
-    }).catch(err => {
+    }).catch((err) => {
       this.load.dismiss();
       console.log('err: ' + JSON.stringify(err))
     });

@@ -1,12 +1,45 @@
 {
- 	"msj" : {
-	    "succes": "Successfully assured",
-	    "alerta": "Missing data!...",
-	    "warning": "Are you sure?....",
-	    "load": "Loading....",
-	    "err": "An error occurred!..."
+	"msj": {
+		"succes": "Successfully assured",
+		"alerta": "Missing data!...",
+		"warning": "Are you sure?....",
+		"load": "Loading....",
+		"err": "An error occurred!..."
 	},
-	"info":[
-        {"title":"Set SMS","msj":"Write *name* where you want each of the customers name on the text. then press the button # which will save the default sms"}
-    ]
+	"info": [
+		{
+			"title": "Set SMS",
+			"msj": "Write *name* where you want each of the customers name on the text. then press the button # which will save the default sms"
+		}
+	],
+	"diasSemana": [
+		{
+			"id": 0,
+			"dia": "Sunday"
+		},
+		{
+			"id": 1,
+			"dia": "Tuesday"
+		},
+		{
+			"id": 2,
+			"dia": "Wednesday"
+		},
+		{
+			"id": 3,
+			"dia": "Thursday"
+		},
+		{
+			"id": 4,
+			"dia": "Friday"
+		},
+		{
+			"id": 5,
+			"dia": "Saturday"
+		},
+		{
+			"id": 6,
+			"dia": "Monday"
+		}
+	]
 }

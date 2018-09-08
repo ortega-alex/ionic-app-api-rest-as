@@ -3,9 +3,8 @@
   <div class="content-header">
     <ion-row class="conten-row">
       <ion-col id="conten-row" col-2>
-        <!--ion-icon id="icon" name="arrow-round-back" (click)="cancelar()"></ion-icon-->
-        <ion-icon *ngIf="util.dispositivo == true" id="icon" name="arrow-round-back" (click)="cancelar(true)"></ion-icon>
-        <ion-icon *ngIf="util.dispositivo == false" id="icon" ios="md-arrow-round-back" md="md-arrow-round-back" (click)="cancelar(true)"></ion-icon>
+        <ion-icon *ngIf="globalProvider.dispositivo== true" id="icon" name="arrow-round-back" (click)="cancelar(true)"></ion-icon>
+        <ion-icon *ngIf="globalProvider.dispositivo== false" id="icon" ios="md-arrow-round-back" md="md-arrow-round-back" (click)="cancelar(true)"></ion-icon>
       </ion-col>
       <ion-col id="conten-row">
         <p id="title"></p>
@@ -29,10 +28,8 @@
     <h2 text-center>New Manual Campaign</h2>
     <ion-row class="content-row">
       <ion-col id="content-row">
-        <!--ion-item class="from-item" no-padding no-lines-->
         <ion-label id="from-label" stacked>Campaign name:</ion-label>
         <ion-input id="from-input" autofocus text-center type="text" [(ngModel)]="new_campania.nombre_campania" text-lg:992px></ion-input>
-        <!--/ion-item-->
       </ion-col>
     </ion-row>
     <ion-row class="content-row">
@@ -238,12 +235,12 @@
       <ion-col id="row-content">
         <ion-label id="row-content-label" stacked *ngIf="campos.stado[0] == false" (click)="habilitar(0)">
           {{new_campania.campos.edit_uno}}
-          <ion-icon *ngIf="util.dispositivo == true" name="create"></ion-icon>
-          <ion-icon *ngIf="util.dispositivo == false" ios="ios-create-outline" md="md-create"></ion-icon>
+          <ion-icon *ngIf="globalProvider.dispositivo== true" name="create"></ion-icon>
+          <ion-icon *ngIf="globalProvider.dispositivo== false" ios="ios-create-outline" md="md-create"></ion-icon>
         </ion-label>
         <input *ngIf="campos.stado[0] == true" id="row-content-input" [(ngModel)]="new_campania.campos.edit_uno" type="text" />
-        <ion-icon *ngIf="campos.stado[0] == true && util.dispositivo == true" name="checkbox-outline" (click)="habilitar(0)"></ion-icon>
-        <ion-icon *ngIf="campos.stado[0] == true && util.dispositivo == false" ios="md-checkbox-outline" md="md-checkbox-outline"
+        <ion-icon *ngIf="campos.stado[0] == true && globalProvider.dispositivo== true" name="checkbox-outline" (click)="habilitar(0)"></ion-icon>
+        <ion-icon *ngIf="campos.stado[0] == true && globalProvider.dispositivo== false" ios="md-checkbox-outline" md="md-checkbox-outline"
           (click)="habilitar(0)"></ion-icon>
         <ion-item no-Lines class="item-content">
           <ion-input id="item-input" text-center placeholder="{{new_campania.campos.edit_uno}}" [(ngModel)]="new_campania.campos.uno"
@@ -253,12 +250,12 @@
       <ion-col id="row-content">
         <ion-label id="row-content-label" stacked *ngIf="campos.stado[1] == false" (click)="habilitar(1)">
           {{new_campania.campos.edit_dos}}
-          <ion-icon *ngIf="util.dispositivo == true" name="create"></ion-icon>
-          <ion-icon *ngIf="util.dispositivo == false" ios="ios-create-outline" md="md-create"></ion-icon>
+          <ion-icon *ngIf="globalProvider.dispositivo== true" name="create"></ion-icon>
+          <ion-icon *ngIf="globalProvider.dispositivo== false" ios="ios-create-outline" md="md-create"></ion-icon>
         </ion-label>
         <input *ngIf="campos.stado[1] == true" id="row-content-input" [(ngModel)]="new_campania.campos.edit_dos" type="text" />
-        <ion-icon *ngIf="campos.stado[1] == true && util.dispositivo == true" name="checkbox-outline" (click)="habilitar(1)"></ion-icon>
-        <ion-icon *ngIf="campos.stado[1] == true && util.dispositivo == false" ios="md-checkbox-outline" md="md-checkbox-outline"
+        <ion-icon *ngIf="campos.stado[1] == true && globalProvider.dispositivo== true" name="checkbox-outline" (click)="habilitar(1)"></ion-icon>
+        <ion-icon *ngIf="campos.stado[1] == true && globalProvider.dispositivo== false" ios="md-checkbox-outline" md="md-checkbox-outline"
           (click)="habilitar(1)"></ion-icon>
         <ion-item no-Lines class="item-content">
           <ion-input id="item-input" placeholder="{{new_campania.campos.edit_dos}}" text-center [(ngModel)]="new_campania.campos.dos"
@@ -275,29 +272,29 @@
     </ion-row>
     <ion-row class="row-content">
       <ion-col col-3 id="row-content">
-        <button id="row-content-btn" ion-button clear full [disabled]="(globalProvider.plan.leads == false ) ? true : false" (click)="popoverInfo(0)">
-          <ion-icon id="icon" *ngIf="util.dispositivo == true" name="help-circle"></ion-icon>
-          <ion-icon id="icon" *ngIf="util.dispositivo == false" ios="ios-help-circle-outline" md="md-help-circle"></ion-icon>
+        <button id="row-content-btn" ion-button clear full [disabled]="(globalProvider.plan.leads != 'P' ) ? true : false" (click)="popoverInfo(0)">
+          <ion-icon id="icon" *ngIf="globalProvider.dispositivo== true" name="help-circle"></ion-icon>
+          <ion-icon id="icon" *ngIf="globalProvider.dispositivo== false" ios="ios-help-circle-outline" md="md-help-circle"></ion-icon>
         </button>
       </ion-col>
       <ion-col col-6 id="row-content">
         <ion-item no-Lines class="item-content">
           <ion-label id="item-label-sms">SMS:</ion-label>
-          <ion-toggle id="item-toggle" color="danger" [disabled]="(globalProvider.plan.leads == false ) ? true : false" checked="{{new_campania.sms}}"
+          <ion-toggle id="item-toggle" color="danger" [disabled]="(globalProvider.plan.leads != 'P' ) ? true : false" checked="{{new_campania.sms}}"
             (ionChange)="chekedSmsCampania($event)"></ion-toggle>
         </ion-item>
       </ion-col>
       <ion-col col-3 id="row-content">
-        <button id="row-content-btn" ion-button clear full [disabled]="(globalProvider.plan.leads == false ) ? true : false" (click)="setSMSPredeterminadoCampania(2, new_campania.id_campania_manual )">
-          <ion-icon id="icon" *ngIf="util.dispositivo == true" name="checkbox-outline"></ion-icon>
-          <ion-icon id="icon" *ngIf="util.dispositivo == false" ios="md-checkbox-outline" md="md-checkbox-outline"></ion-icon>
+        <button id="row-content-btn" ion-button clear full [disabled]="(globalProvider.plan.leads != 'P' ) ? true : false" (click)="setSMSPredeterminadoCampania(2, new_campania.id_campania_manual )">
+          <ion-icon id="icon" *ngIf="globalProvider.dispositivo== true" name="checkbox-outline"></ion-icon>
+          <ion-icon id="icon" *ngIf="globalProvider.dispositivo== false" ios="md-checkbox-outline" md="md-checkbox-outline"></ion-icon>
         </button>
       </ion-col>
     </ion-row>
     <ion-row class="row-content">
       <ion-col id="row-content">
         <ion-item no-Lines class="item-content">
-          <ion-textarea id="item-textarea" [readonly]="(globalProvider.plan.leads == false ) ? true : false" [placeholder]="(globalProvider.plan.leads == false ) ? 'Renew or subscribe to the Dialer product' : 'Write *name* where you want each of the customers name on the text'"
+          <ion-textarea id="item-textarea" [readonly]="(globalProvider.plan.leads != 'P' ) ? true : false" [placeholder]="(globalProvider.plan.leads != 'P' ) ? globalProvider.plan.leads_sms_msn : 'Write *name* where you want each of the customers name on the text'"
             [(ngModel)]="new_campania.sms_tex" text-lg:992px></ion-textarea>
         </ion-item>
       </ion-col>
@@ -306,8 +303,8 @@
       <ion-col col-5 id="row-content">
         <ion-item no-Lines class="item-content">
           <p id="title">Reminder
-            <ion-icon *ngIf="util.dispositivo == true" id="calendar" name="calendar"></ion-icon>
-            <ion-icon *ngIf="util.dispositivo == false" id="calendar" ios="md-calendar" md="md-calendar"></ion-icon>
+            <ion-icon *ngIf="globalProvider.dispositivo== true" id="calendar" name="calendar"></ion-icon>
+            <ion-icon *ngIf="globalProvider.dispositivo== false" id="calendar" ios="md-calendar" md="md-calendar"></ion-icon>
           </p>
         </ion-item>
       </ion-col>

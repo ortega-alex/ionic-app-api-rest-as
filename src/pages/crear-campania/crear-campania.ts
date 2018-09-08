@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ViewController, PopoverController, Platform } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ViewController, PopoverController, Platform, AlertController } from 'ionic-angular';
 
 import { GlobalProvider } from '../../providers/global/global';
 import { HttpProvider } from '../../providers/http/http';
@@ -26,7 +26,6 @@ export class CrearCampaniaPage {
   private ordenarCampania: FormGroup;
   private datos = [];
   private load: any;
-  private res: any;
   private id_pre_campania: any;
   private columna = [
     { c: null, r: true },
@@ -48,7 +47,6 @@ export class CrearCampaniaPage {
     submitted: false,
     error: null,
     noValido: null,
-    dispositivo: null,
     mostrar: false,
     msnS: false,
     catalogoEstado: [],
@@ -72,18 +70,17 @@ export class CrearCampaniaPage {
     private filePath: FilePath,
     private file: File,
     private iosFilePicker: IOSFilePicker,
-    //private alertController: AlertController,
     private callNumber: CallNumber,
     private Sms: SMS,
-    private calendar: Calendar
+    private calendar: Calendar,
+    private alertController: AlertController
   ) {
-    this.util.dispositivo = this.platform.is('android');
     this.campos = { cambio: false, stado: [false, false] };
     var sms: boolean;
     var sms_tex: string;
     if (this.navParams.get('data')) {
       this.data = this.navParams.get('data');
-      if (this.globalProvider.plan.leads == false) {
+      if (this.globalProvider.plan.leads != 'P') {
         sms = false;
         sms_tex = null;
       } else {
@@ -96,7 +93,7 @@ export class CrearCampaniaPage {
       this.getCatalogoEstadoFilaCampania();
       this.campania_blanco = !this.campania_blanco;
     } else {
-      if (this.globalProvider.plan.leads == false) {
+      if (this.globalProvider.plan.leads == 'N') {
         sms = false;
         sms_tex = null;
       }
@@ -134,54 +131,54 @@ export class CrearCampaniaPage {
 
   tem() {
     let url = "servicio=setExcelUsuario&id_usuario=" + 3;
-    this.httpProvider.get(url).then(res => {
-      this.res = res;
-      if (this.res.encabezado) {
-        this.datos = this.res.encabezado;
-        this.id_pre_campania = this.res.id_pre_campania;
+    this.httpProvider.get(url).then((res: any) => {
+      if (res.encabezado) {
+        this.datos = res.encabezado;
+        this.id_pre_campania = res.id_pre_campania;
         this.util.mostrar = true;
       } else {
-        this.globalProvider.alerta(this.res.msn);
+        this.globalProvider.alerta(res.msn);
       }
     }).catch(err => console.log('err: ' + JSON.stringify(err)));
   }
 
   setExcelUsuario() {
-    //if (this.globalProvider.plan.plan_restriccion == false) {
-    if (this.platform.is('android')) {
-      this.fileChooser.open().then(url => {
-        this.filePath.resolveNativePath(url).then(path => {
-          this.file.resolveLocalFilesystemUrl(path).then(newUrl => {
-            let options: FileUploadOptions = {
-              fileKey: 'file',
-              fileName: newUrl.name,
-              headers: {}
-            }
-            this.setFileTrasfder(newUrl.nativeURL, options);
-          }).catch(err => console.log('err: ' + JSON.stringify(err)));
-        }).catch(err => console.log('err filePat: ' + JSON.stringify(err)));
-      }).catch(err => console.log('err choset: ' + JSON.stringify(err)));
+    //if (this.globalProvider.plan.plan_restriccion == 'N') { 
+    if (this.globalProvider.plan.leads != 'N') {
+      if (this.platform.is('android')) {
+        this.fileChooser.open().then(url => {
+          this.filePath.resolveNativePath(url).then(path => {
+            this.file.resolveLocalFilesystemUrl(path).then(newUrl => {
+              let options: FileUploadOptions = {
+                fileKey: 'file',
+                fileName: newUrl.name,
+                headers: {}
+              }
+              this.setFileTrasfder(newUrl.nativeURL, options);
+            }).catch(err => console.log('err: ' + JSON.stringify(err)));
+          }).catch(err => console.log('err filePat: ' + JSON.stringify(err)));
+        }).catch(err => console.log('err choset: ' + JSON.stringify(err)));
+      }
+      if (this.platform.is('ios')) {
+        this.iosFilePicker.pickFile().then(url => {
+          var array = url.split('/');
+          var nombre = array[array.length - 1];
+          let options: FileUploadOptions = {
+            fileKey: 'file',
+            fileName: nombre,
+            headers: {}
+          }
+          this.setFileTrasfder(url, options);
+        }).catch(err => console.log('err: ' + JSON.stringify(err)));
+      }
+    } else {
+      let alert = this.alertController.create({
+        title: '',
+        subTitle: this.globalProvider.plan.leads_sms_msn,
+        buttons: ['Ok']
+      });
+      alert.present();
     }
-    if (this.platform.is('ios')) {
-      this.iosFilePicker.pickFile().then(url => {
-        var array = url.split('/');
-        var nombre = array[array.length - 1];
-        let options: FileUploadOptions = {
-          fileKey: 'file',
-          fileName: nombre,
-          headers: {}
-        }
-        this.setFileTrasfder(url, options);
-      }).catch(err => console.log('err: ' + JSON.stringify(err)));
-    }
-    /* } else {
-       let alert = this.alertController.create({
-         title: '',
-         subTitle: this.globalProvider.plan.plan_restriccion_msn,
-         buttons: ['Ok']
-       });
-       alert.present();
-     }*/
   }
 
   setFileTrasfder(path: string, options: any) {
@@ -190,14 +187,14 @@ export class CrearCampaniaPage {
     const fileTransfer: FileTransferObject = this.transfer.create();
     fileTransfer.upload(path, this.httpProvider.URL + url, options).then((data) => {
       this.load.dismiss();
-      this.res = JSON.parse(data.response);
-      if (this.res.encabezado) {
-        this.datos = this.res.encabezado;
-        this.id_pre_campania = this.res.id_pre_campania;
-        this.util.nombre_archivo = this.res.nombre;
+      let res = JSON.parse(data.response);
+      if (res.encabezado) {
+        this.datos = res.encabezado;
+        this.id_pre_campania = res.id_pre_campania;
+        this.util.nombre_archivo = res.nombre;
         this.util.mostrar = true;
       } else {
-        this.globalProvider.alerta(this.res.msn);
+        this.globalProvider.alerta(res.msn);
       }
     }, (err) => {
       console.log('err: ' + JSON.stringify(err));
@@ -213,7 +210,7 @@ export class CrearCampaniaPage {
   }
 
   chekedSms(event) {
-    if (this.globalProvider.plan.leads == true) {
+    if (this.globalProvider.plan.leads == 'N') {
       if (event.value == true) {
         this.util.msnS = event.value;
         this.sms = 'Y';
@@ -257,22 +254,21 @@ export class CrearCampaniaPage {
         sms: this.sms,
         sms_pre: this.ordenarCampania.value.sms_predeterminado
       }
-      this.httpProvider.post(data, url).then(res => {
+      this.httpProvider.post(data, url).then((res: any) => {
         this.load.dismiss();
-        this.res = res;
-        if (this.res.error == 'false') {
-          if (this.res.errorArchivo == 'false') {
-            this.globalProvider.alerta(this.res.msn);
+        if (res.error == 'false') {
+          if (res.errorArchivo == 'false') {
+            this.globalProvider.alerta(res.msn);
             this.datos = [];
             this.util.mostrar = false;
             this.cancelar(true);
           } else {
-            this.globalProvider.alerta(this.res.msn);
+            this.globalProvider.alerta(res.msn);
           }
         } else {
-          this.globalProvider.alerta(this.res.msn);
+          this.globalProvider.alerta(res.msn);
         }
-      }).catch(err => {
+      }).catch((err) => {
         this.load.dismiss();
         console.log('err: ' + JSON.stringify(err))
       });
@@ -315,13 +311,12 @@ export class CrearCampaniaPage {
       "&nombre=" + this.new_campania.nombre_campania +
       "&sms=" + sms +
       "&sms_tex=" + this.new_campania.sms_tex;
-    this.httpProvider.get(url).then(res => {
-      this.res = res;
-      if (this.res.error == "false") {
-        this.new_campania.id_campania_manual = this.res.id_campania_manual;
+    this.httpProvider.get(url).then((res: any) => {
+      if (res.error == "false") {
+        this.new_campania.id_campania_manual = res.id_campania_manual;
         this.campania_blanco = !this.campania_blanco;
       } else {
-        this.globalProvider.alerta(this.res.msn);
+        this.globalProvider.alerta(res.msn);
       }
     }).catch(err => console.log('err: ' + JSON.stringify(err)));
   }
@@ -333,7 +328,6 @@ export class CrearCampaniaPage {
           this.panel = !this.panel;
         }
       }).catch(err => console.log('err; ' + JSON.stringify(err)));
-      //this.panel = !this.panel;
     }
   }
 
@@ -348,9 +342,8 @@ export class CrearCampaniaPage {
 
   getCatalogoEstadoFilaCampania() {
     let url = 'servicio=getCatalogoEstadoFilaCampania';
-    this.httpProvider.get(url).then(res => {
-      this.res = res;
-      this.util.catalogoEstado = this.res;
+    this.httpProvider.get(url).then((res: any) => {
+      this.util.catalogoEstado = res;
     }).catch(err => console.log('err: ' + JSON.stringify(err)));
   }
 
@@ -377,9 +370,7 @@ export class CrearCampaniaPage {
   }
 
   serEventoCalendar() {
-    this.calendar.hasReadWritePermission().then(res => {
-      console.log('res: ' + JSON.stringify(res));
-    }).catch(err => console.log('err: ' + JSON.stringify(err)));
+    this.calendar.hasReadWritePermission().catch(err => console.log('err: ' + JSON.stringify(err)));
     var startDate = new Date(this.new_campania.fecha);
     this.calendar.createEvent(
       this.new_campania.nombre_campania,
@@ -425,16 +416,15 @@ export class CrearCampaniaPage {
       "&campo_text_1=" + this.new_campania.campos.edit_uno +
       "&campo_text_2_edit=" + cambio +
       "&campo_text_2=" + this.new_campania.campos.edit_dos;
-    this.httpProvider.get(url).then(res => {
+    this.httpProvider.get(url).then((res: any) => {
       this.load.dismiss();
-      this.res = res;
-      if (this.res.error == 'false') {
+      if (res.error == 'false') {
         this.new_campania = { id_campania_manual: info.id, nombre_campania: info.nombre, telefono: '', nombre: null, fecha: null, sms: false, sms_tex: null, nota: null, stado: null, campos: { edit_uno: 'Field 1:', uno: null, uno_stado: false, edit_dos: 'Field 2:', dos: null, dos_stado: false } };
         this.panel = !this.panel;
       } else {
-        this.globalProvider.alerta(this.res.msn);
+        this.globalProvider.alerta(res.msn);
       }
-    }).catch(err => {
+    }).catch((err) => {
       this.load.dismiss();
       console.log('err: ' + JSON.stringify(err))
     });
@@ -450,12 +440,11 @@ export class CrearCampaniaPage {
       "&id_campania=" + id +
       "&tipo=" + tipo +
       "&sms=" + this.new_campania.sms_tex;
-    this.httpProvider.get(url).then(res => {
-      this.res = res;
-      if (this.res.error == 'false') {
-        this.globalProvider.alerta(this.res.msn);
+    this.httpProvider.get(url).then((res: any) => {
+      if (res.error == 'false') {
+        this.globalProvider.alerta(res.msn);
       } else {
-        this.globalProvider.alerta(this.res.msn);
+        this.globalProvider.alerta(res.msn);
       }
     }).catch(err => console.log('err: ' + JSON.stringify(err)));
   }

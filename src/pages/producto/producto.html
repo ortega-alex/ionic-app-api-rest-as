@@ -1,0 +1,68 @@
+<ion-content padding [style.background-color]="'black'">
+  <div class="productos-content" *ngIf="combos.length > 0" >
+    <ion-row no-padding no-lines no-margin id="tabs" *ngIf="combos.length > 1">
+      <ion-col *ngFor="let combo of combos; let i = index">
+        <button no-pading no-margin ion-button small full color="dark" [disabled]="(contador == i)" (click)="contador = i ; (combo.forma_pagos.length == 1) ? pagoSelec(0) : '' ; content.resize() ">
+          <b>{{combo.titulo}}</b>
+        </button>
+      </ion-col>
+    </ion-row>
+    <ion-slides id="productos-slides" autoplay="2500" loop="true" speed="2000" pager>
+      <ion-slide *ngFor="let prod of combos[contador].producto" [style.background]="'linear-gradient( to top , ' + prod.colores[0] + ',' + prod.colores[1] + ')'">
+        <h5> {{combos[contador].titulo}} </h5>
+        <button ion-button round id="icono">
+          <ion-icon [style.color]="prod.colores[0]" name="{{prod.icono}}"></ion-icon>
+        </button>
+        <br> {{prod.titulo}}
+        <br>
+        <p id="detalle">{{prod.detalle}}</p>
+      </ion-slide>
+    </ion-slides>
+    <ion-row text-center id="forma-de-pagos">
+      <ion-col col-4 no-padding *ngIf="combos[contador].forma_pagos.length == 1"></ion-col>
+      <ion-col no-padding *ngFor="let pago of combos[contador].forma_pagos ; let i = index" (click)="pagoSelec(i)">
+
+        <button ion-button round block color="fb" id="oferta" *ngIf="bordes[contador].pago[i] && pago.oferta != ''">
+          {{pago.oferta}}
+        </button>
+
+        <div id="pagos" [style.border]="(bordes[contador].pago[i]) ? 'solid #3b5998 3px' : 'solid #f4f4f4 0.5px' " [style.color]="(bordes[contador].pago[i]) ? '#3b5998' : 'black' ">
+          <div id="titulo">
+            {{pago.titulo}}
+          </div>
+          {{pago.descripcion}}
+          <br>
+          <b>{{pago.precio}}</b>
+          <br>
+          <span id="oferta-detalle" *ngIf="bordes[contador].pago[i] && pago.oferta-detalle != null">{{pago.oferta_detalle}}</span>
+          <br>
+        </div>
+      </ion-col>
+      <ion-col col-4 no-padding *ngIf="combos[contador].forma_pagos.length == 1"></ion-col>
+    </ion-row>
+    <ion-row text-center no-pading no-lines id="bottones">
+      <ion-col col-1></ion-col>
+      <ion-col col-10>
+        <button no-pading no-margin ion-button round block color="fb" (click)="purchase()">
+          CONTINUE
+        </button></ion-col>
+      <ion-col col-1></ion-col>
+      <ion-col col-1></ion-col>
+      <ion-col>
+        <button no-pading no-margin ion-button round block color="fondo" clear (click)="closeModal()">
+          NO THANKS
+        </button></ion-col>
+      <ion-col col-1></ion-col>
+    </ion-row>
+  </div>
+  <ion-scroll scrollY="true" id="informacion" text-center no-Lines no-border no-padding *ngIf="combos.length > 0">
+    Payment will be charged to your iTunes Account at confirmation of purchase Subscription automatically renews unless auto-renew
+    is turned off at least 24-hours before the end of the current period Account will be charged for renewal within 24-hours
+    prior to the end of the current period, and identify the cost of the renewal Subscriptions may be managed by the user
+    and auto-renewal may be turned off by going to the user's Account Settings after purchase Any unused portion of a free
+    trial period, if offered, will be forfeited when the user purchases a subscription to that publication, where applicable
+    <a href=" https://advansales.com/terms.html"> https://advansales.com/terms.html</a>
+    <a href="https://advansales.com/privacy_policies.html">https://advansales.com/privacy_policies.html</a>
+    <a href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/">https://www.apple.com/legal/internet-services/itunes/dev/stdeula/</a>
+  </ion-scroll>
+</ion-content>

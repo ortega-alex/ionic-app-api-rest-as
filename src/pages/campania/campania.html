@@ -4,10 +4,10 @@
     <ion-card class="conten-card">
       <ion-row class="row-cont">
         <ion-col col-2 id="row-cont">
-          <ion-icon *ngIf="globalProvider.plan.mostrar_publicidad_video == true && util.dispositivo == false" id="row-cont-btn-f" name="arrow-round-back"
-            (click)="regresar(true)"></ion-icon>
-          <ion-icon *ngIf="globalProvider.plan.mostrar_publicidad_video == true && util.dispositivo == false" id="row-cont-btn-f" ios="md-arrow-round-back"
-            md="md-arrow-round-back" (click)="regresar(true)"></ion-icon>
+          <ion-icon *ngIf="globalProvider.plan.mostrar_publicidad_video == true && globalProvider.dispositivo == false" id="row-cont-btn-f"
+            name="arrow-round-back" (click)="regresar(true)"></ion-icon>
+          <ion-icon *ngIf="globalProvider.plan.mostrar_publicidad_video == true && globalProvider.dispositivo == false" id="row-cont-btn-f"
+            ios="md-arrow-round-back" md="md-arrow-round-back" (click)="regresar(true)"></ion-icon>
         </ion-col>
         <ion-col id="row-cont" *ngIf="globalProvider.plan.mostrar_publicidad_video == true">
           <button id="row-cont-btn" ion-button small icon-right block color="dark" (click)="showVideo()">
@@ -20,9 +20,9 @@
       </ion-row>
       <ion-row class="row-cont">
         <ion-col col-2 class="row-cont">
-          <ion-icon *ngIf="globalProvider.plan.mostrar_publicidad_video == false && util.dispositivo == true" id="row-cont-btn-f" name="arrow-round-back"
-            (click)="regresar(true)"></ion-icon>
-          <ion-icon *ngIf="globalProvider.plan.mostrar_publicidad_video == false && util.dispositivo == false" id="row-cont-btn-f"
+          <ion-icon *ngIf="globalProvider.plan.mostrar_publicidad_video == 'N' && globalProvider.dispositivo == true" id="row-cont-btn-f"
+            name="arrow-round-back" (click)="regresar(true)"></ion-icon>
+          <ion-icon *ngIf="globalProvider.plan.mostrar_publicidad_video == 'N' && globalProvider.dispositivo == false" id="row-cont-btn-f"
             ios="md-arrow-round-back" md="md-arrow-round-back" (click)="regresar(true)"></ion-icon>
         </ion-col>
         <ion-col id="row-cont">
@@ -48,7 +48,7 @@
           {{(campania.llamados == 0 ) ? 'Start list' : 'Continue where you stop...'}}
         </ion-col>
       </ion-row>
-      <ion-row class="row-cont" *ngIf="util.dispositivo == true && btn_play == true">
+      <ion-row class="row-cont" *ngIf="globalProvider.dispositivo == true && btn_play == true">
         <ion-col id="row-cont-p">
           <button id="row-cont-btn-p" ion-button icon-left block color="dark" (click)="llamarLista(boton.key_estado,false,0)">
             <ion-icon name="play"></ion-icon>
@@ -56,7 +56,7 @@
           </button>
         </ion-col>
       </ion-row>
-      <ion-row class="row-cont" *ngIf="util.dispositivo == false && panel_ios == false && btn_play == true">
+      <ion-row class="row-cont" *ngIf="globalProvider.dispositivo == false && panel_ios == false && btn_play == true">
         <ion-col id="row-cont-p">
           <button id="row-cont-btn-p" ion-button icon-left block color="dark" (click)="panelIos(boton.key_estado,true,0)">
             <ion-icon ios="ios-call" md="md-call"></ion-icon>
@@ -118,9 +118,9 @@
     <br>
     <ion-row class="row-cont">
       <ion-col col-2 id="row-cont">
-        <ion-icon *ngIf="retroceder == true && util.dispositivo == true" id="row-icon" name="arrow-round-back" md="md-arrow-round-back"
+        <ion-icon *ngIf="retroceder == true && globalProvider.dispositivo == true" id="row-icon" name="arrow-round-back" md="md-arrow-round-back"
           (click)="pausar()"></ion-icon>
-        <ion-icon *ngIf="retroceder == true && util.dispositivo == false" id="row-icon" ios="md-arrow-round-back" md="md-arrow-round-back"
+        <ion-icon *ngIf="retroceder == true && globalProvider.dispositivo == false" id="row-icon" ios="md-arrow-round-back" md="md-arrow-round-back"
           (click)="pausar()"></ion-icon>
       </ion-col>
       <ion-col col-8 id="row-cont">
@@ -176,30 +176,30 @@
     </ion-row>
     <ion-row class="row-cont">
       <ion-col col-3 id="row-cont">
-        <button id="row-cont-btn" ion-button clear full [disabled]="(globalProvider.plan.leads == false ) ? true : false" (click)="popoverInfo(0)">
-          <ion-icon id="icon" *ngIf="util.dispositivo == true" name="help-circle"></ion-icon>
-          <ion-icon id="icon" *ngIf="util.dispositivo == false" ios="ios-help-circle-outline" md="md-help-circle"></ion-icon>
+        <button id="row-cont-btn" ion-button clear full [disabled]="(globalProvider.plan.leads != 'P' ) ? true : false" (click)="popoverInfo(0)">
+          <ion-icon id="icon" *ngIf="globalProvider.dispositivo == true" name="help-circle"></ion-icon>
+          <ion-icon id="icon" *ngIf="globalProvider.dispositivo == false" ios="ios-help-circle-outline" md="md-help-circle"></ion-icon>
         </button>
       </ion-col>
       <ion-col col-6 id="row-cont">
         <ion-item no-Lines class="from-item">
           <ion-label id="from-label-sms">SMS:</ion-label>
-          <ion-toggle id="from-toggle" color="danger" [disabled]="(globalProvider.plan.leads == false ) ? true : false" checked="{{msnS}}"
+          <ion-toggle id="from-toggle" color="danger" [disabled]="(globalProvider.plan.leads != 'P' ) ? true : false" checked="{{msnS}}"
             (ionChange)="chekedSms($event)"></ion-toggle>
         </ion-item>
       </ion-col>
       <ion-col col-3 id="row-cont">
-        <button id="row-cont-btn" ion-button clear full [disabled]="(globalProvider.plan.leads == false ) ? true : false" (click)="setSMSPredeterminadoCampania(1, campania.id_campania)">
-          <ion-icon id="icon" *ngIf="util.dispositivo == true" name="checkbox-outline"></ion-icon>
-          <ion-icon id="icon" *ngIf="util.dispositivo == false" ios="md-checkbox-outline" md="md-checkbox-outline"></ion-icon>
+        <button id="row-cont-btn" ion-button clear full [disabled]="(globalProvider.plan.leads != 'P' ) ? true : false" (click)="setSMSPredeterminadoCampania(1, campania.id_campania)">
+          <ion-icon id="icon" *ngIf="globalProvider.dispositivo == true" name="checkbox-outline"></ion-icon>
+          <ion-icon id="icon" *ngIf="globalProvider.dispositivo == false" ios="md-checkbox-outline" md="md-checkbox-outline"></ion-icon>
         </button>
       </ion-col>
     </ion-row>
     <ion-row class="row-cont">
       <ion-col id="row-cont">
         <ion-item no-Lines class="from-item">
-          <ion-textarea id="textarea-notes" [readonly]="(globalProvider.plan.leads == false ) ? true : false" [(ngModel)]="data.sms"
-            [placeholder]="(globalProvider.plan.leads == false ) ? 'Renew or subscribe to the Dialer product' : 'Write *name* where you want each of the customers name on the text'"
+          <ion-textarea id="textarea-notes" [readonly]="(globalProvider.plan.leads != 'P' ) ? true : false" [(ngModel)]="data.sms"
+            [placeholder]="(globalProvider.plan.leads != 'P' ) ? globalProvider.plan.leads_sms_msn : 'Write *name* where you want each of the customers name on the text'"
             text-center text-lg:992px></ion-textarea>
         </ion-item>
       </ion-col>
@@ -208,8 +208,8 @@
       <ion-col col-5 id="row-cont-title">
         <ion-item no-Lines class="from-item">
           <p id="title">Reminder
-            <ion-icon *ngIf="util.dispositivo == true" id="calendar" name="calendar"></ion-icon>
-            <ion-icon *ngIf="util.dispositivo == false" id="calendar" ios="md-calendar" md="md-calendar"></ion-icon>
+            <ion-icon *ngIf="globalProvider.dispositivo == true" id="calendar" name="calendar"></ion-icon>
+            <ion-icon *ngIf="globalProvider.dispositivo == false" id="calendar" ios="md-calendar" md="md-calendar"></ion-icon>
           </p>
         </ion-item>
       </ion-col>
@@ -236,19 +236,12 @@
           [style.border-bottom]="edit_info.border" />
       </ion-col>
     </ion-row>
-    <!--ion-row class="row-cont" *ngIf="retroceder == false">
-      <ion-col id="row-cont-b">
-        <button id="row-cont-btn-t" ion-button block [style.background-color]="buttom.color" (click)="pausarLlamada()">
-          {{buttom.sms}}
-        </button>
-      </ion-col>
-    </ion-row-->
   </ion-card>
   <div *ngIf="util.panel_llamada == true && tipo_campania == false" class="content-panel">
     <ion-row class="row-content">
       <ion-col id="row-content" col-2>
-        <ion-icon *ngIf="util.dispositivo == true" id="icon" name="arrow-round-back" (click)="pausar()"></ion-icon>
-        <ion-icon *ngIf="util.dispositivo == false" id="icon" ios="md-arrow-round-back" md="md-arrow-round-back" (click)="pausar()"></ion-icon>
+        <ion-icon *ngIf="globalProvider.dispositivo == true" id="icon" name="arrow-round-back" (click)="pausar()"></ion-icon>
+        <ion-icon *ngIf="globalProvider.dispositivo == false" id="icon" ios="md-arrow-round-back" md="md-arrow-round-back" (click)="pausar()"></ion-icon>
       </ion-col>
       <ion-col id="row-content">
         <p id="title"></p>
@@ -266,12 +259,12 @@
       <ion-col id="row-content">
         <ion-label id="row-content-label" stacked *ngIf="campos.stado[0] == false" (click)="habilitar(0)">
           {{getFilaCampania.campo_1_text}}
-          <ion-icon *ngIf="util.dispositivo == true" name="create"></ion-icon>
-          <ion-icon *ngIf="util.dispositivo == false" ios="ios-create-outline" md="md-create"></ion-icon>
+          <ion-icon *ngIf="globalProvider.dispositivo == true" name="create"></ion-icon>
+          <ion-icon *ngIf="globalProvider.dispositivo == false" ios="ios-create-outline" md="md-create"></ion-icon>
         </ion-label>
         <input *ngIf="campos.stado[0] == true" id="row-content-input" [(ngModel)]="getFilaCampania.campo_1_text" type="text" />
-        <ion-icon *ngIf="campos.stado[0] == true && util.dispositivo == true" name="checkbox-outline" (click)="habilitar(0)"></ion-icon>
-        <ion-icon *ngIf="campos.stado[0] == true && util.dispositivo == false" ios="md-checkbox-outline" md="md-checkbox-outline"
+        <ion-icon *ngIf="campos.stado[0] == true && globalProvider.dispositivo == true" name="checkbox-outline" (click)="habilitar(0)"></ion-icon>
+        <ion-icon *ngIf="campos.stado[0] == true && globalProvider.dispositivo == false" ios="md-checkbox-outline" md="md-checkbox-outline"
           (click)="habilitar(0)"></ion-icon>
         <ion-item no-Lines class="item-content">
           <ion-input id="item-input" text-center placeholder="Field 1:" [(ngModel)]="getFilaCampania.campo_1" type="text"></ion-input>
@@ -280,12 +273,12 @@
       <ion-col id="row-content">
         <ion-label id="row-content-label" stacked *ngIf="campos.stado[1] == false" (click)="habilitar(1)">
           {{getFilaCampania.campo_2_text}}
-          <ion-icon *ngIf="util.dispositivo == true" name="create"></ion-icon>
-          <ion-icon *ngIf="util.dispositivo == false" ios="ios-create-outline" md="md-create"></ion-icon>
+          <ion-icon *ngIf="globalProvider.dispositivo == true" name="create"></ion-icon>
+          <ion-icon *ngIf="globalProvider.dispositivo == false" ios="ios-create-outline" md="md-create"></ion-icon>
         </ion-label>
         <input *ngIf="campos.stado[1] == true" id="row-content-input" [(ngModel)]="getFilaCampania.campo_2_text" type="text" />
-        <ion-icon *ngIf="campos.stado[1] == true && util.dispositivo == true" name="checkbox-outline" (click)="habilitar(1)"></ion-icon>
-        <ion-icon *ngIf="campos.stado[1] == true && util.dispositivo == false" ios="md-checkbox-outline" md="md-checkbox-outline"
+        <ion-icon *ngIf="campos.stado[1] == true && globalProvider.dispositivo == true" name="checkbox-outline" (click)="habilitar(1)"></ion-icon>
+        <ion-icon *ngIf="campos.stado[1] == true && globalProvider.dispositivo == false" ios="md-checkbox-outline" md="md-checkbox-outline"
           (click)="habilitar(1)"></ion-icon>
         <ion-item no-Lines class="item-content">
           <ion-input id="item-input" text-center placeholder="Field 2:" [(ngModel)]="getFilaCampania.campo_2" type="text"></ion-input>
@@ -301,29 +294,29 @@
     </ion-row>
     <ion-row class="row-content">
       <ion-col col-3 id="row-content">
-        <button id="row-content-btn" ion-button clear full [disabled]="(globalProvider.plan.leads == false ) ? true : false" (click)="popoverInfo(0)">
-          <ion-icon id="icon" *ngIf="util.dispositivo == true" name="help-circle"></ion-icon>
-          <ion-icon id="icon" *ngIf="util.dispositivo == false" ios="ios-help-circle-outline" md="md-help-circle"></ion-icon>
+        <button id="row-content-btn" ion-button clear full [disabled]="(globalProvider.plan.leads != 'P' ) ? true : false" (click)="popoverInfo(0)">
+          <ion-icon id="icon" *ngIf="globalProvider.dispositivo == true" name="help-circle"></ion-icon>
+          <ion-icon id="icon" *ngIf="globalProvider.dispositivo == false" ios="ios-help-circle-outline" md="md-help-circle"></ion-icon>
         </button>
       </ion-col>
       <ion-col col-6 id="row-content">
         <ion-item no-Lines class="item-content">
           <ion-label id="item-label-sms">SMS:</ion-label>
-          <ion-toggle id="item-toggle" color="danger" [disabled]="(globalProvider.plan.leads == false ) ? true : false" checked="{{msnS}}"
+          <ion-toggle id="item-toggle" color="danger" [disabled]="(globalProvider.plan.leads != 'P' ) ? true : false" checked="{{msnS}}"
             (ionChange)="chekedSms($event)"></ion-toggle>
         </ion-item>
       </ion-col>
       <ion-col col-3 id="row-content">
-        <button id="row-content-btn" ion-button clear [disabled]="(globalProvider.plan.leads == false ) ? true : false" full (click)="setSMSPredeterminadoCampania(2, campania.id_campania_manual )">
-          <ion-icon id="icon" *ngIf="util.dispositivo == true" name="checkbox-outline"></ion-icon>
-          <ion-icon id="icon" *ngIf="util.dispositivo == false" ios="md-checkbox-outline" md="md-checkbox-outline"></ion-icon>
+        <button id="row-content-btn" ion-button clear [disabled]="(globalProvider.plan.leads != 'P' ) ? true : false" full (click)="setSMSPredeterminadoCampania(2, campania.id_campania_manual )">
+          <ion-icon id="icon" *ngIf="globalProvider.dispositivo == true" name="checkbox-outline"></ion-icon>
+          <ion-icon id="icon" *ngIf="globalProvider.dispositivo == false" ios="md-checkbox-outline" md="md-checkbox-outline"></ion-icon>
         </button>
       </ion-col>
     </ion-row>
     <ion-row class="row-content">
       <ion-col id="row-content">
         <ion-item no-Lines class="item-content">
-          <ion-textarea id="item-textarea" [readonly]="(globalProvider.plan.leads == false ) ? true : false" [placeholder]="(globalProvider.plan.leads == false ) ? 'renew or subscribe to the Dialer product' : 'Write *name* where you want each of the customers name on the text'"
+          <ion-textarea id="item-textarea" [readonly]="(globalProvider.plan.leads != 'P' ) ? true : false" [placeholder]="(globalProvider.plan.leads != 'P' ) ? globalProvider.plan.leads_sms_msn : 'Write *name* where you want each of the customers name on the text'"
             [(ngModel)]="data.sms" text-lg:992px></ion-textarea>
         </ion-item>
       </ion-col>
@@ -332,8 +325,8 @@
       <ion-col col-5 id="row-content">
         <ion-item no-Lines class="item-content">
           <p id="title">Reminder
-            <ion-icon *ngIf="util.dispositivo == true" id="calendar" name="calendar"></ion-icon>
-            <ion-icon *ngIf="util.dispositivo == false" id="calendar" ios="md-calendar" md="md-calendar"></ion-icon>
+            <ion-icon *ngIf="globalProvider.dispositivo == true" id="calendar" name="calendar"></ion-icon>
+            <ion-icon *ngIf="globalProvider.dispositivo == false" id="calendar" ios="md-calendar" md="md-calendar"></ion-icon>
           </p>
         </ion-item>
       </ion-col>

@@ -7,10 +7,11 @@ export class HttpProvider {
   constructor(public http: HttpClient) { }
 
   // produccion
-  public URL = 'http://35.232.20.49/servicio.php?';
+  public URL : string = 'http://35.232.20.49/servicio.php?';
   public URL_IMG: string = "http://35.232.20.49/advansocialimg.php?src=";
   public URL_VIDEO: string = "http://35.232.20.49/advansocialvideo.php?id=";
   public URL_VCARD : string = "https://advansales.com/vCard.php?u=";
+  public RUTA_IMG: string = "http://35.232.20.49/imgAdvansales.php?src=";
 
   //local 
  /*

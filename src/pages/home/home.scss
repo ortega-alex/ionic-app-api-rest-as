@@ -4,9 +4,8 @@ page-home {
         width: 100% !important;
 		font-size: 1.0em;		
 		.content-header{
-			padding-top: 1%;
-			height: 8% !important;
 			text-align: center;
+			margin: 0% !important;
 			#title{
 				display: block;
 				margin: auto;
@@ -30,13 +29,12 @@ page-home {
 				margin: 0% !important;
 			}
 			.paquete{
-				background-color: #745af2;
-				color: white;
 				padding:2%;
 				text-align: center;
 				margin: 0%;
 				border : solid white 0.5px;
 				border-radius: 6%;
+				font-weight: bold;
 			}	
 			#conten-info{
 				text-align: center;
@@ -107,36 +105,10 @@ page-home {
 				}
 			}
 		}    
-		/*.content-footer{
-			background: transparent;
-			position: absolute;
-			bottom: 0%;
-        	width: 100% !important;
-			.btn-conexion{
-				background: transparent;
-				text-align: center;
-				position: absolute;
-				height: 60% !important;            
-				width: 100% !important;    
-				bottom: 0;
-				#btn-conexion-tex{
-					display: block;
-					margin: auto;
-					height: 4.2vh !important;                
-				}   
-				#btn-conexion-p{
-					text-align: center;
-					margin: 0%;
-					padding-top: 0.5%;
-					font-size: 1.1em;
-				}
-			}
-			#btn-conexion{			
-				display: block;
-				margin: auto;
-				height: 17vh !important;
-				padding-top: 0%; 
-			}
-		}   */
-    }
+	}
+	
+	#mensaje{
+		font-size: 1.5em;
+		font-weight: bold;
+	}
 }

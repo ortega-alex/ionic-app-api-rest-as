@@ -9,8 +9,8 @@ export class Usuario {
     public correo: string;
     public imgUrl: string;
     public clave: string;
-    public logIn: boolean;
-    public log_out: boolean;
+    public logIn: string;
+    public log_out: string;
     public tipo_registro: string;
     public tipo_usuario: string;
 
@@ -40,23 +40,29 @@ export class Usuario {
 }
 
 export class Plan {
-    public gratis: boolean; /* hasta que comparta en fb no podra realizar ningun tipo de accion */
-    public mostrar_publicidad_video: boolean; /* y mostrar publicidad de video */
-    public mostrar_publicidad_banner: boolean; /* y mostrar publiciodad de banner */
-    public compartir_fb: boolean; /* compartir fb bandera */
-    public plan: string; /* cutro planes A :  , B : , C :  , D :  */
-    public plan_fecha_expiracion: string; /* fecha anio-mes-dia  */
-    public plan_restriccion: boolean;  /*boton agregar list si esta en Y no se le muesta el +list*/
-    public bloqueo: boolean; /* bloqueo de app */
-    public bloqueo_msn: string; /* motivo del bloqueo */
+    public gratis: string;
+    public mostrar_publicidad_video: string;
+    public mostrar_publicidad_banner: string;
+    public compartir_fb: string;
+    public plan: string;
+    public plan_fecha_expiracion: string;
+    public plan_restriccion: string;
+    public bloqueo: string;
+    public bloqueo_msn: string;
     public plan_restriccion_msn: string;
 
-    public activo: boolean;
-    public leads: boolean;
-    public sms_leads: boolean;
+    public activo: string;
+    public leads: string;
+    public sms_leads: string;
     public suscripcion_error_msn: string;
-    public suscrito: boolean;
+    public suscrito: string;
     public advanvcard: any;
+
+    public leads_msn: string;
+    public leads_sms_msn: string;
+    public advansocial_msn: string;
+    public advandocs_msn: string;
+    public advanvcard_msn: string;
 
     constructor(
         gratis = null,
@@ -74,7 +80,12 @@ export class Plan {
         leads = null,
         sms_leads = null,
         suscripcion_error_msn = null,
-        advanvcard = null
+        advanvcard = null,
+        leads_msn = null,
+        leads_sms_msn = null,
+        advansocial_msn = null,
+        advandocs_msn = null,
+        advanvcard_msn = null
     ) {
         this.gratis = gratis;
         this.mostrar_publicidad_video = mostrar_publicidad_video;
@@ -92,5 +103,11 @@ export class Plan {
         this.sms_leads = sms_leads;
         this.suscripcion_error_msn = suscripcion_error_msn;
         this.advanvcard = advanvcard;
+
+        this.leads_msn = leads_msn;
+        this.leads_sms_msn = leads_sms_msn;
+        this.advansocial_msn = advansocial_msn;
+        this.advandocs_msn = advandocs_msn;
+        this.advanvcard_msn = advanvcard_msn;
     }
 }

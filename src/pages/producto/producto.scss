@@ -1,0 +1,85 @@
+page-producto {
+   .productos-content{
+        margin-top: 5%; 
+        height: 90% !important;
+        background: white;
+        border-radius: 2%;
+        #productos-slides{
+            height: 50% !important;
+            color: white;
+            border-radius: 5% 5% 0% 0%;
+            #icono{
+                font-size: 3em; 
+                width: 100px;
+                height: 100px;
+                -moz-border-radius: 50%;
+                -webkit-border-radius: 50%;
+                border-radius: 50%;
+                background:white; 
+            }
+            #detalle{
+                margin: 0%;
+                padding: 0%;
+                text-align: center;
+            }
+        }
+    } 
+    #informacion{
+        color: white;
+        font-size: 0.8em;
+        text-align: center;
+        padding: 0% !important;
+        margin: 0%;
+        height: 10% !important;
+        width: 100% !important;
+    }  
+    #titulo{	
+        padding: 15% 0% 10% 0%;				
+        //height: 30%;
+        display: flex;
+        justify-content: center;
+        align-content: center;
+        flex-direction: column;
+        font-weight: bold;
+        font-size: 2em;
+    }
+    #oferta{
+        position: absolute;
+        font-size: 0.65em;
+        top: 0%;
+        margin: 0%;
+        right: 3%;
+        left: 3%;
+        width: 94% !important;
+        padding: 0% !important;
+    }
+    #oferta-detalle{
+        font-size: 0.8em;
+    }
+
+    #pagos{
+        height: 88% !important;
+        width: 100% !important;
+        margin-top: 12%; 
+        padding: 2% 0%;
+    }
+    ion-col{
+        padding: 0% !important;
+    }
+    #forma-de-pagos{
+        height: 27% !important;
+    }
+    #bottones{
+        height: 13% !important;
+    }
+    #bottones{
+        height: 10% !important;
+    }
+    a{
+        color: white;
+        text-decoration: none;
+    }
+    .scroll-content{
+        padding-top: 0% !important; 
+    }
+}

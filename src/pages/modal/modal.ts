@@ -10,8 +10,6 @@ import { CallNumber } from '@ionic-native/call-number';
 import { SMS } from '@ionic-native/sms';
 import { Calendar } from '@ionic-native/calendar';
 import { AdMobFree, AdMobFreeRewardVideoConfig } from '@ionic-native/admob-free';
-import { InAppPurchase2, IAPProduct } from '@ionic-native/in-app-purchase-2';
-import { Producto } from '../../model/Producto';
 
 @IonicPage()
 @Component({
@@ -21,7 +19,7 @@ import { Producto } from '../../model/Producto';
 export class ModalPage {
 
   private data1: DataModal // { view: number, num: number, imagenes: Array<Imagenes> };
-  private res: any;
+  // private res: any;
   private diferencia = new Diferencia();
   private replace = new Replace();
   private fechas = new Fechas();
@@ -52,7 +50,7 @@ export class ModalPage {
     submitted: null,
     error: null,
     noValido: null,
-    dispositivo: null,
+    //dispositivo: null,
     mostrar: null,
     msnS: null,
     catalogoEstado: [], //catalogo_estado
@@ -61,12 +59,6 @@ export class ModalPage {
     style: { background: '', opacity: '' },
     panel_llamada: false
   };
-
-
-  products: Array<Producto>;
-  private dispositivo: boolean;
-  private readonly: Array<{ product: boolean }>;
-  //private id : any ;
 
   constructor(
     public navCtrl: NavController,
@@ -81,11 +73,7 @@ export class ModalPage {
     private alertController: AlertController,
     private admobFree: AdMobFree,
     private popoverController: PopoverController,
-    private store: InAppPurchase2
   ) {
-    this.products = [];
-    this.readonly = [];
-    this.dispositivo = this.platform.is('android');
     this.data1 = this.navParams.get('data');
     if (this.data1.view == 2) {
       this.util.style = { background: 'black', opacity: '' };
@@ -107,10 +95,6 @@ export class ModalPage {
       this.tamanio_contenido = this.llamadas.length;
       this.get_fila_contenido = this.llamadas[this.posicion];
     }
-
-    if (this.data1.view == 5) {
-      this.getProductoUsuario();
-    }
   }
 
   ionViewDidLoad() {
@@ -125,7 +109,6 @@ export class ModalPage {
     this.getCatalogoEstadoFilaCampania();
     this.animacion();
     this.tiempoActual();
-    //this.configurePurchasing();  
   }
 
   ionViewWillUnload() {
@@ -143,7 +126,7 @@ export class ModalPage {
 
   validarTiempo() {
     let date = new Date().getTime();
-    if ((!this.globalProvider.time || date >= this.globalProvider.time) && this.globalProvider.plan.mostrar_publicidad_video == true) {
+    if ((!this.globalProvider.time || date >= this.globalProvider.time) && this.globalProvider.plan.mostrar_publicidad_video == 'Y') {
       let alert = this.alertController.create({
         title: '',
         subTitle: 'Get more time!',
@@ -163,10 +146,10 @@ export class ModalPage {
       '&fecha=' + fecha +
       '&hora=' + hora +
       '&creditos=' + creditos;
-    this.httpProvider.get(url).then(res => {
-      this.res = res;
-      if (this.res.error == 'false') {
-        let date = new Date(this.res.tiempo_usuario);
+    this.httpProvider.get(url).then((res: any) => {
+      //this.res = res;
+      if (res.error == 'false') {
+        let date = new Date(res.tiempo_usuario);
         this.globalProvider.setTime(this.getmilisegundos.transform(date));
         this.tiempoActual();
       }
@@ -201,7 +184,7 @@ export class ModalPage {
   call() {
     if (this.validarTiempo() == true) {
       if (this.get_fila_contenido.telefono != null && this.get_fila_contenido.telefono.trim() != '') {
-        this.callNumber.callNumber(this.get_fila_contenido.telefono, true).then(res => {
+        this.callNumber.callNumber(this.get_fila_contenido.telefono, true).then(() => {
           console.log('llamando');
         }).catch(err => console.log(err));
       }
@@ -219,9 +202,9 @@ export class ModalPage {
 
   getCatalogoEstadoFilaCampania() {
     let url = 'servicio=getCatalogoEstadoFilaCampania';
-    this.httpProvider.get(url).then(res => {
-      this.res = res;
-      this.util.catalogoEstado = this.res;
+    this.httpProvider.get(url).then((res: any) => {
+      //this.res = res;
+      this.util.catalogoEstado = res;
     })
   }
 
@@ -262,9 +245,9 @@ export class ModalPage {
       '&sms_texto=' + this.data.sms +
       '&individual= Y' +
       '&id_usuario=' + this.globalProvider.usuario.id_usuario;
-    this.httpProvider.get(url).then(res => {
-      this.res = res;
-      if (this.res.error == 'false') {
+    this.httpProvider.get(url).then((res: any) => {
+      //this.res = res;
+      if (res.error == 'false') {
         let date = new Date();
         this.globalProvider.setFecha(date);
         this.data.notas = null;
@@ -277,9 +260,9 @@ export class ModalPage {
           this.closeModal();
         }
       } else {
-        this.globalProvider.alerta(this.res.mns);
+        this.globalProvider.alerta(res.mns);
       }
-    }).catch(err => { 
+    }).catch(err => {
       console.log('err: ' + JSON.stringify(err))
       this.closeModal(true);
     });
@@ -340,12 +323,12 @@ export class ModalPage {
       "&id_campania=" + id +
       "&tipo=" + tipo +
       "&sms=" + this.data.sms;
-    this.httpProvider.get(url).then(res => {
-      this.res = res;
-      if (this.res.error == 'false') {
-        this.globalProvider.alerta(this.res.msn);
+    this.httpProvider.get(url).then((res: any) => {
+      // this.res = res;
+      if (res.error == 'false') {
+        this.globalProvider.alerta(res.msn);
       } else {
-        this.globalProvider.alerta(this.res.msn);
+        this.globalProvider.alerta(res.msn);
       }
     }).catch(err => console.log('err: ' + JSON.stringify(err)));
   }
@@ -353,120 +336,5 @@ export class ModalPage {
   popoverInfo(posicion: number) {
     let popover = this.popoverController.create('PopoverPage', { posicion: posicion });
     popover.present();
-  }
-
-  getProductoUsuario() {   
-    let dispositivo: string = (this.dispositivo == true) ? 'android' : 'ios';
-    let url: string = "servicio=getSuscrpcionUsuario";
-    let data = {
-      "id_usuario": this.globalProvider.usuario.id_usuario,
-      "plataforma": dispositivo
-    };
-    this.httpProvider.post(data, url).then(res => {
-      this.res = res;
-      for (let p of this.res) {
-        let product: boolean = (p.suscrito == 'Y') ? true : false;
-        this.readonly.push({ product: product });
-      }
-      this.products = this.res.producto_disponible;
-     // console.log(this.products);
-    }).catch(err => console.log('err: ' + err));
-  }
-
-  async purchase(arg: any) {
-    var order: any;
- 
-    this.configurePurchasing(arg);
-    console.log('Products: ' + JSON.stringify(this.store.products));
-    try {
-      let product = this.store.get(arg.id_producto);
-      console.log('product: ' + JSON.stringify(product));
-      if (arg.id_producto_antiguo == "") {
-        order = await this.store.order(arg.id_producto);
-        this.store.refresh();
-      } else {
-        order = await this.store.order(arg.id_producto, arg.id_producto_antiguo ? { oldPurchasedSkus: [arg.id_producto_antiguo] } : null);
-      }
-      console.log('order: ' + JSON.stringify(order));
-    } catch (err) {
-      console.log('Error Ordering ' + JSON.stringify(err));
-    }   
-  }
-
-  async configurePurchasing(arg: any) {
-    try {
-      //this.store.verbosity = this.store.INFO;
-
-      this.store.register({
-        id: arg.id_producto,
-        alias: arg.id_producto,
-        type: this.store.PAID_SUBSCRIPTION,
-      });
-
-      this.registerHandlers(arg)
-
-      this.store.ready((status) => {
-        console.log('Store is Ready: ' + JSON.stringify(status));
-      });
-
-      this.store.when(arg.id_producto).error((error) => {
-        console.log('An Error Occured' + JSON.stringify(error));
-      });
-
-      this.store.refresh();
-    } catch (err) {
-      console.log('Error On Store Issues' + JSON.stringify(err));
-    }
-  }
-
-  registerHandlers(arg: any) {
-    this.store.when(arg.id_producto).approved((product: IAPProduct) => {
-      console.log('approved: ' + JSON.stringify(product));
-      this.setSuscrpcionUsuario(product,arg);  
-      product.verify();
-    });
-
-    this.store.when(arg.id_producto).registered((product: IAPProduct) => {
-      console.log('Registered: ' + JSON.stringify(product));
-    });
-
-    this.store.when(arg.id_producto).updated((product: IAPProduct) => {
-      console.log('Loaded' + JSON.stringify(product));          
-    });
-
-    this.store.when(arg.id_producto).cancelled((product: IAPProduct) => {
-      console.log('Purchase was Cancelled');
-    });
-
-    this.store.when(arg.id_producto).owned((product: IAPProduct) => {
-      console.log('owned: ' + JSON.stringify(product));
-      this.setSuscrpcionUsuario(product,arg);      
-    });
-
-    this.store.when(arg.id_producto).verified((product : IAPProduct) => {
-      console.log('verified' + JSON.stringify(product));
-      product.finish();
-    });
-
-    this.store.error((err) => {
-      console.log('Store Error ' + JSON.stringify(err));
-    });
-  }
-
-  setSuscrpcionUsuario(product: any , arg : any) {
-    let dispositivo: string = (this.dispositivo == true) ? 'android' : 'ios';
-    let url: string = "servicio=setSuscrpcionUsuario";
-    let data: any = {
-      "id_usuario": this.globalProvider.usuario.id_usuario,
-      "plataforma": dispositivo,
-      "id_producto": product.id,
-      "id_producto_antiguo":arg.id_producto_antiguo ,
-      "token": product.transaction.purchaseToken
-    };
-    console.log(url);
-    this.httpProvider.post(data, url).then(() => {
-      this.getProductoUsuario();            
-      this.globalProvider.setProductoId(product.id);
-    }).catch(err => console.log('err: ' + JSON.stringify(err)));    
   }
 }

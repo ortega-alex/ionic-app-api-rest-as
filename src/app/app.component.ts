@@ -21,13 +21,13 @@ import { AppRate } from '@ionic-native/app-rate';
   templateUrl: 'app.html'
 })
 export class MyApp {
-
   rootPage: any;
   options: Array<CallLogObject>;
   set_milisegundos = new setMilisegundos();
   fechas = new Fechas();
   res = [];
   respuesta: any;
+  notificaciones : Array<any> = [];
 
   constructor(
     private platform: Platform,
@@ -48,22 +48,19 @@ export class MyApp {
       if (platform.is('android')) {
         this.permisos();
       }
-
       this.storage.get('usuario').then(usuario => {
         if (usuario) {
           this.rootPage = HomePage;
           if (platform.is('android')) {
             this.historialTelefonico();
           }
-
           this.ranqui();
-
+          this.initPushNotification();
         } else {
           this.rootPage = LoginPage;
         }
+        splashScreen.hide();
       });
-      splashScreen.hide();
-      this.initPushNotification();
     });
   }
 
@@ -149,7 +146,7 @@ export class MyApp {
     }
     const options: PushOptions = {
       android: {
-        senderID: 'AIzaSyCtDffZZdDaJ3D99NGrovKac4cJuFlIZvs'
+        senderID: 'AIzaSyCtDffZZdDaJ3D99NGrovKac4cJuFlIZvs' , forceShow : true
       },
       ios: {
         alert: 'true',
@@ -191,32 +188,19 @@ export class MyApp {
         }
       }
     });
-    pushObject.on('error').subscribe(error => console.error('Error with Push plugin' + error));
+    pushObject.on('error').subscribe(error => console.log('Error with Push plugin' + error));
   }
 
   ranqui() {
-   /* this.appRate.preferences.storeAppURL = {
-      ios: '1394472577',
-      android: 'market://details?id=com.httpsAdvanSales.AdvanSales8'
-    };    
-    this.appRate.promptForRating(true);*/
-
     this.appRate.preferences = {
       displayAppName: 'AdvanSales',
       usesUntilPrompt: 2,
-      promptAgainForEachNewVersion: false,
-      
+      promptAgainForEachNewVersion: true,
+      inAppReview: false,
       storeAppURL: {
         ios: '1394472577',
         android: 'market://details?id=com.httpsAdvanSales.AdvanSales8'
       },
-      /*customLocale: {
-        title: 'Do you enjoy AdvanSales?',
-        message: 'If you enjoy using AdvanSales, would you mind taking a moment to rate it? Thanks so much!',
-        cancelButtonLabel: 'No, Thanks',
-        laterButtonLabel: 'Remind Me Later',
-        rateButtonLabel: 'Rate It Now'
-      },*/
       callbacks: {
         onRateDialogShow: function (callback) {
           console.log('rate dialog shown!' + callback);
@@ -226,7 +210,6 @@ export class MyApp {
         }
       }
     };
-    // Opens the rating immediately no matter what preferences you set
     this.appRate.promptForRating(false);
   }
 }

@@ -1,0 +1,106 @@
+page-social {
+    .content-header{           
+        text-align: center;
+        width: 100% !important;
+        .conten-row{
+            #conten-row{
+                #title{
+                   height: 2.7em;
+                }    
+               
+            }
+        }
+    }
+    #icon{
+        font-size: 3em;
+    }
+    #icon-accion{
+        font-size: 2em;
+        border-radius: 6px;
+    }
+    #content-progres{
+        position: relative;
+        top: 50%;
+        transform: perspective(1px) translateY(-50%);
+        height: 20% !important;
+        border: solid gray 1px;						
+    }
+    ion-scroll{
+        height: 230px !important;
+    }
+    .item-idioma{
+        background: transparent !important;
+        margin-top: -15% !important; 
+        padding-top: -5% !important; 
+    }
+    #author-text{
+        font-size: 0.5em ; 
+        padding: 0% ; 
+        margin: 0%;
+    }
+    ion-footer{
+        background: transparent;
+    }
+    ion-toolbar{
+        background: transparent;
+    }
+    ion-textarea{
+        border: solid #f8f8f8 0.5px;
+    }
+    #hashtag-wold{
+        margin: 0.5% !important;
+    }
+    #content-hashtag{
+        display: inline;
+    }
+    #img-social{
+        margin: auto;
+        display: block;
+        video{
+            margin: auto;
+            display: block;
+        }
+        img{
+            margin: auto;
+            display: block;
+        }
+    }
+
+    #img-social-marca{
+        position: absolute;
+        top: 40%;
+        width: 310px;
+        height: 230px; 
+        left: 0;
+        right: 0;
+        margin: 0 auto;
+    }
+
+    .posicion-logo{
+        position: absolute;
+        top: 41%;
+        width: 310px;
+        height: 230px; 
+        left: 0;
+        right: 0;
+        margin: 0 auto;
+      
+        #cuadros{
+            border-width: 0.1px; 
+            border-style: dashed; 
+            border-color: black;
+            -webkit-text-stroke: 0.2px white;
+            #btn-cuadro{
+                font-size: 0.9em;
+                width: 100% !important;
+                height: 100% !important;
+                margin: 0% !important;
+            }
+        }
+    }
+    #logo-title{
+        font-size: 1.3em;
+        font-weight: bold;
+        padding-bottom: 0%; 
+    }
+}
