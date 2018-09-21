@@ -269,7 +269,7 @@ export class HomePage {
         }
         this.free();
 
-        if (res.version_app != '2.0.0') {
+        if (res.version_app != '2.0.2') {
           let url: string;
           let alert = this.alertController.create({
             title: 'New Version',
