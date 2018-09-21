@@ -73,7 +73,6 @@ export interface HomeUtil {
 	title: string;
 	spinner: boolean;
 	background: string;
-	//dispositivo: boolean;
 };
 
 //registro
@@ -110,23 +109,14 @@ export interface Tutorial {
 	imagenes: Array<Imagenes>;
 };
 
-//modal 
-export interface DataModal {
-	view: number;
-	num: number;
-	imagenes: Array<Imagenes>
-};
-
 export interface Util {
 	submitted: boolean;
 	error: boolean;
 	noValido: boolean;
-	//dispositivo: boolean;
 	mostrar: boolean;
 	msnS: boolean;
 	catalogoEstado: Array<any>;
 	nombre_archivo: string;
 	sms_tex: string;
-	style: { background: string, opacity: string };
 	panel_llamada: boolean;
 };

@@ -36,11 +36,11 @@ export class SmsPage {
     catalogoEstado: [],
     nombre_archivo: null,
     sms_tex: null,
-    style: null,
+    //style: null,
     panel_llamada: null
   };
   mjs: boolean;
-  numero: Array<any>;
+  //numero: Array<any>;
   hidden: boolean = false;
   visitas: Array<any>;
   contenido: boolean;
@@ -73,15 +73,15 @@ export class SmsPage {
       this.sms_from = this.formBuilder.group({
         sms_text: ['', Validators.required],
         nombre: ['', Validators.required],
-        link_redirect: [''],
+       /* link_redirect: [''],
         cantidad_dia: [contador, Validators.required],
         tipo_dispositivo: ['MCP', Validators.required],
-        dias_semana: ['', Validators.required],
+        dias_semana: ['', Validators.required],*/
         hora: [this.hora.transform(date), Validators.required],
         fecha: [this.fecha.transform(date), Validators.required]
       });
-      this.numero = [];
-      this.getTipoDispositivoLeadSMS();
+      //this.numero = [];
+     // this.getTipoDispositivoLeadSMS();
     } else {
       this.id = this.navParams.get('id');
       this.getCampaniaSMSUsuario(this.id);
@@ -100,14 +100,14 @@ export class SmsPage {
     });
   }
 
-  getTipoDispositivoLeadSMS() {
+  /*getTipoDispositivoLeadSMS() {
     let url: string = 'servicio=getTipoDispositivoLeadSMS&id_usuario=' + this.globalProvider.usuario.id_usuario;
     this.httpProvider.get(url).then((res: any) => {
       if (res.error == 'false') {
         this.numero = res.numero;
       }
     }).catch(err => console.log('err: ' + JSON.stringify(err)));
-  }
+  }*/
 
   closeModal(data: boolean = false): void {
     if (this.contenido == true) {
@@ -129,10 +129,10 @@ export class SmsPage {
         mensaje: this.sms_from.value.sms_text,
         fecha_dispositivo: this.fecha.transform(fecha_dispositivo),
         hora_dispositivo: this.hora.transform(fecha_dispositivo),
-        link_redirect: this.sms_from.value.link_redirect,
-        cantidad_dia: this.sms_from.value.cantidad_dia,
-        tipo_dispositivo: this.sms_from.value.tipo_dispositivo,
-        dias_semana: this.sms_from.value.dias_semana.toString(),
+        //link_redirect: this.sms_from.value.link_redirect,
+        //cantidad_dia: this.sms_from.value.cantidad_dia,
+        //tipo_dispositivo: this.sms_from.value.tipo_dispositivo,
+        //dias_semana: this.sms_from.value.dias_semana.toString(),
         hora: this.sms_from.value.hora,
         fecha: this.sms_from.value.fecha,
         campaniaSms: this.campania_sms

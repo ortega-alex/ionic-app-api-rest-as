@@ -1,5 +1,5 @@
 <ion-content no-Lines no-border>
-  <div class="content-header">
+  <div class="content-header" [style.padding]="(globalProvider.dispositivo == false) ? '5% 0% 0% 0%' : ''">
     <ion-row class="conten-row">
       <ion-col id="conten-row" col-2>
         <ion-icon *ngIf="globalProvider.dispositivo == true" id="icon" name="arrow-round-back" (click)="closeModal()"></ion-icon>
@@ -159,6 +159,11 @@
       </ion-col>
     </ion-row>
 
+    <button ion-button block small icon-left color="dark" (click)="signOff()">
+      <ion-icon name="close"></ion-icon>
+      Sign Off
+    </button>
+  
   </div>
 
   <div class="preview" *ngIf="edit == false" [style.background]="vcard.fondo">

@@ -9,7 +9,7 @@ import { LoginPage } from '../pages/login/login';
 import { GlobalProvider } from '../providers/global/global';
 import { setMilisegundos, Fechas } from '../pipes/filtros/filtros';
 import { HttpProvider } from '../providers/http/http';
-import { CallLogObject, DataModal } from '../model/interfaces';
+import { CallLogObject } from '../model/interfaces';
 
 import { Storage } from '@ionic/storage';
 import { AndroidPermissions } from '@ionic-native/android-permissions';
@@ -27,7 +27,7 @@ export class MyApp {
   fechas = new Fechas();
   res = [];
   respuesta: any;
-  notificaciones : Array<any> = [];
+  notificaciones: Array<any> = [];
 
   constructor(
     private platform: Platform,
@@ -89,7 +89,6 @@ export class MyApp {
   }
 
   historialTelefonico() {
-    let d: DataModal = { view: 1, num: null, imagenes: null };
     var hash = {};
     let numeros: Array<{ numero: string, fecha: string, tipo: string }> = [];
     this.storage.get('fecha').then(fecha => {
@@ -123,7 +122,7 @@ export class MyApp {
           this.respuesta = res;
           if (this.respuesta.error == 'false') {
             if (this.respuesta.llamadas && this.respuesta.llamadas.length > 0) {
-              let modal = this.modalControlle.create('ModalPage', { llamadas: this.respuesta.llamadas, data: d });
+              let modal = this.modalControlle.create('ModalPage', { llamadas: this.respuesta.llamadas });
               modal.present();
             }
           }
@@ -146,7 +145,7 @@ export class MyApp {
     }
     const options: PushOptions = {
       android: {
-        senderID: 'AIzaSyCtDffZZdDaJ3D99NGrovKac4cJuFlIZvs' , forceShow : true
+        senderID: 'AIzaSyCtDffZZdDaJ3D99NGrovKac4cJuFlIZvs', forceShow: true
       },
       ios: {
         alert: 'true',

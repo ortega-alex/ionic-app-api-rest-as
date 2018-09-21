@@ -1,6 +1,6 @@
-<ion-content padding class="content-modal" [style.background-color]="util.style.background" [style.opacity]="util.style.opacity">
+<ion-content padding class="content-modal">
     <br/>
-    <ion-card class="conten-card" *ngIf="util.panel_llamada == true && data1.view == 1">
+    <ion-card class="conten-card" *ngIf="util.panel_llamada == true">
         <ion-row class="row-cont" *ngIf="globalProvider.plan.mostrar_publicidad_video == 'Y'">
             <ion-col id="row-cont">
                 <button id="row-cont-btn" ion-button small icon-right block color="dark" (click)="showVideo()">
@@ -132,7 +132,7 @@
             </ion-col>
         </ion-row>
     </ion-card>
-    <div class="animacion" *ngIf="util.panel_llamada == false && data1.view == 1">
+    <div class="animacion" *ngIf="util.panel_llamada == false">
         <img src="assets/imgs/m.gif" />
         <div class="contenedor">
             <p class="text">
@@ -152,43 +152,4 @@
             </ion-col>
         </ion-row>
     </div>
-    <ion-slides class="slider-content" pager *ngIf="data1.view == 2">
-        <ion-slide class="slider-content" *ngFor="let imagen of tutorial.imagenes ; let i = index">
-            <img id="imagen-demo" [src]="imagen.url" />
-            <button *ngIf="i == tutorial.imagenes.length-1" id="imagen-button" clear ion-button small icon-right color="danger" (click)="closeModal()">
-                Close
-                <ion-icon ios="ios-close-circle" md="md-close-circle">
-                </ion-icon>
-            </button>
-        </ion-slide>
-    </ion-slides>
-    <div class="llamada" *ngIf="data1.view == 3">
-        <div id="siguiente" (click)="closeModal(true)">
-            <p id="parrafo">
-                Tap
-            </p>
-            <p id="parrafo">
-                me
-            </p>
-        </div>
-        <ion-row class="content-row">
-            <ion-col id="content-row">
-                <button id="content-row-btn" small ion-button block color="danger" (click)="closeModal()">
-                    <ion-icon name="close">
-                    </ion-icon>
-                    &nbsp;Cancel
-                </button>
-            </ion-col>
-        </ion-row>
-    </div>
-    <div class="sms-content" *ngIf="data1.view == 4">
-        <div id="sms-content" (click)="closeModal(true)">
-            <p id="parrafo">
-                Tap
-            </p>
-            <p id="parrafo">
-                me
-            </p>
-        </div>
-    </div>   
 </ion-content>

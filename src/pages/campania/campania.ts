@@ -73,7 +73,7 @@ export class CampaniaPage {
     catalogoEstado: [],
     nombre_archivo: null,
     sms_tex: null,
-    style: { background: '', opacity: '' },
+    //style: { background: '', opacity: '' },
     panel_llamada: false
   };
 

@@ -64,6 +64,8 @@ export class Plan {
     public advandocs_msn: string;
     public advanvcard_msn: string;
 
+    public advansocial : string;
+
     constructor(
         gratis = null,
         mostrar_publicidad_video = null,
@@ -85,7 +87,8 @@ export class Plan {
         leads_sms_msn = null,
         advansocial_msn = null,
         advandocs_msn = null,
-        advanvcard_msn = null
+        advanvcard_msn = null,
+        advansocial = null
     ) {
         this.gratis = gratis;
         this.mostrar_publicidad_video = mostrar_publicidad_video;
@@ -109,5 +112,7 @@ export class Plan {
         this.advansocial_msn = advansocial_msn;
         this.advandocs_msn = advandocs_msn;
         this.advanvcard_msn = advanvcard_msn;
+        
+        this.advansocial = advansocial;
     }
 }

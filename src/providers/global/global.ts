@@ -99,13 +99,13 @@ export class GlobalProvider {
     });
   }
 
-  setNum(num: number) {
+  /*setNum(num: number) {
     this.storage.set('num', num);
   }
 
   deleteNum() {
     this.storage.remove('num');
-  }
+  }*/
 
   setListSms(nombre: string, list_sms: any): void {
     this.storage.set(nombre, list_sms);

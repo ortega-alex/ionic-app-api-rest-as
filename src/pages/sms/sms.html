@@ -103,7 +103,7 @@
       <p ion-text [hidden]="sms_from.controls.sms_text.valid || util.submitted === false" color="danger" padding-left>
         Enter SMS......
       </p>
-      <ion-item no-padding no-lines *ngIf="globalProvider.plan.sms_leads == 'P'">
+      <!--ion-item no-padding no-lines *ngIf="globalProvider.plan.sms_leads == 'P'">
         <ion-label id="row-info-label" floating>Link for redirect:</ion-label>
         <ion-input id="row-info-input" type="text" text-center formControlName="link_redirect"></ion-input>
       </ion-item>
@@ -134,7 +134,7 @@
       </ion-item>
       <p ion-text [hidden]="sms_from.controls.dias_semana.valid || util.submitted === false" color="danger" padding-left>
         Selectd days...
-      </p>
+      </p-->
       <ion-item no-padding no-lines>
         <ion-label id="label-item" floating>Shipping Schedule</ion-label>
         <ion-datetime id="row-info-date" text-center displayFormat="HH:mm" formControlName="hora"> </ion-datetime>

@@ -1,5 +1,5 @@
-<ion-content class="contenido-home" no-Lines [style.background]="home_util.background">
-  <div class="content-header" *ngIf="conexion == false">
+<ion-content class="contenido-home" no-Lines [style.background]="home_util.background" >
+  <div class="content-header" *ngIf="conexion == false" [style.padding]="(globalProvider.dispositivo == false) ? '5% 0% 0% 0%' : ''">
     <ion-row text-center no-margin no-lines class="conten-row">
       <ion-col text-center no-margin no-lines id="conten-row">
       </ion-col>
@@ -39,15 +39,16 @@
     </button>
     <button ion-button block (click)="drawVcard() ; menu = false" color="light" icon-left style="margin-top:2%">
       <ion-icon name="people"></ion-icon>
-      <b>VCard</b>
+      <b>VCard and Profile</b>
     </button>
-    <button ion-button block (click)="drawPerfil()  ; menu = false " color="light" icon-left style="margin-top:2%">
-      <ion-icon name="person"></ion-icon>
-      <b>Profile</b>
+    <button ion-button block (click)="drawTutorials()  ; menu = false " color="light" icon-left style="margin-top:2%">
+      <ion-icon name="film"></ion-icon>
+      <b>Tutorials</b>
     </button>
   </div>
 
-  <ion-scroll scrollY="true" class="content-div" no-Lines no-border no-padding *ngIf="conexion == false" [style.background]="home_util.background">
+  <ion-scroll scrollY="true" class="content-div" no-Lines no-border no-padding *ngIf="conexion == false"
+    [style.background]="home_util.background">
     <ion-refresher (ionRefresh)="doRefresh($event)">
       <ion-refresher-content></ion-refresher-content>
     </ion-refresher>
@@ -66,8 +67,8 @@
         <ion-col id="row-cont" col-2>
         </ion-col>
         <ion-col id="row-cont">
-          <input id="title" [readonly]="edid_name[i].edit" [(ngModel)]="campania.nombre" text-center type="text" (click)="editName(i,campania.propietario)"
-            [style.border-bottom]="edid_name[i].border" />
+          <input id="title" [readonly]="edid_name[i].edit" [(ngModel)]="campania.nombre" text-center type="text"
+            (click)="editName(i,campania.propietario)" [style.border-bottom]="edid_name[i].border" />
           <ion-icon id="icon-delete" *ngIf="edid_name[i].edit == false" name="checkmark" (click)="setDatosEditCampania(campania.id_campania,campania.nombre,i)"></ion-icon>
         </ion-col>
         <ion-col id="row-cont" col-2 *ngIf="campania.propietario == 'Y'">
@@ -75,8 +76,8 @@
         </ion-col>
       </ion-row>
       <ion-row class="row-cont-b">
-        <ion-col id="row-cont-b" *ngFor="let estado of campania.estados_llamadas; let j = index " [style.background-color]="'#'+estado.color"
-          (click)="irACampania(campania,i,estado,j)" [style.border]="edid_name[i].border_stado[j]">
+        <ion-col id="row-cont-b" *ngFor="let estado of campania.estados_llamadas; let j = index "
+          [style.background-color]="'#'+estado.color" (click)="irACampania(campania,i,estado,j)" [style.border]="edid_name[i].border_stado[j]">
           <b>{{estado.valor}}</b>
           <br>{{estado.texto}}
         </ion-col>
@@ -92,11 +93,12 @@
       <ion-row class="row-cont">
         <ion-col id="row-cont" col-2>
           <ion-icon *ngIf="globalProvider.dispositivo == true" id="icon-delete" name="paper-plane" (click)="crearCampania( m)"></ion-icon>
-          <ion-icon *ngIf="globalProvider.dispositivo == false" id="icon-delete" ios="md-paper-plane" md="md-paper-plane" (click)="crearCampania( m)"></ion-icon>
+          <ion-icon *ngIf="globalProvider.dispositivo == false" id="icon-delete" ios="md-paper-plane" md="md-paper-plane"
+            (click)="crearCampania( m)"></ion-icon>
         </ion-col>
         <ion-col id="row-cont">
-          <input id="title" [readonly]="edid_name_manual[i].edit" [(ngModel)]="m.nombre" text-center type="text" (click)="editNameManual(i)"
-            [style.border-bottom]="edid_name_manual[i].border" />
+          <input id="title" [readonly]="edid_name_manual[i].edit" [(ngModel)]="m.nombre" text-center type="text"
+            (click)="editNameManual(i)" [style.border-bottom]="edid_name_manual[i].border" />
           <ion-icon id="icon-delete" *ngIf="edid_name_manual[i].edit == false" name="checkmark" (click)="setDatosEditCampaniaManual(m.id_campania_manual,m.nombre,i)"></ion-icon>
         </ion-col>
         <ion-col id="row-cont" col-2>
@@ -117,7 +119,8 @@
       </ion-row>
     </div>
 
-    <div id="mensaje" *ngIf="sin_campanias" padding text-center [style.color]="(sms_activo == false) ? 'gray' : 'white'" [style.padding]="(menu == false) ? '50% 5%' : ''">
+    <div id="mensaje" *ngIf="sin_campanias" padding text-center [style.color]="(sms_activo == false) ? 'gray' : 'white'"
+      [style.padding]="(menu == false) ? '50% 5%' : ''">
       Currently you don't have any leads lists please upload or create one
     </div>
 
@@ -127,7 +130,8 @@
     <ion-row class="conten-row">
       <ion-col id="conten-row" col-2>
         <ion-icon *ngIf="globalProvider.dispositivo == true" id="icon" name="arrow-round-back" (click)="monitoreo()"></ion-icon>
-        <ion-icon *ngIf="globalProvider.dispositivo == false" id="icon" ios="md-arrow-round-back" md="md-arrow-round-back" (click)="monitoreo()"></ion-icon>
+        <ion-icon *ngIf="globalProvider.dispositivo == false" id="icon" ios="md-arrow-round-back" md="md-arrow-round-back"
+          (click)="monitoreo()"></ion-icon>
       </ion-col>
       <ion-col id="conten-row" col-8>
         <p id="title">{{home_util.title}}</p>
@@ -175,7 +179,8 @@
     <ion-row class="conten-row" *ngIf="plan.mostrar_publicidad_video == 'Y' && home_util.spinner == false">
       <ion-col id="conten-row">
         <button id="conten-row-btn" ion-button icon-right block color="buttom" (click)="showVideo()">
-          {{(segundos == 10) ? 'Get more time ' : segundos }} {{(time && segundos == 10) ? time.hora+":"+time.minuto+":"+time.segundo
+          {{(segundos == 10) ? 'Get more time ' : segundos }} {{(time && segundos == 10) ?
+          time.hora+":"+time.minuto+":"+time.segundo
           : (segundos == 10) ? '0' : '' }}
         </button>
       </ion-col>

@@ -3,13 +3,12 @@ import { NavController, App, ModalController, Platform, AlertController } from '
 
 import { GlobalProvider } from '../../providers/global/global';
 import { HttpProvider } from '../../providers/http/http';
-import { PerfilPage } from '../perfil/perfil';
 import { SocialPage } from '../social/social';
 import { ProductoPage } from '../producto/producto';
 import { VcardPage } from '../vcard/vcard';
 
 import { Numerico, Replace, Fecha, Hora, getMilisegundos, Diferencia } from '../../pipes/filtros/filtros';
-import { Persona, CampaniaSms, DataModal, HomeUtil } from '../../model/interfaces';
+import { Persona, CampaniaSms , HomeUtil } from '../../model/interfaces';
 import { MyApp } from '../../app/app.component';
 import { Plan } from '../../model/Usuario';
 
@@ -20,6 +19,7 @@ import { SMS } from '@ionic-native/sms';
 import { Calendar } from '@ionic-native/calendar';
 import { AdMobFree, AdMobFreeBannerConfig, AdMobFreeRewardVideoConfig } from '@ionic-native/admob-free';
 import { Facebook, FacebookLoginResponse } from '@ionic-native/facebook';
+import { TutorialPage } from '../tutorial/tutorial';
 
 @Component({
   selector: 'page-home',
@@ -182,7 +182,6 @@ export class HomePage {
         this.app.getRootNav().setRoot(MyApp);
       } else {
         this.getCampaniaUsuario();
-        this.demo();
         if (usuario.mostrar_publicidad_video == 'Y') {
           this.prepareVideo();
           this.globalProvider.getTime();
@@ -199,10 +198,6 @@ export class HomePage {
         this.getCampaniaUsuario();
       }
     });
-  }
-
-  drawPerfil() {
-    this.navCtrl.push(PerfilPage);
   }
 
   getCampaniaUsuario() {
@@ -229,8 +224,8 @@ export class HomePage {
 
         this.campanias = res.campania;
         this.manual = res.manual.campania;
-        
-        if (this.campanias.length == 0 && this.manual.length ==0) {
+
+        if (this.campanias.length == 0 && this.manual.length == 0) {
           this.sin_campanias = true;
         } else {
           this.sin_campanias = false;
@@ -260,7 +255,7 @@ export class HomePage {
         this.plan.advandocs_msn = res.advandocs_msn;
         this.plan.advanvcard_msn = res.advanvcard_msn;
 
-
+        this.plan.advansocial = res.advansocial;
 
         this.globalProvider.plan = this.plan;
         this.globalProvider.setPlan(this.globalProvider.plan);
@@ -764,22 +759,6 @@ export class HomePage {
     });
   }
 
-  demo() {
-    this.storage.get('num').then(num => {
-      if (num && num != null && num == 1) {
-        let data: DataModal = { view: 2, num: num, imagenes: null }
-        let modal = this.modalControlle.create('ModalPage', { data: data });
-        modal.present();
-        modal.onDidDismiss(data => {
-          if (data) {
-            this.selectSms();
-            this.getCampaniaUsuario();
-          }
-        });
-      }
-    });
-  }
-
   bloqueo() {
     if (this.plan.bloqueo == 'Y') {
       let alert = this.alertController.create({
@@ -812,5 +791,9 @@ export class HomePage {
         this.campaniaSMS = res.campaniaSMS;
       }
     }).catch(err => console.log('err: ' + JSON.stringify(err)));
+  }
+
+  drawTutorials() {
+    this.navCtrl.push(TutorialPage);
   }
 }

@@ -10,8 +10,6 @@ import { GlobalProvider } from '../../providers/global/global';
 import { HttpProvider } from '../../providers/http/http';
 import { Usuario, Plan } from '../../model/Usuario';
 
-import { Storage } from '@ionic/storage';
-
 @IonicPage()
 @Component({
   selector: 'page-login',
@@ -34,7 +32,6 @@ export class LoginPage {
     public formBuilder: FormBuilder,
     private httpProvider: HttpProvider,
     private alertController: AlertController,
-    private storage: Storage,
     private app: App
   ) {
     this.submitted = false;
@@ -101,14 +98,6 @@ export class LoginPage {
           this.globalProvider.setPlan(this.plan);
 
           this.menu();
-          this.storage.get('num').then(num => {
-            if (num && num != null) {
-              num++;
-              this.globalProvider.setNum(num);
-            } else {
-              this.globalProvider.setNum(1);
-            }
-          });
         } else {
           this.globalProvider.alerta(res.msn);
         }

@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ViewController, App } from 'ionic-angular';
 import { HttpProvider } from '../../providers/http/http';
 import { GlobalProvider } from '../../providers/global/global';
 import { Vcard } from '../../model/Vcard';
 import { SocialSharing } from '@ionic-native/social-sharing';
 import { Camera, CameraOptions } from '@ionic-native/camera';
+import { MyApp } from '../../app/app.component';
 
 @IonicPage()
 @Component({
@@ -27,7 +28,8 @@ export class VcardPage {
     private httpProvider: HttpProvider,
     private globalProvider: GlobalProvider,
     private socialSharing: SocialSharing,
-    private camera: Camera
+    private camera: Camera,
+    private app : App
   ) {
     this.edit = true;
     this.vcard = new Vcard();
@@ -152,5 +154,12 @@ export class VcardPage {
       return this.httpProvider.RUTA_IMG + url;
     }
     return this.httpProvider.URL.replace('servicio.php?', '') + 'images/my_profile/' + name;
+  }
+
+  signOff() {
+    if (this.globalProvider.usuario) {
+      this.globalProvider.deleteUsuario();
+      this.app.getRootNav().setRoot(MyApp);
+    }
   }
 }

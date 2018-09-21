@@ -1,0 +1,25 @@
+page-tutorial {
+    .content-header{           
+        text-align: center;
+        width: 100% !important;
+        .conten-row{
+            #conten-row{
+                #title{
+                    margin-top: 4%;
+                   font-size: 1.5em;
+                }    
+                #icon{
+                    font-size: 3em;
+                }
+            }
+        }
+    }   
+    a{
+        text-decoration:none; 
+        color : white;
+    }
+    .header-md::after, .tabs-md[tabsPlacement="top"] > .tabbar::after, .footer-md::before, .tabs-md[tabsPlacement="bottom"] > .tabbar::before{
+        border: none !important;
+        background-image: none !important;
+    }
+}

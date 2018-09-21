@@ -4,7 +4,7 @@ import { IonicPage, NavController, NavParams, Platform, ViewController, AlertCon
 import { GlobalProvider } from '../../providers/global/global';
 import { HttpProvider } from '../../providers/http/http';
 import { Fechas, Replace, getMilisegundos, Fecha, Hora, Diferencia } from '../../pipes/filtros/filtros';
-import { Util, Tutorial, DataModal } from '../../model/interfaces';
+import { Util } from '../../model/interfaces';
 
 import { CallNumber } from '@ionic-native/call-number';
 import { SMS } from '@ionic-native/sms';
@@ -18,8 +18,6 @@ import { AdMobFree, AdMobFreeRewardVideoConfig } from '@ionic-native/admob-free'
 })
 export class ModalPage {
 
-  private data1: DataModal // { view: number, num: number, imagenes: Array<Imagenes> };
-  // private res: any;
   private diferencia = new Diferencia();
   private replace = new Replace();
   private fechas = new Fechas();
@@ -42,21 +40,15 @@ export class ModalPage {
   private timer: any;
   private time: { hora: number, minuto: number, segundo: number };
   private tiempo_restante: any;
-  private tutorial: Tutorial = {
-    nombre: null,
-    imagenes: []
-  }
   private util: Util = {
     submitted: null,
     error: null,
     noValido: null,
-    //dispositivo: null,
     mostrar: null,
     msnS: null,
-    catalogoEstado: [], //catalogo_estado
+    catalogoEstado: [],
     nombre_archivo: null,
     sms_tex: null,
-    style: { background: '', opacity: '' },
     panel_llamada: false
   };
 
@@ -74,27 +66,9 @@ export class ModalPage {
     private admobFree: AdMobFree,
     private popoverController: PopoverController,
   ) {
-    this.data1 = this.navParams.get('data');
-    if (this.data1.view == 2) {
-      this.util.style = { background: 'black', opacity: '' };
-      if (this.data1.num != null) {
-        this.tutorial.imagenes = [
-          { url: 'assets/imgs/demo1.jpg' },
-          { url: 'assets/imgs/demo2.jpg' },
-          { url: 'assets/imgs/demo3.jpg' },
-          { url: 'assets/imgs/demo4.jpg' }
-        ];
-      } else {
-        this.tutorial.imagenes = this.data1.imagenes;
-      }
-    } else {
-      this.util.style = { background: '', opacity: '' };
-    }
-    if (this.data1.view == 1) {
-      this.llamadas = this.navParams.get('llamadas');
-      this.tamanio_contenido = this.llamadas.length;
-      this.get_fila_contenido = this.llamadas[this.posicion];
-    }
+    this.llamadas = this.navParams.get('llamadas');
+    this.tamanio_contenido = this.llamadas.length;
+    this.get_fila_contenido = this.llamadas[this.posicion];
   }
 
   ionViewDidLoad() {
@@ -147,7 +121,6 @@ export class ModalPage {
       '&hora=' + hora +
       '&creditos=' + creditos;
     this.httpProvider.get(url).then((res: any) => {
-      //this.res = res;
       if (res.error == 'false') {
         let date = new Date(res.tiempo_usuario);
         this.globalProvider.setTime(this.getmilisegundos.transform(date));
@@ -203,7 +176,6 @@ export class ModalPage {
   getCatalogoEstadoFilaCampania() {
     let url = 'servicio=getCatalogoEstadoFilaCampania';
     this.httpProvider.get(url).then((res: any) => {
-      //this.res = res;
       this.util.catalogoEstado = res;
     })
   }
@@ -246,7 +218,6 @@ export class ModalPage {
       '&individual= Y' +
       '&id_usuario=' + this.globalProvider.usuario.id_usuario;
     this.httpProvider.get(url).then((res: any) => {
-      //this.res = res;
       if (res.error == 'false') {
         let date = new Date();
         this.globalProvider.setFecha(date);
@@ -311,10 +282,6 @@ export class ModalPage {
   }
 
   closeModal(data: boolean = false): void {
-    if (this.data1.view == 2) {
-      this.data1.num++;
-      this.globalProvider.setNum(this.data1.num);
-    }
     this.viewController.dismiss(data);
   }
 
@@ -324,7 +291,6 @@ export class ModalPage {
       "&tipo=" + tipo +
       "&sms=" + this.data.sms;
     this.httpProvider.get(url).then((res: any) => {
-      // this.res = res;
       if (res.error == 'false') {
         this.globalProvider.alerta(res.msn);
       } else {

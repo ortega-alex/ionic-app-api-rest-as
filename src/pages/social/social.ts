@@ -452,16 +452,16 @@ export class SocialPage {
       var tem = this.hashtag_tex.split('#');
       var mitad: number = Math.round(tem.length / 2);
       tem.forEach((element, index) => {
-        if (index == 0) {
+        if (index == 0 && this.globalProvider.plan.advansocial != 'P') {
           this.comentario_tex += a + element + ' ';
         } else {
           this.comentario_tex += "#" + element;
         }
-        if (index == mitad) {
+        if (index == mitad && this.globalProvider.plan.advansocial != 'P') {
           this.comentario_tex += "#advansales ";
         }
       }, this);
-    } else {
+    } else if (this.globalProvider.plan.advansocial != 'P') {
       this.comentario_tex + a + "#advansales";
     }
 
@@ -611,12 +611,12 @@ export class SocialPage {
     var tem = social.hashtag.split('#');
     var mitad: number = Math.round(tem.length / 2);
     tem.forEach((element, index) => {
-      if (index == 0) {
+      if (index == 0 && this.globalProvider.plan.advansocial != 'P') {
         social.comentario += a + element;
       } else {
         social.comentario += "#" + element;
       }
-      if (index == mitad) {
+      if (index == mitad && this.globalProvider.plan.advansocial != 'P') {
         social.comentario += "#advansales " + "#" + element;
       }
     });

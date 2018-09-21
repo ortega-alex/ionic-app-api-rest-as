@@ -52,7 +52,6 @@ export class CrearCampaniaPage {
     catalogoEstado: [],
     nombre_archivo: null,
     sms_tex: '',
-    style: null,
     panel_llamada: null
   }
 
@@ -210,20 +209,14 @@ export class CrearCampaniaPage {
   }
 
   chekedSms(event) {
-    if (this.globalProvider.plan.leads == 'N') {
-      if (event.value == true) {
-        this.util.msnS = event.value;
-        this.sms = 'Y';
-        this.util.sms_tex = null;
-      } else {
-        this.util.msnS = event.value;
-        this.sms = 'N';
-        this.util.sms_tex = ''
-      }
+    if (event.value == true) {
+      this.util.msnS = event.value;
+      this.sms = 'Y';
+      this.util.sms_tex = null;
     } else {
-      this.util.msnS = false;
+      this.util.msnS = event.value;
       this.sms = 'N';
-      this.util.sms_tex = "Renew or subscribe to one of our products";
+      this.util.sms_tex = ''
     }
   }
 
