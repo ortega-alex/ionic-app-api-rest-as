@@ -23,7 +23,7 @@ export class SmsPage {
   private hora = new Hora();
   private campaniaSMS: Array<any> = [];
   private sms_status: Array<{ togglel: boolean }> = [];
-  private numerico = new Numerico();
+  private numerico = new Numerico()
   private stado_sms: Stado_sms;
   private id: number;
   private load: any;
@@ -73,15 +73,15 @@ export class SmsPage {
       this.sms_from = this.formBuilder.group({
         sms_text: ['', Validators.required],
         nombre: ['', Validators.required],
-       /* link_redirect: [''],
-        cantidad_dia: [contador, Validators.required],
-        tipo_dispositivo: ['MCP', Validators.required],
-        dias_semana: ['', Validators.required],*/
+        /* link_redirect: [''],
+         cantidad_dia: [contador, Validators.required],
+         tipo_dispositivo: ['MCP', Validators.required],
+         dias_semana: ['', Validators.required],*/
         hora: [this.hora.transform(date), Validators.required],
         fecha: [this.fecha.transform(date), Validators.required]
       });
       //this.numero = [];
-     // this.getTipoDispositivoLeadSMS();
+      // this.getTipoDispositivoLeadSMS();
     } else {
       this.id = this.navParams.get('id');
       this.getCampaniaSMSUsuario(this.id);
@@ -270,8 +270,7 @@ export class SmsPage {
           this.getCampaniaSMSUsuario();
         }
       } else {
-        let data = { view: 3, num: null }
-        let modal = this.modalController.create('ModalPage', { data: data });
+        let modal = this.modalController.create(ModalIosPage);
         modal.present();
         modal.onDidDismiss(data => {
           if (data == true) {
@@ -300,9 +299,7 @@ export class SmsPage {
     let url = "servicio=setEstadoCampaniaSMS" +
       "&id_campaniaSMS=" + id +
       "&estado=" + stado;
-    this.httpProvider.get(url).then(() => {
-      console.log('success');
-    }).catch(err => console.log('err: ' + JSON.stringify(err)));
+    this.httpProvider.get(url).catch(err => console.log('err: ' + JSON.stringify(err)));
     if (stado == 'P') {
       this.getCampaniaSMSUsuario();
     }
@@ -311,7 +308,7 @@ export class SmsPage {
   getSMSTotalEnviado(id: number, i: number) {
     this.campaniaSMS[i].estado_campania_sms = 'A';
     let url = "servicio=getSMSTotalEnviado&id_campaniaSMS=" + id;
-    this.httpProvider.get(url).then((res : any) => {
+    this.httpProvider.get(url).then((res: any) => {
       if (res.error == 'false') {
         this.getListaSMSCampaniaSMS(id, true, res.sms_enviado);
       }
@@ -347,5 +344,49 @@ export class SmsPage {
       console.log('err: ' + JSON.stringify(err));
       this.load.dismiss();
     });
+  }
+}
+
+@Component({
+  template: `
+    <ion-content padding text-center>
+      <div id="siguiente" (click)="close(true)">
+       <p id="parrafo">
+            Tap
+            <br>  
+            me
+        </p>
+    </div>
+    <ion-row class="content-row">
+        <ion-col id="content-row">
+            <button id="content-row-btn" small ion-button block color="danger" (click)="close()">
+                <ion-icon name="close">
+                </ion-icon>
+                &nbsp;Cancel
+            </button>
+        </ion-col>
+    </ion-row>
+    </ion-content>
+  ` , styles: [
+    `#siguiente{
+      text-align: center;
+      font-size: 6em;
+      color:#666666; 
+      height: 90% !important;
+        width: 100% !important;
+        padding-top: 30%; 
+        #parrafo{
+            display: block;
+            margin: auto;
+        }
+    }`
+  ]
+})
+
+export class ModalIosPage {
+  constructor(public viewCtrl: ViewController) { }
+
+  close(data: boolean = false) {
+    this.viewCtrl.dismiss(data);
   }
 }

@@ -440,19 +440,24 @@ export class SocialPage {
   compartir() {
     this.load = this.globalProvider.cargando(this.globalProvider.data.msj.load);
     var file: string;
-    var a: string = `
+    var a: string = (this.globalProvider.plan.advansocial != 'P') ? `
     .
     .
     .
     The Entrepreneurs Technology: https://advansales.com
     .
     .
-    .`;
+    .` :
+      `
+    .
+    .
+    .
+    `;
     if (this.hashtag_tex) {
       var tem = this.hashtag_tex.split('#');
       var mitad: number = Math.round(tem.length / 2);
       tem.forEach((element, index) => {
-        if (index == 0 && this.globalProvider.plan.advansocial != 'P') {
+        if (index == 0) {
           this.comentario_tex += a + element + ' ';
         } else {
           this.comentario_tex += "#" + element;
@@ -599,19 +604,24 @@ export class SocialPage {
 
   compartirSave(social: any) {
     this.load = this.globalProvider.cargando(this.globalProvider.data.msj.load);
-    var a: string = `
+    var a: string = (this.globalProvider.plan.advansocial != 'P') ? `
     .
     .
     .
     The Entrepreneurs Technology: https://advansales.com
     .
     .
-    .`;
+    .` :
+      `
+    .
+    .
+    .    
+    `;
 
     var tem = social.hashtag.split('#');
     var mitad: number = Math.round(tem.length / 2);
     tem.forEach((element, index) => {
-      if (index == 0 && this.globalProvider.plan.advansocial != 'P') {
+      if (index == 0) {
         social.comentario += a + element;
       } else {
         social.comentario += "#" + element;

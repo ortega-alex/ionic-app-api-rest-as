@@ -6,7 +6,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
-//import { PerfilPage } from '../pages/perfil/perfil';
+import { ModalIosPage } from '../pages/sms/sms';
 import { LoginPage } from '../pages/login/login';
 import { RegistroPage } from '../pages/registro/registro';
 import { SocialPage } from '../pages/social/social';
@@ -52,7 +52,8 @@ import { ColorPickerModule } from 'ngx-color-picker';
     RegistroPage,
     SocialPage,
     VcardPage,
-    ProductoPage
+    ProductoPage,
+    ModalIosPage
   ],
   imports: [
     BrowserModule,
@@ -66,13 +67,13 @@ import { ColorPickerModule } from 'ngx-color-picker';
   entryComponents: [
     MyApp,
     HomePage,
-    //PerfilPage,
     TutorialPage,
     LoginPage,
     RegistroPage,
     SocialPage,
     VcardPage,
-    ProductoPage
+    ProductoPage,
+    ModalIosPage
   ],
   providers: [
     StatusBar,

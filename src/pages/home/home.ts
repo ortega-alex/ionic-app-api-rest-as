@@ -8,7 +8,7 @@ import { ProductoPage } from '../producto/producto';
 import { VcardPage } from '../vcard/vcard';
 
 import { Numerico, Replace, Fecha, Hora, getMilisegundos, Diferencia } from '../../pipes/filtros/filtros';
-import { Persona, CampaniaSms , HomeUtil } from '../../model/interfaces';
+import { Persona, CampaniaSms, HomeUtil } from '../../model/interfaces';
 import { MyApp } from '../../app/app.component';
 import { Plan } from '../../model/Usuario';
 
@@ -269,7 +269,7 @@ export class HomePage {
         }
         this.free();
 
-        if (res.version_app != '2.0.2') {
+        if (res.version_app != '2.0.3') {
           let url: string;
           let alert = this.alertController.create({
             title: 'New Version',
