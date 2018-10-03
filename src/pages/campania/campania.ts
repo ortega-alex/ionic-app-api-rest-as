@@ -269,9 +269,6 @@ export class CampaniaPage {
       this.separacion(2);
     }
     if (key == 4) {
-      if (this.msnS == true) {
-        this.setSms(this.getFilaCampania.telefono);
-      }
       if (this.data.date != null) {
         this.serEventoCalendar();
       }
@@ -402,18 +399,12 @@ export class CampaniaPage {
   }
 
   chekedSms(event) {
-
-    if (this.globalProvider.plan.leads == 'Y') {
       this.msnS = event.value;
       if (event.value == true) {
         this.data.sms = this.campania.sms_predeterminado;
       } else {
         this.data.sms = null;
       }
-    } else {
-      this.data.sms = null;
-      this.msnS = false;
-    }
   }
 
   setContacto(telefono) {
@@ -654,7 +645,9 @@ export class CampaniaPage {
       } else {
         this.globalProvider.alerta(res.msn);
       }
-    }).catch(err => console.log('err: ' + JSON.stringify(err)));
+    }).catch(err => {
+      console.log('err: ' + JSON.stringify(err))
+    });
   }
 
   popoverInfo(posicion: number) {

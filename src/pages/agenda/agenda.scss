@@ -1,0 +1,21 @@
+page-agenda {
+    .header-md::after, .tabs-md[tabsPlacement="top"] > .tabbar::after, .footer-md::before, .tabs-md[tabsPlacement="bottom"] > .tabbar::before{
+        border: none !important;
+        background-image: none !important;
+    }
+    #restriccion{
+        text-align: center;
+        font-weight: bold;
+    }
+
+    ion-textarea  {
+        width: 100% !important;
+        margin: 0%;
+        padding: 1%;
+        border:solid #e0e0e0 1px;
+    }
+    .content-div{
+        width: 100% !important;
+        height: 35% !important;
+    }
+}

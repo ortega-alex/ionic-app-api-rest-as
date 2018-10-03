@@ -1,10 +1,14 @@
 <ion-content class="contenido">
-  <br>
+  <div *ngIf="globalProvider.dispositivo == false">
+    <br>
+    <br>
+  </div>
   <div class="content-header">
     <ion-row class="conten-row">
       <ion-col id="conten-row" col-2>
         <ion-icon *ngIf="globalProvider.dispositivo== true" id="icon" name="arrow-round-back" (click)="cancelar(true)"></ion-icon>
-        <ion-icon *ngIf="globalProvider.dispositivo== false" id="icon" ios="md-arrow-round-back" md="md-arrow-round-back" (click)="cancelar(true)"></ion-icon>
+        <ion-icon *ngIf="globalProvider.dispositivo== false" id="icon" ios="md-arrow-round-back" md="md-arrow-round-back"
+          (click)="cancelar(true)"></ion-icon>
       </ion-col>
       <ion-col id="conten-row">
         <p id="title"></p>
@@ -29,7 +33,8 @@
     <ion-row class="content-row">
       <ion-col id="content-row">
         <ion-label id="from-label" stacked>Campaign name:</ion-label>
-        <ion-input id="from-input" autofocus text-center type="text" [(ngModel)]="new_campania.nombre_campania" text-lg:992px></ion-input>
+        <ion-input id="from-input" autofocus text-center type="text" [(ngModel)]="new_campania.nombre_campania"
+          text-lg:992px></ion-input>
       </ion-col>
     </ion-row>
     <ion-row class="content-row">
@@ -49,9 +54,11 @@
     </ion-item>
     <ion-item class="from-item">
       <ion-label id="from-label" floating>Campaing name:</ion-label>
-      <ion-input id="from-input" text-center type="text" formControlName="nombreCampania" placeholder="Mandatory" text-lg:992px></ion-input>
+      <ion-input id="from-input" text-center type="text" formControlName="nombreCampania" placeholder="Mandatory"
+        text-lg:992px></ion-input>
     </ion-item>
-    <p ion-text [hidden]="ordenarCampania.controls.nombreCampania.valid || util.submitted === false" color="danger" padding-left>
+    <p ion-text [hidden]="ordenarCampania.controls.nombreCampania.valid || util.submitted === false" color="danger"
+      padding-left>
       Enter campaing name...
     </p>
     <ion-item class="from-item">
@@ -60,7 +67,8 @@
         <ion-option *ngFor="let dato of datos;let i = index" value="{{i}}">{{dato.nombre}}</ion-option>
       </ion-select>
     </ion-item>
-    <p ion-text [hidden]="ordenarCampania.controls.telefono.valid || util.submitted === false" color="danger" padding-left>
+    <p ion-text [hidden]="ordenarCampania.controls.telefono.valid || util.submitted === false" color="danger"
+      padding-left>
       Select phone number...
     </p>
     <ion-item class="from-item">
@@ -69,7 +77,8 @@
         <ion-option *ngFor="let dato of datos;let i = index" value="{{i}}">{{dato.nombre}}</ion-option>
       </ion-select>
     </ion-item>
-    <p ion-text [hidden]="ordenarCampania.controls.telefono.valid || util.submitted === false" color="danger" padding-left>
+    <p ion-text [hidden]="ordenarCampania.controls.telefono.valid || util.submitted === false" color="danger"
+      padding-left>
       select lead name...
     </p>
     <ion-item class="from-item">
@@ -85,8 +94,8 @@
       <ion-col id="row-from">
         <ion-item no-lines class="from-item">
           <ion-label id="from-label" floating>Name:</ion-label>
-          <ion-input id="from-input" text-center type="text" formControlName="c1Nombre" [(ngModel)]="columna[0].c" [readonly]="columna[0].r"
-            text-lg:992px></ion-input>
+          <ion-input id="from-input" text-center type="text" formControlName="c1Nombre" [(ngModel)]="columna[0].c"
+            [readonly]="columna[0].r" text-lg:992px></ion-input>
         </ion-item>
       </ion-col>
       <ion-col id="row-from">
@@ -102,14 +111,15 @@
       <ion-col id="row-from">
         <ion-item no-lines class="from-item">
           <ion-label id="from-label" floating>Name:</ion-label>
-          <ion-input id="from-input" text-center type="text" formControlName="c2Nombre" [(ngModel)]="columna[1].c" [readonly]="columna[1].r"
-            text-lg:992px></ion-input>
+          <ion-input id="from-input" text-center type="text" formControlName="c2Nombre" [(ngModel)]="columna[1].c"
+            [readonly]="columna[1].r" text-lg:992px></ion-input>
         </ion-item>
       </ion-col>
       <ion-col id="row-from">
         <ion-item no-lines class="from-item">
           <ion-label id="from-label" floating></ion-label>
-          <ion-select id="from-select" formControlName="c2" placeholder="Name:" interface="action-sheet" placeholder="Optional" (ionChange)="getNombre(2)">
+          <ion-select id="from-select" formControlName="c2" placeholder="Name:" interface="action-sheet" placeholder="Optional"
+            (ionChange)="getNombre(2)">
             <ion-option *ngFor="let dato of datos;let i = index" value="{{i}}">{{dato.nombre}}</ion-option>
           </ion-select>
         </ion-item>
@@ -119,8 +129,8 @@
       <ion-col id="row-from">
         <ion-item no-lines class="from-item">
           <ion-label id="from-label" floating>Name:</ion-label>
-          <ion-input id="from-input" text-center type="text" formControlName="c3Nombre" [(ngModel)]="columna[2].c" [readonly]="columna[2].r"
-            text-lg:992px></ion-input>
+          <ion-input id="from-input" text-center type="text" formControlName="c3Nombre" [(ngModel)]="columna[2].c"
+            [readonly]="columna[2].r" text-lg:992px></ion-input>
         </ion-item>
       </ion-col>
       <ion-col id="row-from">
@@ -136,8 +146,8 @@
       <ion-col id="row-from">
         <ion-item no-lines class="from-item">
           <ion-label id="from-label" floating>Name:</ion-label>
-          <ion-input id="from-input" text-center type="text" formControlName="c4Nombre" [(ngModel)]="columna[3].c" [readonly]="columna[3].r"
-            text-lg:992px></ion-input>
+          <ion-input id="from-input" text-center type="text" formControlName="c4Nombre" [(ngModel)]="columna[3].c"
+            [readonly]="columna[3].r" text-lg:992px></ion-input>
         </ion-item>
       </ion-col>
       <ion-col id="row-from">
@@ -167,7 +177,8 @@
           <ion-textarea id="textarea-notes" placeholder='Edit this text message and it will be sent to each lead "No Answer" or "Call Later" after you called. Write *name* where you want each of the customers name on the text'
             formControlName="sms_predeterminado" [(ngModel)]="util.sms_tex" text-center text-lg:992px></ion-textarea>
         </ion-item>
-        <p ion-text [hidden]="ordenarCampania.controls.sms_predeterminado.valid || util.submitted === false" color="danger" padding-left>
+        <p ion-text [hidden]="ordenarCampania.controls.sms_predeterminado.valid || util.submitted === false" color="danger"
+          padding-left>
           Enter SMS...
         </p>
       </ion-col>
@@ -193,7 +204,8 @@
       </ion-col>
       <ion-col col-9 id="content-row">
         <ion-item class="from-item">
-          <ion-input id="from-input" readonly autofocus text-center type="text" [(ngModel)]="new_campania.telefono" text-lg:992px></ion-input>
+          <ion-input id="from-input" readonly autofocus text-center type="text" [(ngModel)]="new_campania.telefono"
+            text-lg:992px></ion-input>
         </ion-item>
       </ion-col>
       <ion-col col-2 id="content-row">
@@ -227,7 +239,8 @@
     <ion-row class="row-content">
       <ion-col id="row-content">
         <ion-item no-Lines class="item-content">
-          <ion-input id="item-input" autofocus type="text" placeholder="Name:" [(ngModel)]="new_campania.nombre" text-lg:992px></ion-input>
+          <ion-input id="item-input" autofocus type="text" placeholder="Name:" [(ngModel)]="new_campania.nombre"
+            text-lg:992px></ion-input>
         </ion-item>
       </ion-col>
     </ion-row>
@@ -272,7 +285,8 @@
     </ion-row>
     <ion-row class="row-content">
       <ion-col col-3 id="row-content">
-        <button id="row-content-btn" ion-button clear full [disabled]="(globalProvider.plan.leads != 'P' ) ? true : false" (click)="popoverInfo(0)">
+        <button id="row-content-btn" ion-button clear full [disabled]="(globalProvider.plan.leads != 'P' ) ? true : false"
+          (click)="popoverInfo(0)">
           <ion-icon id="icon" *ngIf="globalProvider.dispositivo== true" name="help-circle"></ion-icon>
           <ion-icon id="icon" *ngIf="globalProvider.dispositivo== false" ios="ios-help-circle-outline" md="md-help-circle"></ion-icon>
         </button>
@@ -280,12 +294,13 @@
       <ion-col col-6 id="row-content">
         <ion-item no-Lines class="item-content">
           <ion-label id="item-label-sms">SMS:</ion-label>
-          <ion-toggle id="item-toggle" color="danger" [disabled]="(globalProvider.plan.leads != 'P' ) ? true : false" checked="{{new_campania.sms}}"
-            (ionChange)="chekedSmsCampania($event)"></ion-toggle>
+          <ion-toggle id="item-toggle" color="danger" [disabled]="(globalProvider.plan.leads != 'P' ) ? true : false"
+            checked="{{new_campania.sms}}" (ionChange)="chekedSmsCampania($event)"></ion-toggle>
         </ion-item>
       </ion-col>
       <ion-col col-3 id="row-content">
-        <button id="row-content-btn" ion-button clear full [disabled]="(globalProvider.plan.leads != 'P' ) ? true : false" (click)="setSMSPredeterminadoCampania(2, new_campania.id_campania_manual )">
+        <button id="row-content-btn" ion-button clear full [disabled]="(globalProvider.plan.leads != 'P' ) ? true : false"
+          (click)="setSMSPredeterminadoCampania(2, new_campania.id_campania_manual )">
           <ion-icon id="icon" *ngIf="globalProvider.dispositivo== true" name="checkbox-outline"></ion-icon>
           <ion-icon id="icon" *ngIf="globalProvider.dispositivo== false" ios="md-checkbox-outline" md="md-checkbox-outline"></ion-icon>
         </button>
@@ -294,7 +309,8 @@
     <ion-row class="row-content">
       <ion-col id="row-content">
         <ion-item no-Lines class="item-content">
-          <ion-textarea id="item-textarea" [readonly]="(globalProvider.plan.leads != 'P' ) ? true : false" [placeholder]="(globalProvider.plan.leads != 'P' ) ? globalProvider.plan.leads_sms_msn : 'Write *name* where you want each of the customers name on the text'"
+          <ion-textarea id="item-textarea" [readonly]="(globalProvider.plan.leads != 'P' ) ? true : false"
+            [placeholder]="(globalProvider.plan.leads != 'P' ) ? globalProvider.plan.leads_sms_msn : 'Write *name* where you want each of the customers name on the text'"
             [(ngModel)]="new_campania.sms_tex" text-lg:992px></ion-textarea>
         </ion-item>
       </ion-col>
@@ -309,7 +325,8 @@
         </ion-item>
       </ion-col>
       <ion-col id="row-content">
-        <ion-datetime id="row-content-datatime" displayFormat="MMM DD, YYYY HH:mm" [(ngModel)]="new_campania.fecha" text-lg:992px></ion-datetime>
+        <ion-datetime id="row-content-datatime" displayFormat="MMM DD, YYYY HH:mm" [(ngModel)]="new_campania.fecha"
+          text-lg:992px></ion-datetime>
       </ion-col>
     </ion-row>
     <ion-row class="row-content">

@@ -1,9 +1,14 @@
 <ion-content no-Lines no-border>
-  <div class="content-header" [style.padding]="(globalProvider.dispositivo == false) ? '5% 0% 0% 0%' : ''">
+  <div *ngIf="globalProvider.dispositivo == false">
+    <br>
+    <br>
+  </div>
+  <div class="content-header">
     <ion-row class="conten-row">
       <ion-col id="conten-row" col-2>
         <ion-icon *ngIf="globalProvider.dispositivo == true" id="icon" name="arrow-round-back" (click)="closeModal()"></ion-icon>
-        <ion-icon *ngIf="globalProvider.dispositivo == false" id="icon" ios="md-arrow-round-back" md="md-arrow-round-back" (click)="closeModal()"></ion-icon>
+        <ion-icon *ngIf="globalProvider.dispositivo == false" id="icon" ios="md-arrow-round-back" md="md-arrow-round-back"
+          (click)="closeModal()"></ion-icon>
       </ion-col>
       <ion-col id="conten-row">
         <img id="title" src="assets/imgs/title.png">
@@ -13,7 +18,7 @@
     </ion-row>
   </div>
   <p id="restriccion" *ngIf="globalProvider.plan.advanvcard != 'P'">
-   {{globalProvider.plan.advanvcard_msn}}
+    {{globalProvider.plan.advanvcard_msn}}
   </p>
   <div *ngIf="edit">
     <button id="btn-color" #someInput ion-button small [(colorPicker)]="vcard.btn_color" [style.background]="(vcard.btn_color != 'null' && vcard.btn_color != null) ?  vcard.btn_color : 'black'"
@@ -109,7 +114,8 @@
 
     <ion-row id="content-row" no-padding no-Lines no-border text-center>
       <ion-col>
-        <button ion-button small clear [disabled]="(globalProvider.plan.advanvcard == 'N') ? true : false" (click)="galeriaImagenes('logo')" color="dark">
+        <button ion-button small clear [disabled]="(globalProvider.plan.advanvcard == 'N') ? true : false" (click)="galeriaImagenes('logo')"
+          color="dark">
           <ion-icon name="images"></ion-icon>
           &nbsp;logo
         </button>
@@ -136,8 +142,8 @@
 
     <ion-row id="content-row" no-padding no-Lines no-border text-center>
       <ion-col>
-        <ion-input type="password" [placeholder]="(this.password == null) ? '*********' : 'Password'" text-center [(ngModel)]="password"
-          [readonly]="password == null"></ion-input>
+        <ion-input type="password" [placeholder]="(this.password == null) ? '*********' : 'Password'" text-center
+          [(ngModel)]="password" [readonly]="password == null"></ion-input>
       </ion-col>
       <ion-col>
         <button ion-button small color="dark" (click)="guardarPassword()">
@@ -163,33 +169,36 @@
       <ion-icon name="close"></ion-icon>
       Sign Off
     </button>
-  
+
   </div>
 
   <div class="preview" *ngIf="edit == false" [style.background]="vcard.fondo">
     <img *ngIf="globalProvider.plan.advanvcard != 'N'" [src]="getImg(vcard.ruta_logo , 'L')" height="130" width="300">
-    <img *ngIf="globalProvider.plan.advanvcard == 'N'" src="https://advansales.com/images/logo-text.jpg" height="130" width="300">
+    <img *ngIf="globalProvider.plan.advanvcard == 'N'" src="https://advansales.com/images/logo-text.jpg" height="130"
+      width="300">
     <ion-row id="content-row" no-padding no-Lines no-border text-center>
       <ion-col>
         <div *ngFor="let telefono of vcard.telefonos">
           <div *ngIf="telefono.tipo == '0'">
-            <button ion-button small block [style.background]="vcard.btn_color" [style.font-size]="vcard.tamanio" [style.font-weight]="vcard.bold"
-              [style.font-style]="vcard.italic" [style.text-decoration]="vcard.subrayar" [style.color]="vcard.text_color">
+            <button ion-button small block [style.background]="vcard.btn_color" [style.font-size]="vcard.tamanio"
+              [style.font-weight]="vcard.bold" [style.font-style]="vcard.italic" [style.text-decoration]="vcard.subrayar"
+              [style.color]="vcard.text_color">
               {{(telefono.telefono != null) ? telefono.telefono : 'Phone'}}
             </button>
           </div>
         </div>
       </ion-col>
       <ion-col>
-        <button ion-button small block [style.background]="vcard.btn_color" [style.font-size]="vcard.tamanio" [style.font-weight]="vcard.bold"
-          [style.font-style]="vcard.italic" [style.text-decoration]="vcard.subrayar" [style.color]="vcard.text_color">
+        <button ion-button small block [style.background]="vcard.btn_color" [style.font-size]="vcard.tamanio"
+          [style.font-weight]="vcard.bold" [style.font-style]="vcard.italic" [style.text-decoration]="vcard.subrayar"
+          [style.color]="vcard.text_color">
           Emal
         </button>
       </ion-col>
     </ion-row>
     <img [src]="getImg(vcard.ruta_img , 'I')" height="240" width="300">
-    <div text-center [style.font-size]="vcard.tamanio" [style.font-weight]="vcard.bold" [style.font-style]="vcard.italic" [style.text-decoration]="vcard.subrayar"
-      [style.color]="vcard.text_color">
+    <div text-center [style.font-size]="vcard.tamanio" [style.font-weight]="vcard.bold" [style.font-style]="vcard.italic"
+      [style.text-decoration]="vcard.subrayar" [style.color]="vcard.text_color">
       <span *ngIf="vcard.nombre">
         Name: {{vcard.nombre}}
       </span>
@@ -205,8 +214,9 @@
     <ion-row id="content-row" no-padding no-Lines no-border text-center>
       <ion-col>
         <div *ngFor="let telefono of vcard.telefonos">
-          <button *ngIf="telefono.tipo == '1'" ion-button small block [style.background]="vcard.btn_color" [style.font-size]="vcard.tamanio"
-            [style.font-weight]="vcard.bold" [style.font-style]="vcard.italic" [style.text-decoration]="vcard.subrayar" [style.color]="vcard.text_color">
+          <button *ngIf="telefono.tipo == '1'" ion-button small block [style.background]="vcard.btn_color"
+            [style.font-size]="vcard.tamanio" [style.font-weight]="vcard.bold" [style.font-style]="vcard.italic"
+            [style.text-decoration]="vcard.subrayar" [style.color]="vcard.text_color">
             {{telefono.telefono}}
           </button>
         </div>
@@ -215,8 +225,9 @@
 
     <ion-row id="content-row" no-padding no-Lines no-border text-center>
       <ion-col>
-        <button ion-button small block [style.background]="vcard.btn_color" [style.font-size]="vcard.tamanio" [style.font-weight]="vcard.bold"
-          [style.font-style]="vcard.italic" [style.text-decoration]="vcard.subrayar" [style.color]="vcard.text_color">
+        <button ion-button small block [style.background]="vcard.btn_color" [style.font-size]="vcard.tamanio"
+          [style.font-weight]="vcard.bold" [style.font-style]="vcard.italic" [style.text-decoration]="vcard.subrayar"
+          [style.color]="vcard.text_color">
           <a id="href-social" [href]="(vcard.url_vcard && vcard.url_vcard != null && vcard.url_vcard != 'null' && vcard.url_vcard.trim() != '') ? httpProvider.URL_VCARD + vcard.id_usuario : '#'"
             [style.text-decoration]="(vcard.subrayar != 'null') ? vcard.subrayar : 'none'" [style.color]="(vcard.btn-color != 'null') ? vcard.btn-color : 'white'">
             Download VCard </a>
@@ -224,8 +235,9 @@
       </ion-col>
 
       <ion-col>
-        <button ion-button small block [style.background]="vcard.btn_color" [style.font-size]="vcard.tamanio" [style.font-weight]="vcard.bold"
-          [style.font-style]="vcard.italic" [style.text-decoration]="vcard.subrayar" [style.color]="vcard.text_color" (click)="compartir(vcard.url_vcard)">
+        <button ion-button small block [style.background]="vcard.btn_color" [style.font-size]="vcard.tamanio"
+          [style.font-weight]="vcard.bold" [style.font-style]="vcard.italic" [style.text-decoration]="vcard.subrayar"
+          [style.color]="vcard.text_color" (click)="compartir(vcard.url_vcard)">
           Share VCard
         </button>
       </ion-col>

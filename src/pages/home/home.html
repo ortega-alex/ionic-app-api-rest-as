@@ -1,7 +1,11 @@
-<ion-content class="contenido-home" no-Lines [style.background]="home_util.background" >
+<ion-content class="contenido-home" no-Lines [style.background]="home_util.background">
   <div class="content-header" *ngIf="conexion == false" [style.padding]="(globalProvider.dispositivo == false) ? '5% 0% 0% 0%' : ''">
     <ion-row text-center no-margin no-lines class="conten-row">
-      <ion-col text-center no-margin no-lines id="conten-row">
+      <ion-col text-center no-margin no-lines id="conten-row" text-left>
+        <button *ngIf="sms_activo == false" ion-button clear small no-margin color="dark" (click)="drawAgenda()" style="font-size: 1.5em;">
+          <ion-icon no-padding *ngIf="globalProvider.dispositivo == true" name="add"></ion-icon>
+          <ion-icon no-padding *ngIf="globalProvider.dispositivo == false" ios="md-add" md="lg-add"></ion-icon>
+        </button>
       </ion-col>
       <ion-col text-center no-margin no-lines id="conten-row">
         <img id="title" src="assets/imgs/title.png" *ngIf="sms_activo == false">
@@ -90,6 +94,10 @@
     </div>
 
     <div *ngFor="let m of manual ; let i = index" class="conten-card" [style.background]="home_util.background">
+      <div *ngIf="globalProvider.dispositivo == false">
+        <br>
+        <br>
+      </div>
       <ion-row class="row-cont">
         <ion-col id="row-cont" col-2>
           <ion-icon *ngIf="globalProvider.dispositivo == true" id="icon-delete" name="paper-plane" (click)="crearCampania( m)"></ion-icon>
@@ -207,4 +215,8 @@
       </button>
     </ion-col>
   </ion-row>
+  <div *ngIf="globalProvider.dispositivo == false">
+    <br>
+    <br>
+  </div>
 </ion-footer>

@@ -44,6 +44,7 @@ export class SmsPage {
   hidden: boolean = false;
   visitas: Array<any>;
   contenido: boolean;
+  tem: number;
 
   constructor(
     public navCtrl: NavController,
@@ -169,10 +170,8 @@ export class SmsPage {
   }
 
   getCampaniaSMSUsuario(id: number = null) {
-    this.load = this.globalProvider.cargando(this.globalProvider.data.msj.load);
     let url = "servicio=getCampaniaSMSUsuario&id_usuario=" + this.globalProvider.usuario.id_usuario;
     this.httpProvider.get(url).then((res: any) => {
-      this.load.dismiss();
       if (res.error == 'false') {
         if (res.campaniaSMS.length == 0) {
           this.mjs = true;
@@ -187,7 +186,6 @@ export class SmsPage {
         this.campaniaSMS = res.campaniaSMS;
       }
     }).catch((err) => {
-      this.load.dismiss();
       console.log('err: ' + JSON.stringify(err));
     });
   }
@@ -300,12 +298,15 @@ export class SmsPage {
       "&id_campaniaSMS=" + id +
       "&estado=" + stado;
     this.httpProvider.get(url).catch(err => console.log('err: ' + JSON.stringify(err)));
-    if (stado == 'P') {
-      this.getCampaniaSMSUsuario();
-    }
   }
 
   getSMSTotalEnviado(id: number, i: number) {
+    this.tem = i;
+    if (this.tem != i) {
+      console.log("pause")
+      this.pausar(this.tem)
+    }
+
     this.campaniaSMS[i].estado_campania_sms = 'A';
     let url = "servicio=getSMSTotalEnviado&id_campaniaSMS=" + id;
     this.httpProvider.get(url).then((res: any) => {

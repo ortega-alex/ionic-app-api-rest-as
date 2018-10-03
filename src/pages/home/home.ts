@@ -6,6 +6,8 @@ import { HttpProvider } from '../../providers/http/http';
 import { SocialPage } from '../social/social';
 import { ProductoPage } from '../producto/producto';
 import { VcardPage } from '../vcard/vcard';
+import { TutorialPage } from '../tutorial/tutorial';
+import { AgendaPage } from '../agenda/agenda';
 
 import { Numerico, Replace, Fecha, Hora, getMilisegundos, Diferencia } from '../../pipes/filtros/filtros';
 import { Persona, CampaniaSms, HomeUtil } from '../../model/interfaces';
@@ -19,7 +21,6 @@ import { SMS } from '@ionic-native/sms';
 import { Calendar } from '@ionic-native/calendar';
 import { AdMobFree, AdMobFreeBannerConfig, AdMobFreeRewardVideoConfig } from '@ionic-native/admob-free';
 import { Facebook, FacebookLoginResponse } from '@ionic-native/facebook';
-import { TutorialPage } from '../tutorial/tutorial';
 
 @Component({
   selector: 'page-home',
@@ -269,7 +270,7 @@ export class HomePage {
         }
         this.free();
 
-        if (res.version_app != '2.0.3') {
+        if (res.version_app != '2.1.0') {
           let url: string;
           let alert = this.alertController.create({
             title: 'New Version',
@@ -795,5 +796,15 @@ export class HomePage {
 
   drawTutorials() {
     this.navCtrl.push(TutorialPage);
+  }
+
+  drawAgenda() {
+    let modal = this.modalControlle.create(AgendaPage);
+    modal.present();
+    modal.onDidDismiss(res => {
+      if (res == true) {
+        this.getCampaniaUsuario();
+      }
+    });
   }
 }

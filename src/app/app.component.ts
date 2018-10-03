@@ -48,14 +48,14 @@ export class MyApp {
       if (platform.is('android')) {
         this.permisos();
       }
+      this.initPushNotification();
+      this.ranqui();
       this.storage.get('usuario').then(usuario => {
         if (usuario) {
           this.rootPage = HomePage;
           if (platform.is('android')) {
             this.historialTelefonico();
           }
-          this.ranqui();
-          this.initPushNotification();
         } else {
           this.rootPage = LoginPage;
         }

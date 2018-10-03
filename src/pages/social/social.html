@@ -1,9 +1,14 @@
 <ion-content padding no-Lines no-border>
-  <div class="content-header" [style.padding]="(globalProvider.dispositivo == false) ? '5% 0% 0% 0%' : ''">
+  <div *ngIf="globalProvider.dispositivo == false">
+    <br>
+    <br>
+  </div>
+  <div class="content-header">
     <ion-row class="conten-row">
       <ion-col id="conten-row" col-2>
         <ion-icon *ngIf="globalProvider.dispositivo == true" id="icon" name="arrow-round-back" (click)="closeModal()"></ion-icon>
-        <ion-icon *ngIf="globalProvider.dispositivo == false" id="icon" ios="md-arrow-round-back" md="md-arrow-round-back" (click)="closeModal()"></ion-icon>
+        <ion-icon *ngIf="globalProvider.dispositivo == false" id="icon" ios="md-arrow-round-back" md="md-arrow-round-back"
+          (click)="closeModal()"></ion-icon>
       </ion-col>
       <ion-col id="conten-row">
         <img id="title" src="assets/imgs/title.png">
@@ -101,9 +106,9 @@
       </div>
       <ion-row class="posicion-logo" no-padding no-lines>
         <ion-col id="cuadros" *ngFor="let posicion of posicion_logo; let i = index" col-4>
-          <button id="btn-cuadro" color="dark" [style.font-weight]="(posicion.posicion != null) ? 'bold' : ''" [style.color]="(posicion.posicion  != null) ? 'white' : ''"
-            [style.opacity]="(posicion.posicion  != null) ? '0.5' : ''" [style.background-color]="(posicion.posicion != null) ? 'blue' : ''"
-            ion-button clear block (click)="inserPosicionLogo(i , logo_select.id)">
+          <button id="btn-cuadro" color="dark" [style.font-weight]="(posicion.posicion != null) ? 'bold' : ''"
+            [style.color]="(posicion.posicion  != null) ? 'white' : ''" [style.opacity]="(posicion.posicion  != null) ? '0.5' : ''"
+            [style.background-color]="(posicion.posicion != null) ? 'blue' : ''" ion-button clear block (click)="inserPosicionLogo(i , logo_select.id)">
             {{ posicion.title }}
           </button>
         </ion-col>
@@ -156,8 +161,8 @@
     <div *ngIf="whizar[3].activo">
       <!--comentarios y vista final-->
       <ion-item no-lines text-center>
-        <ion-textarea placeholder="Write a message..." [(ngModel)]="comentario_tex" name="note" autocomplete="on" autocorrect="on"
-          id="hastak-text-area" cols="25" rows="4">
+        <ion-textarea placeholder="Write a message..." [(ngModel)]="comentario_tex" name="note" autocomplete="on"
+          autocorrect="on" id="hastak-text-area" cols="25" rows="4">
         </ion-textarea>
       </ion-item>
       <div id="img-social" *ngIf="img">
@@ -176,8 +181,8 @@
     <!--post guardatos-->
     <ion-list no-padding no-border no-lines *ngFor="let save of list_save ; let i = index">
       <ion-item no-lines text-center>
-        <ion-textarea placeholder="Write a message..." [(ngModel)]="textarea_comentarios[i]" name="note" autocomplete="on" autocorrect="on"
-          id="hastak-text-area" cols="25" rows="6">
+        <ion-textarea placeholder="Write a message..." [(ngModel)]="textarea_comentarios[i]" name="note" autocomplete="on"
+          autocorrect="on" id="hastak-text-area" cols="25" rows="6">
         </ion-textarea>
       </ion-item>
       <div id="img-social" *ngIf="save.tipo == 'I'">
@@ -217,10 +222,10 @@
   <ion-toolbar no-lines>
     <ion-row>
       <ion-col col-3 text-center>
-        <ion-icon *ngIf="globalProvider.dispositivo == true &&  ( whizar[1].activo || whizar[2].activo || whizar[3].activo) " id="icon"
-          name="arrow-round-back" (click)="back()"></ion-icon>
-        <ion-icon *ngIf="globalProvider.dispositivo == false && ( whizar[1].activo || whizar[2].activo || whizar[3].activo)" id="icon"
-          ios="md-arrow-round-back" md="md-arrow-round-back" (click)="back()"></ion-icon>
+        <ion-icon *ngIf="globalProvider.dispositivo == true &&  ( whizar[1].activo || whizar[2].activo || whizar[3].activo) "
+          id="icon" name="arrow-round-back" (click)="back()"></ion-icon>
+        <ion-icon *ngIf="globalProvider.dispositivo == false && ( whizar[1].activo || whizar[2].activo || whizar[3].activo)"
+          id="icon" ios="md-arrow-round-back" md="md-arrow-round-back" (click)="back()"></ion-icon>
       </ion-col>
       <ion-col text-center *ngFor="let w of whizar">
         <div id="content-progres" [style.background-color]="w.color"></div>
@@ -241,4 +246,8 @@
       </ion-col>
     </ion-row>
   </ion-toolbar>
+  <div *ngIf="globalProvider.dispositivo == false">
+    <br>
+    <br>
+  </div>
 </ion-footer>

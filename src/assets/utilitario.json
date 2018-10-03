@@ -4,7 +4,7 @@
 		"alerta": "Missing data!...",
 		"warning": "Are you sure?....",
 		"load": "Loading....",
-		"err": "An error occurred!..."
+		"err": "An error occurred: "
 	},
 	"info": [
 		{

@@ -1,6 +1,9 @@
 <ion-content padding>
-
-  <div class="content-header" [style.padding]="(globalProvider.dispositivo == false) ? '5% 0% 0% 0%' : ''">
+  <div *ngIf="globalProvider.dispositivo == false">
+    <br>
+    <br>
+  </div>
+  <div class="content-header">
     <ion-row class="conten-row">
       <ion-col id="conten-row" col-2>
         <ion-icon *ngIf="globalProvider.dispositivo == true" id="icon" name="arrow-round-back" (click)="closeModal()"></ion-icon>
@@ -27,4 +30,8 @@
     <a [href]="'https://advansales.com/chat.php?k=' + globalProvider.usuario.id_usuario">chat</a>
     <ion-icon name="chatboxes"></ion-icon>
   </button>
+  <div *ngIf="globalProvider.dispositivo == false">
+    <br>
+    <br>
+  </div>
 </ion-footer>

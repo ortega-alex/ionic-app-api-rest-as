@@ -26,6 +26,8 @@ page-sms {
         }
     }
     .content-historial{
+        height: 80% !important;
+        width: 100% !important;
         .row-historial{
             text-align: center;
             #row-historial{
@@ -43,7 +45,7 @@ page-sms {
                 }
                 #sms_text{
                     border: solid #f8f8f8 1px;
-                    padding: 2%;
+                    //padding: 2%;
                     margin: 0%;
                 }
                 #icon-historial{

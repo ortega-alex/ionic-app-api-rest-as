@@ -1,5 +1,5 @@
-import { Component, ViewChild } from '@angular/core';
-import { IonicPage, NavController, NavParams, ViewController, Content, Platform } from 'ionic-angular';
+import { Component } from '@angular/core';
+import { IonicPage, NavController, NavParams, ViewController, Platform } from 'ionic-angular';
 import { InAppPurchase2, IAPProduct } from '@ionic-native/in-app-purchase-2';
 import { GlobalProvider } from '../../providers/global/global';
 import { HttpProvider } from '../../providers/http/http';
@@ -10,7 +10,6 @@ import { HttpProvider } from '../../providers/http/http';
   templateUrl: 'producto.html',
 })
 export class ProductoPage {
-  @ViewChild(Content) content: Content;
 
   combos: Array<any>;
   degradante: string;
@@ -24,11 +23,20 @@ export class ProductoPage {
     private store: InAppPurchase2,
     private globalProvider: GlobalProvider,
     private httpProvider: HttpProvider,
-    private platform : Platform
+    private platform: Platform
   ) {
     this.contador = 0;
     this.combos = [];
     this.getComboProducto();
+  }
+
+  updateSlider() {
+    var tem: Array<any> = this.combos;
+    this.combos = []
+    var hilo = setInterval(() => {
+      this.combos = tem;
+      clearInterval(hilo);
+    }, 1);
   }
 
   ionViewDidLoad() {
@@ -74,7 +82,7 @@ export class ProductoPage {
           }
         })
       }, this);
-      this.content.resize();
+      //this.content.resize();
     }).catch(err => console.log('err: ' + err));
   }
 

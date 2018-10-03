@@ -1,9 +1,14 @@
-<ion-content padding>
+<ion-content>
+  <div *ngIf="globalProvider.dispositivo == false">
+    <br>
+    <br>
+  </div>
   <div class="content-header">
     <ion-row class="conten-row">
       <ion-col id="conten-row" col-2>
         <ion-icon *ngIf="globalProvider.dispositivo == true" id="icon" name="arrow-round-back" (click)="closeModal(true)"></ion-icon>
-        <ion-icon *ngIf="globalProvider.dispositivo == false" id="icon" ios="md-arrow-round-back" md="md-arrow-round-back" (click)="closeModal(true)"></ion-icon>
+        <ion-icon *ngIf="globalProvider.dispositivo == false" id="icon" ios="md-arrow-round-back" md="md-arrow-round-back"
+          (click)="closeModal(true)"></ion-icon>
       </ion-col>
       <ion-col id="conten-row">
         <p id="title">{{(historial == false) ? 'CAMPAING SMS' : 'SMS MANAGER'}}</p>
@@ -14,7 +19,8 @@
   <div class="info-content" *ngIf="historial == true && campaniaSMS.length == 0">
     <p id="info-parrafo" *ngIf="mjs">Currently you don't have any sms campaigns</p>
   </div>
-  <div class="content-historial" *ngIf="historial == true">
+  <ion-scroll scrollY="true" class="content-historial" no-Lines no-border no-padding *ngIf="historial == true">
+    <!--div class="content-historial" *ngIf="historial == true"-->
     <ion-refresher (ionRefresh)="doRefresh($event)">
       <ion-refresher-content></ion-refresher-content>
     </ion-refresher>
@@ -38,7 +44,7 @@
             </div>
           </ion-col>
         </ion-row>
-        <div *ngIf="sms_status[i].togglel == true">
+        <div *ngIf="sms_status[i].togglel == true" style="padding: 0% 5%">
           <div *ngFor="let tipo of campania_sms.tipo">
             <ion-row class="row-historial" *ngFor="let campania of tipo.campania">
               <ion-col col-12>
@@ -68,7 +74,7 @@
               <ion-icon id="icon-historial" name="pause" color="dark" (click)="pausar(i)"></ion-icon>
             </ion-col>
             <ion-col id="row-historial" *ngIf="campania_sms.estado_campania_sms == 'P' || campania_sms.estado_campania_sms == 'C'">
-              <ion-icon id="icon-historial" name="play" color="dark" (click)="getSMSTotalEnviado(campania_sms.id_campania_sms,i)"></ion-icon>
+              <ion-icon id="icon-historial" name="play" color="dark" (click)="getSMSTotalEnviado(campania_sms.id_campania_sms,i) ; campania_sms.estado_campania_sms == 'A'"></ion-icon>
             </ion-col>
           </ion-row>
         </div>
@@ -86,7 +92,8 @@
         <ion-col>{{visita.visita_link}}</ion-col>
       </ion-row>
     </div>
-  </div>
+    <!--/div-->
+  </ion-scroll>
   <div class="content-sms" *ngIf="historial == false">
     <form [formGroup]="sms_from" class="from-content">
       <ion-item no-padding no-lines>
@@ -144,7 +151,8 @@
       </p>
       <ion-item no-padding no-lines>
         <ion-label id="label-item" floating>Star Date</ion-label>
-        <ion-datetime id="row-info-date" text-center displayFormat="MMM DD, YYYY" formControlName="fecha"> </ion-datetime>
+        <ion-datetime id="row-info-date" text-center displayFormat="MMM DD, YYYY" formControlName="fecha">
+        </ion-datetime>
       </ion-item>
       <p ion-text [hidden]="sms_from.controls.fecha.valid || util.submitted === false" color="danger" padding-left>
         Selectd Date...

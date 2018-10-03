@@ -13,6 +13,7 @@ import { SocialPage } from '../pages/social/social';
 import { VcardPage } from '../pages/vcard/vcard';
 import { ProductoPage } from  '../pages/producto/producto';
 import { TutorialPage } from '../pages/tutorial/tutorial';
+import { AgendaPage } from '../pages/agenda/agenda';
 
 import { GlobalProvider } from '../providers/global/global';
 import { HttpProvider } from '../providers/http/http';
@@ -46,14 +47,14 @@ import { ColorPickerModule } from 'ngx-color-picker';
   declarations: [
     MyApp,
     HomePage,
-    //PerfilPage,
     TutorialPage,
     LoginPage,
     RegistroPage,
     SocialPage,
     VcardPage,
     ProductoPage,
-    ModalIosPage
+    ModalIosPage,
+    AgendaPage
   ],
   imports: [
     BrowserModule,
@@ -73,7 +74,8 @@ import { ColorPickerModule } from 'ngx-color-picker';
     SocialPage,
     VcardPage,
     ProductoPage,
-    ModalIosPage
+    ModalIosPage,
+    AgendaPage
   ],
   providers: [
     StatusBar,

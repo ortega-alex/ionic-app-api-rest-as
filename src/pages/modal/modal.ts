@@ -192,9 +192,6 @@ export class ModalPage {
         this.setFilaActivaCampania(key_estado);
       }
       if (key_estado == 4) {
-        if (this.estado_msn == true) {
-          this.setSms();
-        }
         if (this.data.date != null) {
           this.serEventoCalendar();
         }
