@@ -14,7 +14,8 @@
         </ion-col>
         <ion-col id="row-cont" *ngIf="globalProvider.plan.mostrar_publicidad_video == true">
           <button id="row-cont-btn" ion-button small icon-right block color="dark" (click)="showVideo()">
-            {{(segundos == 10) ? 'Get more time ' : segundos }} {{(time && segundos == 10) ?
+            {{(segundos == 10) ? globalProvider.idioma.contenido['_getMoreTime'] : segundos }} {{(time && segundos ==
+            10) ?
             time.hora+":"+time.minuto+":"+time.segundo
             : (segundos == 10) ? '0' : '' }}
           </button>
@@ -37,7 +38,7 @@
       </ion-row>
       <ion-row class="row-cont">
         <ion-col id="row-cont">
-          last call: {{campania.mod_fecha}}
+          {{ '_lastCall' | translate }}: {{campania.mod_fecha}}
         </ion-col>
       </ion-row>
       <ion-row class="row-cont-b">
@@ -49,14 +50,14 @@
       </ion-row>
       <ion-row class="row-cont" *ngIf="panel_ios == false">
         <ion-col id="row-cont">
-          {{(campania.llamados == 0 ) ? 'Start list' : 'Continue where you stop...'}}
+          {{ ((campania.llamados == 0 ) ? '_startList' : '_continueList') | translate }}...
         </ion-col>
       </ion-row>
       <ion-row class="row-cont" *ngIf="globalProvider.dispositivo == true && btn_play == true">
         <ion-col id="row-cont-p">
           <button id="row-cont-btn-p" ion-button icon-left block color="dark" (click)="llamarLista(boton.key_estado,false,0)">
             <ion-icon name="play"></ion-icon>
-            start dialing now
+            {{ '_startDialingNow' | translate }}
           </button>
         </ion-col>
       </ion-row>
@@ -77,13 +78,13 @@
         <ion-col id="row-cont-c" col-2>
           <button id="row-cont-btn-c" ion-button block (click)="llamarLista(boton.key_estado,true,i,false)" color="white"
             [style.border]="getBorder(boton.color)">
-            edit
+            {{ '_edit' | translate }}
           </button>
         </ion-col>
         <ion-col col-2 id="row-cont-c" *ngIf="c.notas.length > 0">
           <button id="row-cont-btn-c" ion-button block icon-right color="white" [style.border]="getBorder(boton.color)"
             (click)="togell(i)">
-            notes
+            {{ '_note' | translate }}
           </button>
         </ion-col>
         <ion-col id="row-cont-c">
@@ -105,21 +106,21 @@
       <ion-spinner *ngIf="spinner1" name="bubbles" item-left></ion-spinner>
       <div *ngIf="!spinner1">
         <ion-icon name="add"></ion-icon>
-        &nbsp;Load more
+        &nbsp;{{ '_loadMore' | translate }}
       </div>
     </button>
   </ion-content>
   <ion-content class="content-list" *ngIf="util.panel_llamada == false && panel_ios == true">
     <ion-row class="row-cont">
       <div text-center style="height: 80% !important; width: 100%; padding: 40% 0%; font-size: 2em" (click)="panelIos(boton.key_estado,true,posicion,true)">
-        <span>Tap here if you would like to call:</span>
+        <span>{{ '_tapWouldCall' | translate }}:</span>
         <br> {{ (contenido[posicion]) ? contenido[posicion].nombre : ''}}
         <br> {{ (contenido[posicion]) ? contenido[posicion].telefono : ''}}
       </div>
     </ion-row>
   </ion-content>
   <button ion-button block color="dark" (click)="panelIos(boton.key_estado,false,0)" *ngIf="util.panel_llamada == false && panel_ios == true">
-    Exit
+    {{ '_exit' | translate }}
   </button>
   <ion-card *ngIf="util.panel_llamada == true && tipo_campania == true" class="conten-card">
     <br>
@@ -176,7 +177,7 @@
     <ion-row class="row-cont">
       <ion-col id="row-cont">
         <ion-item no-Lines class="from-item">
-          <ion-label id="from-label" stacked>Notes:</ion-label>
+          <ion-label id="from-label" stacked>{{ '_note' | translate }}:</ion-label>
           <ion-textarea id="textarea-notes" text-center [(ngModel)]="data.notas" text-lg:992px [style.border-bottom]="edit_info.border"></ion-textarea>
         </ion-item>
       </ion-col>
@@ -191,7 +192,7 @@
       </ion-col>
       <ion-col col-6 id="row-cont">
         <ion-item no-Lines class="from-item">
-          <ion-label id="from-label-sms">SMS:</ion-label>
+          <ion-label id="from-label-sms">{{ '_sms' | translate }}:</ion-label>
           <ion-toggle id="from-toggle" color="danger" [disabled]="(globalProvider.plan.leads != 'P' ) ? true : false"
             checked="{{msnS}}" (ionChange)="chekedSms($event)"></ion-toggle>
         </ion-item>
@@ -208,7 +209,7 @@
       <ion-col id="row-cont">
         <ion-item no-Lines class="from-item">
           <ion-textarea id="textarea-notes" [readonly]="(globalProvider.plan.leads != 'P' ) ? true : false" [(ngModel)]="data.sms"
-            [placeholder]="(globalProvider.plan.leads != 'P' ) ? globalProvider.plan.leads_sms_msn : 'Write *name* where you want each of the customers name on the text'"
+            [placeholder]="(globalProvider.plan.leads != 'P' ) ? globalProvider.plan.leads_sms_msn : globalProvider.idioma.contenido['_indicationSmsText1']"
             text-center text-lg:992px></ion-textarea>
         </ion-item>
       </ion-col>
@@ -216,7 +217,7 @@
     <ion-row class="row-cont">
       <ion-col col-5 id="row-cont-title">
         <ion-item no-Lines class="from-item">
-          <p id="title">Reminder
+          <p id="title">{{ '_reminder' | translate }}
             <ion-icon *ngIf="globalProvider.dispositivo == true" id="calendar" name="calendar"></ion-icon>
             <ion-icon *ngIf="globalProvider.dispositivo == false" id="calendar" ios="md-calendar" md="md-calendar"></ion-icon>
           </p>
@@ -262,7 +263,7 @@
     <ion-row class="row-content">
       <ion-col id="row-content">
         <ion-item no-Lines class="item-content">
-          <ion-input id="item-input" autofocus type="text" placeholder="Name:" [(ngModel)]="getFilaCampania.nombre"
+          <ion-input id="item-input" autofocus type="text" [placeholder]="'_name' | translate" [(ngModel)]="getFilaCampania.nombre"
             text-lg:992px></ion-input>
         </ion-item>
       </ion-col>
@@ -279,7 +280,8 @@
         <ion-icon *ngIf="campos.stado[0] == true && globalProvider.dispositivo == false" ios="md-checkbox-outline" md="md-checkbox-outline"
           (click)="habilitar(0)"></ion-icon>
         <ion-item no-Lines class="item-content">
-          <ion-input id="item-input" text-center placeholder="Field 1:" [(ngModel)]="getFilaCampania.campo_1" type="text"></ion-input>
+          <ion-input id="item-input" text-center [placeholder]=" ('_field' | translate) + '1:'" [(ngModel)]="getFilaCampania.campo_1"
+            type="text"></ion-input>
         </ion-item>
       </ion-col>
       <ion-col id="row-content">
@@ -293,14 +295,15 @@
         <ion-icon *ngIf="campos.stado[1] == true && globalProvider.dispositivo == false" ios="md-checkbox-outline" md="md-checkbox-outline"
           (click)="habilitar(1)"></ion-icon>
         <ion-item no-Lines class="item-content">
-          <ion-input id="item-input" text-center placeholder="Field 2:" [(ngModel)]="getFilaCampania.campo_2" type="text"></ion-input>
+          <ion-input id="item-input" text-center [placeholder]="('_field' | translate) + '2:'" [(ngModel)]="getFilaCampania.campo_2"
+            type="text"></ion-input>
         </ion-item>
       </ion-col>
     </ion-row>
     <ion-row class="row-content">
       <ion-col id="row-content">
         <ion-item no-Lines class="item-content">
-          <ion-textarea id="item-textarea" placeholder="Notes:" [(ngModel)]="data.notas"></ion-textarea>
+          <ion-textarea id="item-textarea" [placeholder]="('_note' | translate) + ':'" [(ngModel)]="data.notas"></ion-textarea>
         </ion-item>
       </ion-col>
     </ion-row>
@@ -314,7 +317,7 @@
       </ion-col>
       <ion-col col-6 id="row-content">
         <ion-item no-Lines class="item-content">
-          <ion-label id="item-label-sms">SMS:</ion-label>
+          <ion-label id="item-label-sms">{{ '_sms' | translate }}:</ion-label>
           <ion-toggle id="item-toggle" color="danger" [disabled]="(globalProvider.plan.leads != 'P' ) ? true : false"
             checked="{{msnS}}" (ionChange)="chekedSms($event)"></ion-toggle>
         </ion-item>
@@ -331,7 +334,7 @@
       <ion-col id="row-content">
         <ion-item no-Lines class="item-content">
           <ion-textarea id="item-textarea" [readonly]="(globalProvider.plan.leads != 'P' ) ? true : false"
-            [placeholder]="(globalProvider.plan.leads != 'P' ) ? globalProvider.plan.leads_sms_msn : 'Write *name* where you want each of the customers name on the text'"
+            [placeholder]="(globalProvider.plan.leads != 'P' ) ? globalProvider.plan.leads_sms_msn : globalProvider.idioma.contenido['_indicationSmsText1']"
             [(ngModel)]="data.sms" text-lg:992px></ion-textarea>
         </ion-item>
       </ion-col>
@@ -339,7 +342,7 @@
     <ion-row class="row-content">
       <ion-col col-5 id="row-content">
         <ion-item no-Lines class="item-content">
-          <p id="title">Reminder
+          <p id="title">{{ '_reminder' | translate }}
             <ion-icon *ngIf="globalProvider.dispositivo == true" id="calendar" name="calendar"></ion-icon>
             <ion-icon *ngIf="globalProvider.dispositivo == false" id="calendar" ios="md-calendar" md="md-calendar"></ion-icon>
           </p>
@@ -365,7 +368,7 @@
           &nbsp;
         </button>
         <button id="row-content-btn" ion-button block outline (click)="pausar()" color="dark">
-          Don't save and Continue &nbsp;
+          {{ '_dontSaveAndContinue' | translate }} &nbsp;
         </button>
       </ion-col>
     </ion-row>

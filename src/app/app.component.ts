@@ -5,8 +5,10 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { HomePage } from '../pages/home/home';
 import { LoginPage } from '../pages/login/login';
+import { SmsPage } from '../pages/sms/sms';
+import { ModalPage } from '../pages/modal/modal';
 
-import { GlobalProvider } from '../providers/global/global';
+import { GlobalProvider, Idioma } from '../providers/global/global';
 import { setMilisegundos, Fechas } from '../pipes/filtros/filtros';
 import { HttpProvider } from '../providers/http/http';
 import { CallLogObject } from '../model/interfaces';
@@ -37,14 +39,16 @@ export class MyApp {
     private storage: Storage,
     private androidPermissions: AndroidPermissions,
     private callLog: CallLog,
-    private httProvider: HttpProvider,
+    private httpProvider: HttpProvider,
     private modalControlle: ModalController,
     private push: Push,
     private alertController: AlertController,
     private appRate: AppRate
   ) {
+    this.getIdioma();
     platform.ready().then(() => {
       statusBar.styleDefault();
+      //this.globalProvider.getIdioma();
       if (platform.is('android')) {
         this.permisos();
       }
@@ -64,7 +68,7 @@ export class MyApp {
     });
   }
 
-  async permisos() {
+  private async permisos() {
     let list = [
       this.androidPermissions.PERMISSION.CALL_PHONE,
       this.androidPermissions.PERMISSION.READ_PHONE_STATE,
@@ -88,7 +92,7 @@ export class MyApp {
     }
   }
 
-  historialTelefonico() {
+  private historialTelefonico() {
     var hash = {};
     let numeros: Array<{ numero: string, fecha: string, tipo: string }> = [];
     this.storage.get('fecha').then(fecha => {
@@ -118,11 +122,11 @@ export class MyApp {
           fecha: this.fechas.transform(this.set_milisegundos.transform(fecha)),
           llamadas: numeros
         }
-        this.httProvider.post(data, url).then(res => {
+        this.httpProvider.post(data, url).then(res => {
           this.respuesta = res;
           if (this.respuesta.error == 'false') {
             if (this.respuesta.llamadas && this.respuesta.llamadas.length > 0) {
-              let modal = this.modalControlle.create('ModalPage', { llamadas: this.respuesta.llamadas });
+              let modal = this.modalControlle.create( ModalPage , { llamadas: this.respuesta.llamadas });
               modal.present();
             }
           }
@@ -131,7 +135,7 @@ export class MyApp {
     }).catch(err => console.log('err storage: ' + JSON.stringify(err)));
   }
 
-  initPushNotification() {
+  private initPushNotification() {
     this.push.hasPermission().then(res => {
       if (res.isEnabled) {
         console.log('We have permission to send push notifications');
@@ -173,7 +177,7 @@ export class MyApp {
             text: 'View',
             handler: () => {
               if (data.additionalData.id_campania_sms && data.additionalData.id_campania_sms != null) {
-                let modal = this.modalControlle.create('SmsPage', { historial: true, campania_sms: null, id: data.additionalData.id_campania_sms });
+                let modal = this.modalControlle.create(SmsPage, { historial: true, campania_sms: null, id: data.additionalData.id_campania_sms });
                 modal.present();
               }
             }
@@ -182,7 +186,7 @@ export class MyApp {
         confirmAlert.present();
       } else {
         if (data.additionalData.id_campania_sms && data.additionalData.id_campania_sms != null) {
-          let modal = this.modalControlle.create('SmsPage', { historial: true, campania_sms: null, id: data.additionalData.id_campania_sms });
+          let modal = this.modalControlle.create( SmsPage , { historial: true, campania_sms: null, id: data.additionalData.id_campania_sms });
           modal.present();
         }
       }
@@ -190,7 +194,7 @@ export class MyApp {
     pushObject.on('error').subscribe(error => console.log('Error with Push plugin' + error));
   }
 
-  ranqui() {
+  private ranqui() {
     this.appRate.preferences = {
       displayAppName: 'AdvanSales',
       usesUntilPrompt: 2,
@@ -210,5 +214,21 @@ export class MyApp {
       }
     };
     this.appRate.promptForRating(false);
+  }
+
+  private getIdioma() {
+    this.storage.get('id').then((idioma: Idioma) => {
+      if (!idioma) {
+        //console.log("nada");
+        let url: string = "http://192.168.1.57:3000/idioma/en";
+        this.httpProvider.getTem(url).then((res: Object) => {
+          this.globalProvider.idioma = { key: "en", contenido: res };
+          this.globalProvider.setIdioma();
+        }).catch(err => console.log('err idioma: ' + err.toString()));
+      } else {
+        //console.log(idioma)
+        this.globalProvider.idioma = { key: idioma.key , contenido: idioma.contenido };
+      }
+    }).catch(err => console.log('err: ', err.toString()));
   }
 }

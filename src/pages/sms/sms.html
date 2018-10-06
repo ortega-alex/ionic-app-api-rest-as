@@ -11,16 +11,15 @@
           (click)="closeModal(true)"></ion-icon>
       </ion-col>
       <ion-col id="conten-row">
-        <p id="title">{{(historial == false) ? 'CAMPAING SMS' : 'SMS MANAGER'}}</p>
+        <p id="title">{{((historial == false) ? '_campaingSms' : '_smsManager') | translate }}</p>
       </ion-col>
       <ion-col id="conten-row" col-2> </ion-col>
     </ion-row>
   </div>
   <div class="info-content" *ngIf="historial == true && campaniaSMS.length == 0">
-    <p id="info-parrafo" *ngIf="mjs">Currently you don't have any sms campaigns</p>
+    <p id="info-parrafo" *ngIf="mjs">{{ '_warningSms' | translate }}</p>
   </div>
   <ion-scroll scrollY="true" class="content-historial" no-Lines no-border no-padding *ngIf="historial == true">
-    <!--div class="content-historial" *ngIf="historial == true"-->
     <ion-refresher (ionRefresh)="doRefresh($event)">
       <ion-refresher-content></ion-refresher-content>
     </ion-refresher>
@@ -31,9 +30,9 @@
             <div class="togglel_title">
               <b id="title">{{campania_sms.nombre }}</b>
               <br>
-              <b>Start date:</b> {{campania_sms.fecha_inicio}}
+              <b>{{ '_startDate' | translate }}:</b> {{campania_sms.fecha_inicio}}
               <br>
-              <b>Status:</b> {{campania_sms.estado_campania_sms_text}}
+              <b>{{ '_status' | translate }}:</b> {{campania_sms.estado_campania_sms_text}}
               <div class="progress-outer">
                 <div class="progress-inner" [style.width]="porcentage(campania_sms.sms_enviado,campania_sms.sms_total) + '%'">
                   {{porcentage(campania_sms.sms_enviado,campania_sms.sms_total)}} %
@@ -48,7 +47,7 @@
           <div *ngFor="let tipo of campania_sms.tipo">
             <ion-row class="row-historial" *ngFor="let campania of tipo.campania">
               <ion-col col-12>
-                <b id="title_campania"> Campaing: {{campania.nombre_campania}}</b>
+                <b id="title_campania">{{ '_campaing' | translate }}: {{campania.nombre_campania}}</b>
               </ion-col>
               <ion-col col-2 id="row-historial-b" *ngFor="let estado of campania.estado" [style.background-color]="'#'+estado.color">
                 <b id="valor">{{estado.valor}}</b>
@@ -58,13 +57,13 @@
           </div>
           <ion-row class="row-historial">
             <ion-col col-12 id="row-historial">
-              <p id="sms_text">SMS: {{campania_sms.texto_template}}</p>
+              <p id="sms_text">{{ '_sms' | translate }}: {{campania_sms.texto_template}}</p>
             </ion-col>
           </ion-row>
           <ion-row class="row-historial">
             <ion-col id="row-historial" *ngIf="globalProvider.plan.sms_leads == 'P'">
               <button ion-button small color="dark" block (click)="contenido = !contenido ; getVisitaLinkSMS(campania_sms.id_campania_sms)">
-                link views
+                {{ '_linkViews' | translate }}
               </button>
             </ion-col>
             <ion-col id="row-historial">
@@ -83,8 +82,8 @@
     <div *ngIf="contenido">
       <ion-row no-padding no-lines text-center>
         <ion-col>#</ion-col>
-        <ion-col>Name</ion-col>
-        <ion-col>Visit</ion-col>
+        <ion-col>{{ '_name' | translate }}</ion-col>
+        <ion-col>{{ '_visit' | translate }}</ion-col>
       </ion-row>
       <ion-row no-padding no-lines text-center *ngFor="let visita of visitas">
         <ion-col>{{visita.telefono}}</ion-col>
@@ -97,18 +96,18 @@
   <div class="content-sms" *ngIf="historial == false">
     <form [formGroup]="sms_from" class="from-content">
       <ion-item no-padding no-lines>
-        <ion-label id="row-info-label" floating>Name:</ion-label>
+        <ion-label id="row-info-label" floating>{{ '_name' | translate }}:</ion-label>
         <ion-input id="row-info-input" autofocus type="text" text-center formControlName="nombre"></ion-input>
       </ion-item>
       <p ion-text [hidden]="sms_from.controls.nombre.valid || util.submitted === false" color="danger" padding-left>
-        Enter name...
+        {{ '_enterName' | translate }}...
       </p>
       <ion-item no-padding no-lines>
-        <ion-label id="row-info-label" stacked>SMS:</ion-label>
-        <ion-textarea text-center id="row-info-texarea" formControlName="sms_text" [placeholder]="(globalProvider.plan.sms_leads != 'P') ? 'Write *name* where you want each of the customers name on the text' : 'Write *name* where you want each of the customers name on the text and *link*'"></ion-textarea>
+        <ion-label id="row-info-label" stacked>{{ '_sms' | translate }}:</ion-label>
+        <ion-textarea text-center id="row-info-texarea" formControlName="sms_text" [placeholder]="((globalProvider.plan.sms_leads != 'P') ? '_indicationSmsText1' : '_indicationSmsTextLink') | translate"></ion-textarea>
       </ion-item>
       <p ion-text [hidden]="sms_from.controls.sms_text.valid || util.submitted === false" color="danger" padding-left>
-        Enter SMS......
+        {{ '_enterSMS' | translate }}......
       </p>
       <!--ion-item no-padding no-lines *ngIf="globalProvider.plan.sms_leads == 'P'">
         <ion-label id="row-info-label" floating>Link for redirect:</ion-label>
@@ -143,19 +142,19 @@
         Selectd days...
       </p-->
       <ion-item no-padding no-lines>
-        <ion-label id="label-item" floating>Shipping Schedule</ion-label>
+        <ion-label id="label-item" floating>{{ '_shippingSchedule' | translate }}</ion-label>
         <ion-datetime id="row-info-date" text-center displayFormat="HH:mm" formControlName="hora"> </ion-datetime>
       </ion-item>
       <p ion-text [hidden]="sms_from.controls.hora.valid || util.submitted === false" color="danger" padding-left>
-        Selectd Schedule...
+        {{ '_selectdSchedule' | translate }}...
       </p>
       <ion-item no-padding no-lines>
-        <ion-label id="label-item" floating>Star Date</ion-label>
+        <ion-label id="label-item" floating>{{ '_startDate' | translate }}</ion-label>
         <ion-datetime id="row-info-date" text-center displayFormat="MMM DD, YYYY" formControlName="fecha">
         </ion-datetime>
       </ion-item>
       <p ion-text [hidden]="sms_from.controls.fecha.valid || util.submitted === false" color="danger" padding-left>
-        Selectd Date...
+        {{ '_selectdDate' | translate }}...
       </p>
     </form>
     <ion-row class="row-estatus" *ngFor="let sms of campania_sms">
@@ -168,7 +167,7 @@
       </ion-col>
     </ion-row>
     <button id="row-info-btn" ion-button small block icon-right color="dark" type="submit" (click)="setCampaniaSMSUsuario()">
-      send
+      {{ '_send' | translate }}
       <ion-icon name="checkmark"></ion-icon>
     </button>
   </div>

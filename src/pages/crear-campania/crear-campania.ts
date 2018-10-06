@@ -142,7 +142,6 @@ export class CrearCampaniaPage {
   }
 
   setExcelUsuario() {
-    //if (this.globalProvider.plan.plan_restriccion == 'N') { 
     if (this.globalProvider.plan.leads != 'N') {
       if (this.platform.is('android')) {
         this.fileChooser.open().then(url => {

@@ -17,22 +17,22 @@
     </ion-row>
   </div>
   <div class="content-botones" *ngIf="util.mostrar == false && campania_blanco == false">
-    <h2 text-center>New campaing from a File</h2>
-    <p id="instrucciones">Upload your file, make sure to have your headers in the first line as in this example:</p>
+    <h2 text-center> {{ '_newCampaing' | translate }} </h2>
+    <p id="instrucciones">{{ '_uploadFile' | translate }}</p>
     <img id="imagen" src="assets/imgs/ej.jpg">
     <ion-row class="content-row">
       <ion-col id="content-row">
         <button id="content-row-btn" ion-button icon-right block color="dark" (click)="setExcelUsuario()">
-          Upload xls/csv file
+          {{ '_uploadXlsCsv' | translate }}
           <ion-icon name="attach"></ion-icon>
         </button>
       </ion-col>
     </ion-row>
     <br>
-    <h2 text-center>New Manual Campaign</h2>
+    <h2 text-center>{{ '_newManualCampaign' | translate }}</h2>
     <ion-row class="content-row">
       <ion-col id="content-row">
-        <ion-label id="from-label" stacked>Campaign name:</ion-label>
+        <ion-label id="from-label" stacked>{{ '_campaignName' | translate }}:</ion-label>
         <ion-input id="from-input" autofocus text-center type="text" [(ngModel)]="new_campania.nombre_campania"
           text-lg:992px></ion-input>
       </ion-col>
@@ -40,7 +40,7 @@
     <ion-row class="content-row">
       <ion-col id="content-row">
         <button id="content-row-btn" ion-button icon-right block color="dark" (click)="newCampania()">
-          Create
+          {{ '_create' | translate }}
           <ion-icon name="checkmark-circle-outline"></ion-icon>
         </button>
       </ion-col>
@@ -48,52 +48,52 @@
   </div>
   <form [formGroup]="ordenarCampania" *ngIf="util.mostrar == true" class="from-content">
     <ion-item class="from-item">
-      <ion-label id="from-label" floating>File name:</ion-label>
+      <ion-label id="from-label" floating>{{ '_fileName' | translate }}:</ion-label>
       <ion-input id="from-input" autofocus text-center type="text" formControlName="nombreArchivo" [(ngModel)]="util.nombre_archivo"
         readonly text-lg:992px></ion-input>
     </ion-item>
     <ion-item class="from-item">
-      <ion-label id="from-label" floating>Campaing name:</ion-label>
-      <ion-input id="from-input" text-center type="text" formControlName="nombreCampania" placeholder="Mandatory"
+      <ion-label id="from-label" floating>{{ '_campaignName' | translate }}:</ion-label>
+      <ion-input id="from-input" text-center type="text" formControlName="nombreCampania" [placeholder]="'_mandatory' | translate"
         text-lg:992px></ion-input>
     </ion-item>
     <p ion-text [hidden]="ordenarCampania.controls.nombreCampania.valid || util.submitted === false" color="danger"
       padding-left>
-      Enter campaing name...
+      {{ '_enterCampaingName' | translate }}...
     </p>
     <ion-item class="from-item">
-      <ion-label id="from-label" floating>Phone:</ion-label>
-      <ion-select id="from-select" text-center formControlName="telefono" interface="action-sheet" placeholder="Mandatory">
+      <ion-label id="from-label" floating>{{ '_phone' | translate }}:</ion-label>
+      <ion-select id="from-select" text-center formControlName="telefono" interface="action-sheet" [placeholder]="'_mandatory' | translate">
         <ion-option *ngFor="let dato of datos;let i = index" value="{{i}}">{{dato.nombre}}</ion-option>
       </ion-select>
     </ion-item>
     <p ion-text [hidden]="ordenarCampania.controls.telefono.valid || util.submitted === false" color="danger"
       padding-left>
-      Select phone number...
+      {{ '_selectPhone' | translate }}...
     </p>
     <ion-item class="from-item">
-      <ion-label id="from-label" floating>Name:</ion-label>
-      <ion-select id="from-select" text-center formControlName="nombre" interface="action-sheet" placeholder="Mandatory">
+      <ion-label id="from-label" floating>{{ '_name' | translate }}:</ion-label>
+      <ion-select id="from-select" text-center formControlName="nombre" interface="action-sheet" [placeholder]="'_mandatory' | translate">
         <ion-option *ngFor="let dato of datos;let i = index" value="{{i}}">{{dato.nombre}}</ion-option>
       </ion-select>
     </ion-item>
     <p ion-text [hidden]="ordenarCampania.controls.telefono.valid || util.submitted === false" color="danger"
       padding-left>
-      select lead name...
+      {{ '_selectLeadName' | translate }}...
     </p>
     <ion-item class="from-item">
-      <ion-label id="from-label" floating>Note:</ion-label>
-      <ion-select id="from-select" text-center formControlName="nota" interface="action-sheet" placeholder="Mandatory">
+      <ion-label id="from-label" floating>{{ '_note' | translate }}:</ion-label>
+      <ion-select id="from-select" text-center formControlName="nota" interface="action-sheet" [placeholder]="'_mandatory' | translate">
         <ion-option *ngFor="let dato of datos;let i = index" value="{{i}}">{{dato.nombre}}</ion-option>
       </ion-select>
     </ion-item>
     <p ion-text [hidden]="ordenarCampania.controls.nota.valid || util.submitted === false" color="danger" padding-left>
-      Select note...
+      {{ '_selectNote' | translate }}...
     </p>
     <ion-row class="row-from">
       <ion-col id="row-from">
         <ion-item no-lines class="from-item">
-          <ion-label id="from-label" floating>Name:</ion-label>
+          <ion-label id="from-label" floating>{{ '_name' | translate }}:</ion-label>
           <ion-input id="from-input" text-center type="text" formControlName="c1Nombre" [(ngModel)]="columna[0].c"
             [readonly]="columna[0].r" text-lg:992px></ion-input>
         </ion-item>
@@ -101,7 +101,8 @@
       <ion-col id="row-from">
         <ion-item no-lines class="from-item">
           <ion-label id="from-label" floating></ion-label>
-          <ion-select id="from-select" formControlName="c1" interface="action-sheet" placeholder="Optional" (ionChange)="getNombre(1)">
+          <ion-select id="from-select" formControlName="c1" interface="action-sheet" [placeholder]="'_optional' | translate"
+            (ionChange)="getNombre(1)">
             <ion-option *ngFor="let dato of datos;let i = index" value="{{i}}">{{dato.nombre}}</ion-option>
           </ion-select>
         </ion-item>
@@ -110,7 +111,7 @@
     <ion-row class="row-from">
       <ion-col id="row-from">
         <ion-item no-lines class="from-item">
-          <ion-label id="from-label" floating>Name:</ion-label>
+          <ion-label id="from-label" floating>{{ '_name' | translate }}:</ion-label>
           <ion-input id="from-input" text-center type="text" formControlName="c2Nombre" [(ngModel)]="columna[1].c"
             [readonly]="columna[1].r" text-lg:992px></ion-input>
         </ion-item>
@@ -118,8 +119,8 @@
       <ion-col id="row-from">
         <ion-item no-lines class="from-item">
           <ion-label id="from-label" floating></ion-label>
-          <ion-select id="from-select" formControlName="c2" placeholder="Name:" interface="action-sheet" placeholder="Optional"
-            (ionChange)="getNombre(2)">
+          <ion-select id="from-select" formControlName="c2" [placeholder]="'_optional' | translate" interface="action-sheet"
+            [placeholder]="'_optional' | translate" (ionChange)="getNombre(2)">
             <ion-option *ngFor="let dato of datos;let i = index" value="{{i}}">{{dato.nombre}}</ion-option>
           </ion-select>
         </ion-item>
@@ -128,7 +129,7 @@
     <ion-row class="row-from">
       <ion-col id="row-from">
         <ion-item no-lines class="from-item">
-          <ion-label id="from-label" floating>Name:</ion-label>
+          <ion-label id="from-label" floating>{{ '_name' | translate }}:</ion-label>
           <ion-input id="from-input" text-center type="text" formControlName="c3Nombre" [(ngModel)]="columna[2].c"
             [readonly]="columna[2].r" text-lg:992px></ion-input>
         </ion-item>
@@ -136,7 +137,8 @@
       <ion-col id="row-from">
         <ion-item no-lines class="from-item">
           <ion-label id="from-label" floating></ion-label>
-          <ion-select id="from-select" formControlName="c3" interface="action-sheet" placeholder="Optional" (ionChange)="getNombre(3)">
+          <ion-select id="from-select" formControlName="c3" interface="action-sheet" [placeholder]="'_optional' | translate"
+            (ionChange)="getNombre(3)">
             <ion-option *ngFor="let dato of datos;let i = index" value="{{i}}">{{dato.nombre}}</ion-option>
           </ion-select>
         </ion-item>
@@ -145,7 +147,7 @@
     <ion-row class="row-from">
       <ion-col id="row-from">
         <ion-item no-lines class="from-item">
-          <ion-label id="from-label" floating>Name:</ion-label>
+          <ion-label id="from-label" floating>{{ '_name' | translate }}:</ion-label>
           <ion-input id="from-input" text-center type="text" formControlName="c4Nombre" [(ngModel)]="columna[3].c"
             [readonly]="columna[3].r" text-lg:992px></ion-input>
         </ion-item>
@@ -153,7 +155,8 @@
       <ion-col id="row-from">
         <ion-item no-lines class="from-item">
           <ion-label id="from-label" floating></ion-label>
-          <ion-select id="from-select" formControlName="c4" interface="action-sheet" placeholder="Optional" (ionChange)="getNombre(4)">
+          <ion-select id="from-select" formControlName="c4" interface="action-sheet" [placeholder]="'_optional' | translate"
+            (ionChange)="getNombre(4)">
             <ion-option *ngFor="let dato of datos;let i = index" value="{{i}}">{{dato.nombre}}</ion-option>
           </ion-select>
         </ion-item>
@@ -164,7 +167,7 @@
       </ion-col>
       <ion-col col-6 id="row-cont">
         <ion-item class="from-item">
-          <ion-label id="from-label-sms">SMS:</ion-label>
+          <ion-label id="from-label-sms">{{ '_sms' | translate }}:</ion-label>
           <ion-toggle id="from-toggle" color="danger" checked="{{util.msnS}}" (ionChange)="chekedSms()"></ion-toggle>
         </ion-item>
       </ion-col>
@@ -174,12 +177,12 @@
     <ion-row class="row-from">
       <ion-col id="row-from">
         <ion-item class="from-item">
-          <ion-textarea id="textarea-notes" placeholder='Edit this text message and it will be sent to each lead "No Answer" or "Call Later" after you called. Write *name* where you want each of the customers name on the text'
-            formControlName="sms_predeterminado" [(ngModel)]="util.sms_tex" text-center text-lg:992px></ion-textarea>
+          <ion-textarea id="textarea-notes" [placeholder]="'_indicationSmsText' | translate" formControlName="sms_predeterminado"
+            [(ngModel)]="util.sms_tex" text-center text-lg:992px></ion-textarea>
         </ion-item>
         <p ion-text [hidden]="ordenarCampania.controls.sms_predeterminado.valid || util.submitted === false" color="danger"
           padding-left>
-          Enter SMS...
+          {{ '_enterSMS' | translate}}...
         </p>
       </ion-col>
     </ion-row>
@@ -188,12 +191,12 @@
     <ion-col id="content-row">
       <button id="content-row-btn" ion-button block color="danger" (click)="cancelar()">
         <ion-icon name="close"></ion-icon>
-        &nbsp;cancel
+        &nbsp;{{ '_cancel' | translate }}
       </button>
     </ion-col>
     <ion-col id="content-row">
       <button id="content-row-btn" icon-right ion-button block color="secondary" type="submit" (click)="guardarRegistro()">
-        save
+        {{ '_save' | translate }}
         <ion-icon name="checkmark-circle-outline"></ion-icon>
       </button>
     </ion-col>
@@ -221,7 +224,7 @@
     <ion-row class="content-row">
       <ion-col id="content-row">
         <button id="content-row-btn" ion-button icon-right block color="dark" (click)="llamar()">
-          Call
+          {{ '_call' | translate }}
           <ion-icon name="call"></ion-icon>
         </button>
       </ion-col>
@@ -231,7 +234,7 @@
     <ion-row class="row-content">
       <ion-col id="row-content">
         <ion-item no-Lines class="item-content">
-          <ion-label id="item-label" stacked>Campaign name:</ion-label>
+          <ion-label id="item-label" stacked>{{ '_campaignName' | translate }}:</ion-label>
           <ion-input id="item-input" readonly type="text" [(ngModel)]="new_campania.nombre_campania" text-lg:992px></ion-input>
         </ion-item>
       </ion-col>
@@ -239,7 +242,7 @@
     <ion-row class="row-content">
       <ion-col id="row-content">
         <ion-item no-Lines class="item-content">
-          <ion-input id="item-input" autofocus type="text" placeholder="Name:" [(ngModel)]="new_campania.nombre"
+          <ion-input id="item-input" autofocus type="text" [placeholder]="'_name' | translate " [(ngModel)]="new_campania.nombre"
             text-lg:992px></ion-input>
         </ion-item>
       </ion-col>
@@ -279,7 +282,7 @@
     <ion-row class="row-content">
       <ion-col id="row-content">
         <ion-item no-Lines class="item-content">
-          <ion-textarea id="item-textarea" placeholder="Notes:" [(ngModel)]="new_campania.nota"></ion-textarea>
+          <ion-textarea id="item-textarea" [placeholder]="'_note' | translate" [(ngModel)]="new_campania.nota"></ion-textarea>
         </ion-item>
       </ion-col>
     </ion-row>
@@ -310,7 +313,7 @@
       <ion-col id="row-content">
         <ion-item no-Lines class="item-content">
           <ion-textarea id="item-textarea" [readonly]="(globalProvider.plan.leads != 'P' ) ? true : false"
-            [placeholder]="(globalProvider.plan.leads != 'P' ) ? globalProvider.plan.leads_sms_msn : 'Write *name* where you want each of the customers name on the text'"
+            [placeholder]="(globalProvider.plan.leads != 'P' ) ? globalProvider.plan.leads_sms_msn : (globalProvider.idioma && globalProvider.idioma.contenido['Write *name* where you want each of the customers name on the text'])  ? globalProvider.idioma.contenido['Write *name* where you want each of the customers name on the text'] : 'Write *name* where you want each of the customers name on the text'"
             [(ngModel)]="new_campania.sms_tex" text-lg:992px></ion-textarea>
         </ion-item>
       </ion-col>
@@ -318,7 +321,7 @@
     <ion-row class="row-content">
       <ion-col col-5 id="row-content">
         <ion-item no-Lines class="item-content">
-          <p id="title">Reminder
+          <p id="title">{{ '_reminder' | translate }}
             <ion-icon *ngIf="globalProvider.dispositivo== true" id="calendar" name="calendar"></ion-icon>
             <ion-icon *ngIf="globalProvider.dispositivo== false" id="calendar" ios="md-calendar" md="md-calendar"></ion-icon>
           </p>
@@ -344,7 +347,7 @@
           &nbsp;
         </button>
         <button id="row-content-btn" ion-button block outline (click)="saveAndExit()" color="dark">
-          Don't save and Continue &nbsp;
+          {{ "_dontSaveAndContinue" | translate }} &nbsp;
         </button>
       </ion-col>
     </ion-row>

@@ -35,7 +35,7 @@ export class ModalPage {
   };
   private estado_msn: boolean;
   private posicion: number = 0;
-  private text: string = "You contacted ";
+  //private text: string = "You contacted ";
   private segundos: number = 10;
   private timer: any;
   private time: { hora: number, minuto: number, segundo: number };
@@ -51,6 +51,7 @@ export class ModalPage {
     sms_tex: null,
     panel_llamada: false
   };
+  text: string
 
   constructor(
     public navCtrl: NavController,
@@ -151,7 +152,8 @@ export class ModalPage {
   }
 
   animacion() {
-    this.text = this.text + (this.tamanio_contenido) + " leads, let's quickly update your notes now";
+    //this.text = this.text + (this.tamanio_contenido) + " leads, let's quickly update your notes now";
+    this.text = this.globalProvider.idioma.contenido['_animacion'] + " " + (this.tamanio_contenido) + " " + this.globalProvider.idioma.contenido['_animacion1']
   }
 
   call() {

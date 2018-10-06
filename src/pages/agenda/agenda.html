@@ -17,27 +17,27 @@
       </ion-item>
     </ion-item>
     <p id="err" ion-text [hidden]="fromContent.controls.texto.valid || submitted === false" color="danger" padding-left>
-      Enter SMS...
+      {{ '_enterSMS' | translate }}...
     </p>
     <ion-item no-Lines no-padding>
-      <ion-label id="item-label-sms">Save as default:</ion-label>
+      <ion-label id="item-label-sms">{{ '_saveDefault' | translate }} :</ion-label>
       <ion-toggle id="item-toggle" color="danger" checked (ionChange)="chekedSms($event)"></ion-toggle>
     </ion-item>
     <ion-item no-padding>
-      <ion-label floating>Phone:</ion-label>
+      <ion-label floating>{{ '_phone' | translate }}:</ion-label>
       <ion-input text-center type="numero" formControlName="numero"></ion-input>
     </ion-item>
     <p id="err" ion-text [hidden]="fromContent.controls.numero.valid || submitted === false" color="danger"
       padding-left>
-      Enter Phone...
+      {{ '_enterPhone' | translate }}...
     </p>
     <ion-item no-padding>
-      <ion-label floating>Name:</ion-label>
+      <ion-label floating>{{ '_name' | translate }}:</ion-label>
       <ion-input text-center type="text" formControlName="nombre"></ion-input>
     </ion-item>
     <p id="err" ion-text [hidden]="fromContent.controls.nombre.valid || submitted === false" color="danger"
       padding-left>
-      Enter Name...
+      {{ '_enterName' | translate }}...
     </p>
   </form>
 
@@ -52,13 +52,13 @@
 <ion-footer>
   <ion-row no-padding no-margin no-lines>
     <ion-col col-3>
-      <button ion-button block small color="dark" (click)="closeModal()">
+      <button ion-button block color="dark" (click)="closeModal()">
         <ion-icon name="backspace"></ion-icon>
       </button>
     </ion-col>
     <ion-col col-9>
-      <button ion-button small block color="dark" (click)="setAgenda()" [disabled]="(valid.vcard_producto == 'N') ? true : false">
-        SEND
+      <button ion-button block color="dark" (click)="setAgenda()" [disabled]="(valid.vcard_producto == 'N') ? true : false">
+        {{ '_send' | translate }}
       </button>
     </ion-col>
   </ion-row>

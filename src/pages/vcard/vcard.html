@@ -23,83 +23,83 @@
   <div *ngIf="edit">
     <button id="btn-color" #someInput ion-button small [(colorPicker)]="vcard.btn_color" [style.background]="(vcard.btn_color != 'null' && vcard.btn_color != null) ?  vcard.btn_color : 'black'"
       (colorPickerChange)="vcard.btn_color = $event" [cpPosition]="bottom">
-      Color Buttons
+      {{'_colorButtons' | translate }}
     </button>
     <button id="btn-color" #someInput ion-button small [(colorPicker)]="vcard.fondo" [style.background]="(vcard.fondo != 'null' && vcard.fondo != null) ? vcard.fondo : 'black'"
       (colorPickerChange)="vcard.fondo=$event" [cpPosition]="bottom">
-      Background
+      {{ '_background' | translate }}
     </button>
     <button id="btn-color" #someInput ion-button small [(colorPicker)]="vcard.text_color" [style.background]="(vcard.text_color != 'null' && vcard.text_color != null) ? vcard.text_color : 'black'"
       (colorPickerChange)="vcard.text_color=$event" [cpPosition]="bottom">
-      Tex color
+      {{'_textColor' | translate }}
     </button>
 
     <ion-row id="content-row" no-padding no-Lines no-border text-center>
       <ion-col>
         <button ion-button clear small color="dark">
-          Font:
+          {{'_font' | translate }} :
         </button>
         <button ion-button small color="light" (click)="vcard.bold = (vcard.bold == null || vcard.bold == 'null') ? 'bold' : null"
           [style.font-weight]="vcard.bold">
-          Bold
+          {{'_bold' | translate }}
         </button>
         <button ion-button small color="light" (click)="vcard.italic = (vcard.italic == null || vcard.italic == 'null') ? 'italic' : null"
           [style.font-style]="vcard.italic">
-          Italic
+          {{'_italic' | translate }}
         </button>
         <button ion-button small color="light" (click)="vcard.subrayar = (vcard.subrayar == null || vcard.subrayar == 'null') ? 'underline' : null"
           [style.text-decoration]="vcard.subrayar">
-          Underline
+          {{'_underline' | translate }}
         </button>
       </ion-col>
     </ion-row>
 
     <ion-row id="content-row" no-padding no-Lines no-border text-center>
-      <ion-col col-2> </ion-col>
-      <ion-col col-4>
+      <ion-col col-8>
         <button ion-button clear small color="dark">
-          Tex size:
+          {{ '_textSize' | translate }}:
         </button>
       </ion-col>
       <ion-col col-4>
         <ion-input type="number" min="1" max="18" [(ngModel)]="tamanio" (ionChange)="setTamanio()"></ion-input>
       </ion-col>
-      <ion-col col-2></ion-col>
     </ion-row>
 
     <ion-row id="content-row" no-padding no-Lines no-border text-center>
       <ion-col>
-        <ion-input type="text" placeholder="First name" text-center [(ngModel)]="vcard.nombre"></ion-input>
+        <ion-input type="text" [placeholder]="'_name' | translate" text-center [(ngModel)]="vcard.nombre"></ion-input>
       </ion-col>
       <ion-col>
-        <ion-input type="text" placeholder="Last name" text-center [(ngModel)]="vcard.apellido"></ion-input>
+        <ion-input type="text" [placeholder]="'_lastName' | translate" text-center [(ngModel)]="vcard.apellido"></ion-input>
       </ion-col>
     </ion-row>
 
 
     <ion-row id="content-row" no-padding no-Lines no-border text-center>
       <ion-col>
-        <ion-input type="text" placeholder="Email" text-center [(ngModel)]="vcard.usuario_presentacion"></ion-input>
+        <ion-input type="text" [placeholder]="'_email' | translate" text-center [(ngModel)]="vcard.usuario_presentacion"></ion-input>
       </ion-col>
       <ion-col>
-        <ion-input type="text" placeholder="Company" text-center [(ngModel)]="vcard.organisacion"></ion-input>
+        <ion-input type="text" [placeholder]="'_eompany' | translate" text-center [(ngModel)]="vcard.organisacion"></ion-input>
       </ion-col>
     </ion-row>
 
     <ion-row id="content-row" no-padding no-Lines no-border text-center>
       <ion-col>
-        <ion-input type="text" placeholder="Profession" text-center [(ngModel)]="vcard.profesion"></ion-input>
+        <ion-input type="text" [placeholder]="'_erofession' | translate" text-center [(ngModel)]="vcard.profesion"></ion-input>
       </ion-col>
     </ion-row>
 
     <ion-row id="content-row" no-padding no-Lines no-border text-center *ngFor="let telefono of vcard.telefonos ; let i = index">
       <ion-col col-5>
-        <ion-input type="text" placeholder="Phone" text-center [(ngModel)]="vcard.telefonos[i].telefono"></ion-input>
+        <ion-input type="text" [placeholder]="'_phone' | translate" text-center [(ngModel)]="vcard.telefonos[i].telefono"></ion-input>
       </ion-col>
       <ion-col col-4>
         <select [(ngModel)]="vcard.telefonos[i].tipo">
-          <option value="0" selected="{{(vcard.telefonos[i].tipo == '0') ? 'selected' : ''}}">Primary</option>
-          <option value="1" selected="{{(vcard.telefonos[i].tipo == '1') ? 'selected' : ''}}">Secondary</option>
+          <option value="0" selected="{{(vcard.telefonos[i].tipo == '0') ? 'selected' : ''}}">{{'_primary' | translate
+            }}</option>
+          <option value="1" selected="{{(vcard.telefonos[i].tipo == '1') ? 'selected' : ''}}">{{'_secondary' | translate
+            }}</option>
         </select>
       </ion-col>
       <ion-col col-3>
@@ -117,13 +117,13 @@
         <button ion-button small clear [disabled]="(globalProvider.plan.advanvcard == 'N') ? true : false" (click)="galeriaImagenes('logo')"
           color="dark">
           <ion-icon name="images"></ion-icon>
-          &nbsp;logo
+          &nbsp;{{ '_logo' | translate }}
         </button>
       </ion-col>
       <ion-col>
         <button ion-button small clear (click)="galeriaImagenes('img')" color="dark">
           <ion-icon name="images"></ion-icon>
-          &nbsp;Profile
+          &nbsp;{{'_profile' | translate }}
         </button>
       </ion-col>
     </ion-row>
@@ -142,32 +142,43 @@
 
     <ion-row id="content-row" no-padding no-Lines no-border text-center>
       <ion-col>
-        <ion-input type="password" [placeholder]="(this.password == null) ? '*********' : 'Password'" text-center
-          [(ngModel)]="password" [readonly]="password == null"></ion-input>
+        <ion-input type="password" [placeholder]="(this.password == null) ? '*********' : (globalProvider.idioma && globalProvider.idioma.contenido['Password']) ? globalProvider.idioma.contenido['Password'] : 'Password'"
+          text-center [(ngModel)]="password" [readonly]="password == null"></ion-input>
       </ion-col>
       <ion-col>
         <button ion-button small color="dark" (click)="guardarPassword()">
-          {{(password == null) ? 'Change of password' : 'Cancel'}}
+          {{ ((password == null) ? '_changePassword' : '_cancel' ) | translate}}
         </button>
       </ion-col>
+    </ion-row>
+
+    <ion-row no-padding no-lines no-border>
+      <ion-item class="content-item">
+        <ion-label stacked> {{'_language' | translate}} </ion-label>
+        <ion-select (ionChange)="getIdioma($event)" text-center>
+          <ion-option *ngFor="let item of idiomas" [value]="item.id" [selected]="(globalProvider.idioma && item.id == globalProvider.idioma.key) ? true : false">
+            {{ item.text }}
+          </ion-option>
+        </ion-select>
+      </ion-item>
     </ion-row>
 
     <ion-row id="content-row" no-padding no-Lines no-border text-center>
       <ion-col>
         <button ion-button small block color="dark" (click)="edit = false">
-          Preview
+          {{ '_preview' | translate }}
         </button>
       </ion-col>
       <ion-col>
         <button ion-button small block color="dark" (click)="setOrUpdateVcardUsuario()">
-          {{(!vcard.id_vcard_usuario) ? 'Save' : 'Edit'}}
+          {{ ((!vcard.id_vcard_usuario) ? '_save' : '_edit' ) | translate}}
         </button>
       </ion-col>
     </ion-row>
 
     <button ion-button block small icon-left color="dark" (click)="signOff()">
       <ion-icon name="close"></ion-icon>
-      Sign Off
+      {{ '_signOff' | translate }}
     </button>
 
   </div>
@@ -183,7 +194,8 @@
             <button ion-button small block [style.background]="vcard.btn_color" [style.font-size]="vcard.tamanio"
               [style.font-weight]="vcard.bold" [style.font-style]="vcard.italic" [style.text-decoration]="vcard.subrayar"
               [style.color]="vcard.text_color">
-              {{(telefono.telefono != null) ? telefono.telefono : 'Phone'}}
+              {{(telefono.telefono != null) ? telefono.telefono : (globalProvider.idioma &&
+              globalProvider.idioma.contenido['Phone']) ? globalProvider.idioma.contenido['Phone'] : 'Phone'}}
             </button>
           </div>
         </div>
@@ -192,7 +204,7 @@
         <button ion-button small block [style.background]="vcard.btn_color" [style.font-size]="vcard.tamanio"
           [style.font-weight]="vcard.bold" [style.font-style]="vcard.italic" [style.text-decoration]="vcard.subrayar"
           [style.color]="vcard.text_color">
-          Emal
+          {{ '_email' | translate }}
         </button>
       </ion-col>
     </ion-row>
@@ -200,15 +212,15 @@
     <div text-center [style.font-size]="vcard.tamanio" [style.font-weight]="vcard.bold" [style.font-style]="vcard.italic"
       [style.text-decoration]="vcard.subrayar" [style.color]="vcard.text_color">
       <span *ngIf="vcard.nombre">
-        Name: {{vcard.nombre}}
+        {{ '_name' | translate }} : {{vcard.nombre}}
       </span>
       <br>
       <span *ngIf="vcard.profesion">
-        profession: {{vcard.profesion}}
+        {{ '_profession' | translate }}: {{vcard.profesion}}
       </span>
       <br>
       <span *ngIf="vcard.organisacion">
-        Company: {{vcard.organisacion}}
+        {{ '_company' | translate }}: {{ vcard.organisacion }}
       </span>
     </div>
     <ion-row id="content-row" no-padding no-Lines no-border text-center>
@@ -230,7 +242,7 @@
           [style.color]="vcard.text_color">
           <a id="href-social" [href]="(vcard.url_vcard && vcard.url_vcard != null && vcard.url_vcard != 'null' && vcard.url_vcard.trim() != '') ? httpProvider.URL_VCARD + vcard.id_usuario : '#'"
             [style.text-decoration]="(vcard.subrayar != 'null') ? vcard.subrayar : 'none'" [style.color]="(vcard.btn-color != 'null') ? vcard.btn-color : 'white'">
-            Download VCard </a>
+            {{ '_downloadVCard' | translate }} </a>
         </button>
       </ion-col>
 
@@ -238,7 +250,7 @@
         <button ion-button small block [style.background]="vcard.btn_color" [style.font-size]="vcard.tamanio"
           [style.font-weight]="vcard.bold" [style.font-style]="vcard.italic" [style.text-decoration]="vcard.subrayar"
           [style.color]="vcard.text_color" (click)="compartir(vcard.url_vcard)">
-          Share VCard
+          {{ '_shareVCard' | translate }}
         </button>
       </ion-col>
     </ion-row>

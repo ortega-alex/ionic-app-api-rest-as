@@ -6,17 +6,21 @@ import { StatusBar } from '@ionic-native/status-bar';
 
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
-import { ModalIosPage } from '../pages/sms/sms';
+import { ModalIosPage, SmsPage } from '../pages/sms/sms';
 import { LoginPage } from '../pages/login/login';
 import { RegistroPage } from '../pages/registro/registro';
 import { SocialPage } from '../pages/social/social';
 import { VcardPage } from '../pages/vcard/vcard';
-import { ProductoPage } from  '../pages/producto/producto';
+import { ProductoPage } from '../pages/producto/producto';
 import { TutorialPage } from '../pages/tutorial/tutorial';
 import { AgendaPage } from '../pages/agenda/agenda';
+import { CrearCampaniaPage } from '../pages/crear-campania/crear-campania';
+import { CampaniaPage } from '../pages/campania/campania';
+import { ModalPage } from '../pages/modal/modal';
 
 import { GlobalProvider } from '../providers/global/global';
 import { HttpProvider } from '../providers/http/http';
+import { TranslatePipe } from '../pipes/translate/translate';
 
 import { FileChooser } from '@ionic-native/file-chooser';
 import { FilePath } from '@ionic-native/file-path';
@@ -54,7 +58,12 @@ import { ColorPickerModule } from 'ngx-color-picker';
     VcardPage,
     ProductoPage,
     ModalIosPage,
-    AgendaPage
+    AgendaPage,
+    TranslatePipe,
+    CrearCampaniaPage,
+    SmsPage,
+    CampaniaPage,
+    ModalPage
   ],
   imports: [
     BrowserModule,
@@ -75,7 +84,11 @@ import { ColorPickerModule } from 'ngx-color-picker';
     VcardPage,
     ProductoPage,
     ModalIosPage,
-    AgendaPage
+    AgendaPage,
+    CrearCampaniaPage,
+    SmsPage,
+    CampaniaPage,
+    ModalPage
   ],
   providers: [
     StatusBar,

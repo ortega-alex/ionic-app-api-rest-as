@@ -249,47 +249,50 @@ export class SmsPage {
 
   setSms(list_sms: Array<Telefono>, id: number, inicio: number) {
     this.sms.send(this.numerico.transform(list_sms[inicio].telefono), list_sms[inicio].text).then(() => {
-      this.setSMSEnviadoCampanaSMS(id, list_sms[inicio].id);
-      if (list_sms.length - 1 == inicio) {
-        this.setEstadoCampaniaSMS(id, 'T');
-        this.stado_sms.estado = 'T';
-        this.getCampaniaSMSUsuario();
-        if (this.globalProvider.dispositivo == true) {
-          clearInterval(this.stado_sms.hilo);
-        }
-        this.closeModal(true);
-        return false;
-      }
+    this.setSMSEnviadoCampanaSMS(id, list_sms[inicio].id);
+    if (list_sms.length - 1 == inicio) {
+      this.setEstadoCampaniaSMS(id, 'T');
+      this.stado_sms.estado = 'T';
+      this.getCampaniaSMSUsuario();
       if (this.globalProvider.dispositivo == true) {
-        this.stado_sms.inicio++;
-        if (this.stado_sms.estado != 'A') {
-          this.setEstadoCampaniaSMS(id, 'A');
-          this.stado_sms.estado = 'A';
-          this.getCampaniaSMSUsuario();
-        }
-      } else {
-        let modal = this.modalController.create(ModalIosPage);
-        modal.present();
-        modal.onDidDismiss(data => {
-          if (data == true) {
-            inicio++;
-            this.setEstadoCampaniaSMS(id, 'A');
-            this.setSms(list_sms, id, inicio);
-          } else {
-            this.setEstadoCampaniaSMS(id, 'P');
-            this.closeModal(true);
-            return false;
-          }
-        });
+        clearInterval(this.stado_sms.hilo);
       }
+      this.closeModal(true);
+      return false;
+    }
+    if (this.globalProvider.dispositivo == true) {
+      this.stado_sms.inicio++;
+      if (this.stado_sms.estado != 'A') {
+        this.setEstadoCampaniaSMS(id, 'A');
+        this.stado_sms.estado = 'A';
+        this.getCampaniaSMSUsuario();
+      }
+    } else {
+      let modal = this.modalController.create(ModalIosPage);
+      modal.present();
+      modal.onDidDismiss(data => {
+        if (data == true) {
+          inicio++;
+          this.setEstadoCampaniaSMS(id, 'A');
+          this.setSms(list_sms, id, inicio);
+        } else {
+          this.setEstadoCampaniaSMS(id, 'P');
+          this.closeModal(true);
+          return false;
+        }
+      });
+    }
     }).catch((err) => {
-      clearInterval(this.stado_sms.hilo);
-      console.log('err: ' + JSON.stringify(err))
-    });
+       clearInterval(this.stado_sms.hilo);
+       this.closeModal(true);
+       console.log('err: ' + JSON.stringify(err))
+     });
   }
 
   setSMSEnviadoCampanaSMS(id: number, id_contenidp: string) {
-    let url = "servicio=setSMSEnviadoCampanaSMS&id_campaniaSMS=" + id + "&id_campaniaSMS_contenido=" + id_contenidp;
+    let url = "servicio=setSMSEnviadoCampanaSMS&id_campaniaSMS=" + id +
+      "&id_campaniaSMS_contenido=" + id_contenidp +
+      "&id_usuario=" + this.globalProvider.usuario.id_usuario;
     this.httpProvider.get(url).catch(err => console.log('err: ' + JSON.stringify(err)));
   }
 
@@ -353,9 +356,7 @@ export class SmsPage {
     <ion-content padding text-center>
       <div id="siguiente" (click)="close(true)">
        <p id="parrafo">
-            Tap
-            <br>  
-            me
+          {{ '_tapMe' | translate }}
         </p>
     </div>
     <ion-row class="content-row">
@@ -363,23 +364,26 @@ export class SmsPage {
             <button id="content-row-btn" small ion-button block color="danger" (click)="close()">
                 <ion-icon name="close">
                 </ion-icon>
-                &nbsp;Cancel
+                &nbsp;{{ '_cancel' | translate }}
             </button>
         </ion-col>
     </ion-row>
     </ion-content>
   ` , styles: [
     `#siguiente{
-      text-align: center;
       font-size: 6em;
       color:#666666; 
       height: 90% !important;
-        width: 100% !important;
-        padding-top: 30%; 
-        #parrafo{
-            display: block;
-            margin: auto;
-        }
+      width: 100% !important;
+      display: flex;
+      justify-content: center;
+      align-content: center;
+      flex-direction: column;
+      font-weight: bold;
+      #parrafo{
+          display: block;
+          margin: auto;
+      }
     }`
   ]
 })

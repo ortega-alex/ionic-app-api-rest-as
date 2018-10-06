@@ -73,7 +73,6 @@ export class CampaniaPage {
     catalogoEstado: [],
     nombre_archivo: null,
     sms_tex: null,
-    //style: { background: '', opacity: '' },
     panel_llamada: false
   };
 
@@ -82,6 +81,7 @@ export class CampaniaPage {
   spinner1: boolean;
   panel_ios: boolean = false;
   btn_play: boolean = false;
+  llamo: string = 'N';
 
   constructor(
     public navCtrl: NavController,
@@ -291,7 +291,9 @@ export class CampaniaPage {
       '&sms_texto=' + this.data.sms +
       '&individual=' + individual +
       '&id_usuario=' + this.globalProvider.usuario.id_usuario +
-      '&fecha_dispositivo=' + fecha.replace('T', ' ');
+      '&fecha_dispositivo=' + fecha.replace('T', ' ') +
+      '&llamo=' + this.llamo;
+
     this.httpProvider.get(url).then((res: any) => {
       if (res.error == 'false') {
         this.data.notas = '';
@@ -300,6 +302,7 @@ export class CampaniaPage {
         this.data.date = null;
         let date = new Date();
         this.globalProvider.setFecha(date);
+        this.llamo = 'N';
         if (this.paus == false) {
           if (this.validarTiempo() == false) {
             this.util.panel_llamada = false;
@@ -318,6 +321,7 @@ export class CampaniaPage {
         this.globalProvider.alerta(res.mns);
       }
     }).catch(err => console.log('err: ' + JSON.stringify(err)));
+
   }
 
   setEditContenidoCampaniaManual() {
@@ -342,7 +346,8 @@ export class CampaniaPage {
       "&hidEditField_1=" + cambio +
       "&hidEditField_2=" + cambio +
       "&hidEditField_1_valor=" + this.getFilaCampania.campo_1_text +
-      "&hidEditField_2_valor=" + this.getFilaCampania.campo_1_text;
+      "&hidEditField_2_valor=" + this.getFilaCampania.campo_1_text +
+      '&llamo=' + this.llamo;
     this.httpProvider.get(url).then((res: any) => {
       if (res.error == 'false') {
         this.data.notas = '';
@@ -350,6 +355,7 @@ export class CampaniaPage {
         this.key = null;
         let date = new Date();
         this.globalProvider.setFecha(date);
+        this.llamo = 'N';
         if (this.paus == false) {
           if (this.validarTiempo() == false) {
             this.util.panel_llamada = false;
@@ -369,6 +375,7 @@ export class CampaniaPage {
   }
 
   call(telefono, nuevo: boolean = true) {
+    this.llamo = 'Y';
     if (telefono != null && telefono.trim() != '') {
       this.callNumber.callNumber(telefono, true).then(res => {
         if (nuevo == true) {
@@ -399,12 +406,12 @@ export class CampaniaPage {
   }
 
   chekedSms(event) {
-      this.msnS = event.value;
-      if (event.value == true) {
-        this.data.sms = this.campania.sms_predeterminado;
-      } else {
-        this.data.sms = null;
-      }
+    this.msnS = event.value;
+    if (event.value == true) {
+      this.data.sms = this.campania.sms_predeterminado;
+    } else {
+      this.data.sms = null;
+    }
   }
 
   setContacto(telefono) {
@@ -560,9 +567,9 @@ export class CampaniaPage {
           } else {
             this.max = this.contenido.length;
           }
-        }else {
+        } else {
           this.btn_play = false;
-        }       
+        }
         this.spinner = false;
       } else {
         this.globalProvider.alerta(res.msn);
@@ -639,7 +646,7 @@ export class CampaniaPage {
       "&id_campania=" + id +
       "&tipo=" + tipo +
       "&sms=" + this.data.sms;
-    this.httpProvider.get(url).then((res : any) => {
+    this.httpProvider.get(url).then((res: any) => {
       if (res.error == 'false') {
         this.globalProvider.alerta(res.msn);
       } else {

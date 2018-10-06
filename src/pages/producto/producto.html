@@ -43,28 +43,19 @@
       <ion-col col-1></ion-col>
       <ion-col col-10>
         <button no-pading no-margin ion-button round block color="fb" (click)="purchase()">
-          CONTINUE
+          {{ '_continue' | translate }}
         </button></ion-col>
       <ion-col col-1></ion-col>
       <ion-col col-1></ion-col>
       <ion-col>
         <button no-pading no-margin ion-button round block color="fondo" clear (click)="closeModal()">
-          NO THANKS
+          {{ '_noThanks' | translate }}
         </button></ion-col>
       <ion-col col-1></ion-col>
     </ion-row>
   </div>
   <ion-scroll scrollY="true" id="informacion" text-center no-Lines no-border no-padding *ngIf="combos.length > 0">
-    Payment will be charged to your iTunes Account at confirmation of purchase Subscription automatically renews unless
-    auto-renew
-    is turned off at least 24-hours before the end of the current period Account will be charged for renewal within
-    24-hours
-    prior to the end of the current period, and identify the cost of the renewal Subscriptions may be managed by the
-    user
-    and auto-renewal may be turned off by going to the user's Account Settings after purchase Any unused portion of a
-    free
-    trial period, if offered, will be forfeited when the user purchases a subscription to that publication, where
-    applicable
+    {{ '_descriptionProduc' | translate }}
     <a href=" https://advansales.com/terms.html"> https://advansales.com/terms.html</a>
     <a href="https://advansales.com/privacy_policies.html">https://advansales.com/privacy_policies.html</a>
     <a href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/">https://www.apple.com/legal/internet-services/itunes/dev/stdeula/</a>

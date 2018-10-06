@@ -189,7 +189,7 @@ export class ProductoPage {
     console.log(url);
     this.httpProvider.post(data, url).then(() => {
       this.getComboProducto();
-      this.globalProvider.setProductoId(product.id);
+      //this.globalProvider.setProductoId(product.id);
     }).catch(err => console.log('err: ' + JSON.stringify(err)));
   }
 }

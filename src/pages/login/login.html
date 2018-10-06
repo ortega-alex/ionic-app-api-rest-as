@@ -3,22 +3,22 @@
   <br>
   <form [formGroup]="logIn" (ngSubmit)="login()">
     <ion-item no-padding no-lines>
-      <ion-input text-center type="email" placeholder="EMAIL" formControlName="correo"></ion-input>
+      <ion-input text-center type="email" [placeholder]="'_email' | translate" formControlName="correo"></ion-input>
     </ion-item>
     <p id="err" ion-text [hidden]="logIn.controls.correo.valid || submitted === false" color="danger" padding-left>
-      Enter Mail...
+      {{'_enterEmail' | translate }}...
     </p>
     <ion-item no-padding no-lines>
-      <ion-input text-center type="password" placeholder="Password" formControlName="clave"></ion-input>
+      <ion-input text-center type="password" [placeholder]="'_password' | translate" formControlName="clave"></ion-input>
     </ion-item>
     <p id="err" ion-text [hidden]="logIn.controls.clave.valid || submitted === false" color="danger" padding-left>
-      Enter Password...
+      {{ '_enterPassword' | translate }}...
     </p>
     <button ion-button block color="dark" type="submit">
-      LOGIN
+      {{ '_login' | translate }}
     </button>
   </form>
   <button ion-button block color="dark" (click)="registro()">
-    REGISTER
+    {{ '_register' | translate }}
   </button>
 </ion-content>

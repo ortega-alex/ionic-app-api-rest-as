@@ -1,19 +1,19 @@
 <ion-content class="contenido-home" no-Lines [style.background]="home_util.background">
   <div class="content-header" *ngIf="conexion == false" [style.padding]="(globalProvider.dispositivo == false) ? '5% 0% 0% 0%' : ''">
     <ion-row text-center no-margin no-lines class="conten-row">
-      <ion-col text-center no-margin no-lines id="conten-row" text-left>
+      <ion-col col-2 text-center no-margin no-lines id="conten-row" text-left>
         <button *ngIf="sms_activo == false" ion-button clear small no-margin color="dark" (click)="drawAgenda()" style="font-size: 1.5em;">
           <ion-icon no-padding *ngIf="globalProvider.dispositivo == true" name="add"></ion-icon>
           <ion-icon no-padding *ngIf="globalProvider.dispositivo == false" ios="md-add" md="lg-add"></ion-icon>
         </button>
       </ion-col>
-      <ion-col text-center no-margin no-lines id="conten-row">
+      <ion-col col-8 text-center no-margin no-lines id="conten-row">
         <img id="title" src="assets/imgs/title.png" *ngIf="sms_activo == false">
         <button id="conten-row-btn" ion-button small block (click)="smsModal(true)" color="dark" *ngIf="sms_activo == true && campaniaSMS.length > 0">
-          <b id="btn-title">SMS MANAGER</b>
+          <b id="btn-title">{{ '_smsManager' | translate }} </b>
         </button>
       </ion-col>
-      <ion-col text-center no-margin no-padding no-lines id="conten-row" text-right>
+      <ion-col col-2 text-center no-margin no-padding no-lines id="conten-row" text-right>
         <button *ngIf="sms_activo == false" ion-button clear small no-margin color="dark" (click)="menu = !menu" style="font-size: 1.5em;">
           <ion-icon no-padding *ngIf="globalProvider.dispositivo == true" name="more"></ion-icon>
           <ion-icon no-padding *ngIf="globalProvider.dispositivo == false" ios="md-more" md="lg-more"></ion-icon>
@@ -23,31 +23,31 @@
   </div>
 
   <div *ngIf="sms_activo == false && plan.suscrito == 'N'" style="margin:0% 1%">
-    <button ion-button no-padding block color="decorador" (click)="productos()">
-      <b>Get AdvanSales Pro</b>
+    <button ion-button no-padding block color="decorador" (click)="drawProductos()">
+      <b>{{ '_advanSalesPro' | translate }}</b>
     </button>
   </div>
 
   <div *ngIf="menu && sms_activo == false" style="margin:0% 1%">
     <button ion-button block (click)="crearCampania() ; menu = false" color="light" icon-left style="margin-top:2%">
       <ion-icon name="call"></ion-icon>
-      <b>Upload New Leads</b>
+      <b>{{ '_uploadLeads' | translate }}</b>
     </button>
     <button ion-button block (click)="selectSms() ; menu = false" color="light" icon-left style="margin-top:2%">
       <ion-icon name="chatboxes"></ion-icon>
-      <b>Create SMS Campaing</b>
+      <b>{{ '_createSMSCampaing' | translate }}</b>
     </button>
     <button ion-button block (click)="drawSocial() ; menu = false" color="light" icon-left style="margin-top:2%">
       <ion-icon name="globe"></ion-icon>
-      <b>Social Media</b>
+      <b>{{ '_socialMedia' | translate }}</b>
     </button>
     <button ion-button block (click)="drawVcard() ; menu = false" color="light" icon-left style="margin-top:2%">
       <ion-icon name="people"></ion-icon>
-      <b>VCard and Profile</b>
+      <b>{{ '_vCardProfile' | translate }}</b>
     </button>
     <button ion-button block (click)="drawTutorials()  ; menu = false " color="light" icon-left style="margin-top:2%">
       <ion-icon name="film"></ion-icon>
-      <b>Tutorials</b>
+      <b>{{ '_tutorials' | translate }}</b>
     </button>
   </div>
 
@@ -56,12 +56,12 @@
     <ion-refresher (ionRefresh)="doRefresh($event)">
       <ion-refresher-content></ion-refresher-content>
     </ion-refresher>
-    <p id="conten-info" *ngIf="sms_activo == true && !sin_campanias">Tap on any lists</p>
+    <p id="conten-info" *ngIf="sms_activo == true && !sin_campanias">{{ '_taplists' | translate }}</p>
     <ion-row class="conten-row" *ngIf="home_util.compartir == true && sms_activo == false">
       <ion-col id="conten-row">
         <button id="content-row-btn" ion-button block icon-left (click)="share()">
           <ion-icon name="logo-facebook"></ion-icon>
-          share
+          {{ '_share' | translate }}
         </button>
       </ion-col>
     </ion-row>
@@ -88,7 +88,7 @@
       </ion-row>
       <ion-row class="row-cont">
         <ion-col id="row-cont">
-          last call: {{campania.mod_fecha}}
+          {{ '_lastCall' | translate }} : {{campania.mod_fecha}}
         </ion-col>
       </ion-row>
     </div>
@@ -100,9 +100,8 @@
       </div>
       <ion-row class="row-cont">
         <ion-col id="row-cont" col-2>
-          <ion-icon *ngIf="globalProvider.dispositivo == true" id="icon-delete" name="paper-plane" (click)="crearCampania( m)"></ion-icon>
-          <ion-icon *ngIf="globalProvider.dispositivo == false" id="icon-delete" ios="md-paper-plane" md="md-paper-plane"
-            (click)="crearCampania( m)"></ion-icon>
+          <ion-icon *ngIf="globalProvider.dispositivo == true" id="icon-delete" name="add" (click)="crearCampania( m)"></ion-icon>
+          <ion-icon *ngIf="globalProvider.dispositivo == false" id="icon-delete" ios="md-add" md="lg-add" (click)="crearCampania( m)"></ion-icon>
         </ion-col>
         <ion-col id="row-cont">
           <input id="title" [readonly]="edid_name_manual[i].edit" [(ngModel)]="m.nombre" text-center type="text"
@@ -122,14 +121,14 @@
       </ion-row>
       <ion-row class="row-cont">
         <ion-col id="row-cont">
-          last call: {{m.mod_fecha}}
+          {{ '_lastCall' | translate }} : {{m.mod_fecha}}
         </ion-col>
       </ion-row>
     </div>
 
     <div id="mensaje" *ngIf="sin_campanias" padding text-center [style.color]="(sms_activo == false) ? 'gray' : 'white'"
       [style.padding]="(menu == false) ? '50% 5%' : ''">
-      Currently you don't have any leads lists please upload or create one
+      {{ "_warningList" | translate }}
     </div>
 
     <div class="espacio"></div>
@@ -142,7 +141,7 @@
           (click)="monitoreo()"></ion-icon>
       </ion-col>
       <ion-col id="conten-row" col-8>
-        <p id="title">{{home_util.title}}</p>
+        <p id="title">{{ home_util.title | translate }}</p>
       </ion-col>
       <ion-col id="conten-row" col-2></ion-col>
     </ion-row>
@@ -151,35 +150,36 @@
       <ion-col id="conten-row">
         <button id="content-row-btn" ion-button block icon-left (click)="share()">
           <ion-icon name="logo-facebook"></ion-icon>
-          share
+          {{ '_share' | translate }}
         </button>
       </ion-col>
     </ion-row>
     <ion-row class="conten-row" *ngIf="home_util.spinner == false">
       <ion-col id="conten-row">
         <button id="conten-row-btn" ion-button block icon-right color="danger" (click)="monitoreo()">
-          Stop
+          {{ '_stop' | translate }}
           <ion-icon name="help-circle"></ion-icon>
         </button>
       </ion-col>
       <ion-col col-12 id="conten-row" *ngIf="globalProvider.dispositivo == true">
         <br>
         <p id="parrafo">
-          1. To use Sync technology login(pc/mac) into Advansales.com with the same user and password
+          1. {{ '_syncInstruction1' | translate
+          }}
         </p>
         <br>
         <p id="parrafo">
-          2. Select "Enter" into your campaign list you want to call</p>
+          2. {{ "_syncInstruction2" | translate }}</p>
         <br>
         <p id="parrafo">
-          3. Click on the "Continue Calling" button and your phone will start to call the list
+          3. {{ "_syncInstruction3" | translate }}
         </p>
         <br>
       </ion-col>
       <ion-col col-12 id="conten-row" *ngIf="globalProvider.dispositivo == false">
         <br>
         <p id="parrafo">
-          To use Sync technology login(pc/mac) into Advansales.com now
+          {{ '_syncInstruction4' | translate }}
         </p>
         <br>
       </ion-col>
@@ -197,7 +197,7 @@
 
   <ion-fab bottom center *ngIf="conexion == false && sms_activo == false">
     <button ion-fab color="dark" (click)="monitoreo()">
-      SYNC
+      {{ '_sync' | translate }}
     </button>
   </ion-fab>
 </ion-content>
@@ -206,12 +206,12 @@
   <ion-row no-padding no-margin no-lines>
     <ion-col>
       <button ion-button block small color="dark" (click)="selectSms()" style="margin:0%">
-        Cancel
+        {{ '_cancel' | translate }}
       </button>
     </ion-col>
     <ion-col>
       <button ion-button block small color="dark" (click)="smsModal()" [disabled]="sin_campanias" style="margin:0%">
-        Create SMS
+        {{ '_createSMS' | translate }}
       </button>
     </ion-col>
   </ion-row>

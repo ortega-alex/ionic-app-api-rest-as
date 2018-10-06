@@ -7,6 +7,11 @@ import { Usuario, Plan } from '../../model/Usuario';
 import 'rxjs/add/operator/map';
 import { getMilisegundos } from '../../pipes/filtros/filtros';
 
+export interface Idioma {
+  key: string,
+  contenido: Object
+}
+
 @Injectable()
 export class GlobalProvider {
 
@@ -16,36 +21,22 @@ export class GlobalProvider {
   private get_milisegundos = new getMilisegundos();
   public time: number;
   public token: any;
-  public producto_id : string;
-  public dispositivo : boolean;
+  public dispositivo: boolean;
+  public idioma: Idioma;
 
   constructor(
     public http: HttpClient,
     private storage: Storage,
     private load: LoadingController,
     private htt: Http,
-    private platFrom : Platform
+    private platFrom: Platform
   ) {
     this.dispositivo = (this.platFrom.is('android')) ? true : false;
     this.getUsuario();
-    this.getProductoId();
+    this.getIdioma();
     this.htt.get('assets/utilitario.json').map(res => res.json()).subscribe(data => {
       this.data = data;
     });
-  }
-
-  setProductoId(producto_id : string) : void {
-    this.storage.set('producto_id' , producto_id);
-  }
-
-  deleteProductoId() : void{
-    this.storage.remove('producto_id');
-  }
-
-  getProductoId(){
-   this.storage.get('producto_id').then((producto_id) => {
-     this.producto_id = producto_id;
-   }); 
   }
 
   setToken(token: any): void {
@@ -99,14 +90,6 @@ export class GlobalProvider {
     });
   }
 
-  /*setNum(num: number) {
-    this.storage.set('num', num);
-  }
-
-  deleteNum() {
-    this.storage.remove('num');
-  }*/
-
   setListSms(nombre: string, list_sms: any): void {
     this.storage.set(nombre, list_sms);
   }
@@ -140,5 +123,17 @@ export class GlobalProvider {
     setTimeout(() => {
       loader.dismiss();
     }, 3000);
+  }
+
+  setIdioma() {
+    this.storage.set("id", this.idioma)
+  }
+
+  getIdioma() {
+    this.storage.get("id").then((res: Idioma) => {
+      if (res) {
+        this.idioma = res;
+      }
+    });
   }
 }

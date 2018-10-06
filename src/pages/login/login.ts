@@ -43,7 +43,11 @@ export class LoginPage {
     });
   }
 
-  ionViewDidLoad() { }
+  ionViewDidLoad() {
+    if (!this.globalProvider.idioma){
+      this.menu();
+    }
+  }
 
   menu() {
     this.app.getRootNav().setRoot(MyApp);

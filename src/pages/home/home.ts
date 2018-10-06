@@ -1,14 +1,16 @@
 import { Component } from '@angular/core';
 import { NavController, App, ModalController, Platform, AlertController } from 'ionic-angular';
 
-import { GlobalProvider } from '../../providers/global/global';
-import { HttpProvider } from '../../providers/http/http';
 import { SocialPage } from '../social/social';
 import { ProductoPage } from '../producto/producto';
 import { VcardPage } from '../vcard/vcard';
 import { TutorialPage } from '../tutorial/tutorial';
 import { AgendaPage } from '../agenda/agenda';
+import { CrearCampaniaPage } from '../crear-campania/crear-campania';
+import { SmsPage } from '../sms/sms';
 
+import { GlobalProvider } from '../../providers/global/global';
+import { HttpProvider } from '../../providers/http/http';
 import { Numerico, Replace, Fecha, Hora, getMilisegundos, Diferencia } from '../../pipes/filtros/filtros';
 import { Persona, CampaniaSms, HomeUtil } from '../../model/interfaces';
 import { MyApp } from '../../app/app.component';
@@ -21,6 +23,7 @@ import { SMS } from '@ionic-native/sms';
 import { Calendar } from '@ionic-native/calendar';
 import { AdMobFree, AdMobFreeBannerConfig, AdMobFreeRewardVideoConfig } from '@ionic-native/admob-free';
 import { Facebook, FacebookLoginResponse } from '@ionic-native/facebook';
+import { CampaniaPage } from '../campania/campania';
 
 @Component({
   selector: 'page-home',
@@ -53,7 +56,7 @@ export class HomePage {
   private manual: Array<any> = [];
   private home_util: HomeUtil = {
     compartir: null,
-    title: 'Waiting connection with pc ...',
+    title: '_waitingConnection',
     spinner: null,
     background: null,
   };
@@ -192,7 +195,7 @@ export class HomePage {
   }
 
   crearCampania(data: any = null) {
-    let modal = this.modalControlle.create('CrearCampaniaPage', { data: data });
+    let modal = this.modalControlle.create(CrearCampaniaPage, { data: data });
     modal.present();
     modal.onDidDismiss(data => {
       if (data) {
@@ -273,7 +276,7 @@ export class HomePage {
         if (res.version_app != '2.1.0') {
           let url: string;
           let alert = this.alertController.create({
-            title: 'New Version',
+            title: this.globalProvider.idioma.contenido['_newVersion'],
             subTitle: res.version_app_msn,
             buttons: [
               {
@@ -317,7 +320,7 @@ export class HomePage {
   irACampania(campania: any, posicion_campania: number, estado: number, posicion: number, tipo_campania: boolean = true) {
     if (this.bloqueo() == false) {
       if (this.sms_activo == false) {
-        let modal = this.modalControlle.create('CampaniaPage', { campania: campania, posicion_campania: posicion_campania, estado: estado, posicion: posicion, tipo_campania: tipo_campania });
+        let modal = this.modalControlle.create(CampaniaPage, { campania: campania, posicion_campania: posicion_campania, estado: estado, posicion: posicion, tipo_campania: tipo_campania });
         modal.present();
         modal.onDidDismiss(data => {
           if (data) {
@@ -358,7 +361,7 @@ export class HomePage {
       if (res.error == 'false') {
         this.home_util.spinner = false;
         this.getAccionTelefono();
-        this.home_util.title = 'Established connection';
+        this.home_util.title = '_establishedConnection';
       }
     }).catch(err => console.log('err: ' + JSON.stringify(err)));
   }
@@ -744,13 +747,13 @@ export class HomePage {
     if (historial == false && this.campania_sms.length == 0) {
       let alert = this.alertController.create({
         title: '',
-        subTitle: 'You need to select a minimum of 1 list to create a SMS bulk campaign',
+        subTitle: this.globalProvider.idioma.contenido['_warningListSms'],
         buttons: ['Ok']
       });
       alert.present();
       return false;
     }
-    let modal = this.modalControlle.create('SmsPage', { historial: historial, campania_sms: this.campania_sms, id: null });
+    let modal = this.modalControlle.create(SmsPage, { historial: historial, campania_sms: this.campania_sms, id: null });
     modal.present();
     modal.onDidDismiss(data => {
       if (data) {
@@ -777,7 +780,7 @@ export class HomePage {
     this.navCtrl.push(SocialPage);
   }
 
-  productos() {
+  drawProductos() {
     this.navCtrl.push(ProductoPage);
   }
 

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, App } from 'ionic-angular';
 
 import { GlobalProvider } from '../../providers/global/global';
 import { HttpProvider } from '../../providers/http/http';
@@ -22,21 +22,26 @@ export class RegistroPage {
   esImal = new isEmail();
   error: boolean;
   noValido: boolean;
+  idiomas: Array<any>;
 
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
     public globalProvider: GlobalProvider,
-    public httpProvider: HttpProvider
+    public httpProvider: HttpProvider,
+    private app: App
   ) {
+    this.idiomas = [];
+    this.getCatalogo();
     this.contador = 0;
     this.catalogo = [
-      { label: 'Name', tipo: 'text', input: null, color: '#262626', ejemplo: 'e.g. John' },
-      { label: 'Last Name', tipo: 'text', input: null, color: 'white', ejemplo: 'e.g. Smith' },
-      { label: 'Email', tipo: 'emal', input: null, color: 'white', ejemplo: 'e.g. john@email.com' },
-      { label: 'Password', tipo: 'password', input: null, color: 'white', ejemplo: 'e.g. Abc123**' },
-      { label: 'Phone', tipo: 'text', input: null, color: 'white', ejemplo: 'e.g. 001-512-944-6475.' },
-      { label: 'Nombre Completo', tipo: 'text', input: null, color: 'white', ejemplo: 'e.g. text' }
+      { label: '_language', tipo: 'selected', input: "en", color: '#262626', ejemplo: null },
+      { label: '_name', tipo: 'text', input: null, color: 'white', ejemplo: '_egName' },
+      { label: '_lastName', tipo: 'text', input: null, color: 'white', ejemplo: '_egLastName' },
+      { label: '_email', tipo: 'emal', input: null, color: 'white', ejemplo: '_egEmail' },
+      { label: '_password', tipo: 'password', input: null, color: 'white', ejemplo: '_egPassword' },
+      { label: '_phone', tipo: 'text', input: null, color: 'white', ejemplo: '_egPhone' },
+      { label: null, tipo: 'text', input: null, color: 'white', ejemplo: null }
     ];
   }
 
@@ -59,11 +64,11 @@ export class RegistroPage {
     if (this.catalogo[this.contador].input == null || this.catalogo[this.contador].input.trim() == '') {
       this.error = true;
     } else {
-      if (this.contador == 2 && !this.esImal.transform(this.catalogo[this.contador].input)) {
+      if (this.contador == 3 && !this.esImal.transform(this.catalogo[this.contador].input)) {
         this.error = true;
         this.noValido = true;
       } else {
-        if (this.contador == 4) {
+        if (this.contador == 5) {
           this.guardarRegistro();
         } else {
           this.contador++;
@@ -94,7 +99,7 @@ export class RegistroPage {
       '&plataforma=' + platform +
       '&telefono=' + this.catalogo[4].input +
       '&timezone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
-    this.httpProvider.get(url).then((res : any) => {
+    this.httpProvider.get(url).then((res: any) => {
       this.load.dismiss();
       if (res.error == 'false') {
         this.globalProvider.alerta(res.msn);
@@ -106,5 +111,21 @@ export class RegistroPage {
       this.load.dismiss();
       console.log('err: ' + JSON.stringify(err))
     });
+  }
+
+  getIdioma(id: string) {
+    let url: string = "http://192.168.1.57:3000/idioma/" + id;
+    this.httpProvider.getTem(url).then((res: Object) => {
+      this.globalProvider.idioma = { key: id, contenido: res };
+      this.globalProvider.setIdioma();
+      this.app.getRootNav().setRoot(RegistroPage);
+    }).catch(err => console.log('err idioma: ' + err.toString()));
+  }
+
+  getCatalogo() {
+    let url: string = "http://192.168.1.57:3000/catalogo";
+    this.httpProvider.getTem(url).then((res: Array<any>) => {
+      this.idiomas = res;
+    }).catch(err => console.log('err: ' + err.toString()));
   }
 }

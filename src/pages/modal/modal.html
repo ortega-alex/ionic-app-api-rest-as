@@ -4,7 +4,7 @@
         <ion-row class="row-cont" *ngIf="globalProvider.plan.mostrar_publicidad_video == 'Y'">
             <ion-col id="row-cont">
                 <button id="row-cont-btn" ion-button small icon-right block color="dark" (click)="showVideo()">
-                    {{ (segundos == 10) ? 'Get more time ' : segundos }} {{ (time && segundos == 10) ? time.hora+":"+time.minuto+":"+time.segundo:
+                    {{ (segundos == 10) ? globalProvider.idioma.contenido['_getMoreTime'] : segundos }} {{ (time && segundos == 10) ? time.hora+":"+time.minuto+":"+time.segundo:
                     (segundos == 10) ? '0' : '' }}
                 </button>
             </ion-col>
@@ -62,7 +62,7 @@
             <ion-col id="row-cont">
                 <ion-item class="from-item">
                     <ion-label id="from-label" stacked>
-                        Notes:
+                        {{ '_note' | translate }}:
                     </ion-label>
                     <ion-textarea id="textarea-notes" text-center [(ngModel)]="data.notas" text-lg:992px>
                     </ion-textarea>
@@ -79,7 +79,7 @@
             <ion-col col-6 id="row-cont">
                 <ion-item no-Lines class="from-item">
                     <ion-label id="from-label-sms">
-                        SMS:
+                        {{ '_sms' | translate }}:
                     </ion-label>
                     <ion-toggle id="from-toggle" color="danger" checked="{{ estado_msn }}" (ionChange)="chekedSms($event)">
                     </ion-toggle>
@@ -104,7 +104,7 @@
             <ion-col col-4 id="row-cont-title">
                 <ion-item class="from-item">
                     <p id="title">
-                        Reminder
+                        {{ '_reminder' | translate }}
                     </p>
                 </ion-item>
             </ion-col>

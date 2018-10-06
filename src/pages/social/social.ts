@@ -69,15 +69,15 @@ export class SocialPage {
     this.imagenes = [];
     this.videos = [];
     this.posicion_logo = [
-      { title: 'left top', posicion: null, id: null },
-      { title: 'top center', posicion: null, id: null },
-      { title: 'right top', posicion: null, id: null },
-      { title: 'left center', posicion: null, id: null },
-      { title: 'center', posicion: null, id: null },
-      { title: 'right center', posicion: null, id: null },
-      { title: 'left bottom', posicion: null, id: null },
-      { title: 'bottom center', posicion: null, id: null },
-      { title: 'right bottom', posicion: null, id: null }
+      { title: '_leftTop', posicion: null, id: null },
+      { title: '_topCenter', posicion: null, id: null },
+      { title: '_rightTop', posicion: null, id: null },
+      { title: '_leftCenter', posicion: null, id: null },
+      { title: '_center', posicion: null, id: null },
+      { title: '_rightCenter', posicion: null, id: null },
+      { title: '_leftBottom', posicion: null, id: null },
+      { title: '_bottomCenter', posicion: null, id: null },
+      { title: '_rightBottom', posicion: null, id: null }
     ];
     this.idioma = 'en';
     this.hashtag_selected = [];
