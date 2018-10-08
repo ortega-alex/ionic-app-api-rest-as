@@ -45,7 +45,7 @@ export class MyApp {
     private alertController: AlertController,
     private appRate: AppRate
   ) {
-    this.getIdioma();
+    this.getLenguajeUsuario();
     platform.ready().then(() => {
       statusBar.styleDefault();
       //this.globalProvider.getIdioma();
@@ -116,23 +116,25 @@ export class MyApp {
             numeros.push({ numero: r.number, fecha: fecha, tipo: (r.type == 2) ? 'Lost call' : 'Made call' });
           }
         }
+        let lg: string = (this.globalProvider.idioma) ? this.globalProvider.idioma.key : "en";
         let url = 'servicio=getIssetContactosTelefono';
-        let data = {
+        let data: Object = {
           id_usuario: this.globalProvider.usuario.id_usuario,
           fecha: this.fechas.transform(this.set_milisegundos.transform(fecha)),
-          llamadas: numeros
+          llamadas: numeros,
+          lg: lg
         }
         this.httpProvider.post(data, url).then(res => {
           this.respuesta = res;
           if (this.respuesta.error == 'false') {
             if (this.respuesta.llamadas && this.respuesta.llamadas.length > 0) {
-              let modal = this.modalControlle.create( ModalPage , { llamadas: this.respuesta.llamadas });
+              let modal = this.modalControlle.create(ModalPage, { llamadas: this.respuesta.llamadas });
               modal.present();
             }
           }
-        }).catch(err => console.log('err http: ' + JSON.stringify(err)));
-      }).catch(err => console.log('err calLog: ' + JSON.stringify(err)));
-    }).catch(err => console.log('err storage: ' + JSON.stringify(err)));
+        }).catch(err => console.log('err: ', err.toString()));
+      }).catch(err => console.log('err: ', err.toString()));
+    }).catch(err => console.log('err: ', err.toString()));
   }
 
   private initPushNotification() {
@@ -142,7 +144,7 @@ export class MyApp {
       } else {
         console.log('We do not have permission to send push notifications');
       }
-    }).catch(err => console.log('err: ' + JSON.stringify(err)));
+    }).catch(err => console.log('err: ', err.toString()));
     if (!this.platform.is('cordova')) {
       console.warn('Push notifications not initialized. Cordova is not available - Run in physical device');
       return;
@@ -186,7 +188,7 @@ export class MyApp {
         confirmAlert.present();
       } else {
         if (data.additionalData.id_campania_sms && data.additionalData.id_campania_sms != null) {
-          let modal = this.modalControlle.create( SmsPage , { historial: true, campania_sms: null, id: data.additionalData.id_campania_sms });
+          let modal = this.modalControlle.create(SmsPage, { historial: true, campania_sms: null, id: data.additionalData.id_campania_sms });
           modal.present();
         }
       }
@@ -216,18 +218,16 @@ export class MyApp {
     this.appRate.promptForRating(false);
   }
 
-  private getIdioma() {
+  private getLenguajeUsuario() {
     this.storage.get('id').then((idioma: Idioma) => {
       if (!idioma) {
-        //console.log("nada");
-        let url: string = "http://192.168.1.57:3000/idioma/en";
-        this.httpProvider.getTem(url).then((res: Object) => {
+        let url: string = "servicio=getLenguajeUsuario&lenguaje=en&lg=en";
+        this.httpProvider.get(url).then((res: Object) => {
           this.globalProvider.idioma = { key: "en", contenido: res };
           this.globalProvider.setIdioma();
         }).catch(err => console.log('err idioma: ' + err.toString()));
       } else {
-        //console.log(idioma)
-        this.globalProvider.idioma = { key: idioma.key , contenido: idioma.contenido };
+        this.globalProvider.idioma = { key: idioma.key, contenido: idioma.contenido };
       }
     }).catch(err => console.log('err: ', err.toString()));
   }

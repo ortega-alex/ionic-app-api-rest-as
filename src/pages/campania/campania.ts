@@ -188,19 +188,20 @@ export class CampaniaPage {
   }
 
   setBloqueoPublicidadUsuario(tipo: string, fecha: string = null, hora: string = null, creditos: any = null) {
-    let url = 'servicio=setBloqueoPublicidadUsuario' +
+    let url: string = 'servicio=setBloqueoPublicidadUsuario' +
       '&bloqueo=' + tipo +
       '&id_usuario=' + this.globalProvider.usuario.id_usuario +
       '&fecha=' + fecha +
       '&hora=' + hora +
-      '&creditos=' + creditos;
+      '&creditos=' + creditos +
+      '&lg=' + this.globalProvider.idioma.key;
     this.httpProvider.get(url).then((res: any) => {
       if (res.error == 'false') {
         let date = new Date(res.tiempo_usuario);
         this.globalProvider.setTime(this.getmilisegundos.transform(date));
         this.tiempoActual();
       }
-    }).catch(err => console.log('err: ' + JSON.stringify(err)));
+    }).catch(err => console.log('err: ', err.toString()));
   }
 
   prepareVideo() {
@@ -228,7 +229,8 @@ export class CampaniaPage {
   }
 
   getFilaActivaCampania() {
-    let url = 'servicio=getFilaActivaCampania&id_campania=' + this.campania.id_campania;
+    let url: string = 'servicio=getFilaActivaCampania&id_campania=' + this.campania.id_campania +
+      '&lg=' + this.globalProvider.idioma.key;
     this.httpProvider.get(url).then((res: any) => {
       if (res.error == 'false') {
         if (res.estado != 'F') {
@@ -247,14 +249,14 @@ export class CampaniaPage {
       } else {
         this.pausar();
       }
-    }).catch(err => console.log('err: ' + JSON.stringify(err)));
+    }).catch(err => console.log('err: ', err.toString()));
   }
 
   getCatalogoEstadoFilaCampania() {
-    let url = 'servicio=getCatalogoEstadoFilaCampania';
+    let url: string = 'servicio=getCatalogoEstadoFilaCampania&lg=' + this.globalProvider.idioma.key;
     this.httpProvider.get(url).then((res: any) => {
       this.util.catalogoEstado = res;
-    }).catch(err => console.log('err: ' + JSON.stringify(err)));
+    }).catch(err => console.log('err: ', err.toString()));
   }
 
   clickStado(key) {
@@ -280,7 +282,7 @@ export class CampaniaPage {
     let fecha = this.fechas.transform(new Date());
     let sms = (this.msnS == true) ? 'Y' : 'N';
     let individual = (this.individual == true) ? 'Y' : 'N';
-    let url = 'servicio=setFilaActivaCampania' +
+    let url: string = 'servicio=setFilaActivaCampania' +
       '&id_campania=' + this.campania.id_campania +
       '&id_campania_contenido=' + this.getFilaCampania.id_campania_contenido +
       '&estado=' + this.key +
@@ -292,7 +294,8 @@ export class CampaniaPage {
       '&individual=' + individual +
       '&id_usuario=' + this.globalProvider.usuario.id_usuario +
       '&fecha_dispositivo=' + fecha.replace('T', ' ') +
-      '&llamo=' + this.llamo;
+      '&llamo=' + this.llamo +
+      '&lg=' + this.globalProvider.idioma.key;
 
     this.httpProvider.get(url).then((res: any) => {
       if (res.error == 'false') {
@@ -320,7 +323,7 @@ export class CampaniaPage {
       } else {
         this.globalProvider.alerta(res.mns);
       }
-    }).catch(err => console.log('err: ' + JSON.stringify(err)));
+    }).catch(err => console.log('err: ' + err.toString()));
 
   }
 
@@ -329,7 +332,7 @@ export class CampaniaPage {
     let sms = (this.msnS == true) ? 'Y' : 'N';
     //let individual = (this.individual == true) ? 'Y' : 'N';
     let fecha = new Date();
-    let url = 'servicio=setEditContenidoCampaniaManual' +
+    let url: string = 'servicio=setEditContenidoCampaniaManual' +
       "&id_campania_manual=" + this.campania.id_campania_manual +
       "&id_campania_manual_contenido=" + this.getFilaCampania.id_campania_manual_contenido +
       "&estado=" + this.key +
@@ -347,7 +350,8 @@ export class CampaniaPage {
       "&hidEditField_2=" + cambio +
       "&hidEditField_1_valor=" + this.getFilaCampania.campo_1_text +
       "&hidEditField_2_valor=" + this.getFilaCampania.campo_1_text +
-      '&llamo=' + this.llamo;
+      '&llamo=' + this.llamo +
+      '&lg=' + this.globalProvider.idioma.key;
     this.httpProvider.get(url).then((res: any) => {
       if (res.error == 'false') {
         this.data.notas = '';
@@ -371,7 +375,7 @@ export class CampaniaPage {
       } else {
         this.globalProvider.alerta(res.mns);
       }
-    }).catch(err => console.log('err: ' + JSON.stringify(err)));
+    }).catch(err => console.log('err: ', err.toString()));
   }
 
   call(telefono, nuevo: boolean = true) {
@@ -513,7 +517,9 @@ export class CampaniaPage {
     this.boton.estado = estado.texto;
     this.boton.key_estado = estado.key_estado;
     this.key_selec = estado.key_estado;
-    let url = 'servicio=getContenidoCampania&id_campania= ' + this.campania.id_campania + '&id_estado=' + posicion + '&todos=N';
+    let url: string = 'servicio=getContenidoCampania&id_campania= ' + this.campania.id_campania +
+      '&id_estado=' + posicion +
+      '&todos=N&lg=' + this.globalProvider.idioma.key;
     this.httpProvider.get(url).then((res: any) => {
       if (res.error == 'false') {
         if (res.contenido.length > 0) {
@@ -535,7 +541,7 @@ export class CampaniaPage {
         this.globalProvider.alerta(res.msn);
         this.spinner = false;
       }
-    }).catch(err => console.log('err: ' + JSON.stringify(err)));
+    }).catch(err => console.log('err: ', err.toString()));
   }
 
   getContenidoCampaniaManual(estado: any, posicion: number) {
@@ -556,7 +562,9 @@ export class CampaniaPage {
     this.boton.estado = estado.texto;
     this.boton.key_estado = estado.key_estado;
     this.key_selec = estado.key_estado;
-    let url = 'servicio=getContenidoCampaniaManual&id_campania= ' + this.campania.id_campania_manual + '&id_estado=' + estado.key_estado + '&todos=N';
+    let url: string = 'servicio=getContenidoCampaniaManual&id_campania= ' + this.campania.id_campania_manual +
+      '&id_estado=' + estado.key_estado +
+      '&todos=N&lg=' + this.globalProvider.idioma.key;
     this.httpProvider.get(url).then((res: any) => {
       if (res.error == 'false') {
         if (res.contenido.length > 0) {
@@ -575,7 +583,7 @@ export class CampaniaPage {
         this.globalProvider.alerta(res.msn);
         this.spinner = false;
       }
-    }).catch(err => console.log('err: ' + JSON.stringify(err)));
+    }).catch(err => console.log('err: ', err.toString()));
   }
 
   pausar() {
@@ -600,8 +608,8 @@ export class CampaniaPage {
   }
 
   getCampaniaUsuario() {
-    let url = 'servicio=getCampaniaUsuario&' +
-      'id_usuario=' + this.globalProvider.usuario.id_usuario;
+    let url: string = 'servicio=getCampaniaUsuario&id_usuario=' + this.globalProvider.usuario.id_usuario +
+      '&lg=' + this.globalProvider.idioma.key;
     this.httpProvider.get(url).then((res: any) => {
       if (res.error == 'false') {
         if (this.tipo_campania == true) {
@@ -612,7 +620,7 @@ export class CampaniaPage {
       } else {
         this.globalProvider.alerta(res.mns);
       }
-    }).catch(err => console.log('err: ' + JSON.stringify(err)));
+    }).catch(err => console.log('err: ', err.toString()));
   }
 
   editInfo() {
@@ -623,7 +631,7 @@ export class CampaniaPage {
   saveInfo() {
     this.edit_info.readonly = !this.edit_info.readonly;
     this.edit_info.border = "none";
-    let url = "servicio=setEditarCampaniaContenido" +
+    let url: string = "servicio=setEditarCampaniaContenido" +
       "&id_campania_contenido=" + this.getFilaCampania.id_campania_contenido +
       "&telefono=" + this.getFilaCampania.telefono +
       "&nombre=" + this.getFilaCampania.nombre +
@@ -632,8 +640,9 @@ export class CampaniaPage {
       "&campo3=" + this.getFilaCampania.campo_3 +
       "&campo4=" + this.getFilaCampania.campo_4 +
       "&otro_telefono=" + this.getFilaCampania.otro_telefono +
-      "&nota=" + this.data.notas;
-    this.httpProvider.get(url).catch(err => console.log('err: ' + JSON.stringify(err)));
+      "&nota=" + this.data.notas +
+      '&lg=' + this.globalProvider.idioma.key;
+    this.httpProvider.get(url).catch(err => console.log('err: ', err.toString()));
   }
 
   habilitar(i: number) {
@@ -642,19 +651,18 @@ export class CampaniaPage {
   }
 
   setSMSPredeterminadoCampania(tipo: number, id: number) {
-    let url = "servicio=setSMSPredeterminadoCampania" +
+    let url: string = "servicio=setSMSPredeterminadoCampania" +
       "&id_campania=" + id +
       "&tipo=" + tipo +
-      "&sms=" + this.data.sms;
+      "&sms=" + this.data.sms +
+      '&lg=' + this.globalProvider.idioma.key;
     this.httpProvider.get(url).then((res: any) => {
       if (res.error == 'false') {
         this.globalProvider.alerta(res.msn);
       } else {
         this.globalProvider.alerta(res.msn);
       }
-    }).catch(err => {
-      console.log('err: ' + JSON.stringify(err))
-    });
+    }).catch(err => console.log('err: ', err.toString()));
   }
 
   popoverInfo(posicion: number) {

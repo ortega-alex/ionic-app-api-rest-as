@@ -68,7 +68,7 @@ page-social {
 
     #img-social-marca{
         position: absolute;
-        top: 40%;
+        top: 43%;
         width: 310px;
         height: 230px; 
         left: 0;
@@ -78,7 +78,7 @@ page-social {
 
     .posicion-logo{
         position: absolute;
-        top: 41%;
+        top: 44%;
         width: 310px;
         height: 230px; 
         left: 0;
@@ -91,10 +91,17 @@ page-social {
             border-color: black;
             -webkit-text-stroke: 0.2px white;
             #btn-cuadro{
-                font-size: 0.9em;
+                //font-size: 0.8em;
+                text-align: center;
                 width: 100% !important;
                 height: 100% !important;
                 margin: 0% !important;
+
+                display: flex;
+                justify-content: center;
+                align-content: center;
+                flex-direction: column;
+                font-weight: bold;
             }
         }
     }

@@ -21,7 +21,7 @@
 
         <ion-item class="content-item" *ngIf="contador == 0">
           <ion-label stacked> {{'_language' | translate}} </ion-label>
-          <ion-select (ionChange)="getIdioma($event)">
+          <ion-select (ionChange)="getLenguajeUsuario($event)">
             <ion-option *ngFor="let item of idiomas" [value]="item.id" [selected]="(globalProvider.idioma && item.id == globalProvider.idioma.key) ? true : false">
               {{ item.text }}
             </ion-option>

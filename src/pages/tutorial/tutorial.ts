@@ -18,7 +18,7 @@ export class TutorialPage {
     public navParams: NavParams,
     private httpProvider: HttpProvider,
     private globalProvider: GlobalProvider,
-    private viewController : ViewController
+    private viewController: ViewController
   ) {
     this.tutoriales = [];
   }
@@ -29,10 +29,11 @@ export class TutorialPage {
 
   getTutorialPlateforma() {
     var dispositivo = (this.globalProvider.dispositivo == true) ? 'android' : 'ios';
-    let url = 'servicio=getTutorialPlateforma&plataforma=' + dispositivo;
+    let url: string = 'servicio=getTutorialPlateforma&plataforma=' + dispositivo +
+      "&lg=" + this.globalProvider.idioma.key;
     this.httpProvider.get(url).then((res: any) => {
       this.tutoriales = res.tutorial;
-    }).catch(err => console.log('err: ' + JSON.stringify(err)));
+    }).catch(err => console.log('err: ', err.toString()));
   }
 
   closeModal() {

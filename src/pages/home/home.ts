@@ -154,19 +154,20 @@ export class HomePage {
   }
 
   setBloqueoPublicidadUsuario(tipo: string, fecha: string = null, hora: string = null, creditos: any = null) {
-    let url = 'servicio=setBloqueoPublicidadUsuario' +
+    let url: string = 'servicio=setBloqueoPublicidadUsuario' +
       '&bloqueo=' + tipo +
       '&id_usuario=' + this.globalProvider.usuario.id_usuario +
       '&fecha=' + fecha +
       '&hora=' + hora +
-      '&creditos=' + creditos;
+      '&creditos=' + creditos +
+      '&lg=' + this.globalProvider.idioma.key;
     this.httpProvider.get(url).then((res: any) => {
       if (res.error == 'false') {
         let date = new Date(res.tiempo_usuario);
         this.globalProvider.setTime(this.getmilisegundos.transform(date));
         this.tiempoActual();
       }
-    }).catch(err => console.log('err: ' + JSON.stringify(err)));
+    }).catch(err => console.log('err: ', err.toString()));
   }
 
   banner() {
@@ -210,10 +211,12 @@ export class HomePage {
     if (this.inici == false) {
       this.load = this.globalProvider.cargando(this.globalProvider.data.msj.load);
     }
-    let url = 'servicio=getCampaniaUsuario' +
+    let lg: string = (this.globalProvider.idioma) ? this.globalProvider.idioma.key : 'en';
+    let url: string = 'servicio=getCampaniaUsuario' +
       '&id_usuario=' + this.globalProvider.usuario.id_usuario +
       '&token=' + this.globalProvider.token +
-      '&plataforma=' + platform;
+      '&plataforma=' + platform +
+      '&lg=' + lg;
     this.httpProvider.get(url).then((res: any) => {
       if (this.inici == false) {
         this.load.dismiss();
@@ -273,7 +276,7 @@ export class HomePage {
         }
         this.free();
 
-        if (res.version_app != '2.1.0') {
+        if (res.version_app != '2.2.0') {
           let url: string;
           let alert = this.alertController.create({
             title: this.globalProvider.idioma.contenido['_newVersion'],
@@ -306,7 +309,7 @@ export class HomePage {
       if (this.inici == false) {
         this.load.dismiss();
       }
-      console.log('err: ' + JSON.stringify(err));
+      console.log('err: ', err.toString());
     });
   }
 
@@ -356,18 +359,20 @@ export class HomePage {
   }
 
   setConexionTelefonoUsuario() {
-    let url = 'servicio=setConexionTelefonoUsuario&id_usuario=' + this.globalProvider.usuario.id_usuario;
+    let url: string = 'servicio=setConexionTelefonoUsuario&id_usuario=' + this.globalProvider.usuario.id_usuario +
+      '&lg=' + this.globalProvider.idioma.key;
     this.httpProvider.get(url).then((res: any) => {
       if (res.error == 'false') {
         this.home_util.spinner = false;
         this.getAccionTelefono();
         this.home_util.title = '_establishedConnection';
       }
-    }).catch(err => console.log('err: ' + JSON.stringify(err)));
+    }).catch(err => console.log('err: ', err.toString()));
   }
 
   getAccionTelefono() {
-    let url = 'servicio=getAccionTelefono&id_usuario=' + this.globalProvider.usuario.id_usuario;
+    let url: string = 'servicio=getAccionTelefono&id_usuario=' + this.globalProvider.usuario.id_usuario +
+      '&lg=' + this.globalProvider.idioma.key;
     this.httpProvider.get(url).then((res: any) => {
       if (res.error == 'false') {
         if (res.at_desconectar == 'N') {
@@ -435,16 +440,17 @@ export class HomePage {
       startDate
     ).then(res => {
       console.log('success');
-    }).catch(err => console.log('err: ' + JSON.stringify(err)));
+    }).catch(err => console.log('err: ', err.toString()));
   }
 
   setDesConexionTelefonoUsuario() {
-    let url = 'servicio=setDesConexionTelefonoUsuario&id_usuario=' + this.globalProvider.usuario.id_usuario;
+    let url = 'servicio=setDesConexionTelefonoUsuario&id_usuario=' + this.globalProvider.usuario.id_usuario +
+      '&lg=' + this.globalProvider.idioma.key;
     this.httpProvider.get(url).then((res: any) => {
       if (res.error == 'false') {
         this.home_util.title = 'Waiting connection with pc ...';
       }
-    }).catch(err => console.log('err: ' + JSON.stringify(err)));
+    }).catch(err => console.log('err: ', err.toString()));
   }
 
   setDeleteCampania(id: number, nombre: string, manual: boolean = false) {
@@ -465,6 +471,7 @@ export class HomePage {
             } else {
               url = 'servicio=setDeleteCampaniaManual&id_campania_manual=' + id;
             }
+            url += '&lg=' + this.globalProvider.idioma.key
             this.httpProvider.get(url).then((res: any) => {
               if (res.error == 'false') {
                 if (manual == false) {
@@ -476,7 +483,7 @@ export class HomePage {
               } else {
                 this.globalProvider.alerta(res.mns);
               }
-            }).catch(err => console.log('err: ' + JSON.stringify(err)));
+            }).catch(err => console.log('err: ', err.toString()));
           }
         }
       ]
@@ -520,10 +527,11 @@ export class HomePage {
         picture: ''
       }).then(res => {
         let date = new Date();
-        let url = 'servicio=setMostrarPublicidadUsuario' +
+        let url: string = 'servicio=setMostrarPublicidadUsuario' +
           '&id_usuario=' + this.globalProvider.usuario.id_usuario +
           '&fecha=' + this.fecha.transform(date) +
-          '&hora=' + this.hora.transform(date);
+          '&hora=' + this.hora.transform(date) +
+          '&lg=' + this.globalProvider.idioma.key;
         this.httpProvider.get(url).then((res: any) => {
           if (res.error == 'false') {
             let date = new Date(res.tiempo_usuario);
@@ -542,9 +550,9 @@ export class HomePage {
             this.globalProvider.plan = this.plan;
             this.globalProvider.setPlan(this.globalProvider.plan);
           }
-        }).catch(err => console.log('err: ' + JSON.stringify(err)));
-      }).catch(err => console.log('share' + JSON.stringify(err)));
-    }).catch(e => console.log('face: ' + JSON.stringify(e)));
+        }).catch(err => console.log('err: ', err.toString()));
+      }).catch(err => console.log('err', err.toString()));
+    }).catch(err => console.log('err: ', err.toString()));
   }
 
   free() {
@@ -599,22 +607,24 @@ export class HomePage {
   }
 
   setDatosEditCampania(id: number, name: string, i: number) {
-    let url = "servicio=setDatosEditCampania" +
+    let url: string = "servicio=setDatosEditCampania" +
       "&id_campania=" + id +
-      "&nombre=" + name;
+      "&nombre=" + name +
+      "&lg=" + this.globalProvider.idioma.key;
     this.httpProvider.get(url).then(() => {
       console.log('success');
-    }).catch(err => console.log('err: ' + JSON.stringify(err)));
+    }).catch(err => console.log('err: ', err.toString()));
   }
 
   setDatosEditCampaniaManual(id: number, name: string, i: number) {
     this.editNameManual(i);
-    let url = "servicio=setDatosEditCampaniaManual" +
+    let url: string = "servicio=setDatosEditCampaniaManual" +
       "&id_campania_manual=" + id +
-      "&nombre=" + name;
+      "&nombre=" + name +
+      "&lg=" + this.globalProvider.idioma.key;
     this.httpProvider.get(url).then(() => {
       console.log('success');
-    }).catch(err => console.log('err: ' + JSON.stringify(err)));
+    }).catch(err => console.log('err: ', err.toString()));
   }
 
   selectSms() {
@@ -789,12 +799,13 @@ export class HomePage {
   }
 
   getCampaniaSMSUsuario() {
-    let url = "servicio=getCampaniaSMSUsuario&id_usuario=" + this.globalProvider.usuario.id_usuario;
+    let url: string = "servicio=getCampaniaSMSUsuario&id_usuario=" + this.globalProvider.usuario.id_usuario +
+      "&lg=" + this.globalProvider.idioma.key;
     this.httpProvider.get(url).then((res: any) => {
       if (res.error == 'false') {
         this.campaniaSMS = res.campaniaSMS;
       }
-    }).catch(err => console.log('err: ' + JSON.stringify(err)));
+    }).catch(err => console.log('err: ', err.toString()));
   }
 
   drawTutorials() {

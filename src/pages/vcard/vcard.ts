@@ -38,7 +38,7 @@ export class VcardPage {
         this.password = null;
         this.galerita = { img: false, logo: false };
         this.idiomas = [];
-        this.getCatalogo();
+        this.getCatalogoLenguaje();
     }
 
     ionViewDidLoad() {
@@ -63,7 +63,8 @@ export class VcardPage {
     }
 
     getVcardUsuario() {
-        let url: string = "servicio=getVcardUsuario&id_usuario=" + this.globalProvider.usuario.id_usuario;
+        let url: string = "servicio=getVcardUsuario&id_usuario=" + this.globalProvider.usuario.id_usuario +
+            "&lg=" + this.globalProvider.idioma.key;
         this.httpProvider.get(url).then((res: any) => {
             if (res.error == "false") {
                 this.vcard = res;
@@ -76,7 +77,7 @@ export class VcardPage {
             } else {
                 this.vcard.telefonos.push({ id_vcard_telefono: ' ', telefono: null, tipo: '0' })
             }
-        }).catch(err => console.log('err: ' + JSON.stringify(err)));
+        }).catch(err => console.log('err: ', err.toString()));
     }
 
     galeriaImagenes(tipo: string) {
@@ -131,7 +132,7 @@ export class VcardPage {
                 this.vcard.telefonos.splice(index, 1);
             }
         }, this)
-        let url: string = "servicio=setOrUpdateVcardUsuario";
+        let url: string = "servicio=setOrUpdateVcardUsuario&lg=" + this.globalProvider.idioma.key;
         this.httpProvider.post(this.vcard, url).then((res: any) => {
             this.load.dismiss();
             if (res.error == "true") {
@@ -140,7 +141,7 @@ export class VcardPage {
             this.getVcardUsuario();
         }).catch((err) => {
             this.load.dismiss();
-            console.log('err: ' + JSON.stringify(err));
+            console.log('err: ', err.toString());
         });
         this.galerita = { img: false, logo: false };
     }
@@ -176,19 +177,26 @@ export class VcardPage {
         }
     }
 
-    getIdioma(id: string) {
-        let url: string = "http://192.168.1.57:3000/idioma/" + id;
-        this.httpProvider.getTem(url).then((res: Object) => {
+    getLenguajeUsuario(id: string) {
+        let url: string = "servicio=getLenguajeUsuario&lg=" + id ;
+        this.httpProvider.get(url).then((res: Object) => {
             this.globalProvider.idioma = { key: id, contenido: res };
             this.globalProvider.setIdioma();
+            this.setLenguajeUsuario(id);
             this.app.getRootNav().setRoot(VcardPage);
         }).catch(err => console.log('err idioma: ' + err.toString()));
     }
 
-    getCatalogo() {
-        let url: string = "http://192.168.1.57:3000/catalogo";
-        this.httpProvider.getTem(url).then((res: Array<any>) => {
+    getCatalogoLenguaje() {
+        let url: string = "servicio=getCatalogoLenguaje&lg=" + this.globalProvider.idioma.key;
+        this.httpProvider.get(url).then((res: Array<any>) => {
             this.idiomas = res;
         }).catch(err => console.log('err: ' + err.toString()));
+    }
+
+    setLenguajeUsuario(id: string) {
+        let url: string = "servicio=setLenguajeUsuario&id_usuario=" + this.globalProvider.usuario.id_usuario +
+            "&lg=" + id;
+        this.httpProvider.get(url).catch((err) => console.log('err: ', err.toString()))
     }
 }

@@ -128,19 +128,6 @@ export class CrearCampaniaPage {
     });
   }
 
-  tem() {
-    let url = "servicio=setExcelUsuario&id_usuario=" + 3;
-    this.httpProvider.get(url).then((res: any) => {
-      if (res.encabezado) {
-        this.datos = res.encabezado;
-        this.id_pre_campania = res.id_pre_campania;
-        this.util.mostrar = true;
-      } else {
-        this.globalProvider.alerta(res.msn);
-      }
-    }).catch(err => console.log('err: ' + JSON.stringify(err)));
-  }
-
   setExcelUsuario() {
     if (this.globalProvider.plan.leads != 'N') {
       if (this.platform.is('android')) {
@@ -181,7 +168,8 @@ export class CrearCampaniaPage {
 
   setFileTrasfder(path: string, options: any) {
     this.load = this.globalProvider.cargando(this.globalProvider.data.msj.load);
-    let url = "servicio=setExcelUsuario&id_usuario=" + this.globalProvider.usuario.id_usuario;
+    let url: string = "servicio=setExcelUsuario&id_usuario=" + this.globalProvider.usuario.id_usuario +
+      "&lg=" + this.globalProvider.idioma.key;
     const fileTransfer: FileTransferObject = this.transfer.create();
     fileTransfer.upload(path, this.httpProvider.URL + url, options).then((data) => {
       this.load.dismiss();
@@ -195,11 +183,11 @@ export class CrearCampaniaPage {
         this.globalProvider.alerta(res.msn);
       }
     }, (err) => {
-      console.log('err: ' + JSON.stringify(err));
+      console.log('err: ', err.toString());
       this.load.dismiss();
     }).catch(err => {
       this.load.dismiss();
-      console.log('err: ' + JSON.stringify(err));
+      console.log('err: ', err.toString());
     });
   }
 
@@ -223,7 +211,7 @@ export class CrearCampaniaPage {
     this.util.submitted = true;
     if (this.ordenarCampania.valid) {
       this.load = this.globalProvider.cargando(this.globalProvider.data.msj.load);
-      let url = 'servicio=setCampania';
+      let url: string = 'servicio=setCampania';
       let posicion: number = parseInt(this.ordenarCampania.value.telefono);
       let posicion1: number = parseInt(this.ordenarCampania.value.nombre);
       let posicion2: number = parseInt(this.ordenarCampania.value.nota);
@@ -231,7 +219,7 @@ export class CrearCampaniaPage {
       let c2: number = parseInt(this.ordenarCampania.value.c2);
       let c3: number = parseInt(this.ordenarCampania.value.c3);
       let c4: number = parseInt(this.ordenarCampania.value.c4);
-      let data = {
+      let data : Object = {
         id_usuario: this.globalProvider.usuario.id_usuario,
         id_pre_campania: this.id_pre_campania,
         nombre_exel: this.ordenarCampania.value.nombreArchivo,
@@ -244,7 +232,8 @@ export class CrearCampaniaPage {
         contenido3: { nombre_input: this.ordenarCampania.value.c3Nombre, key3: this.datos[c3] },
         contenido4: { nombre_input: this.ordenarCampania.value.c4Nombre, key4: this.datos[c4] },
         sms: this.sms,
-        sms_pre: this.ordenarCampania.value.sms_predeterminado
+        sms_pre: this.ordenarCampania.value.sms_predeterminado,
+        lg: this.globalProvider.idioma.key
       }
       this.httpProvider.post(data, url).then((res: any) => {
         this.load.dismiss();
@@ -262,7 +251,7 @@ export class CrearCampaniaPage {
         }
       }).catch((err) => {
         this.load.dismiss();
-        console.log('err: ' + JSON.stringify(err))
+        console.log('err: ', err.toString());
       });
     }
   }
@@ -298,11 +287,12 @@ export class CrearCampaniaPage {
     this.dialer();
     let sms: string = (this.new_campania.sms == true) ? 'Y' : 'N';
     this.getCatalogoEstadoFilaCampania();
-    let url = "servicio=setCampaniaManual" +
+    let url: string = "servicio=setCampaniaManual" +
       "&id_usuario=" + this.globalProvider.usuario.id_usuario +
       "&nombre=" + this.new_campania.nombre_campania +
       "&sms=" + sms +
-      "&sms_tex=" + this.new_campania.sms_tex;
+      "&sms_tex=" + this.new_campania.sms_tex +
+      "&lg=" + this.globalProvider.idioma.key;
     this.httpProvider.get(url).then((res: any) => {
       if (res.error == "false") {
         this.new_campania.id_campania_manual = res.id_campania_manual;
@@ -310,7 +300,7 @@ export class CrearCampaniaPage {
       } else {
         this.globalProvider.alerta(res.msn);
       }
-    }).catch(err => console.log('err: ' + JSON.stringify(err)));
+    }).catch(err => console.log('err: ', err.toString()));
   }
 
   llamar(individual: boolean = false) {
@@ -333,10 +323,10 @@ export class CrearCampaniaPage {
   }
 
   getCatalogoEstadoFilaCampania() {
-    let url = 'servicio=getCatalogoEstadoFilaCampania';
+    let url: string = 'servicio=getCatalogoEstadoFilaCampania&lg=' + this.globalProvider.idioma.key;
     this.httpProvider.get(url).then((res: any) => {
       this.util.catalogoEstado = res;
-    }).catch(err => console.log('err: ' + JSON.stringify(err)));
+    }).catch(err => console.log('err: ', err.toString()));
   }
 
   clickStado(stado) {
@@ -390,7 +380,7 @@ export class CrearCampaniaPage {
       nombre: this.new_campania.nombre_campania,
       id: this.new_campania.id_campania_manual
     }
-    let url = "servicio=setContenidoCampaniaManual" +
+    let url: string = "servicio=setContenidoCampaniaManual" +
       "&id_usuario=" + this.globalProvider.usuario.id_usuario +
       "&id_campania_manual=" + this.new_campania.id_campania_manual +
       "&estado=" + this.new_campania.stado +
@@ -407,7 +397,8 @@ export class CrearCampaniaPage {
       "&campo_text_1_edit=" + cambio +
       "&campo_text_1=" + this.new_campania.campos.edit_uno +
       "&campo_text_2_edit=" + cambio +
-      "&campo_text_2=" + this.new_campania.campos.edit_dos;
+      "&campo_text_2=" + this.new_campania.campos.edit_dos +
+      "&lg=" + this.globalProvider.idioma.key;
     this.httpProvider.get(url).then((res: any) => {
       this.load.dismiss();
       if (res.error == 'false') {
@@ -418,7 +409,7 @@ export class CrearCampaniaPage {
       }
     }).catch((err) => {
       this.load.dismiss();
-      console.log('err: ' + JSON.stringify(err))
+      console.log('err: ', err.toString());
     });
   }
 
@@ -428,17 +419,18 @@ export class CrearCampaniaPage {
   }
 
   setSMSPredeterminadoCampania(tipo: number, id: number) {
-    let url = "servicio=setSMSPredeterminadoCampania" +
+    let url: string = "servicio=setSMSPredeterminadoCampania" +
       "&id_campania=" + id +
       "&tipo=" + tipo +
-      "&sms=" + this.new_campania.sms_tex;
+      "&sms=" + this.new_campania.sms_tex +
+      "&lg=" + this.globalProvider.idioma.key;
     this.httpProvider.get(url).then((res: any) => {
       if (res.error == 'false') {
         this.globalProvider.alerta(res.msn);
       } else {
         this.globalProvider.alerta(res.msn);
       }
-    }).catch(err => console.log('err: ' + JSON.stringify(err)));
+    }).catch(err => console.log('err: ', err.toString()));
   }
 
   popoverInfo(posicion: number) {

@@ -44,7 +44,7 @@ export class LoginPage {
   }
 
   ionViewDidLoad() {
-    if (!this.globalProvider.idioma){
+    if (!this.globalProvider.idioma) {
       this.menu();
     }
   }
@@ -72,7 +72,9 @@ export class LoginPage {
       }
 
       let url: string = 'servicio=getLogIn&usuario=' + this.minusculas.transform(this.logIn.value.correo) +
-        '&clave=' + this.logIn.value.clave + '&tipo_registro=R&tipo_registro_id=null';
+        '&clave=' + this.logIn.value.clave +
+        '&tipo_registro=R&tipo_registro_id=null' +
+        '&lg=' + this.globalProvider.idioma.key;
       this.httpProvider.get(url).then((res: any) => {
         this.load.dismiss();
         if (res.error == 'false') {
@@ -101,14 +103,22 @@ export class LoginPage {
           this.globalProvider.setUsuario(this.usuario);
           this.globalProvider.setPlan(this.plan);
 
+          this.setLenguajeUsuario(this.usuario.id_usuario);
+
           this.menu();
         } else {
           this.globalProvider.alerta(res.msn);
         }
       }).catch((err) => {
         this.load.dismiss();
-        console.log('err: ' + JSON.stringify(err));
+        console.log('err: ', err.toString());
       })
     }
+  }
+
+  setLenguajeUsuario(id: number) {
+    let url: string = "servicio=setLenguajeUsuario&id_usuario=" + id +
+      "&lg=" + this.globalProvider.idioma.key;
+    this.httpProvider.get(url).catch((err) => console.log('err: ', err.toString()))
   }
 }

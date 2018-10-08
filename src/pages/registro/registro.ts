@@ -32,7 +32,7 @@ export class RegistroPage {
     private app: App
   ) {
     this.idiomas = [];
-    this.getCatalogo();
+    this.getCatalogoLenguaje();
     this.contador = 0;
     this.catalogo = [
       { label: '_language', tipo: 'selected', input: "en", color: '#262626', ejemplo: null },
@@ -88,7 +88,7 @@ export class RegistroPage {
   guardarRegistro() {
     let platform = (this.globalProvider.dispositivo == true) ? 'android' : 'ios';
     this.load = this.globalProvider.cargando(this.globalProvider.data.msj.load);
-    let url = 'servicio=setRegistroUsuario' +
+    let url: string = 'servicio=setRegistroUsuario' +
       '&usuario=' + this.minusculas.transform(this.catalogo[2].input) +
       '&clave=' + this.catalogo[3].input +
       '&nombre=' + this.catalogo[0].input +
@@ -98,7 +98,8 @@ export class RegistroPage {
       '&token=' + this.globalProvider.token +
       '&plataforma=' + platform +
       '&telefono=' + this.catalogo[4].input +
-      '&timezone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
+      '&timezone=' + Intl.DateTimeFormat().resolvedOptions().timeZone +
+      '&lg=' + this.globalProvider.idioma.key;
     this.httpProvider.get(url).then((res: any) => {
       this.load.dismiss();
       if (res.error == 'false') {
@@ -109,22 +110,22 @@ export class RegistroPage {
       }
     }).catch((err) => {
       this.load.dismiss();
-      console.log('err: ' + JSON.stringify(err))
+      console.log('err: ', err.toString())
     });
   }
 
-  getIdioma(id: string) {
-    let url: string = "http://192.168.1.57:3000/idioma/" + id;
-    this.httpProvider.getTem(url).then((res: Object) => {
+  getLenguajeUsuario(id: string) {
+    let url: string = "servicio=getLenguajeUsuario&lg=" + id;
+    this.httpProvider.get(url).then((res: Object) => {
       this.globalProvider.idioma = { key: id, contenido: res };
       this.globalProvider.setIdioma();
       this.app.getRootNav().setRoot(RegistroPage);
     }).catch(err => console.log('err idioma: ' + err.toString()));
   }
 
-  getCatalogo() {
-    let url: string = "http://192.168.1.57:3000/catalogo";
-    this.httpProvider.getTem(url).then((res: Array<any>) => {
+  getCatalogoLenguaje() {
+    let url: string = "servicio=getCatalogoLenguaje&lg=" + this.globalProvider.idioma.key;
+    this.httpProvider.get(url).then((res: Array<any>) => {
       this.idiomas = res;
     }).catch(err => console.log('err: ' + err.toString()));
   }

@@ -35,7 +35,6 @@ export class ModalPage {
   };
   private estado_msn: boolean;
   private posicion: number = 0;
-  //private text: string = "You contacted ";
   private segundos: number = 10;
   private timer: any;
   private time: { hora: number, minuto: number, segundo: number };
@@ -51,7 +50,8 @@ export class ModalPage {
     sms_tex: null,
     panel_llamada: false
   };
-  text: string
+  text: string;
+  private lg: string;
 
   constructor(
     public navCtrl: NavController,
@@ -70,6 +70,7 @@ export class ModalPage {
     this.llamadas = this.navParams.get('llamadas');
     this.tamanio_contenido = this.llamadas.length;
     this.get_fila_contenido = this.llamadas[this.posicion];
+    this.lg = (this.globalProvider.idioma) ? this.globalProvider.idioma.key : 'en';
   }
 
   ionViewDidLoad() {
@@ -115,19 +116,20 @@ export class ModalPage {
   }
 
   setBloqueoPublicidadUsuario(tipo: string, fecha: string = null, hora: string = null, creditos: any = null) {
-    let url = 'servicio=setBloqueoPublicidadUsuario' +
+    let url: string = 'servicio=setBloqueoPublicidadUsuario' +
       '&bloqueo=' + tipo +
       '&id_usuario=' + this.globalProvider.usuario.id_usuario +
       '&fecha=' + fecha +
       '&hora=' + hora +
-      '&creditos=' + creditos;
+      '&creditos=' + creditos +
+      '&lg=' + this.lg;
     this.httpProvider.get(url).then((res: any) => {
       if (res.error == 'false') {
         let date = new Date(res.tiempo_usuario);
         this.globalProvider.setTime(this.getmilisegundos.transform(date));
         this.tiempoActual();
       }
-    });
+    }).catch(err => console.log('err: ', err.toString()));
   }
 
   prepareVideo() {
@@ -176,10 +178,10 @@ export class ModalPage {
   }
 
   getCatalogoEstadoFilaCampania() {
-    let url = 'servicio=getCatalogoEstadoFilaCampania';
+    let url: string = 'servicio=getCatalogoEstadoFilaCampania&lg=' + this.lg;
     this.httpProvider.get(url).then((res: any) => {
       this.util.catalogoEstado = res;
-    })
+    }).catch(err => console.log('err: ', err.toString()))
   }
 
   clickStado(key_estado: number) {
@@ -205,7 +207,7 @@ export class ModalPage {
   setFilaActivaCampania(key_estado: number) {
     let fecha = this.fechas.transform(new Date());
     let sms = (this.estado_msn == true) ? 'Y' : 'N';
-    let url = 'servicio=setFilaActivaCampania' +
+    let url: string = 'servicio=setFilaActivaCampania' +
       '&id_campania=' + this.get_fila_contenido.id_campania +
       '&id_campania_contenido=' + this.get_fila_contenido.id_campania_contenido +
       '&estado=' + key_estado +
@@ -215,7 +217,8 @@ export class ModalPage {
       '&sms=' + sms +
       '&sms_texto=' + this.data.sms +
       '&individual= Y' +
-      '&id_usuario=' + this.globalProvider.usuario.id_usuario;
+      '&id_usuario=' + this.globalProvider.usuario.id_usuario +
+      '&lg=' + this.lg;
     this.httpProvider.get(url).then((res: any) => {
       if (res.error == 'false') {
         let date = new Date();
@@ -233,7 +236,7 @@ export class ModalPage {
         this.globalProvider.alerta(res.mns);
       }
     }).catch(err => {
-      console.log('err: ' + JSON.stringify(err))
+      console.log('err: ', err.toString())
       this.closeModal(true);
     });
   }
@@ -288,14 +291,15 @@ export class ModalPage {
     let url = "servicio=setSMSPredeterminadoCampania" +
       "&id_campania=" + id +
       "&tipo=" + tipo +
-      "&sms=" + this.data.sms;
+      "&sms=" + this.data.sms +
+      "&lg=" + this.lg;
     this.httpProvider.get(url).then((res: any) => {
       if (res.error == 'false') {
         this.globalProvider.alerta(res.msn);
       } else {
         this.globalProvider.alerta(res.msn);
       }
-    }).catch(err => console.log('err: ' + JSON.stringify(err)));
+    }).catch(err => console.log('err: ', err.toString()));
   }
 
   popoverInfo(posicion: number) {

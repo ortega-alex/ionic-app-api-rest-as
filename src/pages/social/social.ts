@@ -102,10 +102,11 @@ export class SocialPage {
   }
 
   getAdvanSocialLogoUsuario() {
-    let url: string = "servicio=getAdvanSocialLogoUsuario&id_usuario=" + this.globalProvider.usuario.id_usuario;
+    let url: string = "servicio=getAdvanSocialLogoUsuario&id_usuario=" + this.globalProvider.usuario.id_usuario +
+      "&lg=" + this.globalProvider.idioma.key;
     this.httpProvider.get(url).then((res: any) => {
       this.logos = res.logo;
-    }).catch(err => console.log('err: ' + JSON.stringify(err)))
+    }).catch(err => console.log('err: ', err.toString()))
   }
 
   reset(): void {
@@ -182,19 +183,20 @@ export class SocialPage {
         }, this);
       } else {
         let url: string = "servicio=getUrlImgLogoUsuario&id_usuario=" + this.globalProvider.usuario.id_usuario;
-        let data: any = {
+        let data: Object = {
           imagen: this.img_tem,
           id_logo: 0,
-          posicion: 7
+          posicion: 7,
+          lg: this.globalProvider.idioma.key
         }
         this.httpProvider.post(data, url).then((res: any) => {
           this.img = res.url;
-        }).catch(err => console.log('err' + JSON.stringify(err)));
+        }).catch(err => console.log('err', err.toString()));
         this.menu(2);
         this.logo_select.id = 0;
         this.logo_select.posicion = 7;
       }
-    }, err => console.log(JSON.stringify(err)));
+    }, err => console.log('err: ', err.toString()));
   }
 
   galeriaImagenes() {
@@ -220,21 +222,20 @@ export class SocialPage {
         }, this);
       } else {
         let url: string = "servicio=getUrlImgLogoUsuario&id_usuario=" + this.globalProvider.usuario.id_usuario;
-        let data: any = {
+        let data: Object = {
           imagen: this.img_tem,
           id_logo: 0,
-          posicion: 7
+          posicion: 7,
+          lg: this.globalProvider.idioma.key
         }
         this.httpProvider.post(data, url).then((res: any) => {
           this.img = res.url;
-        }).catch(err => console.log('err' + JSON.stringify(err)));
+        }).catch(err => console.log('err', err.toString()));
         this.menu(2);
         this.logo_select.id = 0;
         this.logo_select.posicion = 7;
       }
-    }, (err) => {
-      console.log(JSON.stringify(err));
-    });
+    }, (err) => console.log('err: ', err.toString()));
   }
 
   tomarVideo() {
@@ -256,15 +257,19 @@ export class SocialPage {
 
   catalogoImgOVideo() {
     if (this.option == 'I') {
-      let url: string = "servicio=getFotosAdvanSocial&texto=" + this.img_tex.replace(/\s/g, "+") + "&page=" + this.pagina_img;
+      let url: string = "servicio=getFotosAdvanSocial&texto=" + this.img_tex.replace(/\s/g, "+") +
+        "&page=" + this.pagina_img +
+        "&lg=" + this.globalProvider.idioma.key;
       this.httpProvider.get(url).then((res: Array<any>) => {
         this.imagenes = res;
-      }).catch(err => console.log('err: ' + JSON.stringify(err)))
+      }).catch(err => console.log('err: ', err.toString()))
     } else {
-      let url: string = "servicio=getVideoAdvanSocial&texto=" + this.img_tex.replace(/\s/g, "+") + "&page=" + this.pagina_video;
+      let url: string = "servicio=getVideoAdvanSocial&texto=" + this.img_tex.replace(/\s/g, "+") +
+        "&page=" + this.pagina_video +
+        "&lg=" + this.globalProvider.idioma.key;
       this.httpProvider.get(url).then((res: Array<any>) => {
         this.videos = res;
-      }).catch(err => console.log('err: ' + JSON.stringify(err)));
+      }).catch(err => console.log('err: ', err.toString()));
     }
   }
 
@@ -272,16 +277,20 @@ export class SocialPage {
     this.spinner1 = true;
     if (this.option == 'I') {
       this.pagina_img++;
-      let url: string = "servicio=getFotosAdvanSocial&texto=" + this.img_tex.replace(/\s/g, "+") + "&page=" + this.pagina_img;
+      let url: string = "servicio=getFotosAdvanSocial&texto=" + this.img_tex.replace(/\s/g, "+") +
+        "&page=" + this.pagina_img +
+        "&lg=" + this.globalProvider.idioma.key;
       this.httpProvider.get(url).then((res: Array<any>) => {
         this.imagenes = this.imagenes.concat(res);
-      }).catch(err => console.log('err: ', JSON.stringify(err)));
+      }).catch(err => console.log('err: ', err.toString()));
     } else {
       this.pagina_video++;
-      let url: string = "servicio=getVideoAdvanSocial&texto=" + this.img_tex.replace(/\s/g, "+") + "&page=" + this.pagina_video;
+      let url: string = "servicio=getVideoAdvanSocial&texto=" + this.img_tex.replace(/\s/g, "+") +
+        "&page=" + this.pagina_video +
+        "&lg=" + this.globalProvider.idioma.key;
       this.httpProvider.get(url).then((res: Array<any>) => {
         this.videos = this.videos.concat(res);
-      }).catch(err => console.log('err: ' + JSON.stringify(err)));
+      }).catch(err => console.log('err: ', err.toString()));
     }
     this.spinner1 = false;
   }
@@ -313,16 +322,27 @@ export class SocialPage {
       if (this.option == "I") {
         var t = this.httpProvider.URL_IMG + this.img_tem;
         this.img = t.replace(/&/g, "<->");
-        this.img += "&id_usuario=" + this.globalProvider.usuario.id_usuario + "&lo=" + 0 + "&pos=" + 7 + "&us=" + this.globalProvider.usuario.id_usuario;
+        this.img += "&id_usuario=" + this.globalProvider.usuario.id_usuario +
+          "&lo=" + 0 + "&pos=" + 7 +
+          "&us=" + this.globalProvider.usuario.id_usuario +
+          "&lg=" + this.globalProvider.idioma.key;
       }
       if (this.option == "V") {
-        let url: string = this.httpProvider.URL_VIDEO + id + "&src=" + ruta + "&id=" + id + "&w=" + ancho + "&h=" + alto + "&lo=" + 0 + "&pos=" + 7 + "&us=" + this.globalProvider.usuario.id_usuario;
+        let url: string = this.httpProvider.URL_VIDEO + id +
+          "&src=" + ruta +
+          "&id=" + id +
+          "&w=" + ancho +
+          "&h=" + alto +
+          "&lo=" + 0 +
+          "&pos=" + 7 +
+          "&us=" + this.globalProvider.usuario.id_usuario +
+          "&lg=" + this.globalProvider.idioma.key;
         this.img = undefined;
         this.video = undefined;
         this.httpProvider.getTem(url).then((res: any) => {
           this.video = res.url;
           this.poster = poster;
-        }).catch(err => console.log('err: ' + JSON.stringify(err)));
+        }).catch(err => console.log('err: ', err.toString()));
       }
       this.logo_select.id = 0;
       this.logo_select.posicion = 7;
@@ -349,30 +369,43 @@ export class SocialPage {
       if (this.option == "I") {
         var t = this.httpProvider.URL_IMG + this.img_tem;
         this.img = t.replace(/&/g, "<->");
-        this.img += "&id_usuario=" + this.globalProvider.usuario.id_usuario + "&lo=" + this.logo_select.id + "&pos=" + this.logo_select.posicion + "&us=" + this.globalProvider.usuario.id_usuario;
+        this.img += "&id_usuario=" + this.globalProvider.usuario.id_usuario +
+          "&lo=" + this.logo_select.id +
+          "&pos=" + this.logo_select.posicion +
+          "&us=" + this.globalProvider.usuario.id_usuario +
+          "&lg=" + this.globalProvider.idioma.key;
       }
 
       if (this.option == "V") {
-        let url: string = this.httpProvider.URL_VIDEO + this.poster_tem + "&src=" + this.video_tem + "&w=" + this.ancho + "&h=" + this.alto + "&lo=" + this.logo_select.id + "&pos=" + this.logo_select.posicion + "&us=" + this.globalProvider.usuario.id_usuario;
+        let url: string = this.httpProvider.URL_VIDEO + this.poster_tem +
+          "&src=" + this.video_tem +
+          "&w=" + this.ancho +
+          "&h=" + this.alto +
+          "&lo=" + this.logo_select.id +
+          "&pos=" + this.logo_select.posicion +
+          "&us=" + this.globalProvider.usuario.id_usuario +
+          "&lg=" + this.globalProvider.idioma.key;
         this.img = undefined;
         this.video = undefined;
         this.httpProvider.getTem(url).then((res: any) => {
           this.video = res.url;
           this.img = undefined;
           this.poster = this.poster;
-        }).catch(err => console.log('err: ' + JSON.stringify(err)));
+        }).catch(err => console.log('err: ', err.toString()));
       }
 
       if (this.option == "IG" || this.option == "GI") {
         let url: string = "servicio=getUrlImgLogoUsuario&id_usuario=" + this.globalProvider.usuario.id_usuario;
-        let data: any = {
+
+        let data: Object = {
           imagen: this.img_tem,
           id_logo: this.logo_select.id,
-          posicion: this.logo_select.posicion
+          posicion: this.logo_select.posicion,
+          lg: this.globalProvider.idioma.key
         }
         this.httpProvider.post(data, url).then((res: any) => {
           this.img = res.url;
-        }).catch(err => console.log('err' + JSON.stringify(err)));
+        }).catch(err => console.log('err', err.toString()));
       }
     }
     this.whizar.forEach((element, index) => {
@@ -384,21 +417,23 @@ export class SocialPage {
   }
 
   getCatlogoLenguajeAdvanSocial() {
-    let url: string = "servicio=getCatlogoLenguajeAdvanSocial";
+    let url: string = "servicio=getCatlogoLenguajeAdvanSocial&lg=" + this.globalProvider.idioma.key;
     this.httpProvider.get(url).then((res: Array<any>) => {
       this.idiomas = res;
-    }).catch(err => console.log('err: ' + JSON.stringify(err)));
+    }).catch(err => console.log('err: ', err.toString()));
   }
 
   getHashtagAdvanSocial() {
     this.hashtag_selected = [];
-    let url: string = "servicio=getHashtagAdvanSocial&texto=" + this.busqueda.replace(/\s/g, "+") + "&lenguaje=" + this.idioma;
+    let url: string = "servicio=getHashtagAdvanSocial&texto=" + this.busqueda.replace(/\s/g, "+") +
+      "&lenguaje=" + this.idioma +
+      "&lg=" + this.globalProvider.idioma.key;
     this.httpProvider.get(url).then((res: Array<any>) => {
       res.forEach(() => {
         this.hashtag_selected.push(true);
       }, this);
       this.hashtags = res;
-    }).catch(err => console.log('err: ' + JSON.stringify(err)));
+    }).catch(err => console.log('err: ', err.toString()));
   }
 
   clickHashtag(text: string) {
@@ -499,7 +534,8 @@ export class SocialPage {
   getAdvanSocial() {
     this.load = this.globalProvider.cargando(this.globalProvider.data.msj.load)
     this.post_guardados = true;
-    let url: string = "servicio=getAdvanSocial&id_usuario= " + this.globalProvider.usuario.id_usuario;
+    let url: string = "servicio=getAdvanSocial&id_usuario= " + this.globalProvider.usuario.id_usuario +
+      "&lg=" + this.globalProvider.idioma.key;
     this.httpProvider.get(url).then((res: any) => {
       this.load.dismiss();
       if (res.error == 'false') {
@@ -508,7 +544,7 @@ export class SocialPage {
         }, this);
         this.list_save = res.advansocial;
       }
-    }).catch(err => console.log('err: ' + JSON.stringify(err)));
+    }).catch(err => console.log('err: ', err.toString()));
   }
 
   setEliminarAdvanSocial(id_advansocial: string) {
@@ -523,14 +559,15 @@ export class SocialPage {
         {
           text: 'Yes',
           handler: () => {
-            let url: string = "servicio=setEliminarAdvanSocial&id_advansocial=" + id_advansocial;
+            let url: string = "servicio=setEliminarAdvanSocial&id_advansocial=" + id_advansocial +
+              "&lg=" + this.globalProvider.idioma.key;
             this.httpProvider.get(url).then((res: any) => {
               if (res.error == 'false') {
                 this.getAdvanSocial();
               } else {
                 this.globalProvider.alerta(res.msn);
               }
-            }).catch(err => console.log('err: ' + JSON.stringify(err)));
+            }).catch(err => console.log('err: ', err.toString()));
           }
         }
       ]
@@ -551,7 +588,7 @@ export class SocialPage {
     }
 
     let url: string = "servicio=setAdvanSocial";
-    let data: any = {
+    let data: Object = {
       id_usuario: this.globalProvider.usuario.id_usuario,
       comentario: this.comentario_tex,
       hashtag: this.hashtag_tex,
@@ -559,7 +596,8 @@ export class SocialPage {
       url: ruta,
       poster: this.poster,
       id_logo: this.logo_select.id,
-      posicion: this.logo_select.posicion
+      posicion: this.logo_select.posicion,
+      lg: this.globalProvider.idioma.key
     };
 
     this.httpProvider.post(data, url).then((res: any) => {
@@ -569,7 +607,7 @@ export class SocialPage {
       } else {
         this.globalProvider.alerta(res.msn)
       }
-    }).catch(err => console.log('err: ' + JSON.stringify(err)));
+    }).catch(err => console.log('err: ', err.toString()));
   }
 
   setEditAdvanSocial(social: any, i: number) {
@@ -583,14 +621,15 @@ export class SocialPage {
     });
 
     let url: string = "servicio=setEditAdvanSocial";
-    let data: any = {
+    let data: Object = {
       id_advansocial: social.id_advansocial,
       comentario: comentarios,
       hashtag: hashtag,
       tipo: social.tipo,
       url: social.url,
       id_logo: social.id_advansocial_logo,
-      posicion: social.posicion
+      posicion: social.posicion,
+      lg: this.globalProvider.idioma.key
     }
 
     this.httpProvider.post(data, url).then((res: any) => {
@@ -599,7 +638,7 @@ export class SocialPage {
       } else {
         this.globalProvider.alerta(res.msn);
       }
-    }).catch(err => console.log(JSON.stringify(err)));
+    }).catch(err => console.log('err: ', err.toString()));
   }
 
   compartirSave(social: any) {
@@ -647,19 +686,19 @@ export class SocialPage {
       this.setEditAdvanSocialShare(social.id_advansocial);
     }).catch(err => {
       this.load.dismiss();
-      console.log('err: ' + JSON.stringify(err));
+      console.log('err: ', err.toString());
     });
   }
 
   setEditAdvanSocialShare(id: string) {
-    let url: string = "servicio=setEditAdvanSocialShare&id_advansocial=" + id;
+    let url: string = "servicio=setEditAdvanSocialShare&id_advansocial=" + id +
+      "&lg=" + this.globalProvider.idioma.key;
     this.httpProvider.get(url).then(() => {
       console.log('success');
-    }).catch(err => console.log('err:' + JSON.stringify(err)));
+    }).catch(err => console.log('err:', err.toString()));
   }
 
   returnBorder(color: string) {
     return "solid 5px " + color;
   }
-
 }

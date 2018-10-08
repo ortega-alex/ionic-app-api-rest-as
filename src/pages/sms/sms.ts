@@ -102,12 +102,13 @@ export class SmsPage {
   }
 
   /*getTipoDispositivoLeadSMS() {
-    let url: string = 'servicio=getTipoDispositivoLeadSMS&id_usuario=' + this.globalProvider.usuario.id_usuario;
+    let url: string = 'servicio=getTipoDispositivoLeadSMS&id_usuario=' + this.globalProvider.usuario.id_usuario + 
+    '&lg=' + this.globalProvider.idioma.key;
     this.httpProvider.get(url).then((res: any) => {
       if (res.error == 'false') {
         this.numero = res.numero;
       }
-    }).catch(err => console.log('err: ' + JSON.stringify(err)));
+    }).catch(err => console.log('err: ' , err.toString()));
   }*/
 
   closeModal(data: boolean = false): void {
@@ -123,8 +124,8 @@ export class SmsPage {
     if (this.sms_from.valid) {
       this.load = this.globalProvider.cargando(this.globalProvider.data.msj.load);
       var fecha_dispositivo = new Date();
-      let url = "servicio=setCampaniaSMSUsuario";
-      let data = {
+      let url: string = "servicio=setCampaniaSMSUsuario";
+      let data: Object = {
         id_usuario: this.globalProvider.usuario.id_usuario,
         nombre: this.sms_from.value.nombre,
         mensaje: this.sms_from.value.sms_text,
@@ -136,7 +137,8 @@ export class SmsPage {
         //dias_semana: this.sms_from.value.dias_semana.toString(),
         hora: this.sms_from.value.hora,
         fecha: this.sms_from.value.fecha,
-        campaniaSms: this.campania_sms
+        campaniaSms: this.campania_sms,
+        lg: this.globalProvider.idioma.key
       };
       this.httpProvider.post(data, url).then((res: any) => {
         this.load.dismiss();
@@ -153,7 +155,7 @@ export class SmsPage {
         }
       }).catch(err => {
         this.load.dismiss();
-        console.log('err: ' + JSON.stringify(err));
+        console.log('err: ', err.toString());
       });
     }
   }
@@ -170,7 +172,8 @@ export class SmsPage {
   }
 
   getCampaniaSMSUsuario(id: number = null) {
-    let url = "servicio=getCampaniaSMSUsuario&id_usuario=" + this.globalProvider.usuario.id_usuario;
+    let url: string = "servicio=getCampaniaSMSUsuario&id_usuario=" + this.globalProvider.usuario.id_usuario +
+      "&lg=" + this.globalProvider.idioma.key;
     this.httpProvider.get(url).then((res: any) => {
       if (res.error == 'false') {
         if (res.campaniaSMS.length == 0) {
@@ -186,7 +189,7 @@ export class SmsPage {
         this.campaniaSMS = res.campaniaSMS;
       }
     }).catch((err) => {
-      console.log('err: ' + JSON.stringify(err));
+      console.log('err: ', err.toString());
     });
   }
 
@@ -203,7 +206,8 @@ export class SmsPage {
           text: 'Yes',
           handler: () => {
             this.globalProvider.deleteListSms(id.toString());
-            let url = "servicio=setDeleteCampaniaSMS&id_campaniaSMS=" + id;
+            let url: string = "servicio=setDeleteCampaniaSMS&id_campaniaSMS=" + id +
+              "&lg=" + this.globalProvider.idioma.key;
             this.httpProvider.get(url).then((res: any) => {
               if (res.error == 'false') {
                 this.globalProvider.alerta(res.msn);
@@ -212,7 +216,7 @@ export class SmsPage {
               } else {
                 this.globalProvider.alerta(res.msn);
               }
-            }).catch(err => console.log('err: ' + JSON.stringify(err)));
+            }).catch(err => console.log('err: ', err.toString()));
           }
         }
       ]
@@ -231,7 +235,8 @@ export class SmsPage {
   }
 
   getListaSMSCampaniaSMS(id: number, empesar: boolean = false, inicio: number = 0) {
-    let url = "servicio=getListaSMSCampaniaSMS&id_campaniaSMS=" + id;
+    let url: string = "servicio=getListaSMSCampaniaSMS&id_campaniaSMS=" + id +
+      "&lg=" + this.globalProvider.idioma.key;
     this.httpProvider.get(url).then((res: any) => {
       if (res.error == 'false') {
         this.globalProvider.setListSms(id.toString(), res.sms);
@@ -244,63 +249,65 @@ export class SmsPage {
           }
         }
       }
-    }).catch(err => console.log('err: ' + JSON.stringify(err)));
+    }).catch(err => console.log('err: ', err.toString()));
   }
 
   setSms(list_sms: Array<Telefono>, id: number, inicio: number) {
     this.sms.send(this.numerico.transform(list_sms[inicio].telefono), list_sms[inicio].text).then(() => {
-    this.setSMSEnviadoCampanaSMS(id, list_sms[inicio].id);
-    if (list_sms.length - 1 == inicio) {
-      this.setEstadoCampaniaSMS(id, 'T');
-      this.stado_sms.estado = 'T';
-      this.getCampaniaSMSUsuario();
-      if (this.globalProvider.dispositivo == true) {
-        clearInterval(this.stado_sms.hilo);
-      }
-      this.closeModal(true);
-      return false;
-    }
-    if (this.globalProvider.dispositivo == true) {
-      this.stado_sms.inicio++;
-      if (this.stado_sms.estado != 'A') {
-        this.setEstadoCampaniaSMS(id, 'A');
-        this.stado_sms.estado = 'A';
+      this.setSMSEnviadoCampanaSMS(id, list_sms[inicio].id);
+      if (list_sms.length - 1 == inicio) {
+        this.setEstadoCampaniaSMS(id, 'T');
+        this.stado_sms.estado = 'T';
         this.getCampaniaSMSUsuario();
-      }
-    } else {
-      let modal = this.modalController.create(ModalIosPage);
-      modal.present();
-      modal.onDidDismiss(data => {
-        if (data == true) {
-          inicio++;
-          this.setEstadoCampaniaSMS(id, 'A');
-          this.setSms(list_sms, id, inicio);
-        } else {
-          this.setEstadoCampaniaSMS(id, 'P');
-          this.closeModal(true);
-          return false;
+        if (this.globalProvider.dispositivo == true) {
+          clearInterval(this.stado_sms.hilo);
         }
-      });
-    }
+        this.closeModal(true);
+        return false;
+      }
+      if (this.globalProvider.dispositivo == true) {
+        this.stado_sms.inicio++;
+        if (this.stado_sms.estado != 'A') {
+          this.setEstadoCampaniaSMS(id, 'A');
+          this.stado_sms.estado = 'A';
+          this.getCampaniaSMSUsuario();
+        }
+      } else {
+        let modal = this.modalController.create(ModalIosPage);
+        modal.present();
+        modal.onDidDismiss(data => {
+          if (data == true) {
+            inicio++;
+            this.setEstadoCampaniaSMS(id, 'A');
+            this.setSms(list_sms, id, inicio);
+          } else {
+            this.setEstadoCampaniaSMS(id, 'P');
+            this.closeModal(true);
+            return false;
+          }
+        });
+      }
     }).catch((err) => {
-       clearInterval(this.stado_sms.hilo);
-       this.closeModal(true);
-       console.log('err: ' + JSON.stringify(err))
-     });
+      clearInterval(this.stado_sms.hilo);
+      this.closeModal(true);
+      console.log('err: ', err.toString())
+    });
   }
 
   setSMSEnviadoCampanaSMS(id: number, id_contenidp: string) {
-    let url = "servicio=setSMSEnviadoCampanaSMS&id_campaniaSMS=" + id +
+    let url: string = "servicio=setSMSEnviadoCampanaSMS&id_campaniaSMS=" + id +
       "&id_campaniaSMS_contenido=" + id_contenidp +
-      "&id_usuario=" + this.globalProvider.usuario.id_usuario;
-    this.httpProvider.get(url).catch(err => console.log('err: ' + JSON.stringify(err)));
+      "&id_usuario=" + this.globalProvider.usuario.id_usuario +
+      "&lg=" + this.globalProvider.idioma.key;
+    this.httpProvider.get(url).catch(err => console.log('err: ', err.toString()));
   }
 
   setEstadoCampaniaSMS(id: number, stado: string) {
-    let url = "servicio=setEstadoCampaniaSMS" +
+    let url: string = "servicio=setEstadoCampaniaSMS" +
       "&id_campaniaSMS=" + id +
-      "&estado=" + stado;
-    this.httpProvider.get(url).catch(err => console.log('err: ' + JSON.stringify(err)));
+      "&estado=" + stado +
+      "&lg=" + this.globalProvider.idioma.key;
+    this.httpProvider.get(url).catch(err => console.log('err: ', err.toString()));
   }
 
   getSMSTotalEnviado(id: number, i: number) {
@@ -311,12 +318,13 @@ export class SmsPage {
     }
 
     this.campaniaSMS[i].estado_campania_sms = 'A';
-    let url = "servicio=getSMSTotalEnviado&id_campaniaSMS=" + id;
+    let url: string = "servicio=getSMSTotalEnviado&id_campaniaSMS=" + id +
+      "&lg=" + this.globalProvider.idioma.key;
     this.httpProvider.get(url).then((res: any) => {
       if (res.error == 'false') {
         this.getListaSMSCampaniaSMS(id, true, res.sms_enviado);
       }
-    }).catch(err => console.log('err: ' + JSON.stringify(err)));
+    }).catch(err => console.log('err: ', err.toString()));
   }
 
   doRefresh(refresher) {
@@ -340,12 +348,13 @@ export class SmsPage {
 
   getVisitaLinkSMS(id: number) {
     this.load = this.globalProvider.cargando(this.globalProvider.data.msj.load);
-    let url: string = "servicio=getVisitaLinkSMS&id_campania_sms=" + id;
+    let url: string = "servicio=getVisitaLinkSMS&id_campania_sms=" + id +
+      "&lg=" + this.globalProvider.idioma.key;
     this.httpProvider.get(url).then((res: any) => {
       this.load.dismiss();
       this.visitas = res.contenido;
     }).catch((err) => {
-      console.log('err: ' + JSON.stringify(err));
+      console.log('err: ', err.toString());
       this.load.dismiss();
     });
   }

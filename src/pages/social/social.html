@@ -107,11 +107,11 @@
       </div>
       <ion-row class="posicion-logo" no-padding no-lines>
         <ion-col id="cuadros" *ngFor="let posicion of posicion_logo; let i = index" col-4>
-          <button id="btn-cuadro" color="dark" [style.font-weight]="(posicion.posicion != null) ? 'bold' : ''"
+          <p id="btn-cuadro" color="dark" [style.font-weight]="(posicion.posicion != null) ? 'bold' : ''"
             [style.color]="(posicion.posicion  != null) ? 'white' : ''" [style.opacity]="(posicion.posicion  != null) ? '0.5' : ''"
-            [style.background-color]="(posicion.posicion != null) ? 'blue' : ''" ion-button clear block (click)="inserPosicionLogo(i , logo_select.id)">
+            [style.background-color]="(posicion.posicion != null) ? 'blue' : ''"  (click)="inserPosicionLogo(i , logo_select.id)">
             {{ posicion.title | translate }}
-          </button>
+        </p>
         </ion-col>
       </ion-row>
       <!--fin edit marca de agua-->

@@ -64,9 +64,10 @@ export class ProductoPage {
   getComboProducto() {
     let dispositivo: string = (this.globalProvider.dispositivo == true) ? 'android' : 'ios';
     let url: string = "servicio=getComboProducto";
-    let data = {
+    let data: Object = {
       "id_usuario": this.globalProvider.usuario.id_usuario,
-      "plataforma": dispositivo
+      "plataforma": dispositivo,
+      "lg": this.globalProvider.idioma.key
     };
     this.httpProvider.post(data, url).then((res: Array<any>) => {
       this.combos = res;
@@ -82,8 +83,7 @@ export class ProductoPage {
           }
         })
       }, this);
-      //this.content.resize();
-    }).catch(err => console.log('err: ' + err));
+    }).catch(err => console.log('err: ', err.toString()));
   }
 
   async purchase() {
@@ -179,17 +179,16 @@ export class ProductoPage {
   setComboProducto(product: any, arg: any) {
     let dispositivo: string = (this.globalProvider.dispositivo == true) ? 'android' : 'ios';
     let url: string = "servicio=setComboProducto";
-    let data: any = {
+    let data: Object = {
       "id_usuario": this.globalProvider.usuario.id_usuario,
       "plataforma": dispositivo,
       "id_producto": product.id,
       "id_producto_antiguo": arg.id_producto_antiguo,
-      "token": product.transaction.purchaseToken
+      "token": product.transaction.purchaseToken,
+      "lg": this.globalProvider.idioma.key
     };
-    console.log(url);
     this.httpProvider.post(data, url).then(() => {
       this.getComboProducto();
-      //this.globalProvider.setProductoId(product.id);
-    }).catch(err => console.log('err: ' + JSON.stringify(err)));
+    }).catch(err => console.log('err: ', err.toString()));
   }
 }

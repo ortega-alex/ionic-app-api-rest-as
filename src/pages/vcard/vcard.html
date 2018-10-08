@@ -21,15 +21,15 @@
     {{globalProvider.plan.advanvcard_msn}}
   </p>
   <div *ngIf="edit">
-    <button id="btn-color" #someInput ion-button small [(colorPicker)]="vcard.btn_color" [style.background]="(vcard.btn_color != 'null' && vcard.btn_color != null) ?  vcard.btn_color : 'black'"
+    <button id="btn-color" #someInput ion-button [(colorPicker)]="vcard.btn_color" [style.background]="(vcard.btn_color != 'null' && vcard.btn_color != null) ?  vcard.btn_color : 'black'"
       (colorPickerChange)="vcard.btn_color = $event" [cpPosition]="bottom">
       {{'_colorButtons' | translate }}
     </button>
-    <button id="btn-color" #someInput ion-button small [(colorPicker)]="vcard.fondo" [style.background]="(vcard.fondo != 'null' && vcard.fondo != null) ? vcard.fondo : 'black'"
+    <button id="btn-color" #someInput ion-button [(colorPicker)]="vcard.fondo" [style.background]="(vcard.fondo != 'null' && vcard.fondo != null) ? vcard.fondo : 'black'"
       (colorPickerChange)="vcard.fondo=$event" [cpPosition]="bottom">
       {{ '_background' | translate }}
     </button>
-    <button id="btn-color" #someInput ion-button small [(colorPicker)]="vcard.text_color" [style.background]="(vcard.text_color != 'null' && vcard.text_color != null) ? vcard.text_color : 'black'"
+    <button id="btn-color" #someInput ion-button [(colorPicker)]="vcard.text_color" [style.background]="(vcard.text_color != 'null' && vcard.text_color != null) ? vcard.text_color : 'black'"
       (colorPickerChange)="vcard.text_color=$event" [cpPosition]="bottom">
       {{'_textColor' | translate }}
     </button>
@@ -92,20 +92,28 @@
 
     <ion-row id="content-row" no-padding no-Lines no-border text-center *ngFor="let telefono of vcard.telefonos ; let i = index">
       <ion-col col-5>
-        <ion-input type="text" [placeholder]="'_phone' | translate" text-center [(ngModel)]="vcard.telefonos[i].telefono"></ion-input>
+        <ion-item no-padding no-margin no-border no-lines>
+          <ion-label stacked></ion-label>
+          <ion-input type="text" [placeholder]="'_phone' | translate" text-center [(ngModel)]="vcard.telefonos[i].telefono"></ion-input>
+        </ion-item>
       </ion-col>
       <ion-col col-4>
-        <select [(ngModel)]="vcard.telefonos[i].tipo">
-          <option value="0" selected="{{(vcard.telefonos[i].tipo == '0') ? 'selected' : ''}}">{{'_primary' | translate
-            }}</option>
-          <option value="1" selected="{{(vcard.telefonos[i].tipo == '1') ? 'selected' : ''}}">{{'_secondary' | translate
-            }}</option>
-        </select>
+        <ion-item no-padding no-margin no-border no-lines>
+          <ion-label stacked></ion-label>
+          <ion-select [(ngModel)]="vcard.telefonos[i].tipo" text-center>
+            <ion-option value="0" [selected]="(vcard.telefonos[i].tipo == '0') ? 'selected' : ''">{{'_primary' |
+              translate }} </ion-option>
+            <ion-option value="1" [selected]="(vcard.telefonos[i].tipo == '1') ? 'selected' : ''">{{'_secondary' |
+              translate }} </ion-option>
+          </ion-select>
+        </ion-item>
       </ion-col>
       <ion-col col-3>
-        <button *ngIf="vcard.telefonos.length == 1" ion-button small color="dark" (click)="vcard.telefonos.push({id_vcard_telefono: ' ',telefono: null ,tipo: '1'})">
-          <ion-icon name="add-circle"></ion-icon>
-        </button>
+        <ion-item no-padding no-margin no-border no-lines>
+          <button *ngIf="vcard.telefonos.length == 1" ion-button small color="dark" (click)="vcard.telefonos.push({id_vcard_telefono: ' ',telefono: null ,tipo: '1'})">
+            <ion-icon name="add-circle"></ion-icon>
+          </button>
+        </ion-item>
         <!--button *ngIf="telefono.telefono != null" ion-button small color="dark" (click)="eliminarTelefono(telefono.id_vcard_telefono)">
           <ion-icon name="trash"></ion-icon>
         </button-->
@@ -155,7 +163,7 @@
     <ion-row no-padding no-lines no-border>
       <ion-item class="content-item">
         <ion-label stacked> {{'_language' | translate}} </ion-label>
-        <ion-select (ionChange)="getIdioma($event)" text-center>
+        <ion-select (ionChange)="getLenguajeUsuario($event)" text-center>
           <ion-option *ngFor="let item of idiomas" [value]="item.id" [selected]="(globalProvider.idioma && item.id == globalProvider.idioma.key) ? true : false">
             {{ item.text }}
           </ion-option>
@@ -175,12 +183,14 @@
         </button>
       </ion-col>
     </ion-row>
-
-    <button ion-button block small icon-left color="dark" (click)="signOff()">
-      <ion-icon name="close"></ion-icon>
-      {{ '_signOff' | translate }}
-    </button>
-
+    <ion-row id="content-row" no-padding no-Lines no-border text-center>
+      <ion-col>
+        <button ion-button block small icon-left color="dark" (click)="signOff()">
+          <ion-icon name="close"></ion-icon>
+          {{ '_signOff' | translate }}
+        </button>
+      </ion-col>
+    </ion-row>
   </div>
 
   <div class="preview" *ngIf="edit == false" [style.background]="vcard.fondo">
@@ -241,7 +251,8 @@
           [style.font-weight]="vcard.bold" [style.font-style]="vcard.italic" [style.text-decoration]="vcard.subrayar"
           [style.color]="vcard.text_color">
           <a id="href-social" [href]="(vcard.url_vcard && vcard.url_vcard != null && vcard.url_vcard != 'null' && vcard.url_vcard.trim() != '') ? httpProvider.URL_VCARD + vcard.id_usuario : '#'"
-            [style.text-decoration]="(vcard.subrayar != 'null') ? vcard.subrayar : 'none'" [style.color]="(vcard.btn-color != 'null') ? vcard.btn-color : 'white'">
+            [style.background]="vcard.btn_color" [style.text-decoration]="(vcard.subrayar != 'null') ? vcard.subrayar : 'none'"
+            [style.color]="(vcard.text_color != 'null') ? vcard.text_color : 'white'">
             {{ '_downloadVCard' | translate }} </a>
         </button>
       </ion-col>

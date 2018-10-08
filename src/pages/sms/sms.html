@@ -61,7 +61,7 @@
             </ion-col>
           </ion-row>
           <ion-row class="row-historial">
-            <ion-col id="row-historial" *ngIf="globalProvider.plan.sms_leads == 'P'">
+            <ion-col col-6 id="row-historial" *ngIf="globalProvider.plan.sms_leads == 'P'">
               <button ion-button small color="dark" block (click)="contenido = !contenido ; getVisitaLinkSMS(campania_sms.id_campania_sms)">
                 {{ '_linkViews' | translate }}
               </button>

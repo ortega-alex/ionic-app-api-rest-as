@@ -58,7 +58,8 @@ export class AgendaPage {
   }
 
   private getDrawAgenda() {
-    let url: string = "servicio=getDrawAgenda&id_usuario=" + this.globalProvider.usuario.id_usuario;
+    let url: string = "servicio=getDrawAgenda&lg=" + this.globalProvider.idioma.key +
+      "&id_usuario=" + this.globalProvider.usuario.id_usuario;
     this.httpProvider.get(url).then((res: any) => {
       if (res.error == "false") {
         this.texto = res.texto;
@@ -72,7 +73,7 @@ export class AgendaPage {
       } else {
         this.globalProvider.alerta(res.msn);
       }
-    }).catch(err => console.log("err: " + JSON.stringify(err)))
+    }).catch(err => console.log("err: ", err.toString()))
   }
 
   setAgenda() {
@@ -90,7 +91,7 @@ export class AgendaPage {
     let load = this.globalProvider.cargando(this.globalProvider.data.msj.load);
     this.sms.send(this.numerico.transform(this.fromContent.value.numero.toString()), this.fromContent.value.texto.toString()).then(() => {
       load.dismiss();
-      let url: string = "servicio=setAgenda";
+      let url: string = "servicio=setAgenda&lg=" + this.globalProvider.idioma.key;
       this.httpProvider.post(this.fromContent.value, url).then((res: any) => {
         if (res.error == "false") {
           this.setContacto();
@@ -100,12 +101,12 @@ export class AgendaPage {
         }
       }).catch((err) => {
         load.dismiss();
-        console.log("err http: " + JSON.stringify(err));
+        console.log("err: ", err.toString());
       });
     }).catch((err) => {
       load.dismiss();
       this.globalProvider.alerta("It could not send!");
-      console.log("err sms: " + JSON.stringify(err));
+      console.log("err: " + err.toString());
     });
   }
 
