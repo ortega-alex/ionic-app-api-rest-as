@@ -115,10 +115,7 @@ export class RegistroPage {
   }
 
   getLenguajeUsuario(id: string) {
-    let url: string = "servicio=getLenguajeUsuario&lg=" + id;
-    this.httpProvider.get(url).then((res: Object) => {
-      this.globalProvider.idioma = { key: id, contenido: res };
-      this.globalProvider.setIdioma();
+    this.globalProvider.getLenguajeUsuario(id).then(() => {
       this.app.getRootNav().setRoot(RegistroPage);
     }).catch(err => console.log('err idioma: ' + err.toString()));
   }

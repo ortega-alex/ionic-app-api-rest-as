@@ -6,6 +6,7 @@ import { Http } from '@angular/http';
 import { Usuario, Plan } from '../../model/Usuario';
 import 'rxjs/add/operator/map';
 import { getMilisegundos } from '../../pipes/filtros/filtros';
+import { HttpProvider } from '../http/http';
 
 export interface Idioma {
   key: string,
@@ -29,7 +30,8 @@ export class GlobalProvider {
     private storage: Storage,
     private load: LoadingController,
     private htt: Http,
-    private platFrom: Platform
+    private platFrom: Platform,
+    private httpProvider : HttpProvider
   ) {
     this.dispositivo = (this.platFrom.is('android')) ? true : false;
     this.getUsuario();
@@ -125,8 +127,21 @@ export class GlobalProvider {
     }, 3000);
   }
 
-  setIdioma() {
-    this.storage.set("id", this.idioma)
+  getLenguajeUsuario(id: string) {
+    return new Promise((resolve, reject) => {
+      try {
+        let url: string = this.httpProvider.URL + "servicio=getLenguajeUsuario&lg=" + id;
+        this.http.get(url).subscribe((res: object) => {
+          this.idioma = { key: id, contenido: res };
+          this.storage.set("id", this.idioma)
+          resolve();
+        }, error => {
+          reject(error);
+        });
+      } catch (error) {
+        reject(error);
+      }
+    });
   }
 
   getIdioma() {

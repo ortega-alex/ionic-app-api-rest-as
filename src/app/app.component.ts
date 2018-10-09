@@ -221,11 +221,7 @@ export class MyApp {
   private getLenguajeUsuario() {
     this.storage.get('id').then((idioma: Idioma) => {
       if (!idioma) {
-        let url: string = "servicio=getLenguajeUsuario&lenguaje=en&lg=en";
-        this.httpProvider.get(url).then((res: Object) => {
-          this.globalProvider.idioma = { key: "en", contenido: res };
-          this.globalProvider.setIdioma();
-        }).catch(err => console.log('err idioma: ' + err.toString()));
+        this.globalProvider.getLenguajeUsuario('en').catch(err => console.log('err: ' , err.toString()));
       } else {
         this.globalProvider.idioma = { key: idioma.key, contenido: idioma.contenido };
       }

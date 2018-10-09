@@ -178,10 +178,7 @@ export class VcardPage {
     }
 
     getLenguajeUsuario(id: string) {
-        let url: string = "servicio=getLenguajeUsuario&lg=" + id ;
-        this.httpProvider.get(url).then((res: Object) => {
-            this.globalProvider.idioma = { key: id, contenido: res };
-            this.globalProvider.setIdioma();
+        this.globalProvider.getLenguajeUsuario(id).then(() => {
             this.setLenguajeUsuario(id);
             this.app.getRootNav().setRoot(VcardPage);
         }).catch(err => console.log('err idioma: ' + err.toString()));

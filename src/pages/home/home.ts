@@ -63,6 +63,7 @@ export class HomePage {
   menu: boolean;
   campaniaSMS: Array<any>;
   sin_campanias: boolean;
+  version: string = "2.2.1"
 
   constructor(
     public navCtrl: NavController,
@@ -276,27 +277,12 @@ export class HomePage {
         }
         this.free();
 
-        if (res.version_app != '2.2.0') {
-          let url: string;
-          let alert = this.alertController.create({
-            title: this.globalProvider.idioma.contenido['_newVersion'],
-            subTitle: res.version_app_msn,
-            buttons: [
-              {
-                text: 'Yes',
-                handler: () => {
-                  if (this.platform.is('android')) {
-                    url = 'https://play.google.com/store/apps/details?id=com.httpsAdvanSales.AdvanSales8';
-                  }
-                  if (this.platform.is('ios')) {
-                    url = 'https://itunes.apple.com/us/app/advansales/id1394472577?l=es&ls=1&mt=8';
-                  }
-                  window.location.href = url;
-                }
-              }
-            ]
-          });
-          alert.present();
+        if (res.version_app != this.version) {
+          this.alertVersion(res.version_app_msn);
+        }
+
+        if (res.cargar_app_lenguaje == 'Y') {
+          this.setCargaAppLenguaje()
         }
 
       } else {
@@ -820,5 +806,36 @@ export class HomePage {
         this.getCampaniaUsuario();
       }
     });
+  }
+
+  private alertVersion(msj: string) {
+    let url: string;
+    let alert = this.alertController.create({
+      title: this.globalProvider.idioma.contenido['_newVersion'],
+      subTitle: msj,
+      buttons: [
+        {
+          text: 'Yes',
+          handler: () => {
+            if (this.platform.is('android')) {
+              url = 'https://play.google.com/store/apps/details?id=com.httpsAdvanSales.AdvanSales8';
+            }
+            if (this.platform.is('ios')) {
+              url = 'https://itunes.apple.com/us/app/advansales/id1394472577?l=es&ls=1&mt=8';
+            }
+            window.location.href = url;
+          }
+        }
+      ]
+    });
+    alert.present();
+  }
+
+  private setCargaAppLenguaje() {
+    let id = (this.globalProvider.idioma) ? this.globalProvider.idioma.key : 'en';
+    this.globalProvider.getLenguajeUsuario(id).then(() => {
+      let url: string = "servicio=setCargaAppLenguaje&id_usuario=" + this.globalProvider.usuario.id_usuario;
+      this.httpProvider.get(url).catch(err => console.log('err: ', err.toString()));
+    }).catch(err => console.log('err: ', err.toString()))
   }
 }
