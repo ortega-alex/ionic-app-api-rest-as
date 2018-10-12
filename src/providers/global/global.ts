@@ -7,6 +7,7 @@ import { Usuario, Plan } from '../../model/Usuario';
 import 'rxjs/add/operator/map';
 import { getMilisegundos } from '../../pipes/filtros/filtros';
 import { HttpProvider } from '../http/http';
+declare var SMS: any;
 
 export interface Idioma {
   key: string,
@@ -24,6 +25,7 @@ export class GlobalProvider {
   public token: any;
   public dispositivo: boolean;
   public idioma: Idioma;
+  public list_sms: Array<any>
 
   constructor(
     public http: HttpClient,
@@ -31,7 +33,7 @@ export class GlobalProvider {
     private load: LoadingController,
     private htt: Http,
     private platFrom: Platform,
-    private httpProvider : HttpProvider
+    private httpProvider: HttpProvider
   ) {
     this.dispositivo = (this.platFrom.is('android')) ? true : false;
     this.getUsuario();
@@ -92,21 +94,19 @@ export class GlobalProvider {
     });
   }
 
-  setListSms(nombre: string, list_sms: any): void {
-    this.storage.set(nombre, list_sms);
+  setListSms(id: string, list_sms: any): void {
+    this.list_sms = list_sms;
+    this.storage.set(id, list_sms);
   }
 
-  getListSms(nombre: string) {
-    this.storage.get(nombre).then(list_sms => {
-      if (list_sms && list_sms != null) {
-        return list_sms;
-      }
-      return false;
+  getListSms(id: string) {
+    this.storage.get(id).then(list_sms => {
+      this.list_sms = list_sms;
     });
   }
 
-  deleteListSms(nombre: string) {
-    this.storage.remove(nombre);
+  deleteListSms(id: string) {
+    this.storage.remove(id);
   }
 
   cargando(msj) {
@@ -149,6 +149,31 @@ export class GlobalProvider {
       if (res) {
         this.idioma = res;
       }
+    });
+  }
+
+  setSMSRead(status: string, id: string) {
+    let filter = {
+      box: 'sent',
+      body: this.list_sms[0].text
+    };
+    if (SMS) SMS.listSMS(filter, (list: Array<any>) => {
+      this.list_sms.forEach((value, index) => {
+        list.forEach((value2) => {
+          if (value.telefono == value2.address) {
+            this.list_sms[index].estado = "Y";
+          }
+        }, this);
+      }, this);
+      let url: string = this.httpProvider.URL + "servicio=setSMSConfirmacion";
+      let data: Object = { id_campaniaSMS: id, id_usuario: this.usuario.id_usuario, sms: this.list_sms };
+      this.http.post(url, JSON.stringify(data)).subscribe(() => {
+        if (status == 'T') {
+          this.deleteListSms(id);
+        }
+      }, (err) => console.log(err));
+    }, Error => {
+      console.log("err: " + JSON.stringify(Error))
     });
   }
 }

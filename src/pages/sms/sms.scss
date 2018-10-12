@@ -3,7 +3,7 @@ page-sms {
     height: 100% !important;
     width: 100% !important;
     .content-header{    
-        margin-top: 10%;            
+        margin: 0%;        
         text-align: center;
         width: 100% !important;
         .conten-row{
@@ -18,14 +18,8 @@ page-sms {
             }
         }
     }
-    .info-content{
-        padding: 0% 5%;
-        text-align: center;
-        #info-parrafo{
-            font-size: 1.2em;
-        }
-    }
-    .content-historial{
+
+    .view-manager{
         height: 80% !important;
         width: 100% !important;
         .row-historial{
@@ -45,7 +39,6 @@ page-sms {
                 }
                 #sms_text{
                     border: solid #f8f8f8 1px;
-                    //padding: 2%;
                     margin: 0%;
                 }
                 #icon-historial{
@@ -85,41 +78,7 @@ page-sms {
             font-size: 0.7em;
          }
     }
-    .content-sms{
-        .row-info{
-            margin: 0%;
-            padding: 0%;
-            #row-info{
-                    #row-info-label{
-                        margin: 0% !important;
-                        width: 100% !important;
-                        font-size: 0.8em;
-                    }
-                    #row-info-input{
-                        margin: 0% !important;
-                        font-size: 1.2em;
-                        border-bottom:solid #f0f0f0 1px;
-                    }
-                    #row-info-texarea{
-                        margin: 0% !important;
-                        width: 100% !important;
-                        font-size: 1.2em;
-                        border-bottom:solid #f0f0f0 1px;
-                    }     
-                    #row-info-date{
-                        margin: 0% !important;
-                        width: 100% !important;
-                        font-size: 1.2em;
-                        border-bottom:solid #f0f0f0 1px;
-                    }              
-                }
-                #calendar{
-                    font-size: 3em;
-                    bottom: 5%;
-                    right: 2%;
-                }            
-        }
-        .row-estatus{
+    .row-estatus{
             margin: 0%;
             padding: 0%;
             #row-estatus{
@@ -141,10 +100,4 @@ page-sms {
                 }
             }            
         }
-    }  
-    
-    ion-label{
-        margin: 0% !important;
-        padding: 0% !important;
-    }
 }

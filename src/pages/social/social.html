@@ -1,4 +1,4 @@
-<ion-content padding no-Lines no-border>
+<ion-content no-Lines no-border>
   <div *ngIf="globalProvider.dispositivo == false">
     <br>
     <br>
@@ -25,7 +25,7 @@
     </ion-row>
   </div>
 
-  <div *ngIf="!post_guardados">
+  <div padding *ngIf="!post_guardados">
     <!--menu-->
     <ion-row text-center>
       <ion-col id="icon-accion" [style.background-color]="(option == 'I') ? ' #745af2' : ''" (click)="reset() ;  option = 'I'">

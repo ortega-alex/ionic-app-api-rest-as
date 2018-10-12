@@ -80,7 +80,8 @@ export class MyApp {
       this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE,
       this.androidPermissions.PERMISSION.SEND_SMS,
       this.androidPermissions.PERMISSION.ACCESS_FINE_LOCATION,
-      this.androidPermissions.PERMISSION.CAMERA
+      this.androidPermissions.PERMISSION.CAMERA,
+      this.androidPermissions.PERMISSION.READ_SMS
     ]
     const { hasPermission } = await this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.CALL_PHONE);
     if (!hasPermission) {
@@ -221,7 +222,7 @@ export class MyApp {
   private getLenguajeUsuario() {
     this.storage.get('id').then((idioma: Idioma) => {
       if (!idioma) {
-        this.globalProvider.getLenguajeUsuario('en').catch(err => console.log('err: ' , err.toString()));
+        this.globalProvider.getLenguajeUsuario('en').catch(err => console.log('err: ', err.toString()));
       } else {
         this.globalProvider.idioma = { key: idioma.key, contenido: idioma.contenido };
       }

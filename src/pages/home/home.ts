@@ -63,7 +63,7 @@ export class HomePage {
   menu: boolean;
   campaniaSMS: Array<any>;
   sin_campanias: boolean;
-  version: string = "2.2.1"
+  version: string = "2.2.2";
 
   constructor(
     public navCtrl: NavController,

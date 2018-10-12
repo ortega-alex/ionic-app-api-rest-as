@@ -1,20 +1,22 @@
 <ion-content class="contenido-home" no-Lines [style.background]="home_util.background">
   <div class="content-header" *ngIf="conexion == false" [style.padding]="(globalProvider.dispositivo == false) ? '5% 0% 0% 0%' : ''">
     <ion-row text-center no-margin no-lines class="conten-row">
-      <ion-col col-2 text-center no-margin no-lines id="conten-row" text-left>
-        <button *ngIf="sms_activo == false" ion-button clear small no-margin color="dark" (click)="drawAgenda()" style="font-size: 1.5em;">
+      <ion-col col-2 text-center no-margin no-lines id="conten-row" text-left *ngIf="sms_activo == false">
+        <button ion-button clear small no-margin color="dark" (click)="drawAgenda()" style="font-size: 1.5em;">
           <ion-icon no-padding *ngIf="globalProvider.dispositivo == true" name="add"></ion-icon>
           <ion-icon no-padding *ngIf="globalProvider.dispositivo == false" ios="md-add" md="lg-add"></ion-icon>
         </button>
       </ion-col>
-      <ion-col col-8 text-center no-margin no-lines id="conten-row">
-        <img id="title" src="assets/imgs/title.png" *ngIf="sms_activo == false">
-        <button id="conten-row-btn" ion-button small block (click)="smsModal(true)" color="dark" *ngIf="sms_activo == true && campaniaSMS.length > 0">
+      <ion-col col-8 text-center no-margin no-lines id="conten-row" *ngIf="sms_activo == false">
+        <img id="title" src="assets/imgs/title.png">
+      </ion-col>
+      <ion-col col-12 text-center no-margin no-lines id="conten-row" *ngIf="sms_activo == true && campaniaSMS.length > 0">
+        <button id="conten-row-btn" ion-button block (click)="smsModal(true)" color="dark">
           <b id="btn-title">{{ '_smsManager' | translate }} </b>
         </button>
       </ion-col>
-      <ion-col col-2 text-center no-margin no-padding no-lines id="conten-row" text-right>
-        <button *ngIf="sms_activo == false" ion-button clear small no-margin color="dark" (click)="menu = !menu" style="font-size: 1.5em;">
+      <ion-col col-2 text-center no-margin no-padding no-lines id="conten-row" text-right *ngIf="sms_activo == false">
+        <button ion-button clear small no-margin color="dark" (click)="menu = !menu" style="font-size: 1.5em;">
           <ion-icon no-padding *ngIf="globalProvider.dispositivo == true" name="more"></ion-icon>
           <ion-icon no-padding *ngIf="globalProvider.dispositivo == false" ios="md-more" md="lg-more"></ion-icon>
         </button>
@@ -28,30 +30,30 @@
     </button>
   </div>
 
-  <div *ngIf="menu && sms_activo == false" style="margin:0% 1%">
-    <button ion-button block (click)="crearCampania() ; menu = false" color="light" icon-left style="margin-top:2%">
-      <ion-icon name="call"></ion-icon>
+  <ion-scroll scrollY="true" class="menu" *ngIf="menu && sms_activo == false">
+    <p id="submenu" (click)="crearCampania() ; menu = false" style="background-color: rgb(6, 215, 156);">
+      <ion-icon id="icono-menu" name="call"></ion-icon>
       <b>{{ '_uploadLeads' | translate }}</b>
-    </button>
-    <button ion-button block (click)="selectSms() ; menu = false" color="light" icon-left style="margin-top:2%">
-      <ion-icon name="chatboxes"></ion-icon>
+    </p>
+    <p id="submenu" (click)="selectSms() ; menu = false" style="background-color: rgb(52, 58, 64);">
+      <ion-icon id="icono-menu" name="chatboxes"></ion-icon>
       <b>{{ '_createSMSCampaing' | translate }}</b>
-    </button>
-    <button ion-button block (click)="drawSocial() ; menu = false" color="light" icon-left style="margin-top:2%">
-      <ion-icon name="globe"></ion-icon>
+    </p>
+    <p id="submenu" (click)="drawSocial() ; menu = false" style="background-color: rgb(57, 139, 247);">
+      <ion-icon id="icono-menu" name="globe"></ion-icon>
       <b>{{ '_socialMedia' | translate }}</b>
-    </button>
-    <button ion-button block (click)="drawVcard() ; menu = false" color="light" icon-left style="margin-top:2%">
-      <ion-icon name="people"></ion-icon>
+    </p>
+    <p id="submenu" (click)="drawVcard() ; menu = false" style="background-color: rgb(116, 90, 242);">
+      <ion-icon id="icono-menu" name="people"></ion-icon>
       <b>{{ '_vCardProfile' | translate }}</b>
-    </button>
-    <button ion-button block (click)="drawTutorials()  ; menu = false " color="light" icon-left style="margin-top:2%">
-      <ion-icon name="film"></ion-icon>
+    </p>
+    <p id="submenu" (click)="drawTutorials()  ; menu = false" style="background-color: rgb(255, 193, 7);">
+      <ion-icon id="icono-menu" name="film"></ion-icon>
       <b>{{ '_tutorials' | translate }}</b>
-    </button>
-  </div>
+    </p>
+  </ion-scroll>
 
-  <ion-scroll scrollY="true" class="content-div" no-Lines no-border no-padding *ngIf="conexion == false"
+  <ion-scroll scrollY="true" class="content-div" no-Lines no-border no-padding *ngIf="conexion == false && menu == false"
     [style.background]="home_util.background">
     <ion-refresher (ionRefresh)="doRefresh($event)">
       <ion-refresher-content></ion-refresher-content>
@@ -134,6 +136,10 @@
     <div class="espacio"></div>
   </ion-scroll>
   <div class="conten-conexion" *ngIf="conexion == true">
+    <div *ngIf="globalProvider.dispositivo == false">
+      <br>
+      <br>
+    </div>
     <ion-row class="conten-row">
       <ion-col id="conten-row" col-2>
         <ion-icon *ngIf="globalProvider.dispositivo == true" id="icon" name="arrow-round-back" (click)="monitoreo()"></ion-icon>
@@ -195,7 +201,7 @@
     </ion-row>
   </div>
 
-  <ion-fab bottom center *ngIf="conexion == false && sms_activo == false && globalProvider.idioma">
+  <ion-fab bottom center *ngIf="conexion == false && sms_activo == false && globalProvider.idioma && menu == false">
     <button ion-fab color="dark" (click)="monitoreo()">
       {{ '_sync' | translate }}
     </button>
@@ -205,12 +211,12 @@
 <ion-footer no-padding no-border no-lines *ngIf="sms_activo == true">
   <ion-row no-padding no-margin no-lines>
     <ion-col>
-      <button ion-button block small color="dark" (click)="selectSms()" style="margin:0%">
+      <button ion-button block color="dark" (click)="selectSms()" style="margin:0%">
         {{ '_cancel' | translate }}
       </button>
     </ion-col>
     <ion-col>
-      <button ion-button block small color="dark" (click)="smsModal()" [disabled]="sin_campanias" style="margin:0%">
+      <button ion-button block color="dark" (click)="smsModal()" [disabled]="sin_campanias" style="margin:0%">
         {{ '_createSMS' | translate }}
       </button>
     </ion-col>

@@ -82,9 +82,9 @@ page-home {
 			}
 		}	
 		.conten-conexion{
-			padding: 5%;
+			padding: 0% 5% 0% 5%;
 			text-align: center;
-			margin-top: 5% !important;  			
+			//margin-top: 5% !important;  			
 			.conten-row{
 				#conten-row{
 					margin: 0%;
@@ -111,4 +111,31 @@ page-home {
 		font-size: 1.5em;
 		font-weight: bold;
 	}
+	.menu{
+		//border: solid black 1px;
+		height: 87% !important;
+		text-align: center;		
+		.scroll-zoom-wrapper{
+			//border: solid black 1px;
+			height: 100% !important;
+		}
+		#submenu{
+			height: 25% !important;
+			margin: 0% 5% 5% 5%;
+			//border-radius: 10px;
+			border-radius: 3%;
+			color: white;
+			//background-color: #f4f4f4;
+			padding: 0% 5%;
+			display: flex;
+			justify-content: center;
+			align-content: center;
+			flex-direction: column;
+			font-weight: bold;
+			font-size: 1.2em;
+			#icono-menu{
+				font-size: 3em;
+			}
+		}
+	}	
 }

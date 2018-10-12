@@ -17,17 +17,14 @@
       </ion-col>
     </ion-row>
   </div>
-
   <button *ngFor="let tutorial of tutoriales" ion-button block icon-left color="dark">
     <ion-icon name="add"></ion-icon>
     <a href="{{tutorial.url}}">{{tutorial.nombre}}</a>
   </button>
-
 </ion-content>
-
 <ion-footer style="padding : 0 5%">
   <button ion-button block icon-right color="dark">
-    <a [href]="'https://advansales.com/chat.php?k=' + globalProvider.usuario.id_usuario">chat</a>
+    <a href="https://advansales.com/chat.php?k={{globalProvider.usuario.id_usuario}}">chat</a>
     <ion-icon name="chatboxes"></ion-icon>
   </button>
   <div *ngIf="globalProvider.dispositivo == false">
