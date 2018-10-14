@@ -56,6 +56,7 @@ export class SmsPage {
     this.sms_status = [];
     this.campaniaSMS = [];
     this.submitted = false;
+    this.list = { id: null, sms_enviado: null, status: null, posicion: null };
   }
 
   ionViewDidLoad() {
@@ -183,6 +184,8 @@ export class SmsPage {
       if (res.error == 'false') {
         this.globalProvider.setListSms(this.list.id.toString(), res.sms);
         if (empesar == true) {
+          this.list.status = 'A';
+          this.setEstadoCampaniaSMS()
           if (this.globalProvider.dispositivo == true) {
             this.play();
           } else {
@@ -200,6 +203,7 @@ export class SmsPage {
   }
 
   procesosDeEnvio() {
+    console.log('existe', this.globalProvider.list_sms[this.list.sms_enviado]);
     if (this.globalProvider.list_sms[this.list.sms_enviado]) {
       this.setSms(this.numerico.transform(this.globalProvider.list_sms[this.list.sms_enviado].telefono), this.globalProvider.list_sms[this.list.sms_enviado].text);
       return
@@ -210,7 +214,6 @@ export class SmsPage {
   }
 
   setSms(telefono: string, text: string) {
-    console.log('envia: ', telefono, text, this.list);
     this.setSMSEnviadoCampanaSMS(this.list.sms_enviado);
     this.list.sms_enviado++;
     this.sms.send(telefono, text).then(() => {
@@ -244,11 +247,13 @@ export class SmsPage {
       "&lg=" + this.globalProvider.idioma.key;
     this.httpProvider.get(url).then(() => {
       this.getCampaniaSMSUsuario();
-      if (this.globalProvider.dispositivo == false && this.list.status == 'T') {
-        this.globalProvider.deleteListSms(this.list.id.toString())
-      } else {
-        this.globalProvider.setSMSRead(this.list.status, this.list.id.toString());
-      }  
+      if (this.list.status != 'A' && this.list.status != 'R') {
+        if (this.globalProvider.dispositivo == false && this.list.status == 'T') {
+          this.globalProvider.deleteListSms(this.list.id.toString())
+        } else {
+          this.globalProvider.setSMSRead(this.list.status, this.list.id.toString());
+        }
+      }
     }).catch(err => console.log('err: ', err.toString()));
   }
 
@@ -264,6 +269,7 @@ export class SmsPage {
 
   pausar(i: number) {
     this.list.status = "P";
+    this.list.id = this.campaniaSMS[i].id_campania_sms;
     clearInterval(this.hilo);
     this.setEstadoCampaniaSMS();
   }

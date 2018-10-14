@@ -109,20 +109,25 @@
             <p id="sms_text">{{ '_sms' | translate }}: {{campania_sms.texto_template}}</p>
           </ion-col>
         </ion-row>
-        <ion-row class="row-historial">
-          <ion-col col-6 id="row-historial" *ngIf="globalProvider.plan.sms_leads == 'P'">
+        <ion-row class="row-historial" no-padding no-margin>
+          <ion-col no-padding no-margin col-6 id="row-historial" *ngIf="globalProvider.plan.sms_leads == 'P'">
             <button ion-button small color="dark" block (click)="sms_page = 2 ; getVisitaLinkSMS(campania_sms.id_campania_sms)">
               {{ '_linkViews' | translate }}
             </button>
           </ion-col>
-          <ion-col id="row-historial">
+          <ion-col no-padding no-margin id="row-historial">
             <ion-icon id="icon-historial" name="trash" color="dark" (click)="setDeleteCampaniaSMS(campania_sms.id_campania_sms)"></ion-icon>
           </ion-col>
-          <ion-col id="row-historial" *ngIf="campania_sms.estado_campania_sms == 'A' && globalProvider.dispositivo == true">
+          <ion-col no-padding no-margin id="row-historial" *ngIf="campania_sms.estado_campania_sms == 'A' && globalProvider.dispositivo == true">
             <ion-icon id="icon-historial" name="pause" color="dark" (click)="campania_sms.estado_campania_sms = 'P' ; pausar(i)"></ion-icon>
           </ion-col>
-          <ion-col id="row-historial" *ngIf="campania_sms.estado_campania_sms == 'P' || campania_sms.estado_campania_sms == 'C'">
+          <ion-col no-padding no-margin id="row-historial" *ngIf="campania_sms.estado_campania_sms == 'P' || campania_sms.estado_campania_sms == 'C'">
             <ion-icon id="icon-historial" name="play" color="dark" (click)="campania_sms.estado_campania_sms = 'A' ; getSMSTotalEnviado(campania_sms.id_campania_sms , i)"></ion-icon>
+          </ion-col>
+          <ion-col no-padding no-margin col-12 id="row-historial" *ngIf="campania_sms.estado_campania_sms == 'R'">
+            <button ion-button small block color="remitente" (click)="campania_sms.estado_campania_sms = 'A' ; getSMSTotalEnviado(campania_sms.id_campania_sms , i)">
+              {{ '_forwarding_msn' | translate }}
+            </button>
           </ion-col>
         </ion-row>
       </div>
