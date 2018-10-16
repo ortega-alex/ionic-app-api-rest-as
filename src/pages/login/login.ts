@@ -70,12 +70,15 @@ export class LoginPage {
         alert.present();
         return false;
       }
-
-      let url: string = 'servicio=getLogIn&usuario=' + this.minusculas.transform(this.logIn.value.correo) +
-        '&clave=' + this.logIn.value.clave +
-        '&tipo_registro=R&tipo_registro_id=null' +
-        '&lg=' + this.globalProvider.idioma.key;
-      this.httpProvider.get(url).then((res: any) => {
+      let url: string = "servicio=getLogInJ";
+      let data: Object = {
+        usuario: this.minusculas.transform(this.logIn.value.correo),
+        clave: this.logIn.value.clave,
+        tipo_registro: 'R',
+        tipo_registro_id: null,
+        lg: this.globalProvider.idioma.key
+      }
+      this.httpProvider.post(data, url).then((res: any) => {
         this.load.dismiss();
         if (res.error == 'false') {
           this.usuario.id_usuario = parseInt(res.id_usuario);

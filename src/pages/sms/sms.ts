@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, Platform, ViewController, ModalController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Platform, ViewController, ModalController, AlertController } from 'ionic-angular';
 import { GlobalProvider } from '../../providers/global/global';
 import { HttpProvider } from '../../providers/http/http';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
@@ -37,7 +37,8 @@ export class SmsPage {
     private httpProvider: HttpProvider,
     private formBuilder: FormBuilder,
     private sms: SMS,
-    private modalController: ModalController
+    private modalController: ModalController,
+    private alertController: AlertController
   ) {
     this.sms_page = (this.navParams.get('historial') == true) ? 1 : 0;
     if (this.sms_page == 1) {
@@ -280,6 +281,38 @@ export class SmsPage {
       refresher.complete();
     });
   }
+
+  setDeleteCampaniaSMS(id: number) {
+    let confirm = this.alertController.create({
+      title: '',
+      message: this.globalProvider.idioma.contenido['_are_you_sure'],
+      buttons: [
+        {
+          text: 'No',
+          handler: () => { }
+        },
+        {
+          text: 'Yes',
+          handler: () => {
+            this.globalProvider.deleteListSms(id.toString());
+            let url: string = "servicio=setDeleteCampaniaSMS&id_campaniaSMS=" + id +
+              "&lg=" + this.globalProvider.idioma.key;
+            this.httpProvider.get(url).then((res: any) => {
+              if (res.error == 'false') {
+                this.globalProvider.alerta(res.msn);
+                this.togglel();
+                this.getCampaniaSMSUsuario();
+              } else {
+                this.globalProvider.alerta(res.msn);
+              }
+            }).catch(err => console.log('err: ', err.toString()));
+          }
+        }
+      ]
+    });
+    confirm.present();
+  }
+
 }
 
 @Component({

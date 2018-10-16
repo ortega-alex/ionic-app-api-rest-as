@@ -15,10 +15,6 @@ page-tutorial {
             }
         }
     }   
-    a{
-        text-decoration:none; 
-        color : white;
-    }
     .header-md::after, .tabs-md[tabsPlacement="top"] > .tabbar::after, .footer-md::before, .tabs-md[tabsPlacement="bottom"] > .tabbar::before{
         border: none !important;
         background-image: none !important;

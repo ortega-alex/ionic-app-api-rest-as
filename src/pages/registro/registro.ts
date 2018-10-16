@@ -88,19 +88,21 @@ export class RegistroPage {
   guardarRegistro() {
     let platform = (this.globalProvider.dispositivo == true) ? 'android' : 'ios';
     this.load = this.globalProvider.cargando(this.globalProvider.data.msj.load);
-    let url: string = 'servicio=setRegistroUsuario' +
-      '&usuario=' + this.minusculas.transform(this.catalogo[2].input) +
-      '&clave=' + this.catalogo[3].input +
-      '&nombre=' + this.catalogo[0].input +
-      '&apellido=' + this.catalogo[1].input +
-      '&tipo_registro= R' +
-      '&tipo_registro_id=' + null +
-      '&token=' + this.globalProvider.token +
-      '&plataforma=' + platform +
-      '&telefono=' + this.catalogo[4].input +
-      '&timezone=' + Intl.DateTimeFormat().resolvedOptions().timeZone +
-      '&lg=' + this.globalProvider.idioma.key;
-    this.httpProvider.get(url).then((res: any) => {
+    let url: string = "servicio=setRegistroUsuarioJ";
+    let data: Object = {
+      usuario: this.minusculas.transform(this.catalogo[3].input),
+      clave: this.catalogo[4].input,
+      nombre: this.catalogo[1].input,
+      apellido: this.catalogo[2].input,
+      tipo_registro: 'R',
+      tipo_registro_id: null,
+      token: this.globalProvider.token,
+      plataforma: platform,
+      telefono: this.catalogo[5].input,
+      timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+      lg: this.globalProvider.idioma.key
+    };
+    this.httpProvider.post(data, url).then((res: any) => {
       this.load.dismiss();
       if (res.error == 'false') {
         this.globalProvider.alerta(res.msn);

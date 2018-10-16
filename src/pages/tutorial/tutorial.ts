@@ -39,4 +39,12 @@ export class TutorialPage {
   closeModal() {
     this.viewController.dismiss();
   }
+
+  goUrl(url: string = null) { 
+    if (url == null) {  
+      window.location.href = "https://advansales.com/chat.php?k= " + this.globalProvider.usuario.id_usuario;
+    } else {
+      window.location.href = url;
+    }   
+  }
 }

@@ -27,7 +27,7 @@ export class CrearCampaniaPage {
   private datos = [];
   private load: any;
   private id_pre_campania: any;
-  private columna = [
+  private columna: Array<any> = [
     { c: null, r: true },
     { c: null, r: true },
     { c: null, r: true },
@@ -79,23 +79,15 @@ export class CrearCampaniaPage {
     var sms_tex: string;
     if (this.navParams.get('data')) {
       this.data = this.navParams.get('data');
-      if (this.globalProvider.plan.leads != 'P') {
-        sms = false;
-        sms_tex = null;
-      } else {
-        sms = (this.data.sms == 'Y') ? true : false;
-        sms_tex = (this.data.sms == 'Y') ? this.data.sms_predeterminado : null;
-      }
-
-      this.new_campania = { id_campania_manual: this.data.id_campania_manual, nombre_campania: this.data.nombre_campania, telefono: '', nombre: null, fecha: null, sms: sms, sms_tex: sms_tex, nota: null, stado: null, campos: { edit_uno: this.data.campo_1_text, uno: null, uno_stado: false, edit_dos: this.data.campo_2_text, dos: null, dos_stado: false } };
+      sms = (this.data.sms == 'Y') ? true : false;
+      sms_tex = (this.data.sms == 'Y') ? this.data.sms_predeterminado : null;
+      this.new_campania = { id_campania_manual: this.data.id_campania_manual, nombre_campania: this.data.nombre, telefono: '', nombre: null, fecha: null, sms: sms, sms_tex: sms_tex, nota: null, stado: null, campos: { edit_uno: this.data.campo_1_text, uno: null, uno_stado: false, edit_dos: this.data.campo_2_text, dos: null, dos_stado: false } };
       this.dialer();
       this.getCatalogoEstadoFilaCampania();
       this.campania_blanco = !this.campania_blanco;
     } else {
-      if (this.globalProvider.plan.leads == 'N') {
-        sms = false;
-        sms_tex = null;
-      }
+      sms = false;
+      sms_tex = null;
       this.new_campania = { id_campania_manual: null, nombre_campania: null, telefono: '', nombre: null, fecha: null, sms: sms, sms_tex: sms_tex, nota: null, stado: null, campos: { edit_uno: 'Field 1:', uno: null, uno_stado: false, edit_dos: 'Field 2:', dos: null, dos_stado: false } };
     }
     this.ordenarCampania = this.formBuilder.group({
@@ -219,7 +211,7 @@ export class CrearCampaniaPage {
       let c2: number = parseInt(this.ordenarCampania.value.c2);
       let c3: number = parseInt(this.ordenarCampania.value.c3);
       let c4: number = parseInt(this.ordenarCampania.value.c4);
-      let data : Object = {
+      let data: Object = {
         id_usuario: this.globalProvider.usuario.id_usuario,
         id_pre_campania: this.id_pre_campania,
         nombre_exel: this.ordenarCampania.value.nombreArchivo,
@@ -441,10 +433,11 @@ export class CrearCampaniaPage {
   chekedSmsCampania(event) {
     this.new_campania.sms = event.value;
     if (event.value == true) {
-      this.new_campania.sms_tex = this.data.sms_predeterminado;
+      this.new_campania.sms_tex = (this.data) ? this.data.sms_predeterminado : null;
     } else {
       this.new_campania.sms_tex = null;
     }
+    this.new_campania.sms = event.value;
   }
 
   saveAndExit() {
