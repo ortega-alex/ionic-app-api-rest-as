@@ -196,4 +196,11 @@ export class VcardPage {
             "&lg=" + id;
         this.httpProvider.get(url).catch((err) => console.log('err: ', err.toString()))
     }
+
+    doRefresh(refresher) {
+        setTimeout(() => {
+            this.getVcardUsuario();
+            refresher.complete();
+        });
+    }
 }

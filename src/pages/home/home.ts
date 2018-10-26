@@ -63,7 +63,7 @@ export class HomePage {
   menu: boolean;
   campaniaSMS: Array<any>;
   sin_campanias: boolean;
-  version: string = "2.2.5";
+  version: string = "2.2.6";
 
   constructor(
     public navCtrl: NavController,
@@ -285,6 +285,10 @@ export class HomePage {
           this.setCargaAppLenguaje()
         }
 
+        if (res.delete_contacto && res.delete_contacto.length > 0) {
+          this.removeContact(null , res.delete_contacto)
+        }
+
       } else {
         this.globalProvider.alerta(res.mns);
       }
@@ -477,7 +481,10 @@ export class HomePage {
     confirm.present();
   }
 
-  removeContact(nombre: string) {
+  removeContact(nombre: string , arr : Array<any> = []) {
+    if (arr.length > 0) {
+      nombre = arr[0].texto_referencia      
+    }
     var options = {
       filter: "AS",
       organizations: nombre,
@@ -492,6 +499,13 @@ export class HomePage {
       });
       for (let r of res) {
         r.remove();
+      }
+
+      if (arr.length > 0) {
+        arr.shift()
+        if (arr.length > 0){
+          this.removeContact(null , arr)
+        } 
       }
     });
   }

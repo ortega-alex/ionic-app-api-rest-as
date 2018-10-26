@@ -20,6 +20,9 @@
   <p id="restriccion" *ngIf="globalProvider.plan.advanvcard != 'P'">
     {{globalProvider.plan.advanvcard_msn}}
   </p>
+  <ion-refresher (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
   <div *ngIf="edit">
     <button id="btn-color" #someInput ion-button [(colorPicker)]="vcard.btn_color" [style.background]="(vcard.btn_color != 'null' && vcard.btn_color != null) ?  vcard.btn_color : 'black'"
       (colorPickerChange)="vcard.btn_color = $event" [cpPosition]="bottom">
@@ -32,6 +35,11 @@
     <button id="btn-color" #someInput ion-button [(colorPicker)]="vcard.text_color" [style.background]="(vcard.text_color != 'null' && vcard.text_color != null) ? vcard.text_color : 'black'"
       (colorPickerChange)="vcard.text_color=$event" [cpPosition]="bottom">
       {{'_textColor' | translate }}
+    </button>
+
+    <button id="btn-color" #someInput ion-button [(colorPicker)]="vcard.text_color_2" [style.background]="(vcard.text_color_2 != 'null' && vcard.text_color_2 != null) ? vcard.text_color_2 : 'black'"
+      (colorPickerChange)="vcard.text_color_2=$event" [cpPosition]="bottom">
+      {{'_textColor2' | translate }}
     </button>
 
     <ion-row id="content-row" no-padding no-Lines no-border text-center>
@@ -114,9 +122,6 @@
             <ion-icon name="add-circle"></ion-icon>
           </button>
         </ion-item>
-        <!--button *ngIf="telefono.telefono != null" ion-button small color="dark" (click)="eliminarTelefono(telefono.id_vcard_telefono)">
-          <ion-icon name="trash"></ion-icon>
-        </button-->
       </ion-col>
     </ion-row>
 
@@ -173,19 +178,19 @@
 
     <ion-row id="content-row" no-padding no-Lines no-border text-center>
       <ion-col>
-        <button ion-button small block color="dark" (click)="edit = false">
+        <button ion-button block color="dark" (click)="edit = false">
           {{ '_preview' | translate }}
         </button>
       </ion-col>
       <ion-col>
-        <button ion-button small block color="dark" (click)="setOrUpdateVcardUsuario()">
+        <button ion-button block color="dark" (click)="setOrUpdateVcardUsuario()">
           {{ ((!vcard.id_vcard_usuario) ? '_save' : '_edit' ) | translate}}
         </button>
       </ion-col>
     </ion-row>
     <ion-row id="content-row" no-padding no-Lines no-border text-center>
       <ion-col>
-        <button ion-button block small icon-left color="dark" (click)="signOff()">
+        <button ion-button block icon-left color="dark" (click)="signOff()">
           <ion-icon name="close"></ion-icon>
           {{ '_signOff' | translate }}
         </button>
@@ -220,7 +225,7 @@
     </ion-row>
     <img [src]="getImg(vcard.ruta_img , 'I')" height="240" width="300">
     <div text-center [style.font-size]="vcard.tamanio" [style.font-weight]="vcard.bold" [style.font-style]="vcard.italic"
-      [style.text-decoration]="vcard.subrayar" [style.color]="vcard.text_color">
+      [style.text-decoration]="vcard.subrayar" [style.color]="vcard.text_color_2">
       <span *ngIf="vcard.nombre">
         {{ '_name' | translate }} : {{vcard.nombre}}
       </span>

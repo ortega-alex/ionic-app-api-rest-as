@@ -1,8 +1,14 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.httpsAdvanSales.AdvanSales8" version="2.2.5" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>AdvanSales</name>
-    <description>An awesome Ionic/Cordova app.</description>
-    <author email="mortegalex27@outlook.es" href="https://www.facebook.com/profile.php?id=100002421532264">Alex Ortega</author>
+<widget id="com.httpsAdvanSales.AdvanSales8" version="2.2.6" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>
+        AdvanSales
+    </name>
+    <description>
+        An awesome Ionic/Cordova app.
+    </description>
+    <author email="mortegalex27@outlook.es" href="https://www.facebook.com/profile.php?id=100002421532264">
+        Alex Ortega
+    </author>
     <content src="index.html" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
@@ -21,6 +27,8 @@
     <preference name="SplashScreenDelay" value="3000" />
     <preference name="orientation" value="portrait" />
     <platform name="android">
+        <preference name="LoadUrlTimeoutValue" value="700000">
+        </preference>
         <allow-intent href="market:*" />
         <icon density="ldpi" src="resources/android/icon/drawable-ldpi-icon.png" />
         <icon density="mdpi" src="resources/android/icon/drawable-mdpi-icon.png" />

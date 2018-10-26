@@ -48,7 +48,6 @@ export class MyApp {
     this.getLenguajeUsuario();
     platform.ready().then(() => {
       statusBar.styleDefault();
-      //this.globalProvider.getIdioma();
       if (platform.is('android')) {
         this.permisos();
       }
@@ -202,7 +201,7 @@ export class MyApp {
       displayAppName: 'AdvanSales',
       usesUntilPrompt: 2,
       promptAgainForEachNewVersion: true,
-      inAppReview: false,
+      inAppReview: true,
       storeAppURL: {
         ios: '1394472577',
         android: 'market://details?id=com.httpsAdvanSales.AdvanSales8'

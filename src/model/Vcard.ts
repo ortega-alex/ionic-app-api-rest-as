@@ -19,13 +19,13 @@ export class Vcard {
     public ruta_img: string;
     public ruta_logo: string;
     public url_vcard: string;
-    //public id_vcard_configuracion: string;
     public tamanio: string;
     public italic: string;
     public bold: string;
     public subrayar: string;
     public fondo: string;
     public text_color: string;
+    public text_color_2: string;
     public btn_color: string;
     public telefonos: Array<{
         id_vcard_telefono: string,
@@ -50,13 +50,13 @@ export class Vcard {
         ruta_img = null,
         ruta_logo = null,
         url_vcard = null,
-        //id_vcard_configuracion = null,
         tamanio = null,
         italic = null,
         bold = null,
         subrayar = null,
         fondo = null,
         text_color = null,
+        text_color_2 = null,
         btn_color = null,
         telefonos = []
     ) {
@@ -76,13 +76,13 @@ export class Vcard {
         this.ruta_img = ruta_img;
         this.ruta_logo = ruta_logo;
         this.url_vcard = url_vcard;
-        //this.id_vcard_configuracion = id_vcard_configuracion;
         this.tamanio = tamanio;
         this.italic = italic;
         this.bold = bold;
         this.subrayar = subrayar;
         this.fondo = fondo;
         this.text_color = text_color;
+        this.text_color_2 = text_color_2;
         this.btn_color = btn_color;
         this.telefonos = telefonos;
     }

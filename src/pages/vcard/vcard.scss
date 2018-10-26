@@ -5,9 +5,9 @@ page-vcard {
         left: 20% !important;
     }
     #btn-color{
-        width: 31% !important;
+        width: 48% !important;
         -webkit-text-stroke: 0.3px black;
-        font-size: 0.8em;
+        font-size: 1em;
     }
     .content-header{           
         text-align: center;
@@ -57,22 +57,18 @@ page-vcard {
     #icon-instagram{
         background: linear-gradient(to bottom left, #515BD4 , #8134AF , #DD2A7B , #FEDA77 , #F58529 ); 
         color: white;
-    }
-
-  
+    }  
     #href-social{
         text-decoration:none; 
         color : white;
         ion-icon{
             color : white;
         }
-    }
-    
+    }    
     .preview{
         height: 94% !important;
     }
     #restriccion{
-     //   padding: 2% 0% ;
         text-align: center;
     }
 }
