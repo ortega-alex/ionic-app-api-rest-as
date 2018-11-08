@@ -120,3 +120,11 @@ export interface Util {
 	sms_tex: string;
 	panel_llamada: boolean;
 };
+
+export interface Calendario { 
+	fecha : string;
+	titulo : string; 
+	nombre : string;  
+	telefono : string; 
+	nota : string;
+}

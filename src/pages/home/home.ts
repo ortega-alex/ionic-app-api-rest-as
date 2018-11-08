@@ -11,8 +11,8 @@ import { SmsPage } from '../sms/sms';
 
 import { GlobalProvider } from '../../providers/global/global';
 import { HttpProvider } from '../../providers/http/http';
-import { Numerico, Replace, Fecha, Hora, getMilisegundos, Diferencia } from '../../pipes/filtros/filtros';
-import { Persona, CampaniaSms, HomeUtil } from '../../model/interfaces';
+import { Numerico, Fecha, Hora, getMilisegundos, Diferencia } from '../../pipes/filtros/filtros';
+import { Persona, CampaniaSms, HomeUtil, Calendario } from '../../model/interfaces';
 import { MyApp } from '../../app/app.component';
 import { Plan } from '../../model/Usuario';
 
@@ -20,7 +20,6 @@ import { Storage } from '@ionic/storage';
 import { CallNumber } from '@ionic-native/call-number';
 import { Contacts, Contact, ContactField, ContactName, ContactOrganization } from '@ionic-native/contacts';
 import { SMS } from '@ionic-native/sms';
-import { Calendar } from '@ionic-native/calendar';
 import { AdMobFree, AdMobFreeBannerConfig, AdMobFreeRewardVideoConfig } from '@ionic-native/admob-free';
 import { Facebook, FacebookLoginResponse } from '@ionic-native/facebook';
 import { CampaniaPage } from '../campania/campania';
@@ -34,15 +33,13 @@ export class HomePage {
   private getmilisegundos = new getMilisegundos();
   private diferencia = new Diferencia();
   private numerico = new Numerico();
-  private replace = new Replace();
   private fecha = new Fecha();
   private hora = new Hora();
   private load: any;
   private campanias: Array<any>;
   private conexion: boolean = false;
   private fila: any;
-  private at_id_telefono: any;
-  private at_id_sms_calendar: any;
+  private at_id_telefono: string;
   private inici: boolean = true;
   private segundos: number = 10;
   private timer: any;
@@ -63,7 +60,7 @@ export class HomePage {
   menu: boolean;
   campaniaSMS: Array<any>;
   sin_campanias: boolean;
-  version: string = "2.2.6";
+  version: string = "2.2.8";
 
   constructor(
     public navCtrl: NavController,
@@ -76,7 +73,6 @@ export class HomePage {
     private callNumber: CallNumber,
     private contacts: Contacts,
     private sms: SMS,
-    private calendar: Calendar,
     private alertController: AlertController,
     private admobFree: AdMobFree,
     private facebook: Facebook
@@ -286,7 +282,7 @@ export class HomePage {
         }
 
         if (res.delete_contacto && res.delete_contacto.length > 0) {
-          this.removeContact(null , res.delete_contacto)
+          this.removeContact(null, res.delete_contacto)
         }
 
       } else {
@@ -337,8 +333,9 @@ export class HomePage {
       this.home_util.spinner = true;
       this.conexion = !this.conexion;
       if (this.conexion == true) {
+        this.setConexionTelefonoUsuario();
         this.fila = setInterval(() => {
-          this.setConexionTelefonoUsuario();
+          this.getAccionTelefono();
         }, 1000);
       } else {
         clearInterval(this.fila);
@@ -378,18 +375,15 @@ export class HomePage {
             }
             this.at_id_telefono = res.at_id_telefono;
           }
-          if (this.at_id_sms_calendar != res.at_id_sms_calendar) {
-            this.at_id_sms_calendar = res.at_id_sms_calendar;
-            if (res.at_sms == 'Y') {
-              this.setSms(res.at_sms_telefono, res.at_sms_telefono_text);
-            }
-            if (res.at_calendar == 'Y') {
-              this.setCalendar(res);
-            }
+          if (res.at_sms == 'Y') {
+            this.setSms(res.at_sms_telefono, res.at_sms_telefono_text);
+          }
+          if (res.at_calendar == 'Y') {
+            this.setCalendar(res);
           }
         }
       }
-    }).catch(err => console.log('err: ' + JSON.stringify(err)));
+    }).catch(err => console.log('err: ' + err.toString()));
   }
 
   call(telefono: string, campania: string = null, nombre: string = null, nuevo: boolean = false) {
@@ -420,17 +414,14 @@ export class HomePage {
   }
 
   setCalendar(res: any) {
-    res.at_calendar_fecha_hora, res.at_calendar_nota, res.at_calendar_titulo, res.at_telefono_nombre
-    var startDate = new Date(this.replace.transform(res.at_calendar_fecha_hora));
-    this.calendar.createEvent(
-      res.at_calendar_titulo,
-      'AdvanSales',
-      'name: ' + res.at_telefono_nombre + ' , phone: ' + this.numerico.transform(res.res.at_telefono) + ' , note: ' + res.at_calendar_nota,
-      startDate,
-      startDate
-    ).then(res => {
-      console.log('success');
-    }).catch(err => console.log('err: ', err.toString()));
+    let calendario: Calendario = {
+      fecha: res.at_calendar_fecha_hora,
+      nombre: res.at_telefono_nombre,
+      nota: res.at_calendar_nota,
+      telefono: res.at_telefono,
+      titulo: res.at_calendar_titulo
+    }
+    this.globalProvider.setCalendar(calendario);
   }
 
   setDesConexionTelefonoUsuario() {
@@ -481,9 +472,9 @@ export class HomePage {
     confirm.present();
   }
 
-  removeContact(nombre: string , arr : Array<any> = []) {
+  removeContact(nombre: string, arr: Array<any> = []) {
     if (arr.length > 0) {
-      nombre = arr[0].texto_referencia      
+      nombre = arr[0].texto_referencia
     }
     var options = {
       filter: "AS",
@@ -503,9 +494,9 @@ export class HomePage {
 
       if (arr.length > 0) {
         arr.shift()
-        if (arr.length > 0){
-          this.removeContact(null , arr)
-        } 
+        if (arr.length > 0) {
+          this.removeContact(null, arr)
+        }
       }
     });
   }

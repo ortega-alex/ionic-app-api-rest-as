@@ -3,13 +3,12 @@ import { IonicPage, NavController, NavParams, ViewController, Platform, AlertCon
 
 import { GlobalProvider } from '../../providers/global/global';
 import { HttpProvider } from '../../providers/http/http';
-import { Fechas, getMilisegundos, Fecha, Hora, Diferencia, FechaPosterios } from '../../pipes/filtros/filtros';
-import { Util, Detalle, Stados } from '../../model/interfaces';
+import { Fechas, getMilisegundos, Fecha, Hora, Diferencia } from '../../pipes/filtros/filtros';
+import { Util, Detalle, Stados, Calendario } from '../../model/interfaces';
 
 import { CallNumber } from '@ionic-native/call-number';
 import { Contacts, Contact, ContactField, ContactName, ContactOrganization } from '@ionic-native/contacts';
 import { SMS } from '@ionic-native/sms';
-import { Calendar } from '@ionic-native/calendar';
 import { AdMobFree, AdMobFreeRewardVideoConfig } from '@ionic-native/admob-free';
 
 @IonicPage()
@@ -18,8 +17,6 @@ import { AdMobFree, AdMobFreeRewardVideoConfig } from '@ionic-native/admob-free'
   templateUrl: 'campania.html',
 })
 export class CampaniaPage {
-
-  private fechaPosterios = new FechaPosterios();
   private getmilisegundos = new getMilisegundos();
   private diferencia = new Diferencia();
   private fechas = new Fechas();
@@ -91,7 +88,6 @@ export class CampaniaPage {
     private callNumber: CallNumber,
     private viewController: ViewController,
     private sms: SMS,
-    private calendar: Calendar,
     private platform: Platform,
     private contacts: Contacts,
     private admobFree: AdMobFree,
@@ -330,7 +326,6 @@ export class CampaniaPage {
   setEditContenidoCampaniaManual() {
     let cambio: string = (this.campos.cambio == true) ? 'Y' : 'N';
     let sms = (this.msnS == true) ? 'Y' : 'N';
-    //let individual = (this.individual == true) ? 'Y' : 'N';
     let fecha = new Date();
     let url: string = 'servicio=setEditContenidoCampaniaManual' +
       "&id_campania_manual=" + this.campania.id_campania_manual +
@@ -394,19 +389,15 @@ export class CampaniaPage {
   }
 
   serEventoCalendar() {
-    this.calendar.hasReadWritePermission().then(res => {
-      console.log('res: ' + JSON.stringify(res));
-    }).catch(err => console.log('err: ' + JSON.stringify(err)));
-    var startDate = new Date(this.data.date);
-    this.calendar.createEvent(
-      this.campania.nombre,
-      'AdvanSales',
-      'name: ' + this.getFilaCampania.nombre + ' , phone: ' + this.getFilaCampania.telefono + ' , note: ' + this.data.notas,
-      startDate,
-      this.fechaPosterios.transform(startDate, 1)
-    ).then(res => {
-      this.data.date = null;
-    }).catch(err => console.log('err: ' + JSON.stringify(err)));
+    let calendario: Calendario = {
+      fecha: this.data.date,
+      nombre: this.getFilaCampania.nombre,
+      nota: this.data.notas,
+      telefono: this.getFilaCampania.telefono,
+      titulo: this.campania.nombre
+    }
+    this.globalProvider.setCalendar(calendario);
+    this.data.date = null
   }
 
   chekedSms(event) {

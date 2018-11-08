@@ -3,12 +3,11 @@ import { IonicPage, NavController, NavParams, Platform, ViewController, AlertCon
 
 import { GlobalProvider } from '../../providers/global/global';
 import { HttpProvider } from '../../providers/http/http';
-import { Fechas, Replace, getMilisegundos, Fecha, Hora, Diferencia } from '../../pipes/filtros/filtros';
-import { Util } from '../../model/interfaces';
+import { Fechas , getMilisegundos, Fecha, Hora, Diferencia } from '../../pipes/filtros/filtros';
+import { Util, Calendario } from '../../model/interfaces';
 
 import { CallNumber } from '@ionic-native/call-number';
 import { SMS } from '@ionic-native/sms';
-import { Calendar } from '@ionic-native/calendar';
 import { AdMobFree, AdMobFreeRewardVideoConfig } from '@ionic-native/admob-free';
 
 @IonicPage()
@@ -19,7 +18,6 @@ import { AdMobFree, AdMobFreeRewardVideoConfig } from '@ionic-native/admob-free'
 export class ModalPage {
 
   private diferencia = new Diferencia();
-  private replace = new Replace();
   private fechas = new Fechas();
   private fecha = new Fecha();
   private hora = new Hora();
@@ -62,7 +60,6 @@ export class ModalPage {
     private httpProvider: HttpProvider,
     private callNumber: CallNumber,
     private sms: SMS,
-    private calendar: Calendar,
     private alertController: AlertController,
     private admobFree: AdMobFree,
     private popoverController: PopoverController,
@@ -154,7 +151,6 @@ export class ModalPage {
   }
 
   animacion() {
-    //this.text = this.text + (this.tamanio_contenido) + " leads, let's quickly update your notes now";
     this.text = this.globalProvider.idioma.contenido['_animacion'] + " " + (this.tamanio_contenido) + " " + this.globalProvider.idioma.contenido['_animacion1']
   }
 
@@ -246,16 +242,15 @@ export class ModalPage {
   }
 
   serEventoCalendar() {
-    var startDate = new Date(this.replace.transform(this.data.date));
-    this.calendar.createEvent(
-      this.get_fila_contenido.nombre_campania,
-      'AdvanSales',
-      'name: ' + this.get_fila_contenido.nombre_campania + ' , phone: ' + this.get_fila_contenido.telefono + ' , note: ' + this.data.notas,
-      startDate,
-      startDate
-    ).then(res => {
-      this.data.date = null;
-    }).catch(err => console.log(err));
+    let calendario: Calendario = {
+      fecha: this.data.date,
+      nombre: this.get_fila_contenido.nombre_campania,
+      nota: this.data.notas,
+      telefono: this.get_fila_contenido.telefono,
+      titulo: this.get_fila_contenido.nombre_campania
+    }
+    this.globalProvider.setCalendar(calendario);
+    this.data.date = null
   }
 
   tiempoActual() {

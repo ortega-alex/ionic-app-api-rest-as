@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.httpsAdvanSales.AdvanSales8" version="2.2.6" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.httpsAdvanSales.AdvanSales8" version="2.2.8" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>
         AdvanSales
     </name>
@@ -27,7 +27,10 @@
     <preference name="SplashScreenDelay" value="3000" />
     <preference name="orientation" value="portrait" />
     <platform name="android">
-        <preference name="LoadUrlTimeoutValue" value="700000">
+        <allow-navigation href="*" />
+        <content src="index.html" />
+        <content original-src="index.html" />
+        <preference name="LoadUrlTimeoutValue" value="300000">
         </preference>
         <allow-intent href="market:*" />
         <icon density="ldpi" src="resources/android/icon/drawable-ldpi-icon.png" />

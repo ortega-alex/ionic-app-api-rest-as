@@ -1,13 +1,17 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+
 import { Storage } from '@ionic/storage';
 import { LoadingController, Platform } from 'ionic-angular';
 import { Http } from '@angular/http';
-import { Usuario, Plan } from '../../model/Usuario';
 import 'rxjs/add/operator/map';
-import { getMilisegundos } from '../../pipes/filtros/filtros';
-import { HttpProvider } from '../http/http';
+import { Calendar } from '@ionic-native/calendar';
 declare var SMS: any;
+
+import { Usuario, Plan } from '../../model/Usuario';
+import { getMilisegundos, Replace, FechaPosterios, Numerico } from '../../pipes/filtros/filtros';
+import { HttpProvider } from '../http/http';
+import { Calendario } from '../../model/interfaces';
 
 export interface Idioma {
   key: string,
@@ -25,7 +29,10 @@ export class GlobalProvider {
   public token: any;
   public dispositivo: boolean;
   public idioma: Idioma;
-  public list_sms: Array<any>
+  public list_sms: Array<any>;
+  private replace = new Replace();
+  private fechaPosterios = new FechaPosterios();
+  private numerico = new Numerico()
 
   constructor(
     public http: HttpClient,
@@ -33,7 +40,8 @@ export class GlobalProvider {
     private load: LoadingController,
     private htt: Http,
     private platFrom: Platform,
-    private httpProvider: HttpProvider
+    private httpProvider: HttpProvider,
+    private calendar: Calendar
   ) {
     this.dispositivo = (this.platFrom.is('android')) ? true : false;
     this.getUsuario();
@@ -175,5 +183,18 @@ export class GlobalProvider {
     }, Error => {
       console.log("err: " + JSON.stringify(Error))
     });
+  }
+
+  setCalendar(calendario: Calendario) {
+    var startDate = new Date(this.replace.transform(calendario.fecha));
+    this.calendar.createEvent(
+      calendario.titulo,
+      'AdvanSales',
+      'name: ' + calendario.nombre + ' , phone: ' + this.numerico.transform(calendario.telefono) + ' , note: ' + calendario.nota,
+      startDate,
+      this.fechaPosterios.transform(startDate, 1)
+    ).then(() => {
+      console.log('success');
+    }).catch(err => console.log('err: ', err.toString()));
   }
 }
