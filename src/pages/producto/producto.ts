@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ViewController, Platform } from 'ionic-angular';
 import { InAppPurchase2, IAPProduct } from '@ionic-native/in-app-purchase-2';
+
 import { GlobalProvider } from '../../providers/global/global';
 import { HttpProvider } from '../../providers/http/http';
 
@@ -40,6 +41,9 @@ export class ProductoPage {
   }
 
   ionViewDidLoad() {
+    this.platform.registerBackButtonAction(() => {
+      this.closeModal();
+    });
   }
 
   ionViewWillUnload() {
@@ -119,7 +123,6 @@ export class ProductoPage {
   async configurePurchasing(arg: any) {
     try {
       //this.store.verbosity = this.store.INFO;
-
       this.store.register({
         id: arg.id_producto,
         alias: arg.id_producto,
@@ -144,7 +147,6 @@ export class ProductoPage {
 
   registerHandlers(arg: any) {
     this.store.when(arg.id_producto).approved((product: IAPProduct) => {
-      console.log('approved: ' + JSON.stringify(product));
       this.setComboProducto(product, arg);
       product.verify();
     });

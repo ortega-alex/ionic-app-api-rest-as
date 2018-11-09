@@ -17,13 +17,13 @@ import { Usuario, Plan } from '../../model/Usuario';
 })
 export class LoginPage {
 
-  load: any;
-  logIn: FormGroup;
-  minusculas = new Minusculas();
-  submitted: boolean;
+  minusculas = new Minusculas();  
   is_mail = new isEmail();
+  submitted: boolean;
+  logIn: FormGroup;
   usuario: Usuario;
   plan: Plan;
+  load: any;
 
   constructor(
     public navCtrl: NavController,

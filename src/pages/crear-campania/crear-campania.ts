@@ -4,23 +4,22 @@ import { IonicPage, NavController, NavParams, ViewController, PopoverController,
 import { GlobalProvider } from '../../providers/global/global';
 import { HttpProvider } from '../../providers/http/http';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
-import { Campania, Stado, Util } from '../../model/interfaces';
+import { Campania, Stado, Util, Calendario } from '../../model/interfaces';
 
 import { FileChooser } from '@ionic-native/file-chooser';
 import { FilePath } from '@ionic-native/file-path';
 import { File } from '@ionic-native/file';
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
 import { IOSFilePicker } from '@ionic-native/file-picker';
-import { CallNumber } from '@ionic-native/call-number';
-import { FechaPosterios, Fecha, Hora } from '../../pipes/filtros/filtros';
-import { SMS } from '@ionic-native/sms';
-import { Calendar } from '@ionic-native/calendar';
+import { Fecha, Hora } from '../../pipes/filtros/filtros';
+import { FunctionProvider } from '../../providers/function/function';
 
 @IonicPage()
 @Component({
   selector: 'page-crear-campania',
   templateUrl: 'crear-campania.html',
 })
+
 export class CrearCampaniaPage {
 
   private ordenarCampania: FormGroup;
@@ -36,7 +35,6 @@ export class CrearCampaniaPage {
   private sms: string = 'N';
   private campania_blanco: boolean = false;
   private numeros: Array<number> = [];
-  private fechaPosterios = new FechaPosterios();
   private fecha = new Fecha();
   private hora = new Hora();
   private panel: boolean = false;
@@ -69,10 +67,8 @@ export class CrearCampaniaPage {
     private filePath: FilePath,
     private file: File,
     private iosFilePicker: IOSFilePicker,
-    private callNumber: CallNumber,
-    private Sms: SMS,
-    private calendar: Calendar,
-    private alertController: AlertController
+    private alertController: AlertController,
+    private functionProvider: FunctionProvider
   ) {
     this.campos = { cambio: false, stado: [false, false] };
     var sms: boolean;
@@ -295,16 +291,6 @@ export class CrearCampaniaPage {
     }).catch(err => console.log('err: ', err.toString()));
   }
 
-  llamar(individual: boolean = false) {
-    if (this.new_campania.telefono != null && this.new_campania.telefono.trim() != '') {
-      this.callNumber.callNumber(this.new_campania.telefono, true).then(res => {
-        if (individual == false) {
-          this.panel = !this.panel;
-        }
-      }).catch(err => console.log('err; ' + JSON.stringify(err)));
-    }
-  }
-
   armarNumero(i: number) {
     let n: string = (this.numeros[i] == 10) ? '*' : (this.numeros[i] == 11) ? '0' : (this.numeros[i] == 12) ? '#' : (this.numeros[i] == 14) ? '+' : this.numeros[i].toString();
     this.new_campania.telefono += n;
@@ -323,38 +309,21 @@ export class CrearCampaniaPage {
 
   clickStado(stado) {
     this.new_campania.stado = stado;
-    if (stado == 1 || stado == 2) {
-      this.setContenidoCampaniaManual();
+    if (stado == 3 && this.new_campania.sms == true) {
+      this.functionProvider.setSms(this.new_campania.telefono, this.new_campania.sms_tex);
     }
-    if (stado == 3) {
-      this.setSms();
-      this.setContenidoCampaniaManual();
-    }
-    if (stado == 4) {
-      this.setSms();
-      if (this.new_campania.fecha != null) {
-        this.serEventoCalendar();
+    if (stado == 4 && this.new_campania.fecha != null) {
+      let calendario: Calendario = {
+        fecha: this.new_campania.fecha,
+        nombre: this.new_campania.nombre,
+        nota: this.new_campania.nota,
+        telefono: this.new_campania.telefono,
+        titulo: this.new_campania.nombre_campania
       }
-      this.setContenidoCampaniaManual();
-    }
-  }
-
-  setSms() {
-    this.Sms.send(this.new_campania.telefono, this.new_campania.sms_tex).then(res => console.log('res: ' + res)).catch(err => console.log('err: ' + err));
-  }
-
-  serEventoCalendar() {
-    this.calendar.hasReadWritePermission().catch(err => console.log('err: ' + JSON.stringify(err)));
-    var startDate = new Date(this.new_campania.fecha);
-    this.calendar.createEvent(
-      this.new_campania.nombre_campania,
-      'PowerDialer',
-      'name: ' + this.new_campania.nombre + ' , phone: ' + this.new_campania.telefono + ' , note: ' + this.new_campania.nota,
-      startDate,
-      this.fechaPosterios.transform(startDate, 1)
-    ).then(() => {
+      this.functionProvider.setCalendar(calendario);
       this.new_campania.fecha = null;
-    }).catch(err => console.log('err: ' + JSON.stringify(err)));
+    }
+    this.setContenidoCampaniaManual();
   }
 
   cheked() {

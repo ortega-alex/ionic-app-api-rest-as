@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ViewController, AlertController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ViewController, AlertController, Platform } from 'ionic-angular';
 
 import { HttpProvider } from '../../providers/http/http';
 import { GlobalProvider } from '../../providers/global/global';
@@ -15,36 +15,35 @@ import { SocialSharing } from '@ionic-native/social-sharing';
   templateUrl: 'social.html',
 })
 export class SocialPage {
-  img: string;
-  video: string;
-  whizar: Array<{ color: string, activo: boolean }>;
-  imagenes: Array<any>;
-  videos: Array<any>;
-  load: any;
-  option: string;
-  img_tem: string;
-  video_tem: string;
+  private img: string;
+  private video: string;
+  private whizar: Array<{ color: string, activo: boolean }>;
+  private imagenes: Array<any>;
+  private videos: Array<any>;
+  private load: any;
+  private option: string;
+  private img_tem: string;
+  private video_tem: string;
   post_guardados: boolean;
-  img_tex: string;
+  private img_tex: string;
   spinner1: boolean;
-  poster: string;
-  poster_tem: string;
-  alto: string;
-  ancho: string;
-  posicion_logo: Array<{ title: string, posicion: number, id: number }>;
-  hashtag_tex: string;
-  busqueda: string;
-  idioma: string;
-  hashtag_selected: Array<boolean>;
+  private poster: string;
+  private poster_tem: string;
+  private alto: string;
+  private ancho: string;
+  private posicion_logo: Array<{ title: string, posicion: number, id: number }>;
+  private hashtag_tex: string;
+  private busqueda: string;
+  private idioma: string;
+  private hashtag_selected: Array<boolean>;
   hashtags: Array<any>;
-  comentario_tex: string;
-  logos: Array<any>;
-  logo_select: { id: number, posicion: number };
+  private comentario_tex: string;
+  private logos: Array<any>;
+  private logo_select: { id: number, posicion: number };
   list_save: Array<any>;
-  textarea_comentarios: Array<string>;
-
-  pagina_img: number;
-  pagina_video: number;
+  private textarea_comentarios: Array<string>;
+  private pagina_img: number;
+  private pagina_video: number;
   idiomas: Array<any>;
 
   constructor(
@@ -57,7 +56,8 @@ export class SocialPage {
     private globalProvider: GlobalProvider,
     private alertController: AlertController,
     private clipboard: Clipboard,
-    private socialSharing: SocialSharing
+    private socialSharing: SocialSharing,
+    private platform: Platform
   ) {
     this.whizar = [
       { color: '#745af2', activo: true },
@@ -95,6 +95,15 @@ export class SocialPage {
   ionViewDidLoad() {
     this.getAdvanSocialLogoUsuario();
     this.getCatlogoLenguajeAdvanSocial();
+    this.platform.registerBackButtonAction(() => {
+      this.closeModal()
+    });
+  }
+
+  ionViewWillUnload() {
+    this.platform.registerBackButtonAction(() => {
+      this.platform.exitApp();
+    });
   }
 
   closeModal(): void {

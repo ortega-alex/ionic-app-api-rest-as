@@ -1,0 +1,67 @@
+<ion-content padding>
+
+  <div *ngIf="globalProvider.dispositivo == false">
+    <br>
+    <br>
+  </div>
+
+  <ion-row>
+    <ion-col no-padding col-2>
+      <ion-icon *ngIf="globalProvider.dispositivo == true" id="icon" name="arrow-round-back" (click)="monitoreo()"></ion-icon>
+      <ion-icon *ngIf="globalProvider.dispositivo == false" id="icon" ios="md-arrow-round-back" md="md-arrow-round-back"
+        (click)="closeModal()"></ion-icon>
+    </ion-col>
+    <ion-col no-padding  col-8>
+      <p id="title">{{ title | translate }}</p>
+    </ion-col>
+    <ion-col no-padding col-2></ion-col>
+  </ion-row>
+
+  <ion-spinner *ngIf="spinner" name="bubbles" item-left></ion-spinner>
+  
+  <button ion-button block icon-left *ngIf="compartir" (click)="globalProvider.share()">
+    <ion-icon name="logo-facebook"></ion-icon>
+    {{ '_share' | translate }}
+  </button>
+  
+  <button ion-button block icon-right color="danger" *ngIf="spinner == false" (click)="closeModal()">
+    {{ '_stop' | translate }}
+    <ion-icon name="help-circle"></ion-icon>
+  </button>
+  
+  <ion-row no-padding no-margin>
+    <ion-col no-padding col-12 *ngIf="globalProvider.dispositivo == true">
+      <br>
+      <p id="parrafo">
+        1. {{ '_syncInstruction1' | translate
+        }}
+      </p>
+      <br>
+      <p id="parrafo">
+        2. {{ "_syncInstruction2" | translate }}</p>
+      <br>
+      <p id="parrafo">
+        3. {{ "_syncInstruction3" | translate }}
+      </p>
+      <br>
+    </ion-col>
+
+    <ion-col no-padding col-12 id="conten-row" *ngIf="globalProvider.dispositivo == false">
+      <br>
+      <p id="parrafo">
+        {{ '_syncInstruction4' | translate }}
+      </p>
+      <br>
+    </ion-col>
+
+  </ion-row>
+  <!--ion-row class="conten-row" *ngIf="plan.mostrar_publicidad_video == 'Y' && home_util.spinner == false">
+    <ion-col id="conten-row">
+      <button id="conten-row-btn" ion-button icon-right block color="buttom" (click)="showVideo()">
+        {{(segundos == 10) ? 'Get more time ' : segundos }} {{(time && segundos == 10) ?
+        time.hora+":"+time.minuto+":"+time.segundo
+        : (segundos == 10) ? '0' : '' }}
+      </button>
+    </ion-col>
+  </ion-row-->
+</ion-content>

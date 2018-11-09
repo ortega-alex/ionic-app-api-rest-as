@@ -239,7 +239,7 @@
     </ion-row>
     <ion-row class="row-cont">
       <ion-col id="row-cont-b">
-        <button *ngIf="edit_info.readonly == true" id="row-cont-btn-t" ion-button block color="secondary" (click)="call(getFilaCampania.telefono)">
+        <button *ngIf="edit_info.readonly == true" id="row-cont-btn-t" ion-button block color="secondary" (click)="functionProvider.call(getFilaCampania.telefono)">
           <ion-icon name="call"></ion-icon>
           &nbsp;{{getFilaCampania.telefono}}
         </button>
@@ -362,7 +362,7 @@
     </ion-row>
     <ion-row class="row-content">
       <ion-col col-12 id="row-content">
-        <button id="row-content-btn" ion-button icon-right block color="dark" (click)="call(getFilaCampania.telefono)">
+        <button id="row-content-btn" ion-button icon-right block color="dark" (click)="functionProvider.call(getFilaCampania.telefono)">
           {{getFilaCampania.telefono}}
           <ion-icon name="call"></ion-icon>
           &nbsp;

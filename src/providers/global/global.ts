@@ -2,16 +2,15 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 import { Storage } from '@ionic/storage';
-import { LoadingController, Platform } from 'ionic-angular';
+import { LoadingController, Platform, AlertController } from 'ionic-angular';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
-import { Calendar } from '@ionic-native/calendar';
 declare var SMS: any;
+import { Facebook, FacebookLoginResponse } from '@ionic-native/facebook';
 
 import { Usuario, Plan } from '../../model/Usuario';
-import { getMilisegundos, Replace, FechaPosterios, Numerico } from '../../pipes/filtros/filtros';
+import { getMilisegundos, Fecha, Hora } from '../../pipes/filtros/filtros';
 import { HttpProvider } from '../http/http';
-import { Calendario } from '../../model/interfaces';
 
 export interface Idioma {
   key: string,
@@ -30,20 +29,20 @@ export class GlobalProvider {
   public dispositivo: boolean;
   public idioma: Idioma;
   public list_sms: Array<any>;
-  private replace = new Replace();
-  private fechaPosterios = new FechaPosterios();
-  private numerico = new Numerico()
+  private fecha = new Fecha();
+  private hora = new Hora();
 
   constructor(
     public http: HttpClient,
     private storage: Storage,
     private load: LoadingController,
     private htt: Http,
-    private platFrom: Platform,
+    private platform: Platform,
     private httpProvider: HttpProvider,
-    private calendar: Calendar
+    private facebook: Facebook,
+    private alertController: AlertController
   ) {
-    this.dispositivo = (this.platFrom.is('android')) ? true : false;
+    this.dispositivo = (this.platform.is('android')) ? true : false;
     this.getUsuario();
     this.getIdioma();
     this.htt.get('assets/utilitario.json').map(res => res.json()).subscribe(data => {
@@ -185,16 +184,104 @@ export class GlobalProvider {
     });
   }
 
-  setCalendar(calendario: Calendario) {
-    var startDate = new Date(this.replace.transform(calendario.fecha));
-    this.calendar.createEvent(
-      calendario.titulo,
-      'AdvanSales',
-      'name: ' + calendario.nombre + ' , phone: ' + this.numerico.transform(calendario.telefono) + ' , note: ' + calendario.nota,
-      startDate,
-      this.fechaPosterios.transform(startDate, 1)
-    ).then(() => {
-      console.log('success');
+  share() {
+    var url: string;
+    if (this.platform.is('android')) {
+      url = 'https://advansalesapp.page.link/android';
+    }
+    if (this.platform.is('ios')) {
+      url = 'https://advansalesapp.page.link/ios';
+    }
+    this.facebook.login(['email', 'public_profile']).then((response: FacebookLoginResponse) => {
+      this.facebook.showDialog({
+        method: "share",
+        href: url,
+        caption: '',
+        description: '',
+        picture: ''
+      }).then(() => {
+        let date = new Date();
+        let url: string = 'servicio=setMostrarPublicidadUsuario' +
+          '&id_usuario=' + this.usuario.id_usuario +
+          '&fecha=' + this.fecha.transform(date) +
+          '&hora=' + this.hora.transform(date) +
+          '&lg=' + this.idioma.key;
+        this.httpProvider.get(url).then((res: any) => {
+          if (res.error == 'false') {
+            let date = new Date(res.tiempo_usuario);
+            this.setTime(this.get_milisegundos.transform(date));
+            this.plan.gratis = res.gratis;
+            this.plan.mostrar_publicidad_video = res.mostrar_publicidad_video;
+            this.plan.mostrar_publicidad_banner = res.mostrar_publicidad_banner;
+            this.plan.compartir_fb = res.compartir_fb;
+            this.plan.plan = res.plan;
+            this.plan.plan_fecha_expiracion = res.plan_fecha_expiracion;
+            this.plan.plan_restriccion = res.plan_restriccion;
+            this.plan.bloqueo = res.bloqueo;
+            this.plan.bloqueo_msn = res.bloqueo_msn;
+            this.plan.plan_restriccion_msn = res.plan_restriccion_msn;
+            this.plan.suscrito = res.suscrito;
+            this.setPlan(this.plan);
+          }
+        }).catch(err => console.log('err: ', err.toString()));
+      }).catch(err => console.log('err', err.toString()));
+    }).catch(err => console.log('err: ', err.toString()));
+  }
+
+  free() {
+    if (this.plan.gratis == 'Y' && this.plan.compartir_fb == 'N') {
+      let alert = this.alertController.create({
+        title: '',
+        subTitle: 'Make a publication so that the application is free!',
+        buttons: ['Ok']
+      });
+      alert.present();
+      return true;
+    }
+    return false;
+  }
+
+  bloqueo() {
+    if (this.plan.bloqueo == 'Y') {
+      let alert = this.alertController.create({
+        title: '',
+        subTitle: this.plan.bloqueo_msn,
+        buttons: ['Ok']
+      });
+      alert.present();
+      return true;
+    }
+    return false
+  }
+
+  validarTiempo() {
+    let date = new Date().getTime();
+    if ((!this.time || date >= this.time) && this.plan.mostrar_publicidad_video == 'Y') {
+      let alert = this.alertController.create({
+        title: '',
+        subTitle: 'Get more time!',
+        buttons: ['Ok']
+      });
+      alert.present();
+      this.setBloqueoPublicidadUsuario('Y');
+      return false;
+    }
+    return true;
+  }
+
+  setBloqueoPublicidadUsuario(tipo: string, fecha: string = null, hora: string = null, creditos: any = null) {
+    let url: string = 'servicio=setBloqueoPublicidadUsuario' +
+      '&bloqueo=' + tipo +
+      '&id_usuario=' + this.usuario.id_usuario +
+      '&fecha=' + fecha +
+      '&hora=' + hora +
+      '&creditos=' + creditos +
+      '&lg=' + this.idioma.key;
+    this.httpProvider.get(url).then((res: any) => {
+      if (res.error == 'false') {
+        let date = new Date(res.tiempo_usuario);
+        this.setTime(this.get_milisegundos.transform(date));
+      }
     }).catch(err => console.log('err: ', err.toString()));
   }
 }

@@ -1,10 +1,11 @@
 <ion-content padding class="content-modal">
-    <br/>
+    <br />
     <ion-card class="conten-card" *ngIf="util.panel_llamada == true">
         <ion-row class="row-cont" *ngIf="globalProvider.plan.mostrar_publicidad_video == 'Y'">
             <ion-col id="row-cont">
                 <button id="row-cont-btn" ion-button small icon-right block color="dark" (click)="showVideo()">
-                    {{ (segundos == 10) ? globalProvider.idioma.contenido['_getMoreTime'] : segundos }} {{ (time && segundos == 10) ? time.hora+":"+time.minuto+":"+time.segundo:
+                    {{ (segundos == 10) ? globalProvider.idioma.contenido['_getMoreTime'] : segundos }} {{ (time &&
+                    segundos == 10) ? time.hora+":"+time.minuto+":"+time.segundo:
                     (segundos == 10) ? '0' : '' }}
                 </button>
             </ion-col>
@@ -110,21 +111,23 @@
             </ion-col>
             <ion-col id="row-cont">
                 <ion-item class="from-item">
-                    <ion-datetime id="from-date" text-center displayFormat="MMM DD, YYYY HH:mm" [(ngModel)]="data.date" text-lg:992px>
+                    <ion-datetime id="from-date" text-center displayFormat="MMM DD, YYYY HH:mm" [(ngModel)]="data.date"
+                        text-lg:992px>
                     </ion-datetime>
                 </ion-item>
             </ion-col>
         </ion-row>
         <ion-row class="row-cont-b">
             <ion-col id="row-cont-b" col-6 *ngFor="let stado of util.catalogoEstado | slice:1:5;">
-                <button id="row-cont-btn-status" ion-button small full [style.background-color]="'#'+stado.color" (click)="clickStado(stado.key)">
+                <button id="row-cont-btn-status" ion-button small full [style.background-color]="'#'+stado.color"
+                    (click)="clickStado(stado.key)">
                     {{ stado.nombre }}
                 </button>
             </ion-col>
         </ion-row>
         <ion-row class="row-cont">
             <ion-col id="row-cont-b">
-                <button id="row-cont-btn-t" ion-button block small color="secondary" (click)="call()">
+                <button id="row-cont-btn-t" ion-button block small color="secondary" (click)="functionProvider.call( get_fila_contenido.telefono)">
                     <ion-icon name="call">
                     </ion-icon>
                     &nbsp;{{ get_fila_contenido.telefono }}

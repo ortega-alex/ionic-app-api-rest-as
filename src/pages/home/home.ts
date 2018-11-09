@@ -11,35 +11,29 @@ import { SmsPage } from '../sms/sms';
 
 import { GlobalProvider } from '../../providers/global/global';
 import { HttpProvider } from '../../providers/http/http';
-import { Numerico, Fecha, Hora, getMilisegundos, Diferencia } from '../../pipes/filtros/filtros';
-import { Persona, CampaniaSms, HomeUtil, Calendario } from '../../model/interfaces';
+import { Fecha, Hora, Diferencia } from '../../pipes/filtros/filtros';
+import { Persona, CampaniaSms, HomeUtil } from '../../model/interfaces';
 import { MyApp } from '../../app/app.component';
 import { Plan } from '../../model/Usuario';
 
 import { Storage } from '@ionic/storage';
-import { CallNumber } from '@ionic-native/call-number';
-import { Contacts, Contact, ContactField, ContactName, ContactOrganization } from '@ionic-native/contacts';
-import { SMS } from '@ionic-native/sms';
 import { AdMobFree, AdMobFreeBannerConfig, AdMobFreeRewardVideoConfig } from '@ionic-native/admob-free';
-import { Facebook, FacebookLoginResponse } from '@ionic-native/facebook';
 import { CampaniaPage } from '../campania/campania';
+import { SincPage } from '../sinc/sinc';
+import { FunctionProvider } from '../../providers/function/function';
 
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
 })
+
 export class HomePage {
 
-  private getmilisegundos = new getMilisegundos();
   private diferencia = new Diferencia();
-  private numerico = new Numerico();
   private fecha = new Fecha();
   private hora = new Hora();
   private load: any;
   private campanias: Array<any>;
-  private conexion: boolean = false;
-  private fila: any;
-  private at_id_telefono: string;
   private inici: boolean = true;
   private segundos: number = 10;
   private timer: any;
@@ -60,7 +54,7 @@ export class HomePage {
   menu: boolean;
   campaniaSMS: Array<any>;
   sin_campanias: boolean;
-  version: string = "2.2.8";
+  private version: string = "2.2.8";
 
   constructor(
     public navCtrl: NavController,
@@ -70,12 +64,9 @@ export class HomePage {
     private app: App,
     private modalControlle: ModalController,
     private platform: Platform,
-    private callNumber: CallNumber,
-    private contacts: Contacts,
-    private sms: SMS,
     private alertController: AlertController,
     private admobFree: AdMobFree,
-    private facebook: Facebook
+    private functionProvider: FunctionProvider
   ) {
     this.plan = new Plan();
     this.menu = false;
@@ -86,17 +77,13 @@ export class HomePage {
     document.addEventListener(this.admobFree.events.REWARD_VIDEO_REWARD, (res) => {
       let creditos = res['rewardAmount'];
       let date = new Date();
-      this.setBloqueoPublicidadUsuario('N', this.fecha.transform(date), this.hora.transform(date), creditos);
+      this.globalProvider.setBloqueoPublicidadUsuario('N', this.fecha.transform(date), this.hora.transform(date), creditos);
     });
-    if (this.conexion == true) {
-      this.platform.registerBackButtonAction(() => {
-        this.monitoreo();
-      });
-    } else {
-      this.platform.registerBackButtonAction(() => {
-        this.platform.exitApp();
-      });
-    }
+
+    this.platform.registerBackButtonAction(() => {
+      this.platform.exitApp();
+    });
+
     this.isLogin();
     this.tiempoActual();
     this.campaniaSMS = [];
@@ -113,21 +100,6 @@ export class HomePage {
       clearInterval(this.timer);
       this.segundos = 10;
     }
-  }
-
-  validarTiempo() {
-    let date = new Date().getTime();
-    if ((!this.globalProvider.time || date >= this.globalProvider.time) && this.globalProvider.plan.mostrar_publicidad_video == 'Y') {
-      let alert = this.alertController.create({
-        title: '',
-        subTitle: 'Get more time!',
-        buttons: ['Ok']
-      });
-      alert.present();
-      this.setBloqueoPublicidadUsuario('Y');
-      return false;
-    }
-    return true;
   }
 
   prepareVideo() {
@@ -148,23 +120,6 @@ export class HomePage {
     }).catch((err) => {
       throw new Error(err);
     });
-  }
-
-  setBloqueoPublicidadUsuario(tipo: string, fecha: string = null, hora: string = null, creditos: any = null) {
-    let url: string = 'servicio=setBloqueoPublicidadUsuario' +
-      '&bloqueo=' + tipo +
-      '&id_usuario=' + this.globalProvider.usuario.id_usuario +
-      '&fecha=' + fecha +
-      '&hora=' + hora +
-      '&creditos=' + creditos +
-      '&lg=' + this.globalProvider.idioma.key;
-    this.httpProvider.get(url).then((res: any) => {
-      if (res.error == 'false') {
-        let date = new Date(res.tiempo_usuario);
-        this.globalProvider.setTime(this.getmilisegundos.transform(date));
-        this.tiempoActual();
-      }
-    }).catch(err => console.log('err: ', err.toString()));
   }
 
   banner() {
@@ -204,7 +159,8 @@ export class HomePage {
 
   getCampaniaUsuario() {
     this.getCampaniaSMSUsuario();
-    let platform = (this.platform.is('ios')) ? 'ios' : 'android';
+    //let platform = (this.platform.is('ios')) ? 'ios' : 'android';
+    let platform = (this.globalProvider.dispositivo == true) ? 'android' : 'ios';
     if (this.inici == false) {
       this.load = this.globalProvider.cargando(this.globalProvider.data.msj.load);
     }
@@ -246,19 +202,16 @@ export class HomePage {
         this.plan.bloqueo_msn = res.bloqueo_msn;
         this.plan.plan_restriccion_msn = res.plan_restriccion_msn;
         this.plan.suscrito = res.suscrito;
-
         this.plan.activo = res.plan;
         this.plan.leads = res.leads;
         this.plan.sms_leads = res.sms_leads;
         this.plan.suscripcion_error_msn = res.suscripcion_error_msn;
         this.plan.advanvcard = res.advanvcard;
-
         this.plan.leads_msn = res.leads_msn;
         this.plan.leads_sms_msn = res.leads_sms_msn;
         this.plan.advansocial_msn = res.advansocial_msn;
         this.plan.advandocs_msn = res.advandocs_msn;
         this.plan.advanvcard_msn = res.advanvcard_msn;
-
         this.plan.advansocial = res.advansocial;
 
         this.globalProvider.plan = this.plan;
@@ -271,7 +224,8 @@ export class HomePage {
           this.globalProvider.getUsuario();
           this.app.getRootNav().setRoot(MyApp);
         }
-        this.free();
+
+        this.home_util.compartir = this.globalProvider.free();
 
         if (res.version_app != this.version) {
           this.alertVersion(res.version_app_msn);
@@ -282,7 +236,7 @@ export class HomePage {
         }
 
         if (res.delete_contacto && res.delete_contacto.length > 0) {
-          this.removeContact(null, res.delete_contacto)
+          this.functionProvider.removeContact(null, res.delete_contacto)
         }
 
       } else {
@@ -307,7 +261,7 @@ export class HomePage {
   }
 
   irACampania(campania: any, posicion_campania: number, estado: number, posicion: number, tipo_campania: boolean = true) {
-    if (this.bloqueo() == false) {
+    if (this.globalProvider.bloqueo() == false) {
       if (this.sms_activo == false) {
         let modal = this.modalControlle.create(CampaniaPage, { campania: campania, posicion_campania: posicion_campania, estado: estado, posicion: posicion, tipo_campania: tipo_campania });
         modal.present();
@@ -328,110 +282,8 @@ export class HomePage {
     }
   }
 
-  monitoreo() {
-    if (this.bloqueo() == false) {
-      this.home_util.spinner = true;
-      this.conexion = !this.conexion;
-      if (this.conexion == true) {
-        this.setConexionTelefonoUsuario();
-        this.fila = setInterval(() => {
-          this.getAccionTelefono();
-        }, 1000);
-      } else {
-        clearInterval(this.fila);
-        this.setDesConexionTelefonoUsuario();
-      }
-      this.tiempoActual();
-    }
-  }
-
-  setConexionTelefonoUsuario() {
-    let url: string = 'servicio=setConexionTelefonoUsuario&id_usuario=' + this.globalProvider.usuario.id_usuario +
-      '&lg=' + this.globalProvider.idioma.key;
-    this.httpProvider.get(url).then((res: any) => {
-      if (res.error == 'false') {
-        this.home_util.spinner = false;
-        this.getAccionTelefono();
-        this.home_util.title = '_establishedConnection';
-      }
-    }).catch(err => console.log('err: ', err.toString()));
-  }
-
-  getAccionTelefono() {
-    let url: string = 'servicio=getAccionTelefono&id_usuario=' + this.globalProvider.usuario.id_usuario +
-      '&lg=' + this.globalProvider.idioma.key;
-    this.httpProvider.get(url).then((res: any) => {
-      if (res.error == 'false') {
-        if (res.at_desconectar == 'N') {
-          if (res.at_id_telefono) {
-            if (res.at_id_telefono != this.at_id_telefono) {
-              if (res.at_id_telefono != '0') {
-                this.call(res.at_telefono, res.at_telefono_nombre_campania, res.at_telefono_nombre, true);
-              }
-            } else {
-              if (res.at_telefono_volver_llamar == 'Y') {
-                this.call(res.at_telefono);
-              }
-            }
-            this.at_id_telefono = res.at_id_telefono;
-          }
-          if (res.at_sms == 'Y') {
-            this.setSms(res.at_sms_telefono, res.at_sms_telefono_text);
-          }
-          if (res.at_calendar == 'Y') {
-            this.setCalendar(res);
-          }
-        }
-      }
-    }).catch(err => console.log('err: ' + err.toString()));
-  }
-
-  call(telefono: string, campania: string = null, nombre: string = null, nuevo: boolean = false) {
-    if (this.validarTiempo() == true) {
-      if (telefono != null && telefono.trim() != '') {
-        this.callNumber.callNumber(telefono, true).then(res => {
-          if (nuevo == true) {
-            this.setContacto(telefono, nombre, campania);
-          }
-        });
-      }
-    }
-  }
-
-  setContacto(telefono: string, nombre: string, campania: string) {
-    let contact: Contact = this.contacts.create();
-    contact.name = new ContactName(null, nombre, 'AS');
-    contact.nickname = campania;
-    contact.organizations = [new ContactOrganization(null, campania, null)];
-    contact.phoneNumbers = [new ContactField('mobile', this.numerico.transform(telefono))];
-    contact.save().then(() => console.log('Contact saved!', contact),
-      (error: any) => console.error('Error saving contact.', error)
-    );
-  }
-
-  setSms(telefono: string, text: string) {
-    this.sms.send(this.numerico.transform(telefono), text);
-  }
-
-  setCalendar(res: any) {
-    let calendario: Calendario = {
-      fecha: res.at_calendar_fecha_hora,
-      nombre: res.at_telefono_nombre,
-      nota: res.at_calendar_nota,
-      telefono: res.at_telefono,
-      titulo: res.at_calendar_titulo
-    }
-    this.globalProvider.setCalendar(calendario);
-  }
-
-  setDesConexionTelefonoUsuario() {
-    let url = 'servicio=setDesConexionTelefonoUsuario&id_usuario=' + this.globalProvider.usuario.id_usuario +
-      '&lg=' + this.globalProvider.idioma.key;
-    this.httpProvider.get(url).then((res: any) => {
-      if (res.error == 'false') {
-        this.home_util.title = 'Waiting connection with pc ...';
-      }
-    }).catch(err => console.log('err: ', err.toString()));
+  drawSinc() {
+    this.navCtrl.push(SincPage, { compartir: this.home_util.compartir });
   }
 
   setDeleteCampania(id: number, nombre: string, manual: boolean = false) {
@@ -456,7 +308,7 @@ export class HomePage {
             this.httpProvider.get(url).then((res: any) => {
               if (res.error == 'false') {
                 if (manual == false) {
-                  this.removeContact(nombre);
+                  this.functionProvider.removeContact(nombre);
                   this.getCampaniaUsuario();
                 } else {
                   this.getCampaniaUsuario();
@@ -470,94 +322,6 @@ export class HomePage {
       ]
     });
     confirm.present();
-  }
-
-  removeContact(nombre: string, arr: Array<any> = []) {
-    if (arr.length > 0) {
-      nombre = arr[0].texto_referencia
-    }
-    var options = {
-      filter: "AS",
-      organizations: nombre,
-      nickname: nombre,
-      multiple: true,
-      hasPhoneNumber: true
-    };
-    this.contacts.find(["*"], options).then((res: any) => {
-      res = res.filter(function (current) {
-        var exists = current.nickname == nombre;
-        return exists;
-      });
-      for (let r of res) {
-        r.remove();
-      }
-
-      if (arr.length > 0) {
-        arr.shift()
-        if (arr.length > 0) {
-          this.removeContact(null, arr)
-        }
-      }
-    });
-  }
-
-  share() {
-    var url: string;
-    if (this.platform.is('android')) {
-      url = 'https://advansalesapp.page.link/android';
-    }
-    if (this.platform.is('ios')) {
-      url = 'https://advansalesapp.page.link/ios';
-    }
-    this.facebook.login(['email', 'public_profile']).then((response: FacebookLoginResponse) => {
-      this.facebook.showDialog({
-        method: "share",
-        href: url,
-        caption: '',
-        description: '',
-        picture: ''
-      }).then(res => {
-        let date = new Date();
-        let url: string = 'servicio=setMostrarPublicidadUsuario' +
-          '&id_usuario=' + this.globalProvider.usuario.id_usuario +
-          '&fecha=' + this.fecha.transform(date) +
-          '&hora=' + this.hora.transform(date) +
-          '&lg=' + this.globalProvider.idioma.key;
-        this.httpProvider.get(url).then((res: any) => {
-          if (res.error == 'false') {
-            let date = new Date(res.tiempo_usuario);
-            this.globalProvider.setTime(this.getmilisegundos.transform(date));
-            this.plan.gratis = res.gratis;
-            this.plan.mostrar_publicidad_video = res.mostrar_publicidad_video;
-            this.plan.mostrar_publicidad_banner = res.mostrar_publicidad_banner;
-            this.plan.compartir_fb = res.compartir_fb;
-            this.plan.plan = res.plan;
-            this.plan.plan_fecha_expiracion = res.plan_fecha_expiracion;
-            this.plan.plan_restriccion = res.plan_restriccion;
-            this.plan.bloqueo = res.bloqueo;
-            this.plan.bloqueo_msn = res.bloqueo_msn;
-            this.plan.plan_restriccion_msn = res.plan_restriccion_msn;
-            this.plan.suscrito = res.suscrito;
-            this.globalProvider.plan = this.plan;
-            this.globalProvider.setPlan(this.globalProvider.plan);
-          }
-        }).catch(err => console.log('err: ', err.toString()));
-      }).catch(err => console.log('err', err.toString()));
-    }).catch(err => console.log('err: ', err.toString()));
-  }
-
-  free() {
-    if (this.plan.gratis == 'Y' && this.plan.compartir_fb == 'N') {
-      let alert = this.alertController.create({
-        title: '',
-        subTitle: 'Make a publication so that the application is free!',
-        buttons: ['Ok']
-      });
-      alert.present();
-      this.home_util.compartir = true;
-    } else {
-      this.home_util.compartir = false;
-    }
   }
 
   tiempoActual() {
@@ -619,7 +383,7 @@ export class HomePage {
   }
 
   selectSms() {
-    if (this.bloqueo() == false) {
+    if (this.globalProvider.bloqueo() == false) {
       this.sms_activo = !this.sms_activo;
       if (this.sms_activo == true) {
         this.home_util.background = "lightgray";
@@ -762,19 +526,6 @@ export class HomePage {
         this.getCampaniaUsuario();
       }
     });
-  }
-
-  bloqueo() {
-    if (this.plan.bloqueo == 'Y') {
-      let alert = this.alertController.create({
-        title: '',
-        subTitle: this.plan.bloqueo_msn,
-        buttons: ['Ok']
-      });
-      alert.present();
-      return true;
-    }
-    return false
   }
 
   drawSocial() {

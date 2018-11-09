@@ -17,9 +17,11 @@ import { AgendaPage } from '../pages/agenda/agenda';
 import { CrearCampaniaPage } from '../pages/crear-campania/crear-campania';
 import { CampaniaPage } from '../pages/campania/campania';
 import { ModalPage } from '../pages/modal/modal';
+import { SincPage } from '../pages/sinc/sinc'
 
 import { GlobalProvider } from '../providers/global/global';
 import { HttpProvider } from '../providers/http/http';
+import { FunctionProvider } from '../providers/function/function';
 import { TranslatePipe } from '../pipes/translate/translate';
 
 import { FileChooser } from '@ionic-native/file-chooser';
@@ -63,7 +65,8 @@ import { ColorPickerModule } from 'ngx-color-picker';
     CrearCampaniaPage,
     SmsPage,
     CampaniaPage,
-    ModalPage
+    ModalPage,
+    SincPage
   ],
   imports: [
     BrowserModule,
@@ -88,7 +91,8 @@ import { ColorPickerModule } from 'ngx-color-picker';
     CrearCampaniaPage,
     SmsPage,
     CampaniaPage,
-    ModalPage
+    ModalPage,
+    SincPage
   ],
   providers: [
     StatusBar,
@@ -118,7 +122,8 @@ import { ColorPickerModule } from 'ngx-color-picker';
     Clipboard,
     Camera,
     MediaCapture,
-    AppRate
+    AppRate,
+    FunctionProvider
   ]
 })
 export class AppModule { }

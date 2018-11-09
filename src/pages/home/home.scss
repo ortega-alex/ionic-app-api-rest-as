@@ -3,22 +3,14 @@ page-home {
 		height: 100% !important;
         width: 100% !important;
 		font-size: 1.0em;		
-		.content-header{
-			text-align: center;
-			margin: 0% !important;
-			#title{
-				display: block;
-				margin: auto;
-				height: 5vh !important;
-				padding-top: 0%; 
-            }
-            #conten-row-btn{
-				color: #262626;
-				#btn-title{
-					color:white;
-				}
-			}					
-		}		
+			
+		#title-header{
+			display: block;
+			margin: auto;
+			height: 6vh !important;
+			padding-top: 0%; 
+		}
+		
 		.content-div{
 			height: 87% !important;
 			width: 100% !important;
@@ -80,31 +72,7 @@ page-home {
 			.espacio{
 				height: 40px;
 			}
-		}	
-		.conten-conexion{
-			padding: 0% 5% 0% 5%;
-			text-align: center;
-			//margin-top: 5% !important;  			
-			.conten-row{
-				#conten-row{
-					margin: 0%;
-					padding: 0%;
-					#title{
-						font-size: 1.0em;
-						font-weight: bold;
-					}
-					#icon{
-						font-size: 3em;
-					}
-					#parrafo{
-						margin: 1%;
-					}
-					#conten-row-btn{
-						font-size: 1.0em;
-					}
-				}
-			}
-		}    
+		}			
 	}
 	
 	#mensaje{

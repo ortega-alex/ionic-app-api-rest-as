@@ -223,7 +223,7 @@
     </ion-row>
     <ion-row class="content-row">
       <ion-col id="content-row">
-        <button id="content-row-btn" ion-button icon-right block color="dark" (click)="llamar()">
+        <button id="content-row-btn" ion-button icon-right block color="dark" (click)="functionProvider.call(new_campania.telefono); panel = !panel">
           {{ '_call' | translate }}
           <ion-icon name="call"></ion-icon>
         </button>
@@ -341,7 +341,7 @@
     </ion-row>
     <ion-row class="row-content">
       <ion-col col-12 id="row-content">
-        <button id="row-content-btn" ion-button icon-right block color="dark" (click)="llamar(true)">
+        <button id="row-content-btn" ion-button icon-right block color="dark" (click)="functionProvider.call(new_campania.telefono)">
           {{new_campania.telefono}}
           <ion-icon name="call"></ion-icon>
           &nbsp;

@@ -1,13 +1,12 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, Platform, ViewController, AlertController, PopoverController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Platform, ViewController, PopoverController } from 'ionic-angular';
 
 import { GlobalProvider } from '../../providers/global/global';
 import { HttpProvider } from '../../providers/http/http';
-import { Fechas , getMilisegundos, Fecha, Hora, Diferencia } from '../../pipes/filtros/filtros';
+import { FunctionProvider } from '../../providers/function/function';
+import { Fechas , Fecha, Hora, Diferencia } from '../../pipes/filtros/filtros';
 import { Util, Calendario } from '../../model/interfaces';
 
-import { CallNumber } from '@ionic-native/call-number';
-import { SMS } from '@ionic-native/sms';
 import { AdMobFree, AdMobFreeRewardVideoConfig } from '@ionic-native/admob-free';
 
 @IonicPage()
@@ -15,6 +14,7 @@ import { AdMobFree, AdMobFreeRewardVideoConfig } from '@ionic-native/admob-free'
   selector: 'page-modal',
   templateUrl: 'modal.html',
 })
+
 export class ModalPage {
 
   private diferencia = new Diferencia();
@@ -22,7 +22,6 @@ export class ModalPage {
   private fecha = new Fecha();
   private hora = new Hora();
   private llamadas = [];
-  private getmilisegundos = new getMilisegundos();
   private get_fila_contenido: any;
   private tamanio_contenido: number;
   private data = {
@@ -58,11 +57,9 @@ export class ModalPage {
     private viewController: ViewController,
     private globalProvider: GlobalProvider,
     private httpProvider: HttpProvider,
-    private callNumber: CallNumber,
-    private sms: SMS,
-    private alertController: AlertController,
     private admobFree: AdMobFree,
     private popoverController: PopoverController,
+    private functionProvider: FunctionProvider
   ) {
     this.llamadas = this.navParams.get('llamadas');
     this.tamanio_contenido = this.llamadas.length;
@@ -77,8 +74,9 @@ export class ModalPage {
     document.addEventListener(this.admobFree.events.REWARD_VIDEO_REWARD, (res) => {
       let creditos = res['rewardAmount'];
       let date = new Date();
-      this.setBloqueoPublicidadUsuario('N', this.fecha.transform(date), this.hora.transform(date), creditos);
+      this.globalProvider.setBloqueoPublicidadUsuario('N', this.fecha.transform(date), this.hora.transform(date), creditos);
     });
+
     this.getCatalogoEstadoFilaCampania();
     this.animacion();
     this.tiempoActual();
@@ -95,38 +93,6 @@ export class ModalPage {
       clearInterval(this.timer);
       this.segundos = 10;
     }
-  }
-
-  validarTiempo() {
-    let date = new Date().getTime();
-    if ((!this.globalProvider.time || date >= this.globalProvider.time) && this.globalProvider.plan.mostrar_publicidad_video == 'Y') {
-      let alert = this.alertController.create({
-        title: '',
-        subTitle: 'Get more time!',
-        buttons: ['Ok']
-      });
-      alert.present();
-      this.setBloqueoPublicidadUsuario('Y');
-      return false;
-    }
-    return true;
-  }
-
-  setBloqueoPublicidadUsuario(tipo: string, fecha: string = null, hora: string = null, creditos: any = null) {
-    let url: string = 'servicio=setBloqueoPublicidadUsuario' +
-      '&bloqueo=' + tipo +
-      '&id_usuario=' + this.globalProvider.usuario.id_usuario +
-      '&fecha=' + fecha +
-      '&hora=' + hora +
-      '&creditos=' + creditos +
-      '&lg=' + this.lg;
-    this.httpProvider.get(url).then((res: any) => {
-      if (res.error == 'false') {
-        let date = new Date(res.tiempo_usuario);
-        this.globalProvider.setTime(this.getmilisegundos.transform(date));
-        this.tiempoActual();
-      }
-    }).catch(err => console.log('err: ', err.toString()));
   }
 
   prepareVideo() {
@@ -154,16 +120,6 @@ export class ModalPage {
     this.text = this.globalProvider.idioma.contenido['_animacion'] + " " + (this.tamanio_contenido) + " " + this.globalProvider.idioma.contenido['_animacion1']
   }
 
-  call() {
-    if (this.validarTiempo() == true) {
-      if (this.get_fila_contenido.telefono != null && this.get_fila_contenido.telefono.trim() != '') {
-        this.callNumber.callNumber(this.get_fila_contenido.telefono, true).then(() => {
-          console.log('llamando');
-        }).catch(err => console.log(err));
-      }
-    }
-  }
-
   chekedSms(event) {
     this.estado_msn = event.value;
     if (event.value == true) {
@@ -181,22 +137,22 @@ export class ModalPage {
   }
 
   clickStado(key_estado: number) {
-    if (this.validarTiempo() == true) {
-      if (key_estado == 1 || key_estado == 2) {
-        this.setFilaActivaCampania(key_estado);
+    if (this.globalProvider.validarTiempo() == true) {
+      if (key_estado == 3 && this.estado_msn == true) {
+        this.functionProvider.setSms(this.get_fila_contenido.telefono, this.data.sms);
       }
-      if (key_estado == 3) {
-        if (this.estado_msn == true) {
-          this.setSms();
-        }
-        this.setFilaActivaCampania(key_estado);
+      if (key_estado == 4 && this.data.date != null) {
+        let calendario: Calendario = {
+          fecha: this.data.date,
+          nombre: this.get_fila_contenido.nombre_campania,
+          nota: this.data.notas,
+          telefono: this.get_fila_contenido.telefono,
+          titulo: this.get_fila_contenido.nombre_campania
+        };
+        this.functionProvider.setCalendar(calendario);
+        this.data.date = null;
       }
-      if (key_estado == 4) {
-        if (this.data.date != null) {
-          this.serEventoCalendar();
-        }
-        this.setFilaActivaCampania(key_estado);
-      }
+      this.setFilaActivaCampania(key_estado);
     }
   }
 
@@ -235,22 +191,6 @@ export class ModalPage {
       console.log('err: ', err.toString())
       this.closeModal(true);
     });
-  }
-
-  setSms() {
-    this.sms.send(this.get_fila_contenido.telefono, this.data.sms);
-  }
-
-  serEventoCalendar() {
-    let calendario: Calendario = {
-      fecha: this.data.date,
-      nombre: this.get_fila_contenido.nombre_campania,
-      nota: this.data.notas,
-      telefono: this.get_fila_contenido.telefono,
-      titulo: this.get_fila_contenido.nombre_campania
-    }
-    this.globalProvider.setCalendar(calendario);
-    this.data.date = null
   }
 
   tiempoActual() {

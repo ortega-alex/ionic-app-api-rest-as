@@ -1,17 +1,19 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
-import { GlobalProvider } from '../../providers/global/global';
-import { HttpProvider } from '../../providers/http/http';
+import { IonicPage, NavController, NavParams, ViewController, Platform } from 'ionic-angular';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { SMS } from '@ionic-native/sms';
-import { Contacts, Contact, ContactField, ContactName, ContactOrganization } from '@ionic-native/contacts';
+
+import { GlobalProvider } from '../../providers/global/global';
+import { HttpProvider } from '../../providers/http/http';
 import { Numerico } from '../../pipes/filtros/filtros';
+import { FunctionProvider } from '../../providers/function/function';
 
 @IonicPage()
 @Component({
   selector: 'page-agenda',
   templateUrl: 'agenda.html',
 })
+
 export class AgendaPage {
 
   fromContent: FormGroup;
@@ -30,7 +32,8 @@ export class AgendaPage {
     private httpProvider: HttpProvider,
     private fromBuilder: FormBuilder,
     private sms: SMS,
-    private contacts: Contacts
+    private functionProvider: FunctionProvider,
+    private platform: Platform
   ) {
     this.submitted = false;
     this.fromContent = this.fromBuilder.group({
@@ -47,7 +50,17 @@ export class AgendaPage {
     this.valid = { isset_vcard: null, vcard_msn: null, vcard_producto: null };
   }
 
-  ionViewDidLoad() { }
+  ionViewDidLoad() {
+    this.platform.registerBackButtonAction(() => {
+      this.closeModal();
+    });
+  }
+
+  ionViewWillUnload() {
+    this.platform.registerBackButtonAction(() => {
+      this.platform.exitApp();
+    });
+  }
 
   closeModal(res: boolean = false) {
     this.viwController.dismiss(res);
@@ -94,7 +107,13 @@ export class AgendaPage {
       let url: string = "servicio=setAgenda&lg=" + this.globalProvider.idioma.key;
       this.httpProvider.post(this.fromContent.value, url).then((res: any) => {
         if (res.error == "false") {
-          this.setContacto();
+          var nombre_campania: string;
+          this.lists.forEach((element) => {
+            if (this.fromContent.value.id_campania_manual == element.id_campania_manual) {
+              nombre_campania = element.nombre
+            }
+          });
+          this.functionProvider.setContacto(this.fromContent.value.numero, this.fromContent.value.nombre, nombre_campania);
           this.closeModal(true);
         } else {
           this.globalProvider.alerta(res.msn);
@@ -108,20 +127,5 @@ export class AgendaPage {
       this.globalProvider.alerta("It could not send!");
       console.log("err: " + err.toString());
     });
-  }
-
-  setContacto() {
-    var nombre_campania: string;
-    this.lists.forEach((element, ) => {
-      if (this.fromContent.value.id_campania_manual == element.id_campania_manual) {
-        nombre_campania = element.nombre
-      }
-    });
-    let contact: Contact = this.contacts.create();
-    contact.name = new ContactName(null, this.fromContent.value.nombre, 'AS');
-    contact.nickname = nombre_campania;
-    contact.organizations = [new ContactOrganization(null, nombre_campania, null)];
-    contact.phoneNumbers = [new ContactField('mobile', this.fromContent.value.numero)];
-    contact.save().catch(err => console.log('err: ' + JSON.stringify(err)));
   }
 }

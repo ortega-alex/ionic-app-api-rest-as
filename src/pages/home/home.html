@@ -1,30 +1,31 @@
 <ion-content class="contenido-home" no-Lines [style.background]="home_util.background">
-  <div class="content-header" *ngIf="conexion == false" [style.padding]="(globalProvider.dispositivo == false) ? '5% 0% 0% 0%' : ''">
-    <ion-row text-center no-margin no-lines class="conten-row">
-      <ion-col col-2 text-center no-margin no-lines id="conten-row" text-left *ngIf="sms_activo == false">
-        <button ion-button clear small no-margin color="dark" (click)="drawAgenda()" style="font-size: 1.5em;">
-          <ion-icon no-padding *ngIf="globalProvider.dispositivo == true" name="add"></ion-icon>
-          <ion-icon no-padding *ngIf="globalProvider.dispositivo == false" ios="md-add" md="lg-add"></ion-icon>
+
+  <div text-center [style.padding-top]="(globalProvider.dispositivo == false) ? '5%' : ''">
+    <ion-row>
+      <ion-col col-2 no-padding *ngIf="sms_activo == false">
+        <button ion-button clear small color="dark" (click)="drawAgenda()" style="font-size: 1.5em;">
+          <ion-icon *ngIf="globalProvider.dispositivo == true" name="add"></ion-icon>
+          <ion-icon *ngIf="globalProvider.dispositivo == false" ios="md-add" md="lg-add"></ion-icon>
         </button>
       </ion-col>
-      <ion-col col-8 text-center no-margin no-lines id="conten-row" *ngIf="sms_activo == false">
-        <img id="title" src="assets/imgs/title.png">
+      <ion-col no-padding col-8 *ngIf="sms_activo == false" style="padding-top: 2%">
+        <img id="title-header" src="assets/imgs/title.png">
       </ion-col>
-      <ion-col col-12 text-center no-margin no-lines id="conten-row" *ngIf="sms_activo == true && campaniaSMS.length > 0">
-        <button id="conten-row-btn" ion-button block (click)="smsModal(true)" color="dark">
-          <b id="btn-title">{{ '_smsManager' | translate }} </b>
+      <ion-col no-padding col-12 *ngIf="sms_activo == true && campaniaSMS.length > 0">
+        <button ion-button block (click)="smsModal(true)" color="dark">
+          <b>{{ '_smsManager' | translate }} </b>
         </button>
       </ion-col>
-      <ion-col col-2 text-center no-margin no-padding no-lines id="conten-row" text-right *ngIf="sms_activo == false">
-        <button ion-button clear small no-margin color="dark" (click)="menu = !menu" style="font-size: 1.5em;">
-          <ion-icon no-padding *ngIf="globalProvider.dispositivo == true" name="more"></ion-icon>
-          <ion-icon no-padding *ngIf="globalProvider.dispositivo == false" ios="md-more" md="lg-more"></ion-icon>
+      <ion-col no-padding col-2 *ngIf="sms_activo == false">
+        <button ion-button clear small color="dark" (click)="menu = !menu" style="font-size: 1.5em;">
+          <ion-icon *ngIf="globalProvider.dispositivo == true" name="more"></ion-icon>
+          <ion-icon *ngIf="globalProvider.dispositivo == false" ios="md-more" md="lg-more"></ion-icon>
         </button>
       </ion-col>
     </ion-row>
   </div>
 
-  <div *ngIf="sms_activo == false && plan.suscrito == 'N'" style="margin:0% 1%">
+  <div *ngIf="sms_activo == false && plan.suscrito == 'N'" style="margin : 0 1% 0 1%">
     <button ion-button no-padding block color="decorador" (click)="drawProductos()">
       <b>{{ '_advanSalesPro' | translate }}</b>
     </button>
@@ -53,20 +54,20 @@
     </p>
   </ion-scroll>
 
-  <ion-scroll scrollY="true" class="content-div" no-Lines no-border no-padding *ngIf="conexion == false && menu == false"
-    [style.background]="home_util.background">
+  <ion-scroll scrollY="true" class="content-div" no-Lines no-border no-padding *ngIf="menu == false" [style.background]="home_util.background">
+
     <ion-refresher (ionRefresh)="doRefresh($event)">
       <ion-refresher-content></ion-refresher-content>
     </ion-refresher>
+
     <p id="conten-info" *ngIf="sms_activo == true && !sin_campanias">{{ '_taplists' | translate }}</p>
-    <ion-row class="conten-row" *ngIf="home_util.compartir == true && sms_activo == false">
-      <ion-col id="conten-row">
-        <button id="content-row-btn" ion-button block icon-left (click)="share()">
-          <ion-icon name="logo-facebook"></ion-icon>
-          {{ '_share' | translate }}
-        </button>
-      </ion-col>
-    </ion-row>
+
+    <div *ngIf="home_util.compartir == true && sms_activo == false" style="margin : 0 1% 0 1%">
+      <button color="fb" id="content-row-btn" ion-button block icon-left (click)="globalProvider.share()">
+        <ion-icon name="logo-facebook"></ion-icon>
+        {{ '_share' | translate }}
+      </button>
+    </div>
 
     <div *ngFor="let campania of campanias ; let i = index" class="conten-card" [style.background]="home_util.background">
       <ion-row class="row-cont">
@@ -96,10 +97,6 @@
     </div>
 
     <div *ngFor="let m of manual ; let i = index" class="conten-card" [style.background]="home_util.background">
-      <div *ngIf="globalProvider.dispositivo == false">
-        <br>
-        <br>
-      </div>
       <ion-row class="row-cont">
         <ion-col id="row-cont" col-2>
           <ion-icon *ngIf="globalProvider.dispositivo == true" id="icon-delete" name="add" (click)="crearCampania( m)"></ion-icon>
@@ -135,74 +132,9 @@
 
     <div class="espacio"></div>
   </ion-scroll>
-  <div class="conten-conexion" *ngIf="conexion == true">
-    <div *ngIf="globalProvider.dispositivo == false">
-      <br>
-      <br>
-    </div>
-    <ion-row class="conten-row">
-      <ion-col id="conten-row" col-2>
-        <ion-icon *ngIf="globalProvider.dispositivo == true" id="icon" name="arrow-round-back" (click)="monitoreo()"></ion-icon>
-        <ion-icon *ngIf="globalProvider.dispositivo == false" id="icon" ios="md-arrow-round-back" md="md-arrow-round-back"
-          (click)="monitoreo()"></ion-icon>
-      </ion-col>
-      <ion-col id="conten-row" col-8>
-        <p id="title">{{ home_util.title | translate }}</p>
-      </ion-col>
-      <ion-col id="conten-row" col-2></ion-col>
-    </ion-row>
-    <ion-spinner *ngIf="home_util.spinner" name="bubbles" item-left></ion-spinner>
-    <ion-row class="conten-row" *ngIf="home_util.compartir">
-      <ion-col id="conten-row">
-        <button id="content-row-btn" ion-button block icon-left (click)="share()">
-          <ion-icon name="logo-facebook"></ion-icon>
-          {{ '_share' | translate }}
-        </button>
-      </ion-col>
-    </ion-row>
-    <ion-row class="conten-row" *ngIf="home_util.spinner == false">
-      <ion-col id="conten-row">
-        <button id="conten-row-btn" ion-button block icon-right color="danger" (click)="monitoreo()">
-          {{ '_stop' | translate }}
-          <ion-icon name="help-circle"></ion-icon>
-        </button>
-      </ion-col>
-      <ion-col col-12 id="conten-row" *ngIf="globalProvider.dispositivo == true">
-        <br>
-        <p id="parrafo">
-          1. {{ '_syncInstruction1' | translate
-          }}
-        </p>
-        <br>
-        <p id="parrafo">
-          2. {{ "_syncInstruction2" | translate }}</p>
-        <br>
-        <p id="parrafo">
-          3. {{ "_syncInstruction3" | translate }}
-        </p>
-        <br>
-      </ion-col>
-      <ion-col col-12 id="conten-row" *ngIf="globalProvider.dispositivo == false">
-        <br>
-        <p id="parrafo">
-          {{ '_syncInstruction4' | translate }}
-        </p>
-        <br>
-      </ion-col>
-    </ion-row>
-    <ion-row class="conten-row" *ngIf="plan.mostrar_publicidad_video == 'Y' && home_util.spinner == false">
-      <ion-col id="conten-row">
-        <button id="conten-row-btn" ion-button icon-right block color="buttom" (click)="showVideo()">
-          {{(segundos == 10) ? 'Get more time ' : segundos }} {{(time && segundos == 10) ?
-          time.hora+":"+time.minuto+":"+time.segundo
-          : (segundos == 10) ? '0' : '' }}
-        </button>
-      </ion-col>
-    </ion-row>
-  </div>
 
-  <ion-fab bottom center *ngIf="conexion == false && sms_activo == false && globalProvider.idioma && menu == false">
-    <button ion-fab color="dark" (click)="monitoreo()">
+  <ion-fab bottom center *ngIf="sms_activo == false && globalProvider.idioma && menu == false">
+    <button ion-fab color="dark" (click)="drawSinc()">
       {{ '_sync' | translate }}
     </button>
   </ion-fab>

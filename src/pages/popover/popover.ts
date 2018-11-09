@@ -20,17 +20,16 @@ export class PopoverPage {
     private viewController: ViewController
   ) {
     this.posicion = this.navParams.get('posicion');
-    this.title = this.globalProvider.idioma.contenido['_setSMS'] //this.globalProvider.data.info[this.posicion].title;
+    this.title = this.globalProvider.idioma.contenido['_setSMS'];
     if (this.posicion == 0) {
-      //let i = this.globalProvider.data.info[this.posicion].msj;
       let i = this.globalProvider.idioma.contenido['_instructionSetSms']
       this.informacion = i.split('#');
     } else {
       this.informacion = this.globalProvider.data.info[this.posicion].msj;
-  }
+    }
   }
 
-  ionViewDidLoad() {}
+  ionViewDidLoad() { }
 
   closeModal() {
     this.viewController.dismiss();
